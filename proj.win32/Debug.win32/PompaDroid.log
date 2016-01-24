@@ -1,0 +1,21 @@
+﻿生成启动时间为 2016/1/24 22:24:21。
+     1>项目“C:\Users\jeffcai\Documents\Cocos\CocosProjects\PompaDroid\proj.win32\PompaDroid.vcxproj”在节点 2 上(Build 个目标)。
+     1>PreLinkEvent:
+         if not exist "C:\Users\jeffcai\Documents\Cocos\CocosProjects\PompaDroid\proj.win32\Debug.win32\" mkdir "C:\Users\jeffcai\Documents\Cocos\CocosProjects\PompaDroid\proj.win32\Debug.win32\"
+         xcopy /Y /Q "C:\Cocos\Cocos2d-x\cocos2d-x-3.10\prebuilt\win32\*.*" "C:\Users\jeffcai\Documents\Cocos\CocosProjects\PompaDroid\proj.win32\Debug.win32\"
+         
+         :VCEnd
+         复制了 60 个文件
+       Link:
+         PompaDroid.vcxproj -> C:\Users\jeffcai\Documents\Cocos\CocosProjects\PompaDroid\proj.win32\Debug.win32\PompaDroid.exe
+       CustomBuildStep:
+         if not exist "C:\Users\jeffcai\Documents\Cocos\CocosProjects\PompaDroid\proj.win32\Debug.win32\" mkdir "C:\Users\jeffcai\Documents\Cocos\CocosProjects\PompaDroid\proj.win32\Debug.win32\"
+         xcopy "C:\Users\jeffcai\Documents\Cocos\CocosProjects\PompaDroid\proj.win32\..\Resources" "C:\Users\jeffcai\Documents\Cocos\CocosProjects\PompaDroid\proj.win32\Debug.win32\" /D /E /I /F /Y
+               
+         :VCEnd
+         复制了 0 个文件
+     1>已完成生成项目“C:\Users\jeffcai\Documents\Cocos\CocosProjects\PompaDroid\proj.win32\PompaDroid.vcxproj”(Build 个目标)的操作。
+
+已成功生成。
+
+已用时间 00:00:00.84
