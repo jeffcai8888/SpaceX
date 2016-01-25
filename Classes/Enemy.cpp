@@ -31,7 +31,7 @@ bool Enemy::init()
 		Animation *pDeadAnim = this->createAnimation("robot_knockout_%02d.png", 5, 12);
 		this->setDeadAction(Sequence::create(Animate::create(pDeadAnim), Blink::create(3, 9), BaseSprite::createDeadCallbackFunc(), NULL));
 
-		Size enemyShowSize = this->getDisplayFrame()->getRect().size;
+		Size enemyShowSize = this->getSpriteFrame()->getRect().size;
 		this->m_bodyBox = this->createBoundingBox(Point(-enemyShowSize.width / 2, -enemyShowSize.height / 2), enemyShowSize);
 		this->m_hitBox = this->createBoundingBox(Point(enemyShowSize.width / 2, -5), Size(25, 20));
 
@@ -58,7 +58,7 @@ void Enemy::decide(const Point& target, float targetBodyWidth)
 {
 	Point location = this->getPosition();
 	float distance = location.getDistance(target);
-	distance = distance - (targetBodyWidth / 2 + this->getDisplayFrame()->getRect().size.width / 2) + 30;
+	distance = distance - (targetBodyWidth / 2 + this->getSpriteFrame()->getRect().size.width / 2) + 30;
 	//log("distance=%f, m_fVelocity=%f", distance, m_fVelocity);
 
 	bool isFlippedX = this->isFlippedX();

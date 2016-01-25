@@ -22,7 +22,7 @@ bool GameOverLayer::init()
 		CC_BREAK_IF( !LayerColor::initWithColor( Color4B(255, 255, 255, 255)) );
 
 		Size winSize = Director::getInstance()->getWinSize();
-		this->m_pLabel = LabelTTF::create("Game Over!!!", "Artial", 32);
+		this->m_pLabel = Label::createWithSystemFont("Game Over!!!", "Artial", 32);
 		this->m_pLabel->setPosition( Point(winSize.width / 2, winSize.height / 2) );
 		this->m_pLabel->setColor( Color3B(0, 0, 0) );
 

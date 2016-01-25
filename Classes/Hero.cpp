@@ -30,7 +30,7 @@ bool Hero::init()
 		Animation *pDeadAnim = this->createAnimation("hero_knockout_%02d.png", 5, 12);
 		this->setDeadAction(Sequence::create(Animate::create(pDeadAnim), Blink::create(3, 9), BaseSprite::createDeadCallbackFunc(), NULL));
 
-		Size heroShowSize = this->getDisplayFrame()->getRect().size;
+		Size heroShowSize = this->getSpriteFrame()->getRect().size;
 		this->m_bodyBox = this->createBoundingBox( Point(-heroShowSize.width / 2, -heroShowSize.height / 2), heroShowSize);
 		this->m_hitBox = this->createBoundingBox( Point(heroShowSize.width / 2, -10), Size(20, 20));
 

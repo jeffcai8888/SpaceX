@@ -13,6 +13,7 @@
 
 class BaseSprite;
 class Hero;
+class Enemy;
 class GameLayer : public cocos2d::Layer
 {
 public:
@@ -50,7 +51,7 @@ private:
 	float m_fScreenHeight;
 	cocos2d::Point m_origin;
 
-	cocos2d::Array *m_pEnemies;
+	cocos2d::Vector<Enemy *> m_vecEnemies;
 	cocos2d::SpriteBatchNode *m_pSpriteNodes;
 
 	cocos2d::ProgressTimer *m_pBlood;

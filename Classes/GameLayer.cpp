@@ -24,17 +24,16 @@ GameLayer::GameLayer()
 	:m_pTiledMap(NULL),
 	m_pSpriteNodes(NULL),
 	m_pHero(NULL),
-	m_pEnemies(NULL),
 	m_pBlood(NULL),
 	m_pBloodBg(NULL)
 {
-
+	m_vecEnemies.clear();
 }
 
 GameLayer::~GameLayer()
 {
 	this->unscheduleUpdate();
-	CC_SAFE_RELEASE(m_pEnemies);
+	m_vecEnemies.clear();
 }
 
 bool GameLayer::init()
@@ -67,7 +66,7 @@ bool GameLayer::init()
 		m_pHero = Hero::create();
 		m_pHero->setPosition( m_origin + Point(100, 100) );
 		m_pHero->runIdleAction();
-		m_pHero->setZOrder(m_fScreenHeight - m_pHero->getPositionY());
+		m_pHero->setLocalZOrder(m_fScreenHeight - m_pHero->getPositionY());
 		m_pHero->setAttack(5);
 		m_pHero->setHP(100);
 		m_pHero->onDeadCallback = CC_CALLBACK_0(GameLayer::onHeroDead, this, m_pHero);
@@ -97,8 +96,6 @@ bool GameLayer::init()
 
 		m_pSpriteNodes->addChild(m_pHero);
 
-		m_pEnemies = Array::createWithCapacity(MIN_ENEMY_COUNT);
-		m_pEnemies->retain();
 		for(int i = 0; i < MIN_ENEMY_COUNT; ++ i)
 		{
 			this->addEnemy();
@@ -115,7 +112,7 @@ bool GameLayer::init()
 	return ret;
 }
 
-void GameLayer::exitApp(Object* pSender)
+void GameLayer::exitApp(Ref* pSender)
 {
 	Director::getInstance()->end();
 }
@@ -142,10 +139,10 @@ void GameLayer::onHeroAttack()
 	
 		if(m_pHero->getCurrActionState() == ACTION_STATE_ATTACK)
 		{
-			Object *enemyObj = NULL;
-			CCARRAY_FOREACH(m_pEnemies, enemyObj)
+			Ref *enemyObj = NULL;
+			for (int i = 0; i < m_vecEnemies.size(); ++i)
 			{
-				Enemy *pEnemy = (Enemy*)enemyObj;
+				Enemy *pEnemy = m_vecEnemies.at(i);
 				if(pEnemy->getCurrActionState() >= ACTION_STATE_DEAD)
 				{
 					continue;
@@ -201,7 +198,7 @@ void GameLayer::updateHero(float dt)
 {
 	if(m_pHero->getCurrActionState() == ACTION_STATE_WALK)
 	{
-		float halfHeroFrameHeight = (m_pHero->getDisplayFrame()->getRect().size.height) / 2;
+		float halfHeroFrameHeight = (m_pHero->getSpriteFrame()->getRect().size.height) / 2;
 		Point expectP = m_pHero->getPosition() + m_pHero->getVelocity();
 		Point actualP = expectP;
 		//can not walk on the wall or out of map
@@ -211,7 +208,7 @@ void GameLayer::updateHero(float dt)
 		}
 		float mapWidth = m_pTiledMap->getContentSize().width;
 		float halfWinWidth = m_fScreenWidth / 2;
-		float halfHeroFrameWidth = (m_pHero->getDisplayFrame()->getRect().size.width) / 2;
+		float halfHeroFrameWidth = (m_pHero->getSpriteFrame()->getRect().size.width) / 2;
 		if(expectP.x > halfWinWidth && expectP.x <= (mapWidth - halfWinWidth))
 		{
 			this->setPositionX(this->getPositionX() - m_pHero->getVelocity().x);
@@ -223,15 +220,15 @@ void GameLayer::updateHero(float dt)
 			actualP.x = m_pHero->getPositionX();
 		}
 		m_pHero->setPosition(actualP);
-		m_pHero->setZOrder(m_fScreenHeight - m_pHero->getPositionY());
+		m_pHero->setLocalZOrder(m_fScreenHeight - m_pHero->getPositionY());
 	}
 }
 
 void GameLayer::updateEnemies(float dt) {
-    Object *pObj = NULL;
+	Ref *pObj = NULL;
 	Point distance = Point::ZERO;
 	//log("enemies count = %d", m_pEnemies->count());
-	if(m_pEnemies->count() < MIN_ENEMY_COUNT)
+	if(m_vecEnemies.size() < MIN_ENEMY_COUNT)
 	{
 		this->addEnemy();
 	}
@@ -241,17 +238,18 @@ void GameLayer::updateEnemies(float dt) {
 	{
 		heroLocation = Point(-1000, -1000);
 	}
-	Array *pRemovedEnemies = Array::create();
-    CCARRAY_FOREACH(m_pEnemies, pObj)
+
+	Vector<Enemy*>  vecRemovedEnemies;
+	for (int i = 0; i < m_vecEnemies.size(); ++i)
 	{
-		Enemy *pEnemy = (Enemy*)pObj;
+		Enemy *pEnemy = m_vecEnemies.at(i);
 		if(pEnemy->getCurrActionState() == ACTION_STATE_REMOVE)
 		{
 			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(PATH_ENEMY_DEAD_EFFECT);
-			pRemovedEnemies->addObject(pEnemy);
+			vecRemovedEnemies.pushBack(pEnemy);
 			continue;
 		}
-		pEnemy->execute(heroLocation, m_pHero->getDisplayFrame()->getRect().size.width);
+		pEnemy->execute(heroLocation, m_pHero->getSpriteFrame()->getRect().size.width);
 
 		if(pEnemy->getCurrActionState() == ACTION_STATE_WALK) 
 		{
@@ -259,33 +257,33 @@ void GameLayer::updateEnemies(float dt) {
 			Point direction = pEnemy->getMoveDirection();
 			
 			Point expect = location + direction;
-			float halfEnemyFrameHeight = (pEnemy->getDisplayFrame()->getRect().size.height) / 2;
+			float halfEnemyFrameHeight = (pEnemy->getSpriteFrame()->getRect().size.height) / 2;
 			if(expect.y < halfEnemyFrameHeight || expect.y > (m_fTileHeight * 3 + halfEnemyFrameHeight) )
 			{
 				direction.y = 0;
 			}
 			pEnemy->setFlippedX(direction.x < 0 ? true : false);
 			pEnemy->setPosition(location + direction);
-			pEnemy->setZOrder(pEnemy->getPositionY());
+			pEnemy->setLocalZOrder(pEnemy->getPositionY());
 		}
 	}
 
-	CCARRAY_FOREACH(pRemovedEnemies, pObj)
+	for (int i = 0; i < vecRemovedEnemies.size(); ++i)
 	{
-		Enemy *pEnemy = (Enemy*)pObj;
-		m_pEnemies->removeObject(pEnemy);
+		Enemy *pEnemy = vecRemovedEnemies.at(i);
+		m_vecEnemies.eraseObject(pEnemy);
 		m_pSpriteNodes->removeChild(pEnemy, true);
 	}
 
-	pRemovedEnemies->removeAllObjects();
+	vecRemovedEnemies.clear();
 }
 
 void GameLayer::onEnemyAttack(BaseSprite *pSprite)
 {
-	Object *enemyObj = NULL;
-	CCARRAY_FOREACH(m_pEnemies, enemyObj)
+	Ref *enemyObj = NULL;
+	for (int i = 0; i < m_vecEnemies.size(); ++i)
 	{
-		Enemy *pEnemy = (Enemy*)enemyObj;
+		Enemy *pEnemy = m_vecEnemies.at(i);
 		if(pEnemy->getCurrActionState() == ACTION_STATE_ATTACK)
 		{
 			if(!m_pHero->isLive())
@@ -327,7 +325,7 @@ void GameLayer::addEnemy()
 
 	Enemy *pEnemy = Enemy::create();
 	//log("m_pTiledMap->getMapSize() mapSize=%f", m_pTiledMap->getMapSize().width);
-	float halfEnemyFrameHeight = (pEnemy->getDisplayFrame()->getRect().size.height) / 2;
+	float halfEnemyFrameHeight = (pEnemy->getSpriteFrame()->getRect().size.height) / 2;
 	float heroPosX = m_pHero->getPositionX();
 	float halfWinWidth = (winSize.width / 2);
 	while(fabsf(heroPosX - location.x) < 150)
@@ -352,7 +350,7 @@ void GameLayer::addEnemy()
 	pEnemy->attack = CC_CALLBACK_0(GameLayer::onEnemyAttack, this, pEnemy);
 	pEnemy->onDeadCallback = CC_CALLBACK_0(GameLayer::onEnemyDead, this, pEnemy);
 	pEnemy->setPosition(m_origin + location);
-	pEnemy->setZOrder(m_fScreenHeight - pEnemy->getPositionY());
+	pEnemy->setLocalZOrder(m_fScreenHeight - pEnemy->getPositionY());
 	pEnemy->runIdleAction();
 	pEnemy->setAttack(5);
 	pEnemy->setHP(30);
@@ -360,6 +358,6 @@ void GameLayer::addEnemy()
 	pEnemy->setEyeArea(200);
 	pEnemy->setAttackArea(25);
 
-	m_pEnemies->addObject(pEnemy);
+	m_vecEnemies.pushBack(pEnemy);
 	m_pSpriteNodes->addChild(pEnemy);
 }

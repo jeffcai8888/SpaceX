@@ -15,7 +15,7 @@ public:
 	void restartGame();
 	bool init();
 
-	CC_SYNTHESIZE_READONLY(cocos2d::LabelTTF*, m_pLabel, GameOverLabel);
+	CC_SYNTHESIZE_READONLY(cocos2d::Label*, m_pLabel, GameOverLabel);
 };
 
 class GameOverScene

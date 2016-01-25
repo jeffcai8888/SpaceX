@@ -71,7 +71,6 @@ void BaseSprite::removeSprite()
 
 Animation* BaseSprite::createAnimation(const char* formatStr, int frameCount, int fps)
 {
-	//Array *pFrames = Array::createWithCapacity(frameCount);
 	Vector<SpriteFrame*>  vec(frameCount);
 	for(int i = 0; i < frameCount; ++ i) 
 	{
