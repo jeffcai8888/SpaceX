@@ -97,14 +97,14 @@ void OperateLayer::onTouchesMoved(const vector<Touch*>& touches, Event *unused_e
 	Size winSize = Director::getInstance()->getWinSize();
 	std::vector<Touch*>::const_iterator touchIter = touches.begin();
 	Touch *pTouch = (Touch*)(*touchIter);
-	Vec2 start = pTouch->getStartLocation();
+	Point start = pTouch->getStartLocation();
 	if(start.x > winSize.width / 2)
 	{
 		return;
 	}
-	Vec2 dest = pTouch->getLocation();
+	Point dest = pTouch->getLocation();
 	float distance = start.getDistance(dest);
-	Vec2 direction = dest - start;
+	Point direction = dest - start;
 	direction.normalize();
 	this->updateJoystick(direction, distance);
 
