@@ -37,6 +37,14 @@ void BaseSprite::runWalkAction()
 	}
 }
 
+void BaseSprite::runJumpAction()
+{
+	if (changeState(ACTION_STATE_JUMP))
+	{
+		this->runAction(m_pIdleAction);
+	}
+}
+
 void BaseSprite::runAttackAction()
 {
 	if(changeState(ACTION_STATE_ATTACK))

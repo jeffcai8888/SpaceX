@@ -108,7 +108,14 @@ void OperateLayer::onTouchesMoved(const vector<Touch*>& touches, Event *unused_e
 	direction.normalize();
 	this->updateJoystick(direction, distance);
 
-	m_pHero->walk(direction, distance);
+	const Vec2 v1(direction.x, direction.y);
+	const Vec2 v2(1.f, 0.f);
+	float cos = v1.dot(v2);
+
+	if (direction.y > 0 && cos >= 0 && cos < 0.9)
+		m_pHero->jump(direction, distance);
+	else
+		m_pHero->walk(direction, distance);
 }
 
 void OperateLayer::onTouchesEnded(const vector<Touch*>& touches, Event *unused_event)

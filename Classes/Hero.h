@@ -14,7 +14,8 @@ public:
 	CREATE_FUNC(Hero);
 
 	std::function<void(cocos2d::Point, float)> walk;
-	std::function<void(void)> stop;
+	std::function<void(cocos2d::Point, float)> jump;
+	std::function<void(void)> stop;	
 };
 
 

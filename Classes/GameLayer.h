@@ -25,6 +25,7 @@ public:
 	virtual bool init();
 
 	void onHeroWalk(cocos2d::Point direction, float distance);
+	void onHeroJump(cocos2d::Point direction, float distance);
 	void onHeroAttack();
 	void onHeroStop();
 	void onHeroDead(BaseSprite *pTarget);

@@ -7,6 +7,7 @@ typedef enum {
 	ACTION_STATE_NONE = 0,
 	ACTION_STATE_IDLE,
 	ACTION_STATE_WALK,
+	ACTION_STATE_JUMP,
 	ACTION_STATE_ATTACK,
 	ACTION_STATE_HURT,
 	ACTION_STATE_DEAD,
@@ -27,6 +28,7 @@ public:
 
 	void runIdleAction();
 	void runWalkAction();
+	void runJumpAction();
 	void runAttackAction();
 	void runHurtAction();
 	void removeSprite();

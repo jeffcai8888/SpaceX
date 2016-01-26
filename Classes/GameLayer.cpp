@@ -72,6 +72,7 @@ bool GameLayer::init()
 		m_pHero->attack = CC_CALLBACK_0(GameLayer::onHeroAttack, this);
 		m_pHero->stop = CC_CALLBACK_0(GameLayer::onHeroStop, this);
 		m_pHero->walk = CC_CALLBACK_2(GameLayer::onHeroWalk, this);
+		m_pHero->jump = CC_CALLBACK_2(GameLayer::onHeroJump, this);
 
 		Sprite *pBloodSprite = Sprite::create("blood.png");
 		this->m_pBlood = ProgressTimer::create(pBloodSprite);
@@ -125,7 +126,23 @@ void GameLayer::onHeroWalk(Point direction, float distance)
 		m_pHero->setFlippedX(direction.x < 0 ? true : false);
 		m_pHero->runWalkAction();
 
-		Point velocity = direction * (distance < 78 ? 1 : 3);
+		Point velocity;
+		if (direction.x > 0)
+			velocity = Point(1.f, 0.f) * (distance < 78 ? 1 : 3);
+		else
+			velocity = Point(-1.f, 0.f) * (distance < 78 ? 1 : 3);
+		m_pHero->setVelocity(velocity);
+	}
+}
+
+void GameLayer::onHeroJump(Point direction, float distance)
+{
+	if (m_pHero->isLive())
+	{
+		m_pHero->setFlippedX(direction.x < 0 ? true : false);
+		m_pHero->runJumpAction();
+
+		Point velocity = Point(0.f, 1.f) * (distance < 78 ? 1 : 3);
 		m_pHero->setVelocity(velocity);
 	}
 }
@@ -196,7 +213,7 @@ void GameLayer::update(float dt)
 
 void GameLayer::updateHero(float dt)
 {
-	if(m_pHero->getCurrActionState() == ACTION_STATE_WALK)
+	if(m_pHero->getCurrActionState() == ACTION_STATE_WALK || m_pHero->getCurrActionState() == ACTION_STATE_JUMP)
 	{
 		float halfHeroFrameHeight = (m_pHero->getSpriteFrame()->getRect().size.height) / 2;
 		Point expectP = m_pHero->getPosition() + m_pHero->getVelocity();
