@@ -3,11 +3,12 @@
 
 #include <cocos2d.h>
 
+using namespace cocos2d;
 class GameScene
 {
 public:
 
-	static cocos2d::Scene* createScene();
+	static Scene* createScene();
 };
 
 

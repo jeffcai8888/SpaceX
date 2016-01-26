@@ -5,8 +5,6 @@
 #include "SceneManager.h"
 #include "SimpleAudioEngine.h"
 
-using namespace cocos2d;
-
 bool collisionDetection(const BoundingBox &hitBox, const BoundingBox &bodyBox)
 {
 	Rect hitRect = hitBox.actual;
@@ -25,7 +23,8 @@ GameLayer::GameLayer()
 	m_pSpriteNodes(NULL),
 	m_pHero(NULL),
 	m_pBlood(NULL),
-	m_pBloodBg(NULL)
+	m_pBloodBg(NULL),
+	m_pWorld(NULL)
 {
 	m_vecEnemies.clear();
 }
@@ -94,12 +93,13 @@ bool GameLayer::init()
 		this->addChild(m_pBloodBg, 100);
 		this->addChild(m_pBlood, 100);
 
+
 		m_pSpriteNodes->addChild(m_pHero);
 
-		for(int i = 0; i < MIN_ENEMY_COUNT; ++ i)
+		/*for(int i = 0; i < MIN_ENEMY_COUNT; ++ i)
 		{
 			this->addEnemy();
-		}
+		}*/
 
 		CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(PATH_BG_MUSIC, true);
 		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(PATH_HERO_TALK_EFFECT);
@@ -191,7 +191,7 @@ void GameLayer::onHeroDead(BaseSprite *pTarget)
 void GameLayer::update(float dt)
 {
 	this->updateHero(dt);
-	this->updateEnemies(dt);
+	//this->updateEnemies(dt);
 }
 
 void GameLayer::updateHero(float dt)

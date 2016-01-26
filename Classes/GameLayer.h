@@ -14,7 +14,9 @@
 class BaseSprite;
 class Hero;
 class Enemy;
-class GameLayer : public cocos2d::Layer
+
+using namespace cocos2d;
+class GameLayer : public Layer
 {
 public:
 	GameLayer();
@@ -36,14 +38,15 @@ public:
 	void updateHero(float dt);
 	void updateEnemies(float dt);
 
-	void exitApp(cocos2d::Object* pSender);
+	void exitApp(Ref* pSender);
 
 	CC_SYNTHESIZE_READONLY(Hero*, m_pHero, Hero);
+	CC_SYNTHESIZE(PhysicsWorld*, m_pWorld, PhyWorld);
 
 	CREATE_FUNC(GameLayer);
 
 private:
-	cocos2d::TMXTiledMap *m_pTiledMap;
+	TMXTiledMap *m_pTiledMap;
 	float m_fTileWidth;
 	float m_fTileHeight;
 

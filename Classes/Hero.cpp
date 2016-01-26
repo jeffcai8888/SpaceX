@@ -34,6 +34,9 @@ bool Hero::init()
 		this->m_bodyBox = this->createBoundingBox( Point(-heroShowSize.width / 2, -heroShowSize.height / 2), heroShowSize);
 		this->m_hitBox = this->createBoundingBox( Point(heroShowSize.width / 2, -10), Size(20, 20));
 
+		auto body = PhysicsBody::createBox(Size(this->getContentSize().width / 4, this->getContentSize().height / 2));
+		this->setPhysicsBody(body);
+
 		ret = true;
 	} while(0);
 
