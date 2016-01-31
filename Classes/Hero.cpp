@@ -13,7 +13,7 @@ bool Hero::init()
 {
 	bool ret = false;
 	do {
-		this->initWithSpriteFrameName("hero_idle_00.png");
+		/*this->initWithSpriteFrameName("hero_idle_00.png");
 
 		Animation *pIdleAnim = this->createAnimation("hero_idle_%02d.png", 6, 12);
 		this->setIdleAction(RepeatForever::create(Animate::create(pIdleAnim)));
@@ -32,11 +32,15 @@ bool Hero::init()
 
 		Size heroShowSize = this->getSpriteFrame()->getRect().size;
 		this->m_bodyBox = this->createBoundingBox( Point(-heroShowSize.width / 2, -heroShowSize.height / 2), heroShowSize);
-		this->m_hitBox = this->createBoundingBox( Point(heroShowSize.width / 2, -10), Size(20, 20));
+		this->m_hitBox = this->createBoundingBox( Point(heroShowSize.width / 2, -10), Size(20, 20));*/
 
-		auto body = PhysicsBody::createBox(Size(this->getContentSize().width / 4, this->getContentSize().height / 2));
+		//auto body = PhysicsBody::createBox(Size(this->getContentSize().width / 4, this->getContentSize().height / 2));
+		//this->setPhysicsBody(body);
+		this->initWithSpriteFrameName("hero_idle_00.png");
+		auto body = PhysicsBody::create();
+		auto shape = PhysicsShapeBox::create(Size(this->getContentSize().width / 8, this->getContentSize().height / 3), PHYSICSSHAPE_MATERIAL_DEFAULT, Vec2(0.f, -15.f));
+		body->addShape(shape);
 		this->setPhysicsBody(body);
-
 		ret = true;
 	} while(0);
 

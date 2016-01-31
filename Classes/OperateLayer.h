@@ -7,6 +7,12 @@ class Hero;
 class OperateLayer : public cocos2d::Layer
 {
 public:
+	enum JoystickType
+	{
+		JT_Player,
+		JT_Bullet
+	};
+
 	OperateLayer();
 	~OperateLayer();
 
@@ -21,13 +27,12 @@ public:
 	CC_SYNTHESIZE(Hero*, m_pHero, Hero);
 
 private:
-	void showJoystick(cocos2d::Point pos);
-	void hideJoystick();
-	void updateJoystick(cocos2d::Point direction, float distance);
+	void showJoystick(int type, cocos2d::Point pos);
+	void hideJoystick(int type);
+	void updateJoystick(int type, cocos2d::Point direction, float distance);
 
-	cocos2d::Sprite *m_pJoystick;
-	cocos2d::Sprite *m_pJoystickBg;
-
+	cocos2d::Sprite *m_pJoystick[2];
+	cocos2d::Sprite *m_pJoystickBg[2];
 };
 
 #endif
