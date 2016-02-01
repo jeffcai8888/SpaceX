@@ -1,10 +1,10 @@
 #include "GameLayer.h"
 #include "Hero.h"
-#include "Enemy.h"
+#include "Bullet.h"
 
 #include "SceneManager.h"
 #include "SimpleAudioEngine.h"
-
+using namespace cocos2d;
 bool collisionDetection(const BoundingBox &hitBox, const BoundingBox &bodyBox)
 {
 	Rect hitRect = hitBox.actual;
@@ -26,13 +26,13 @@ GameLayer::GameLayer()
 	m_pBloodBg(NULL),
 	m_pWorld(NULL)
 {
-	m_vecEnemies.clear();
+	m_vecBullets.clear();
 }
 
 GameLayer::~GameLayer()
 {
 	this->unscheduleUpdate();
-	m_vecEnemies.clear();
+	m_vecBullets.clear();
 }
 
 bool GameLayer::init()
@@ -97,8 +97,8 @@ bool GameLayer::init()
 
 		m_pSpriteNodes->addChild(m_pHero);
 
-		CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(PATH_BG_MUSIC, true);
-		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(PATH_HERO_TALK_EFFECT);
+		//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(PATH_BG_MUSIC, true);
+		//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(PATH_HERO_TALK_EFFECT);
 
 		this->scheduleUpdate();
 
@@ -149,42 +149,6 @@ void GameLayer::onHeroJump(Point direction, float distance)
 
 void GameLayer::onHeroAttack()
 {
-
-	if(m_pHero->isLive())
-	{
-		m_pHero->runAttackAction();
-	
-		if(m_pHero->getCurrActionState() == ACTION_STATE_ATTACK)
-		{
-			Ref *enemyObj = NULL;
-			for (int i = 0; i < m_vecEnemies.size(); ++i)
-			{
-				Enemy *pEnemy = m_vecEnemies.at(i);
-				if(pEnemy->getCurrActionState() >= ACTION_STATE_DEAD)
-				{
-					continue;
-				}
-				if(fabsf(m_pHero->getPosition().y - pEnemy->getPosition().y) < 10)
-				{
-					BoundingBox heroHitBox = m_pHero->getHitBox();
-					BoundingBox enemyBodyBox = pEnemy->getBodyBox();
-
-					if(::collisionDetection(heroHitBox, enemyBodyBox))
-					{
-						int damage = m_pHero->getAttack();
-						pEnemy->runHurtAction();
-						pEnemy->setHP(pEnemy->getHP() - damage);
-			
-						if(pEnemy->getHP() <= 0)
-						{
-							pEnemy->runDeadAction();
-						}
-						CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(PATH_HERO_HIT_EFFECT);
-					}
-				}
-			}
-		}
-	}
 
 }
 
@@ -238,4 +202,9 @@ void GameLayer::updateHero(float dt)
 		m_pHero->setPosition(actualP);
 		m_pHero->setLocalZOrder(m_fScreenHeight - m_pHero->getPositionY());
 	}
+}
+
+void GameLayer::updateBullet(float dt)
+{
+
 }

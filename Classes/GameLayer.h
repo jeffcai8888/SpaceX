@@ -13,10 +13,9 @@
 
 class BaseSprite;
 class Hero;
-class Enemy;
+class Bullet;
 
-using namespace cocos2d;
-class GameLayer : public Layer
+class GameLayer : public cocos2d::Layer
 {
 public:
 	GameLayer();
@@ -30,24 +29,19 @@ public:
 	void onHeroStop();
 	void onHeroDead(BaseSprite *pTarget);
 
-	void onEnemyAttack(BaseSprite *pSprite);
-	void onEnemyDead(BaseSprite *pTarget);
-
-	void addEnemy();
-
 	void update(float dt);
 	void updateHero(float dt);
-	void updateEnemies(float dt);
+	void updateBullet(float dt);
 
-	void exitApp(Ref* pSender);
+	void exitApp(cocos2d::Ref* pSender);
 
 	CC_SYNTHESIZE_READONLY(Hero*, m_pHero, Hero);
-	CC_SYNTHESIZE(PhysicsWorld*, m_pWorld, PhyWorld);
+	CC_SYNTHESIZE(cocos2d::PhysicsWorld*, m_pWorld, PhyWorld);
 
 	CREATE_FUNC(GameLayer);
 
 private:
-	TMXTiledMap *m_pTiledMap;
+	cocos2d::TMXTiledMap *m_pTiledMap;
 	float m_fTileWidth;
 	float m_fTileHeight;
 
@@ -55,7 +49,7 @@ private:
 	float m_fScreenHeight;
 	cocos2d::Point m_origin;
 
-	cocos2d::Vector<Enemy *> m_vecEnemies;
+	cocos2d::Vector<Bullet *> m_vecBullets;
 	cocos2d::SpriteBatchNode *m_pSpriteNodes;
 
 	cocos2d::ProgressTimer *m_pBlood;
