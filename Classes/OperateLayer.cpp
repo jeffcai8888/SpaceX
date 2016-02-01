@@ -113,11 +113,11 @@ void OperateLayer::onTouchesMoved(const vector<Touch*>& touches, Event *unused_e
 	if(start.x > winSize.width / 2)
 	{
 		Point pos = m_pJoystick[JT_Bullet]->getPosition();
-		float distance = pos.distanceSquared(start);
-		if (distance < (m_pJoystickBg[JT_Bullet]->getContentSize().width / 2) * (m_pJoystickBg[JT_Bullet]->getContentSize().width / 2))
+		//float distance = pos.distanceSquared(start);
+		//if (distance < (m_pJoystickBg[JT_Bullet]->getContentSize().width / 2) * (m_pJoystickBg[JT_Bullet]->getContentSize().width / 2))
 		{
 			Point dest = pTouch->getLocation();
-			distance = start.getDistance(dest);
+			float distance = start.getDistance(dest);
 			Point direction = dest - start;
 			direction.normalize();
 			this->updateJoystick(JT_Bullet, direction, distance);

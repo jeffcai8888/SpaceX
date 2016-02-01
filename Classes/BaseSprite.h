@@ -41,7 +41,8 @@ public:
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pDeadAction, DeadAction);
 
 	CC_SYNTHESIZE(ActionState, m_currActionState, CurrActionState);
-	CC_SYNTHESIZE(cocos2d::Point, m_fVelocity, Velocity);
+	CC_SYNTHESIZE(float, m_fVelocity, Velocity);
+	CC_SYNTHESIZE(cocos2d::Point, m_fDirection, Direction);
 	CC_SYNTHESIZE(unsigned int, m_hp, HP);
 	CC_SYNTHESIZE(unsigned int, m_attack, Attack);
 

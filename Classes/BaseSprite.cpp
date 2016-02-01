@@ -25,7 +25,7 @@ void BaseSprite::runIdleAction()
 {
 	if(changeState(ACTION_STATE_IDLE))
 	{
-		//this->runAction(m_pIdleAction);
+		this->runAction(m_pIdleAction);
 	}
 }
 	
@@ -33,7 +33,7 @@ void BaseSprite::runWalkAction()
 {
 	if(changeState(ACTION_STATE_WALK))
 	{
-		//this->runAction(m_pWalkAction);
+		this->runAction(m_pWalkAction);
 	}
 }
 
@@ -41,7 +41,7 @@ void BaseSprite::runJumpAction()
 {
 	if (changeState(ACTION_STATE_JUMP))
 	{
-		//this->runAction(m_pIdleAction);
+		this->runAction(m_pIdleAction);
 	}
 }
 
@@ -49,7 +49,7 @@ void BaseSprite::runAttackAction()
 {
 	if(changeState(ACTION_STATE_ATTACK))
 	{
-		//this->runAction(m_pAttackAction);
+		this->runAction(m_pAttackAction);
 	}
 }
 
@@ -57,7 +57,7 @@ void BaseSprite::runHurtAction()
 {
 	if(changeState(ACTION_STATE_HURT))
 	{
-		//this->runAction(m_pHurtAction);
+		this->runAction(m_pHurtAction);
 
 	}
 }
@@ -67,7 +67,7 @@ void BaseSprite::runDeadAction()
 	if(changeState(ACTION_STATE_DEAD))
 	{
 		this->m_hp = 0;
-		//this->runAction(m_pDeadAction);
+		this->runAction(m_pDeadAction);
 	}
 }
 

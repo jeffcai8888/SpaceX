@@ -21,9 +21,6 @@
     <ClCompile Include="..\Classes\BaseSprite.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Enemy.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\GameLayer.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -42,6 +39,9 @@
     <ClCompile Include="..\Classes\SceneManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -54,9 +54,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\commons.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Enemy.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\GameLayer.h">
@@ -75,6 +72,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\SceneManager.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

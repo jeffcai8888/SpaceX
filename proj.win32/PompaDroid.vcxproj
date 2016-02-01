@@ -148,26 +148,26 @@ xcopy /Y /Q "$(COCOS_X_ROOT)\cocos2d-x-3.10\prebuilt\win32\*.*" "$(OutDir)"
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\BaseSprite.cpp" />
-    <ClCompile Include="..\Classes\Enemy.cpp" />
     <ClCompile Include="..\Classes\GameLayer.cpp" />
     <ClCompile Include="..\Classes\GameOverScene.cpp" />
     <ClCompile Include="..\Classes\GameScene.cpp" />
     <ClCompile Include="..\Classes\Hero.cpp" />
     <ClCompile Include="..\Classes\OperateLayer.cpp" />
     <ClCompile Include="..\Classes\SceneManager.cpp" />
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\BaseSprite.h" />
     <ClInclude Include="..\Classes\commons.h" />
-    <ClInclude Include="..\Classes\Enemy.h" />
     <ClInclude Include="..\Classes\GameLayer.h" />
     <ClInclude Include="..\Classes\GameOverScene.h" />
     <ClInclude Include="..\Classes\GameScene.h" />
     <ClInclude Include="..\Classes\Hero.h" />
     <ClInclude Include="..\Classes\OperateLayer.h" />
     <ClInclude Include="..\Classes\SceneManager.h" />
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>

@@ -97,11 +97,6 @@ bool GameLayer::init()
 
 		m_pSpriteNodes->addChild(m_pHero);
 
-		/*for(int i = 0; i < MIN_ENEMY_COUNT; ++ i)
-		{
-			this->addEnemy();
-		}*/
-
 		CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(PATH_BG_MUSIC, true);
 		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(PATH_HERO_TALK_EFFECT);
 
@@ -126,12 +121,17 @@ void GameLayer::onHeroWalk(Point direction, float distance)
 		m_pHero->setFlippedX(direction.x < 0 ? true : false);
 		m_pHero->runWalkAction();
 
-		Point velocity;
+		//Point velocity;
 		if (direction.x > 0)
-			velocity = Point(1.f, 0.f) * (distance < 78 ? 1 : 3);
+		{
+			m_pHero->setVelocity(distance < 78 ? 1 : 3);
+			m_pHero->setDirection(Point(1.f, 0.f));
+		}
 		else
-			velocity = Point(-1.f, 0.f) * (distance < 78 ? 1 : 3);
-		m_pHero->setVelocity(velocity);
+		{
+			m_pHero->setVelocity(distance < 78 ? 1 : 3);
+			m_pHero->setDirection(Point(-1.f, 0.f));
+		}		
 	}
 }
 
@@ -142,8 +142,8 @@ void GameLayer::onHeroJump(Point direction, float distance)
 		m_pHero->setFlippedX(direction.x < 0 ? true : false);
 		m_pHero->runJumpAction();
 
-		Point velocity = Point(0.f, 1.f) * (distance < 78 ? 1 : 3);
-		m_pHero->setVelocity(velocity);
+		m_pHero->setVelocity(distance < 78 ? 1 : 3);
+		m_pHero->setDirection(direction);
 	}
 }
 
@@ -208,7 +208,6 @@ void GameLayer::onHeroDead(BaseSprite *pTarget)
 void GameLayer::update(float dt)
 {
 	this->updateHero(dt);
-	//this->updateEnemies(dt);
 }
 
 void GameLayer::updateHero(float dt)
@@ -216,7 +215,7 @@ void GameLayer::updateHero(float dt)
 	if(m_pHero->getCurrActionState() == ACTION_STATE_WALK || m_pHero->getCurrActionState() == ACTION_STATE_JUMP)
 	{
 		float halfHeroFrameHeight = (m_pHero->getSpriteFrame()->getRect().size.height) / 2;
-		Point expectP = m_pHero->getPosition() + m_pHero->getVelocity();
+		Point expectP = m_pHero->getPosition() + m_pHero->getVelocity() * m_pHero->getDirection();
 		Point actualP = expectP;
 		//can not walk on the wall or out of map
 		if(expectP.y < halfHeroFrameHeight || expectP.y > (m_fTileHeight * 3 + halfHeroFrameHeight) )
@@ -228,10 +227,10 @@ void GameLayer::updateHero(float dt)
 		float halfHeroFrameWidth = (m_pHero->getSpriteFrame()->getRect().size.width) / 2;
 		if(expectP.x > halfWinWidth && expectP.x <= (mapWidth - halfWinWidth))
 		{
-			this->setPositionX(this->getPositionX() - m_pHero->getVelocity().x);
-			this->m_pBlood->setPositionX(this->m_pBlood->getPositionX() + m_pHero->getVelocity().x);
-			this->m_pBloodBg->setPositionX(this->m_pBloodBg->getPositionX() + m_pHero->getVelocity().x);
-			this->m_pCloseItem->setPositionX(this->m_pCloseItem->getPositionX() + m_pHero->getVelocity().x);
+			this->setPositionX(this->getPositionX() - (m_pHero->getVelocity() * m_pHero->getDirection()).x);
+			this->m_pBlood->setPositionX(this->m_pBlood->getPositionX() + (m_pHero->getVelocity() * m_pHero->getDirection()).x);
+			this->m_pBloodBg->setPositionX(this->m_pBloodBg->getPositionX() + (m_pHero->getVelocity() * m_pHero->getDirection()).x);
+			this->m_pCloseItem->setPositionX(this->m_pCloseItem->getPositionX() + (m_pHero->getVelocity() * m_pHero->getDirection()).x);
 		}else if(expectP.x < halfHeroFrameWidth || expectP.x >= mapWidth - halfHeroFrameWidth)
 		{
 			actualP.x = m_pHero->getPositionX();
@@ -239,142 +238,4 @@ void GameLayer::updateHero(float dt)
 		m_pHero->setPosition(actualP);
 		m_pHero->setLocalZOrder(m_fScreenHeight - m_pHero->getPositionY());
 	}
-}
-
-void GameLayer::updateEnemies(float dt) {
-	Ref *pObj = NULL;
-	Point distance = Point::ZERO;
-	//log("enemies count = %d", m_pEnemies->count());
-	if(m_vecEnemies.size() < MIN_ENEMY_COUNT)
-	{
-		this->addEnemy();
-	}
-
-	Point heroLocation = m_pHero->getPosition();
-	if(!m_pHero->isLive())
-	{
-		heroLocation = Point(-1000, -1000);
-	}
-
-	Vector<Enemy*>  vecRemovedEnemies;
-	for (int i = 0; i < m_vecEnemies.size(); ++i)
-	{
-		Enemy *pEnemy = m_vecEnemies.at(i);
-		if(pEnemy->getCurrActionState() == ACTION_STATE_REMOVE)
-		{
-			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(PATH_ENEMY_DEAD_EFFECT);
-			vecRemovedEnemies.pushBack(pEnemy);
-			continue;
-		}
-		pEnemy->execute(heroLocation, m_pHero->getSpriteFrame()->getRect().size.width);
-
-		if(pEnemy->getCurrActionState() == ACTION_STATE_WALK) 
-		{
-			Point location = pEnemy->getPosition();
-			Point direction = pEnemy->getMoveDirection();
-			
-			Point expect = location + direction;
-			float halfEnemyFrameHeight = (pEnemy->getSpriteFrame()->getRect().size.height) / 2;
-			if(expect.y < halfEnemyFrameHeight || expect.y > (m_fTileHeight * 3 + halfEnemyFrameHeight) )
-			{
-				direction.y = 0;
-			}
-			pEnemy->setFlippedX(direction.x < 0 ? true : false);
-			pEnemy->setPosition(location + direction);
-			pEnemy->setLocalZOrder(pEnemy->getPositionY());
-		}
-	}
-
-	for (int i = 0; i < vecRemovedEnemies.size(); ++i)
-	{
-		Enemy *pEnemy = vecRemovedEnemies.at(i);
-		m_vecEnemies.eraseObject(pEnemy);
-		m_pSpriteNodes->removeChild(pEnemy, true);
-	}
-
-	vecRemovedEnemies.clear();
-}
-
-void GameLayer::onEnemyAttack(BaseSprite *pSprite)
-{
-	Ref *enemyObj = NULL;
-	for (int i = 0; i < m_vecEnemies.size(); ++i)
-	{
-		Enemy *pEnemy = m_vecEnemies.at(i);
-		if(pEnemy->getCurrActionState() == ACTION_STATE_ATTACK)
-		{
-			if(!m_pHero->isLive())
-			{
-				break;
-			}
-			pEnemy->setPositionY(m_pHero->getPositionY());
-			BoundingBox heroBodyBox = m_pHero->getBodyBox();
-			BoundingBox enemyHitBox = pEnemy->getHitBox();
-
-			if(::collisionDetection(enemyHitBox, heroBodyBox))
-			{
-				int damage = pEnemy->getAttack();
-				m_pHero->runHurtAction();
-				m_pHero->setHP(m_pHero->getHP() - damage);
-				CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(PATH_ENEMY_HIT_EFFECT);
-
-				if(m_pHero->getHP() <= 0)
-				{
-					m_pHero->runDeadAction();
-					CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(PATH_HERO_DEAD_EFFECT);
-				}
-				this->m_pBlood->setPercentage( (m_pHero->getHP() / 100.0f) * 100);
-				
-			}
-		}
-	}
-}
-
-void GameLayer::onEnemyDead(BaseSprite *pTarget)
-{
-	pTarget->removeSprite();
-}
-
-void GameLayer::addEnemy()
-{
-	Size winSize = Director::getInstance()->getWinSize();
-	Point location = Point::ZERO;
-
-	Enemy *pEnemy = Enemy::create();
-	//log("m_pTiledMap->getMapSize() mapSize=%f", m_pTiledMap->getMapSize().width);
-	float halfEnemyFrameHeight = (pEnemy->getSpriteFrame()->getRect().size.height) / 2;
-	float heroPosX = m_pHero->getPositionX();
-	float halfWinWidth = (winSize.width / 2);
-	while(fabsf(heroPosX - location.x) < 150)
-	{
-		if(heroPosX < halfWinWidth)
-		{
-			location.x = m_pHero->getPositionX() + CCRANDOM_0_1()  * halfWinWidth;
-		}else if(heroPosX > (m_pTiledMap->getMapSize().width * m_fTileWidth - halfWinWidth)) {
-			location.x = m_pHero->getPositionX() - CCRANDOM_0_1()  * halfWinWidth;
-		}else {
-			location.x = m_pHero->getPositionX() + CCRANDOM_MINUS1_1()  * halfWinWidth;
-		}
-	}
-
-	float maxY = m_fTileHeight * 3 + halfEnemyFrameHeight;
-	location.y = CCRANDOM_0_1() * maxY;
-	if(location.y < halfEnemyFrameHeight)
-	{
-		location.y = halfEnemyFrameHeight;
-	}
-
-	pEnemy->attack = CC_CALLBACK_0(GameLayer::onEnemyAttack, this, pEnemy);
-	pEnemy->onDeadCallback = CC_CALLBACK_0(GameLayer::onEnemyDead, this, pEnemy);
-	pEnemy->setPosition(m_origin + location);
-	pEnemy->setLocalZOrder(m_fScreenHeight - pEnemy->getPositionY());
-	pEnemy->runIdleAction();
-	pEnemy->setAttack(5);
-	pEnemy->setHP(30);
-	pEnemy->setVelocity(Point(0.5f, 0.5f));
-	pEnemy->setEyeArea(200);
-	pEnemy->setAttackArea(25);
-
-	m_vecEnemies.pushBack(pEnemy);
-	m_pSpriteNodes->addChild(pEnemy);
 }
