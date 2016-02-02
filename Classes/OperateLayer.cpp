@@ -41,12 +41,15 @@ bool OperateLayer::init()
 
 		this->hideJoystick(JT_Player);
 
-		auto listener = EventListenerTouchAllAtOnce::create();
+		setTouchEnabled(true);
+		setTouchMode(Touch::DispatchMode::ALL_AT_ONCE);
+
+		/*auto listener = EventListenerTouchAllAtOnce::create();
 		listener->onTouchesBegan = CC_CALLBACK_2(OperateLayer::onTouchesBegan, this);
 		listener->onTouchesMoved = CC_CALLBACK_2(OperateLayer::onTouchesMoved, this);
 		listener->onTouchesEnded = CC_CALLBACK_2(OperateLayer::onTouchesEnded, this);
-		_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, m_pJoystick[JT_Bullet]);
-
+		_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+		_eventDispatcher->addEventListenerWithSceneGraphPriority(listener->clone(), m_pJoystick[JT_Bullet]);*/
 		ret = true;
 
 	} while(false);
@@ -85,7 +88,7 @@ void OperateLayer::updateJoystick(int type, Point direction, float distance)
 }
 
 
-void OperateLayer::onTouchesBegan(const vector<Touch*>& touches, Event *unused_event)
+void OperateLayer::onTouchesBegan(const vector<Touch*>& touches, Event *event)
 {
 	Size winSize = Director::getInstance()->getWinSize();
 	vector<Touch*>::const_iterator touchIter = touches.begin();
@@ -97,7 +100,8 @@ void OperateLayer::onTouchesBegan(const vector<Touch*>& touches, Event *unused_e
 		{
 			this->showJoystick(JT_Player, p);
 		}else {
-			m_pHero->attack();
+			if (this->isTap(m_pJoystickBg[JT_Bullet], pTouch->getLocation()))
+				m_pHero->attack();
 		}
 
 		++ touchIter;
@@ -112,9 +116,7 @@ void OperateLayer::onTouchesMoved(const vector<Touch*>& touches, Event *unused_e
 	Point start = pTouch->getStartLocation();
 	if(start.x > winSize.width / 2)
 	{
-		Point pos = m_pJoystick[JT_Bullet]->getPosition();
-		float distance = pos.distanceSquared(start);
-		if (distance < (m_pJoystickBg[JT_Bullet]->getContentSize().width / 2) * (m_pJoystickBg[JT_Bullet]->getContentSize().width / 2))
+		if (this->isTap(m_pJoystickBg[JT_Bullet], start))
 		{
 			Point dest = pTouch->getLocation();
 			float distance = start.getDistance(dest);
@@ -156,4 +158,15 @@ void OperateLayer::onTouchesEnded(const vector<Touch*>& touches, Event *unused_e
 		m_pJoystick[JT_Bullet]->setPosition(pos);
 	}
 	m_pHero->stop();
+}
+
+bool OperateLayer::isTap(cocos2d::Node* pNode, cocos2d::Point point)
+{
+	Point pos = pNode->getPosition();
+	float distance = pos.distanceSquared(point);
+	Size size = pNode->getContentSize();
+	if (distance < (size.width / 2) * (size.width / 2))
+		return true;
+	else
+		return false;
 }

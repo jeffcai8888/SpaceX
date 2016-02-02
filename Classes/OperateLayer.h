@@ -20,9 +20,9 @@ public:
 
 	CREATE_FUNC(OperateLayer);
 
-	void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event *unused_event);
-	void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event *unused_event);
-	void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event *unused_event);
+	virtual void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event *unused_event);
+	virtual void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event *unused_event);
+	virtual void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event *unused_event);
 
 	CC_SYNTHESIZE(Hero*, m_pHero, Hero);
 
@@ -30,7 +30,7 @@ private:
 	void showJoystick(int type, cocos2d::Point pos);
 	void hideJoystick(int type);
 	void updateJoystick(int type, cocos2d::Point direction, float distance);
-
+	bool isTap(cocos2d::Node*, cocos2d::Point);
 	cocos2d::Sprite *m_pJoystick[2];
 	cocos2d::Sprite *m_pJoystickBg[2];
 };
