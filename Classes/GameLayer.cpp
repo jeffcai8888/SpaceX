@@ -149,7 +149,10 @@ void GameLayer::onHeroJump(Point direction, float distance)
 
 void GameLayer::onHeroAttack()
 {
-
+	if (m_pHero->isLive())
+	{
+		m_pHero->runAttackAction();
+	}
 }
 
 void GameLayer::onHeroStop()

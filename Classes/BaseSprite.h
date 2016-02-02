@@ -8,7 +8,6 @@ typedef enum {
 	ACTION_STATE_IDLE,
 	ACTION_STATE_WALK,
 	ACTION_STATE_JUMP,
-	ACTION_STATE_ATTACK,
 	ACTION_STATE_HURT,
 	ACTION_STATE_DEAD,
 	ACTION_STATE_REMOVE,
@@ -45,6 +44,7 @@ public:
 	CC_SYNTHESIZE(cocos2d::Point, m_fDirection, Direction);
 	CC_SYNTHESIZE(unsigned int, m_hp, HP);
 	CC_SYNTHESIZE(unsigned int, m_attack, Attack);
+	CC_SYNTHESIZE(bool, m_isAttacking, IsAttacking)
 
 	CC_SYNTHESIZE(BoundingBox, m_bodyBox, BodyBox);
 	CC_SYNTHESIZE(BoundingBox, m_hitBox, HitBox);

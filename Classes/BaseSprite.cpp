@@ -47,10 +47,16 @@ void BaseSprite::runJumpAction()
 
 void BaseSprite::runAttackAction()
 {
-	if(changeState(ACTION_STATE_ATTACK))
+	/*if(changeState(ACTION_STATE_ATTACK))
 	{
 		this->runAction(m_pAttackAction);
+	}*/
+
+	if (this->getIsAttacking() == false)
+	{
+		this->setIsAttacking(true);
 	}
+
 }
 
 void BaseSprite::runHurtAction()

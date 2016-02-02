@@ -44,8 +44,8 @@ bool OperateLayer::init()
 		auto listener = EventListenerTouchAllAtOnce::create();
 		listener->onTouchesBegan = CC_CALLBACK_2(OperateLayer::onTouchesBegan, this);
 		listener->onTouchesMoved = CC_CALLBACK_2(OperateLayer::onTouchesMoved, this);
-		listener->onTouchesEnded = CC_CALLBACK_2(OperateLayer::onTouchesEnded, this); 
-		_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+		listener->onTouchesEnded = CC_CALLBACK_2(OperateLayer::onTouchesEnded, this);
+		_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, m_pJoystick[JT_Bullet]);
 
 		ret = true;
 
@@ -77,8 +77,8 @@ void OperateLayer::updateJoystick(int type, Point direction, float distance)
 	if(distance < 33)
 	{
 		m_pJoystick[type]->setPosition(start + (direction * distance));
-	}else if(distance > 78) {
-		m_pJoystick[type]->setPosition(start + (direction * 45));
+	//}else if(distance > 78) {
+	//	m_pJoystick[type]->setPosition(start + (direction * 45));
 	}else {
 		m_pJoystick[type]->setPosition(start + (direction * 33));
 	}
@@ -97,7 +97,7 @@ void OperateLayer::onTouchesBegan(const vector<Touch*>& touches, Event *unused_e
 		{
 			this->showJoystick(JT_Player, p);
 		}else {
-			//m_pHero->attack();
+			m_pHero->attack();
 		}
 
 		++ touchIter;
@@ -113,8 +113,8 @@ void OperateLayer::onTouchesMoved(const vector<Touch*>& touches, Event *unused_e
 	if(start.x > winSize.width / 2)
 	{
 		Point pos = m_pJoystick[JT_Bullet]->getPosition();
-		//float distance = pos.distanceSquared(start);
-		//if (distance < (m_pJoystickBg[JT_Bullet]->getContentSize().width / 2) * (m_pJoystickBg[JT_Bullet]->getContentSize().width / 2))
+		float distance = pos.distanceSquared(start);
+		if (distance < (m_pJoystickBg[JT_Bullet]->getContentSize().width / 2) * (m_pJoystickBg[JT_Bullet]->getContentSize().width / 2))
 		{
 			Point dest = pTouch->getLocation();
 			float distance = start.getDistance(dest);
