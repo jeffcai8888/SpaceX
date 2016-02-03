@@ -47,4 +47,5 @@ void Bullet::launch(Hero* pHero)
 	Point pos = pHero->getPosition();
 	this->setPosition(pos);
 	this->m_startPostion = pos;
+
 }

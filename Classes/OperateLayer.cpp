@@ -41,15 +41,107 @@ bool OperateLayer::init()
 
 		this->hideJoystick(JT_Player);
 
-		setTouchEnabled(true);
-		setTouchMode(Touch::DispatchMode::ALL_AT_ONCE);
+		//setTouchEnabled(true);
+		//setTouchMode(Touch::DispatchMode::ALL_AT_ONCE);
 
-		/*auto listener = EventListenerTouchAllAtOnce::create();
-		listener->onTouchesBegan = CC_CALLBACK_2(OperateLayer::onTouchesBegan, this);
-		listener->onTouchesMoved = CC_CALLBACK_2(OperateLayer::onTouchesMoved, this);
-		listener->onTouchesEnded = CC_CALLBACK_2(OperateLayer::onTouchesEnded, this);
+		auto listener = EventListenerTouchAllAtOnce::create();
+		//listener->onTouchesBegan = CC_CALLBACK_2(OperateLayer::onTouchesBegan, this);
+		//listener->onTouchesMoved = CC_CALLBACK_2(OperateLayer::onTouchesMoved, this);
+		//listener->onTouchesEnded = CC_CALLBACK_2(OperateLayer::onTouchesEnded, this);
+		listener->onTouchesBegan = [this](const vector<Touch*>& touches, Event *event)
+		{
+			Size winSize = Director::getInstance()->getWinSize();
+			vector<Touch*>::const_iterator touchIter = touches.begin();
+			while (touchIter != touches.end())
+			{
+				Touch *pTouch = (Touch*)(*touchIter);
+				Point p = pTouch->getLocation();
+				if (p.x <= winSize.width / 2)
+				{
+					this->showJoystick(JT_Player, p);
+				}
+				else {
+					if (this->isTap(m_pJoystickBg[JT_Bullet], pTouch->getLocation()))
+						m_pHero->attack();
+				}
+
+				++touchIter;
+			}
+		};
+		listener->onTouchesMoved = [this](const vector<Touch*>& touches, Event *event)
+		{
+			Size winSize = Director::getInstance()->getWinSize();
+			std::vector<Touch*>::const_iterator touchIter = touches.begin();
+			Touch *pTouch = (Touch*)(*touchIter);
+			Point start = pTouch->getStartLocation();
+			if (start.x > winSize.width / 2)
+			{
+				if (this->isTap(m_pJoystickBg[JT_Bullet], start))
+				{
+					Point dest = pTouch->getLocation();
+					float distance = start.getDistance(dest);
+					Vec2 direction = dest - start;
+					direction.normalize();
+					this->updateJoystick(JT_Bullet, direction, distance);
+					m_pHero->setShootDirection(direction);
+				}
+			}
+			else
+			{
+				Point dest = pTouch->getLocation();
+				float distance = start.getDistance(dest);
+				Vec2 direction = dest - start;
+				direction.normalize();
+				this->updateJoystick(JT_Player, direction, distance);
+
+				const Vec2 v1(direction.x, direction.y);
+				const Vec2 v2(1.f, 0.f);
+				float cos = v1.dot(v2);
+
+				if (direction.y > 0 && cos >= 0 && cos < 0.9)
+					m_pHero->jump(direction, distance);
+				else
+					m_pHero->walk(direction, distance);
+			}
+		};
+		listener->onTouchesEnded = [this](const vector<Touch*>& touches, Event *event)
+		{
+			Size winSize = Director::getInstance()->getWinSize();
+			std::vector<Touch*>::const_iterator touchIter = touches.begin();
+			Touch *pTouch = (Touch*)(*touchIter);
+			Point start = pTouch->getStartLocation();
+			if (start.x < winSize.width / 2)
+				this->hideJoystick(JT_Player);
+			else
+			{
+				Point pos = m_pJoystickBg[JT_Bullet]->getPosition();
+				m_pJoystick[JT_Bullet]->setPosition(pos);
+			}
+			m_pHero->stop();
+		};
 		_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
-		_eventDispatcher->addEventListenerWithSceneGraphPriority(listener->clone(), m_pJoystick[JT_Bullet]);*/
+		//_eventDispatcher->addEventListenerWithSceneGraphPriority(listener->clone(), m_pJoystick[JT_Bullet]);
+		auto keyListener = EventListenerKeyboard::create();
+		keyListener->onKeyPressed = [this](EventKeyboard::KeyCode keyCode, Event *event)
+		{
+			CCLOG("KeyPressed %d", keyCode);
+			if (keyCode == EventKeyboard::KeyCode::KEY_D)
+			{
+				m_pHero->walk(Vec2(1.f, 0.f), 3.f);
+			}
+			else if (keyCode == EventKeyboard::KeyCode::KEY_A)
+			{
+				m_pHero->walk(Vec2(-1.f, 0.f), 3.f);
+			}
+		};
+		keyListener->onKeyReleased = [this](EventKeyboard::KeyCode keyCode, Event *event)
+		{
+			CCLOG("KeyReleased %d", keyCode);
+			if (keyCode == EventKeyboard::KeyCode::KEY_D || keyCode == EventKeyboard::KeyCode::KEY_A)
+				m_pHero->stop();
+		};
+		_eventDispatcher->addEventListenerWithSceneGraphPriority(keyListener, this);
+		
 		ret = true;
 
 	} while(false);
@@ -87,78 +179,15 @@ void OperateLayer::updateJoystick(int type, Point direction, float distance)
 	}
 }
 
-
-void OperateLayer::onTouchesBegan(const vector<Touch*>& touches, Event *event)
+/*void OperateLayer::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {
-	Size winSize = Director::getInstance()->getWinSize();
-	vector<Touch*>::const_iterator touchIter = touches.begin();
-	while(touchIter != touches.end())
-	{
-		Touch *pTouch = (Touch*)(*touchIter);
-		Point p = pTouch->getLocation();
-		if(p.x <= winSize.width / 2)
-		{
-			this->showJoystick(JT_Player, p);
-		}else {
-			if (this->isTap(m_pJoystickBg[JT_Bullet], pTouch->getLocation()))
-				m_pHero->attack();
-		}
-
-		++ touchIter;
-	}
+	CCLOG("OperateLayer::onKeyPressed %d", keyCode);
 }
 
-void OperateLayer::onTouchesMoved(const vector<Touch*>& touches, Event *unused_event)
+void OperateLayer::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 {
-	Size winSize = Director::getInstance()->getWinSize();
-	std::vector<Touch*>::const_iterator touchIter = touches.begin();
-	Touch *pTouch = (Touch*)(*touchIter);
-	Point start = pTouch->getStartLocation();
-	if(start.x > winSize.width / 2)
-	{
-		if (this->isTap(m_pJoystickBg[JT_Bullet], start))
-		{
-			Point dest = pTouch->getLocation();
-			float distance = start.getDistance(dest);
-			Vec2 direction = dest - start;
-			direction.normalize();
-			this->updateJoystick(JT_Bullet, direction, distance);
-		}
-	}
-	else
-	{
-		Point dest = pTouch->getLocation();
-		float distance = start.getDistance(dest);
-		Vec2 direction = dest - start;
-		direction.normalize();
-		this->updateJoystick(JT_Player, direction, distance);
-
-		const Vec2 v1(direction.x, direction.y);
-		const Vec2 v2(1.f, 0.f);
-		float cos = v1.dot(v2);
-
-		if (direction.y > 0 && cos >= 0 && cos < 0.9)
-			m_pHero->jump(direction, distance);
-		else
-			m_pHero->walk(direction, distance);
-	}
-}
-
-void OperateLayer::onTouchesEnded(const vector<Touch*>& touches, Event *unused_event)
-{
-	Size winSize = Director::getInstance()->getWinSize();
-	std::vector<Touch*>::const_iterator touchIter = touches.begin();
-	Touch *pTouch = (Touch*)(*touchIter);
-	Point start = pTouch->getStartLocation();
-	if(start.x < winSize.width / 2 )
-		this->hideJoystick(JT_Player);
-	else
-	{
-		Point pos = m_pJoystickBg[JT_Bullet]->getPosition();
-		m_pJoystick[JT_Bullet]->setPosition(pos);
-	}
-	m_pHero->stop();
-}
+	CCLOG("OperateLayer::onKeyReleased %d", keyCode);
+}*/
 
 bool OperateLayer::isTap(cocos2d::Node* pNode, cocos2d::Point point)
 {
