@@ -44,7 +44,7 @@ public:
 	CC_SYNTHESIZE(cocos2d::Point, m_fDirection, Direction);
 	CC_SYNTHESIZE(unsigned int, m_hp, HP);
 	CC_SYNTHESIZE(unsigned int, m_attack, Attack);
-	CC_SYNTHESIZE(bool, m_isAttacking, IsAttacking)
+	CC_SYNTHESIZE(bool, m_isAttacking, IsAttacking);
 
 	CC_SYNTHESIZE(BoundingBox, m_bodyBox, BodyBox);
 	CC_SYNTHESIZE(BoundingBox, m_hitBox, HitBox);

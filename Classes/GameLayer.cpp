@@ -63,11 +63,12 @@ bool GameLayer::init()
 		this->addChild(m_pSpriteNodes);
 
 		m_pHero = Hero::create();
-		m_pHero->setPosition( m_origin + Point(100, 100) );
+		m_pHero->setPosition( m_origin + Point(100, 100));
 		m_pHero->runIdleAction();
 		m_pHero->setLocalZOrder(m_fScreenHeight - m_pHero->getPositionY());
 		m_pHero->setAttack(5);
 		m_pHero->setHP(100);
+		m_pHero->setIsAttacking(false);
 		m_pHero->onDeadCallback = CC_CALLBACK_0(GameLayer::onHeroDead, this, m_pHero);
 		m_pHero->attack = CC_CALLBACK_0(GameLayer::onHeroAttack, this);
 		m_pHero->stop = CC_CALLBACK_0(GameLayer::onHeroStop, this);
@@ -119,6 +120,7 @@ void GameLayer::onHeroWalk(Point direction, float distance)
 	if(m_pHero->isLive())
 	{
 		m_pHero->setFlippedX(direction.x < 0 ? true : false);
+		
 		m_pHero->runWalkAction();
 
 		//Point velocity;
@@ -175,6 +177,7 @@ void GameLayer::onHeroDead(BaseSprite *pTarget)
 void GameLayer::update(float dt)
 {
 	this->updateHero(dt);
+	this->updateBullet(dt);
 }
 
 void GameLayer::updateHero(float dt)
@@ -205,9 +208,44 @@ void GameLayer::updateHero(float dt)
 		m_pHero->setPosition(actualP);
 		m_pHero->setLocalZOrder(m_fScreenHeight - m_pHero->getPositionY());
 	}
+
+	if (m_pHero->getIsAttacking())
+	{
+		Bullet* bullet = getUnusedBullet();
+		bullet->setVelocity(1.f);
+		if(m_pHero->isFlippedX())
+			bullet->setDirection(Point(-1.f, 1.f));
+		else
+			bullet->setDirection(Point(1.f, 1.f));
+		bullet->setDisappearDistance(10000.f);
+		bullet->launch(m_pHero);
+		m_pHero->setIsAttacking(false);
+		this->addChild(bullet);
+	}
 }
 
 void GameLayer::updateBullet(float dt)
 {
+	for (auto sp_obj : m_vecBullets)
+	{
+		if (sp_obj->getIsActive())
+		{
+			sp_obj->update(dt);
+		}
+	}
+}
 
+Bullet* GameLayer::getUnusedBullet()
+{
+	for (auto sp_obj : m_vecBullets)
+	{
+		if (!sp_obj->getIsActive())
+		{
+			return sp_obj;
+		}
+	}
+
+	auto bullet = Bullet::create();
+	m_vecBullets.pushBack(bullet);
+	return bullet;
 }

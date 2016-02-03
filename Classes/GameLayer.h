@@ -55,6 +55,8 @@ private:
 	cocos2d::ProgressTimer *m_pBlood;
 	cocos2d::ProgressTimer *m_pBloodBg;
 	cocos2d::MenuItemImage *m_pCloseItem;
+
+	Bullet* getUnusedBullet();
 };
 
 #endif

@@ -120,7 +120,7 @@ void OperateLayer::onTouchesMoved(const vector<Touch*>& touches, Event *unused_e
 		{
 			Point dest = pTouch->getLocation();
 			float distance = start.getDistance(dest);
-			Point direction = dest - start;
+			Vec2 direction = dest - start;
 			direction.normalize();
 			this->updateJoystick(JT_Bullet, direction, distance);
 		}
@@ -129,7 +129,7 @@ void OperateLayer::onTouchesMoved(const vector<Touch*>& touches, Event *unused_e
 	{
 		Point dest = pTouch->getLocation();
 		float distance = start.getDistance(dest);
-		Point direction = dest - start;
+		Vec2 direction = dest - start;
 		direction.normalize();
 		this->updateJoystick(JT_Player, direction, distance);
 
