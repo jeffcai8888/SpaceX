@@ -213,12 +213,9 @@ void GameLayer::updateHero(float dt)
 	if (m_pHero->getIsAttacking())
 	{
 		Bullet* bullet = getUnusedBullet();
-		bullet->setVelocity(1.f);
-		if(m_pHero->isFlippedX())
-			bullet->setDirection(Point(-1.f, 1.f));
-		else
-			bullet->setDirection(Point(1.f, 1.f));
-		bullet->setDisappearDistance(10000.f);
+		bullet->setVelocity(5.f);
+		bullet->setDirection(m_pHero->getShootDirection());
+		bullet->setDisappearDistance(40000.f);
 		bullet->launch(m_pHero);
 		m_pHero->setIsAttacking(false);
 		this->addChild(bullet);
