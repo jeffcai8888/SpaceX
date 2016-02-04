@@ -84,6 +84,7 @@ bool OperateLayer::init()
 					direction.normalize();
 					this->updateJoystick(JT_Bullet, direction, distance);
 					m_pHero->setShootDirection(direction);
+					CCLOG("onTouchesMoved direction(%f, %f)", direction.x, direction.y);
 				}
 			}
 			else
@@ -97,6 +98,8 @@ bool OperateLayer::init()
 				const Vec2 v1(direction.x, direction.y);
 				const Vec2 v2(1.f, 0.f);
 				float cos = v1.dot(v2);
+
+				CCLOG("onTouchesMoved %f", cos);
 
 				if (direction.y > 0 && cos >= 0 && cos < 0.9)
 					m_pHero->jump(direction, distance);
@@ -116,6 +119,7 @@ bool OperateLayer::init()
 			{
 				Point pos = m_pJoystickBg[JT_Bullet]->getPosition();
 				m_pJoystick[JT_Bullet]->setPosition(pos);
+				m_pHero->setIsAttacking(false);
 			}
 			m_pHero->stop();
 		};

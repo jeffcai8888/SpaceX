@@ -98,7 +98,7 @@ bool GameLayer::init()
 
 		m_pSpriteNodes->addChild(m_pHero);
 
-		auto* listener = EventListenerCustom::create("bullet_disappear", [this](EventCustom* event) {
+		auto listener = EventListenerCustom::create("bullet_disappear", [this](EventCustom* event) {
 			Bullet* bullet = static_cast<Bullet *>(event->getUserData());
 			if(bullet)
 				this->removeChild(bullet);
@@ -106,6 +106,7 @@ bool GameLayer::init()
 
 		_eventDispatcher->addEventListenerWithFixedPriority(listener, 1);
 
+		m_shootTime = 1.f;
 		//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(PATH_BG_MUSIC, true);
 		//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(PATH_HERO_TALK_EFFECT);
 
@@ -131,6 +132,7 @@ void GameLayer::onHeroWalk(Point direction, float distance)
 		m_pHero->runWalkAction();
 
 		//Point velocity;
+
 		if (direction.x > 0)
 		{
 			m_pHero->setVelocity(distance < 78 ? 1 : 3);
@@ -152,8 +154,9 @@ void GameLayer::onHeroJump(Point direction, float distance)
 		//m_pHero->setFlippedX(direction.x < 0 ? true : false);
 		m_pHero->runJumpAction();
 
-		m_pHero->setVelocity(distance < 78 ? 1 : 3);
-		m_pHero->setMoveDirection(direction);
+		//m_pHero->setVelocity(distance < 78 ? 1 : 3);
+		//m_pHero->setMoveDirection(direction);
+		m_pHero->getPhysicsBody()->applyImpulse(direction * 100.f);
 	}
 }
 
@@ -220,13 +223,18 @@ void GameLayer::updateHero(float dt)
 
 	if (m_pHero->getIsAttacking())
 	{
-		Bullet* bullet = getUnusedBullet();
-		bullet->setVelocity(200.f);
-		bullet->setDirection(m_pHero->getShootDirection());
-		bullet->setDisappearDistance(40000.f);
-		bullet->launch(m_pHero);
-		m_pHero->setIsAttacking(false);
-		this->addChild(bullet);
+		m_shootTime += dt;
+		if (m_shootTime >= 1.f)
+		{
+			Bullet* bullet = getUnusedBullet();
+			bullet->setVelocity(200.f);
+			bullet->setDirection(m_pHero->getShootDirection());
+			CCLOG("m_pHero attack (%f, %f)", m_pHero->getShootDirection().x, m_pHero->getShootDirection().y);
+			bullet->setDisappearDistance(40000.f);
+			bullet->launch(m_pHero);
+			this->addChild(bullet);
+			m_shootTime = 0.f;
+		}
 	}
 }
 

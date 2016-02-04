@@ -49,6 +49,8 @@ private:
 
 	float m_fScreenWidth;
 	float m_fScreenHeight;
+
+	float m_shootTime;
 	cocos2d::Point m_origin;
 
 	cocos2d::Vector<Bullet *> m_vecBullets;
