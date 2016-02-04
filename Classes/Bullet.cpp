@@ -18,7 +18,7 @@ bool Bullet::init()
 	do 
 	{
 		this->initWithFile("bullet.jpg");
-		PhysicsMaterial materail(0.1f, 0.0f, 1.0f);
+		PhysicsMaterial materail(0.1f, 0.0f, 0.5f);
 		auto body = PhysicsBody::create();
 		auto shape = PhysicsShapeBox::create(Size(this->getContentSize().width, this->getContentSize().height), materail);
 		body->addShape(shape);

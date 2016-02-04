@@ -101,7 +101,7 @@ bool OperateLayer::init()
 
 				CCLOG("onTouchesMoved %f", cos);
 
-				if (direction.y > 0 && cos >= 0 && cos < 0.9)
+				if (direction.y > 0 && cos >-0.9 && cos < 0.9)
 					m_pHero->jump(direction, distance);
 				else
 					m_pHero->walk(direction, distance);

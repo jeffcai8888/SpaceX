@@ -19,7 +19,7 @@ Scene* GameScene::createScene()
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 
-	PhysicsMaterial materail(0.1f, 0.0f, 0.0f);
+	PhysicsMaterial materail(0.1f, 0.0f, 0.5f);
 	auto body = PhysicsBody::createEdgeBox(visibleSize, PHYSICSSHAPE_MATERIAL_DEFAULT, 3);
 	body->setCategoryBitmask(0x04);
 	body->setCollisionBitmask(0x01);

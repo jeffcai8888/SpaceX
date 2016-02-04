@@ -154,9 +154,9 @@ void GameLayer::onHeroJump(Point direction, float distance)
 		//m_pHero->setFlippedX(direction.x < 0 ? true : false);
 		m_pHero->runJumpAction();
 
-		//m_pHero->setVelocity(distance < 78 ? 1 : 3);
-		//m_pHero->setMoveDirection(direction);
-		m_pHero->getPhysicsBody()->applyImpulse(direction * 100.f);
+		m_pHero->setVelocity(distance < 78 ? 10 : 30);
+		m_pHero->setMoveDirection(direction);
+		//m_pHero->getPhysicsBody()->applyImpulse(direction * 100.f);
 	}
 }
 
@@ -230,7 +230,7 @@ void GameLayer::updateHero(float dt)
 			bullet->setVelocity(200.f);
 			bullet->setDirection(m_pHero->getShootDirection());
 			CCLOG("m_pHero attack (%f, %f)", m_pHero->getShootDirection().x, m_pHero->getShootDirection().y);
-			bullet->setDisappearDistance(40000.f);
+			bullet->setDisappearDistance(90000.f);
 			bullet->launch(m_pHero);
 			this->addChild(bullet);
 			m_shootTime = 0.f;
