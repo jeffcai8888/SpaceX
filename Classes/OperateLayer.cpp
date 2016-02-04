@@ -127,20 +127,38 @@ bool OperateLayer::init()
 			CCLOG("KeyPressed %d", keyCode);
 			if (keyCode == EventKeyboard::KeyCode::KEY_D)
 			{
-				m_pHero->walk(Vec2(1.f, 0.f), 3.f);
+				m_KeyPressedValue |= KB_Front;
 			}
 			else if (keyCode == EventKeyboard::KeyCode::KEY_A)
 			{
-				m_pHero->walk(Vec2(-1.f, 0.f), 3.f);
+				m_KeyPressedValue |= KB_Back;
 			}
+			else if (keyCode == EventKeyboard::KeyCode::KEY_W)
+			{
+				m_KeyPressedValue |= KB_Up;
+			}
+			DealWithKeyBoard();
 		};
 		keyListener->onKeyReleased = [this](EventKeyboard::KeyCode keyCode, Event *event)
 		{
 			CCLOG("KeyReleased %d", keyCode);
-			if (keyCode == EventKeyboard::KeyCode::KEY_D || keyCode == EventKeyboard::KeyCode::KEY_A)
-				m_pHero->stop();
+			if (keyCode == EventKeyboard::KeyCode::KEY_D)
+			{
+				m_KeyPressedValue ^= KB_Front;
+			}
+			else if (keyCode == EventKeyboard::KeyCode::KEY_A)
+			{
+				m_KeyPressedValue ^= KB_Back;
+			}
+			else if (keyCode == EventKeyboard::KeyCode::KEY_W)
+			{
+				m_KeyPressedValue ^= KB_Up;
+			}
+			DealWithKeyBoard();
 		};
 		_eventDispatcher->addEventListenerWithSceneGraphPriority(keyListener, this);
+
+		m_KeyPressedValue = 0;
 		
 		ret = true;
 
@@ -179,16 +197,6 @@ void OperateLayer::updateJoystick(int type, Point direction, float distance)
 	}
 }
 
-/*void OperateLayer::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
-{
-	CCLOG("OperateLayer::onKeyPressed %d", keyCode);
-}
-
-void OperateLayer::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
-{
-	CCLOG("OperateLayer::onKeyReleased %d", keyCode);
-}*/
-
 bool OperateLayer::isTap(cocos2d::Node* pNode, cocos2d::Point point)
 {
 	Point pos = pNode->getPosition();
@@ -198,4 +206,25 @@ bool OperateLayer::isTap(cocos2d::Node* pNode, cocos2d::Point point)
 		return true;
 	else
 		return false;
+}
+
+void OperateLayer::DealWithKeyBoard()
+{
+	if (m_KeyPressedValue&KB_Up)
+	{
+		m_pHero->jump(Vec2(0.f, 1.f), 5.f);
+	}
+	else if (m_KeyPressedValue&KB_Front)
+	{
+		m_pHero->walk(Vec2(1.f, 0.f), 5.f);
+	}
+	else if (m_KeyPressedValue&KB_Back)
+	{
+		m_pHero->walk(Vec2(-1.f, 0.f), 5.f);
+	}
+	else
+	{
+		m_pHero->stop();
+	}
+
 }

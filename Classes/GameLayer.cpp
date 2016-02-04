@@ -98,6 +98,14 @@ bool GameLayer::init()
 
 		m_pSpriteNodes->addChild(m_pHero);
 
+		auto* listener = EventListenerCustom::create("bullet_disappear", [this](EventCustom* event) {
+			Bullet* bullet = static_cast<Bullet *>(event->getUserData());
+			if(bullet)
+				this->removeChild(bullet);
+		});
+
+		_eventDispatcher->addEventListenerWithFixedPriority(listener, 1);
+
 		//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(PATH_BG_MUSIC, true);
 		//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(PATH_HERO_TALK_EFFECT);
 
@@ -213,7 +221,7 @@ void GameLayer::updateHero(float dt)
 	if (m_pHero->getIsAttacking())
 	{
 		Bullet* bullet = getUnusedBullet();
-		bullet->setVelocity(5.f);
+		bullet->setVelocity(200.f);
 		bullet->setDirection(m_pHero->getShootDirection());
 		bullet->setDisappearDistance(40000.f);
 		bullet->launch(m_pHero);

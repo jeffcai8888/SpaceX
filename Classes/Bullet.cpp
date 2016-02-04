@@ -36,7 +36,12 @@ void Bullet::update(float dt)
 
 		float distance = curPos.distanceSquared(this->m_startPostion);
 		if (distance >= m_fDisappearDistance)
+		{
 			this->m_isActive = false;
+			EventCustom event("bullet_disappear");
+			event.setUserData(this);
+			_eventDispatcher->dispatchEvent(&event);
+		}
 	}
 }
 
@@ -47,6 +52,6 @@ void Bullet::launch(Hero* pHero)
 	Point pos = pHero->getPosition();
 	this->setPosition(pos);
 	this->m_startPostion = pos;
-	//this->getPhysicsBody()->setVelocity(m_fVelocity * m_fDirection);
-	this->getPhysicsBody()->applyImpulse(m_fVelocity * m_fDirection * 50);
+	this->getPhysicsBody()->setVelocity(Vec2(0.f, 0.f));
+	this->getPhysicsBody()->applyImpulse(m_fVelocity * m_fDirection);
 }

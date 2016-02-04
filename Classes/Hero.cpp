@@ -35,12 +35,10 @@ bool Hero::init()
 		this->m_bodyBox = this->createBoundingBox( Point(-heroShowSize.width / 2, -heroShowSize.height / 2), heroShowSize);
 		this->m_hitBox = this->createBoundingBox( Point(heroShowSize.width / 2, -10), Size(20, 20));
 
-		//auto body = PhysicsBody::createBox(Size(this->getContentSize().width / 4, this->getContentSize().height / 2));
-		//this->setPhysicsBody(body);
-		//auto body = PhysicsBody::create();
-		//auto shape = PhysicsShapeBox::create(Size(this->getContentSize().width / 8, this->getContentSize().height / 3), PHYSICSSHAPE_MATERIAL_DEFAULT, Vec2(0.f, -15.f));
-		//body->addShape(shape);
-		//this->setPhysicsBody(body);
+		auto body = PhysicsBody::create();
+		auto shape = PhysicsShapeBox::create(Size(this->getContentSize().width / 8, this->getContentSize().height / 3), PHYSICSSHAPE_MATERIAL_DEFAULT, Vec2(0.f, -15.f));
+		body->addShape(shape);
+		this->setPhysicsBody(body);
 		ret = true;
 	} while(0);
 
