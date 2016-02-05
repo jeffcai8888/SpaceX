@@ -35,6 +35,8 @@ public:
 
 	void exitApp(cocos2d::Ref* pSender);
 
+	void callBack(cocos2d::Ref *pSender);
+
 	CC_SYNTHESIZE_READONLY(Hero*, m_pHero, Hero);
 	CC_SYNTHESIZE(cocos2d::PhysicsWorld*, m_pWorld, PhyWorld);
 
@@ -47,6 +49,8 @@ private:
 
 	float m_fScreenWidth;
 	float m_fScreenHeight;
+
+	float m_shootTime;
 	cocos2d::Point m_origin;
 
 	cocos2d::Vector<Bullet *> m_vecBullets;
@@ -55,6 +59,8 @@ private:
 	cocos2d::ProgressTimer *m_pBlood;
 	cocos2d::ProgressTimer *m_pBloodBg;
 	cocos2d::MenuItemImage *m_pCloseItem;
+
+	Bullet* getUnusedBullet();
 };
 
 #endif

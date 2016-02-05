@@ -2,7 +2,7 @@
 #define _HERO_H_
 
 #include "BaseSprite.h"
-
+class Bullet;
 class Hero : public BaseSprite
 {
 public:

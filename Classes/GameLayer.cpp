@@ -63,11 +63,12 @@ bool GameLayer::init()
 		this->addChild(m_pSpriteNodes);
 
 		m_pHero = Hero::create();
-		m_pHero->setPosition( m_origin + Point(100, 100) );
+		m_pHero->setPosition( m_origin + Point(100, 100));
 		m_pHero->runIdleAction();
 		m_pHero->setLocalZOrder(m_fScreenHeight - m_pHero->getPositionY());
 		m_pHero->setAttack(5);
 		m_pHero->setHP(100);
+		m_pHero->setIsAttacking(false);
 		m_pHero->onDeadCallback = CC_CALLBACK_0(GameLayer::onHeroDead, this, m_pHero);
 		m_pHero->attack = CC_CALLBACK_0(GameLayer::onHeroAttack, this);
 		m_pHero->stop = CC_CALLBACK_0(GameLayer::onHeroStop, this);
@@ -97,6 +98,15 @@ bool GameLayer::init()
 
 		m_pSpriteNodes->addChild(m_pHero);
 
+		auto listener = EventListenerCustom::create("bullet_disappear", [this](EventCustom* event) {
+			Bullet* bullet = static_cast<Bullet *>(event->getUserData());
+			if(bullet)
+				this->removeChild(bullet);
+		});
+
+		_eventDispatcher->addEventListenerWithFixedPriority(listener, 1);
+
+		m_shootTime = 1.f;
 		//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(PATH_BG_MUSIC, true);
 		//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(PATH_HERO_TALK_EFFECT);
 
@@ -118,32 +128,35 @@ void GameLayer::onHeroWalk(Point direction, float distance)
 {
 	if(m_pHero->isLive())
 	{
-		m_pHero->setFlippedX(direction.x < 0 ? true : false);
+		//m_pHero->setFlippedX(direction.x < 0 ? true : false);
 		m_pHero->runWalkAction();
 
 		//Point velocity;
+
 		if (direction.x > 0)
 		{
 			m_pHero->setVelocity(distance < 78 ? 1 : 3);
-			m_pHero->setDirection(Point(1.f, 0.f));
+			m_pHero->setMoveDirection(Vec2(1.f, 0.f));
 		}
 		else
 		{
 			m_pHero->setVelocity(distance < 78 ? 1 : 3);
-			m_pHero->setDirection(Point(-1.f, 0.f));
+			m_pHero->setMoveDirection(Vec2(-1.f, 0.f));
 		}		
 	}
 }
 
 void GameLayer::onHeroJump(Point direction, float distance)
 {
+	; 
 	if (m_pHero->isLive())
 	{
-		m_pHero->setFlippedX(direction.x < 0 ? true : false);
+		//m_pHero->setFlippedX(direction.x < 0 ? true : false);
 		m_pHero->runJumpAction();
 
-		m_pHero->setVelocity(distance < 78 ? 1 : 3);
-		m_pHero->setDirection(direction);
+		m_pHero->setVelocity(distance < 78 ? 10 : 30);
+		m_pHero->setMoveDirection(direction);
+		//m_pHero->getPhysicsBody()->applyImpulse(direction * 100.f);
 	}
 }
 
@@ -175,6 +188,7 @@ void GameLayer::onHeroDead(BaseSprite *pTarget)
 void GameLayer::update(float dt)
 {
 	this->updateHero(dt);
+	this->updateBullet(dt);
 }
 
 void GameLayer::updateHero(float dt)
@@ -182,7 +196,7 @@ void GameLayer::updateHero(float dt)
 	if(m_pHero->getCurrActionState() == ACTION_STATE_WALK || m_pHero->getCurrActionState() == ACTION_STATE_JUMP)
 	{
 		float halfHeroFrameHeight = (m_pHero->getSpriteFrame()->getRect().size.height) / 2;
-		Point expectP = m_pHero->getPosition() + m_pHero->getVelocity() * m_pHero->getDirection();
+		Point expectP = m_pHero->getPosition() + m_pHero->getVelocity() * m_pHero->getMoveDirection();
 		Point actualP = expectP;
 		//can not walk on the wall or out of map
 		if(expectP.y < halfHeroFrameHeight || expectP.y > (m_fTileHeight * 3 + halfHeroFrameHeight) )
@@ -194,20 +208,58 @@ void GameLayer::updateHero(float dt)
 		float halfHeroFrameWidth = (m_pHero->getSpriteFrame()->getRect().size.width) / 2;
 		if(expectP.x > halfWinWidth && expectP.x <= (mapWidth - halfWinWidth))
 		{
-			this->setPositionX(this->getPositionX() - (m_pHero->getVelocity() * m_pHero->getDirection()).x);
-			this->m_pBlood->setPositionX(this->m_pBlood->getPositionX() + (m_pHero->getVelocity() * m_pHero->getDirection()).x);
-			this->m_pBloodBg->setPositionX(this->m_pBloodBg->getPositionX() + (m_pHero->getVelocity() * m_pHero->getDirection()).x);
-			this->m_pCloseItem->setPositionX(this->m_pCloseItem->getPositionX() + (m_pHero->getVelocity() * m_pHero->getDirection()).x);
+			this->setPositionX(this->getPositionX() - (m_pHero->getVelocity() * m_pHero->getMoveDirection()).x);
+			this->m_pBlood->setPositionX(this->m_pBlood->getPositionX() + (m_pHero->getVelocity() * m_pHero->getMoveDirection()).x);
+			this->m_pBloodBg->setPositionX(this->m_pBloodBg->getPositionX() + (m_pHero->getVelocity() * m_pHero->getMoveDirection()).x);
+			this->m_pCloseItem->setPositionX(this->m_pCloseItem->getPositionX() + (m_pHero->getVelocity() * m_pHero->getMoveDirection()).x);
 		}else if(expectP.x < halfHeroFrameWidth || expectP.x >= mapWidth - halfHeroFrameWidth)
 		{
 			actualP.x = m_pHero->getPositionX();
 		}
 		m_pHero->setPosition(actualP);
 		m_pHero->setLocalZOrder(m_fScreenHeight - m_pHero->getPositionY());
+		m_pHero->setFlippedX(m_pHero->getShootDirection().x < 0 ? true : false);
+	}
+
+	if (m_pHero->getIsAttacking())
+	{
+		m_shootTime += dt;
+		if (m_shootTime >= 1.f)
+		{
+			Bullet* bullet = getUnusedBullet();
+			bullet->setVelocity(200.f);
+			bullet->setDirection(m_pHero->getShootDirection());
+			CCLOG("m_pHero attack (%f, %f)", m_pHero->getShootDirection().x, m_pHero->getShootDirection().y);
+			bullet->setDisappearDistance(90000.f);
+			bullet->launch(m_pHero);
+			this->addChild(bullet);
+			m_shootTime = 0.f;
+		}
 	}
 }
 
 void GameLayer::updateBullet(float dt)
 {
+	for (auto sp_obj : m_vecBullets)
+	{
+		if (sp_obj->getIsActive())
+		{
+			sp_obj->update(dt);
+		}
+	}
+}
 
+Bullet* GameLayer::getUnusedBullet()
+{
+	for (auto sp_obj : m_vecBullets)
+	{
+		if (!sp_obj->getIsActive())
+		{
+			return sp_obj;
+		}
+	}
+
+	auto bullet = Bullet::create();
+	m_vecBullets.pushBack(bullet);
+	return bullet;
 }

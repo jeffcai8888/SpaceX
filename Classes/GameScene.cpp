@@ -18,7 +18,11 @@ Scene* GameScene::createScene()
 	operateLayer->setHero(gameLayer->getHero());
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
-	auto body = PhysicsBody::createEdgeBox(visibleSize, PHYSICSBODY_MATERIAL_DEFAULT, 3);
+
+	PhysicsMaterial materail(0.1f, 0.0f, 0.5f);
+	auto body = PhysicsBody::createEdgeBox(visibleSize, PHYSICSSHAPE_MATERIAL_DEFAULT, 3);
+	body->setCategoryBitmask(0x04);
+	body->setCollisionBitmask(0x01);
 	auto edgeNode = Node::create();
 	edgeNode->setPosition(Point(visibleSize.width / 2, visibleSize.height / 2));
 	edgeNode->setPhysicsBody(body);

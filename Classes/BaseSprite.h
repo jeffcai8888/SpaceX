@@ -41,10 +41,11 @@ public:
 
 	CC_SYNTHESIZE(ActionState, m_currActionState, CurrActionState);
 	CC_SYNTHESIZE(float, m_fVelocity, Velocity);
-	CC_SYNTHESIZE(cocos2d::Point, m_fDirection, Direction);
+	CC_SYNTHESIZE(cocos2d::Vec2, m_fMoveDirection, MoveDirection);
 	CC_SYNTHESIZE(unsigned int, m_hp, HP);
 	CC_SYNTHESIZE(unsigned int, m_attack, Attack);
-	CC_SYNTHESIZE(bool, m_isAttacking, IsAttacking)
+	CC_SYNTHESIZE(bool, m_isAttacking, IsAttacking);
+	CC_SYNTHESIZE(cocos2d::Vec2, m_fShootDirection, ShootDirection);
 
 	CC_SYNTHESIZE(BoundingBox, m_bodyBox, BodyBox);
 	CC_SYNTHESIZE(BoundingBox, m_hitBox, HitBox);
