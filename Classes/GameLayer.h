@@ -2,18 +2,12 @@
 #define _GAME_LAYER_H_
 
 #include <cocos2d.h>
-
-#define MIN_ENEMY_COUNT 5
-#define PATH_BG_MUSIC "background-music-aac.wav"
-#define PATH_HERO_HIT_EFFECT "pd_hit0.wav"
-#define PATH_ENEMY_HIT_EFFECT "pd_hit1.wav"
-#define PATH_HERO_DEAD_EFFECT "pd_herodeath.mp3"
-#define PATH_ENEMY_DEAD_EFFECT "pd_botdeath.wav"
-#define PATH_HERO_TALK_EFFECT "hero_talk.mp3"
+#include <Box2D/Box2D.h>
 
 class BaseSprite;
 class Hero;
 class Bullet;
+class GLESDebugDraw;
 
 class GameLayer : public cocos2d::Layer
 {
@@ -33,14 +27,18 @@ public:
 	void updateHero(float dt);
 	void updateBullet(float dt);
 
+
+
 	void exitApp(cocos2d::Ref* pSender);
 
 	void callBack(cocos2d::Ref *pSender);
 
 	CC_SYNTHESIZE_READONLY(Hero*, m_pHero, Hero);
-	CC_SYNTHESIZE(cocos2d::PhysicsWorld*, m_pWorld, PhyWorld);
+	CC_SYNTHESIZE(b2World*, m_pWorld, PhyWorld);
 
 	CREATE_FUNC(GameLayer);
+protected:
+	virtual void draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, uint32_t flags);
 
 private:
 	cocos2d::TMXTiledMap *m_pTiledMap;
@@ -59,6 +57,8 @@ private:
 	cocos2d::ProgressTimer *m_pBlood;
 	cocos2d::ProgressTimer *m_pBloodBg;
 	cocos2d::MenuItemImage *m_pCloseItem;
+
+	GLESDebugDraw *m_pDebugDraw;
 
 	Bullet* getUnusedBullet();
 };

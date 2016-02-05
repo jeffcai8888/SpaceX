@@ -1,15 +1,18 @@
 #include "GameLayer.h"
 #include "Hero.h"
 #include "Bullet.h"
+#include "GLES-Render.h"
 
 #include "SceneManager.h"
 #include "SimpleAudioEngine.h"
 using namespace cocos2d;
+
+#define PTM_RATIO 32
 bool collisionDetection(const BoundingBox &hitBox, const BoundingBox &bodyBox)
 {
 	Rect hitRect = hitBox.actual;
 	Rect bodyRect = bodyBox.actual;
-	if(hitRect.intersectsRect(bodyRect))
+	if (hitRect.intersectsRect(bodyRect))
 	{
 		return true;
 	}
@@ -19,20 +22,34 @@ bool collisionDetection(const BoundingBox &hitBox, const BoundingBox &bodyBox)
 
 
 GameLayer::GameLayer()
-	:m_pTiledMap(NULL),
-	m_pSpriteNodes(NULL),
-	m_pHero(NULL),
-	m_pBlood(NULL),
-	m_pBloodBg(NULL),
-	m_pWorld(NULL)
+	:m_pTiledMap(nullptr),
+	m_pSpriteNodes(nullptr),
+	m_pHero(nullptr),
+	m_pBlood(nullptr),
+	m_pBloodBg(nullptr),
+	m_pWorld(nullptr)
 {
 	m_vecBullets.clear();
+
+	b2Vec2 gravity;
+	gravity.Set(0.0f, -9.8f);
+	m_pWorld = new b2World(gravity);
+
+	m_pDebugDraw = new GLESDebugDraw(PTM_RATIO);
+	m_pWorld->SetDebugDraw(m_pDebugDraw);
+	uint32 flags = 0;
+	flags += b2Draw::e_shapeBit;
+	m_pDebugDraw->SetFlags(flags);
 }
 
 GameLayer::~GameLayer()
 {
+	_eventDispatcher->removeAllEventListeners();
 	this->unscheduleUpdate();
 	m_vecBullets.clear();
+
+	CC_SAFE_DELETE(m_pDebugDraw);
+	CC_SAFE_DELETE(m_pWorld);
 }
 
 bool GameLayer::init()
@@ -69,6 +86,7 @@ bool GameLayer::init()
 		m_pHero->setAttack(5);
 		m_pHero->setHP(100);
 		m_pHero->setIsAttacking(false);
+		m_pHero->initPhysics(m_pWorld);
 		m_pHero->onDeadCallback = CC_CALLBACK_0(GameLayer::onHeroDead, this, m_pHero);
 		m_pHero->attack = CC_CALLBACK_0(GameLayer::onHeroAttack, this);
 		m_pHero->stop = CC_CALLBACK_0(GameLayer::onHeroStop, this);
@@ -94,6 +112,14 @@ bool GameLayer::init()
 
 		this->addChild(m_pBloodBg, 100);
 		this->addChild(m_pBlood, 100);
+		
+		b2BodyDef edgeBodydef;
+		edgeBodydef.position.SetZero();
+		b2Body* edgeBody = m_pWorld->CreateBody(&edgeBodydef);
+		b2EdgeShape edgeShape;
+		edgeShape.Set(b2Vec2::b2Vec2(0, 0), b2Vec2::b2Vec2(m_fScreenWidth / PTM_RATIO, 0));
+		edgeBody->CreateFixture(&edgeShape, 0);
+
 
 
 		m_pSpriteNodes->addChild(m_pHero);
@@ -123,16 +149,23 @@ void GameLayer::exitApp(Ref* pSender)
 	Director::getInstance()->end();
 }
 
+void GameLayer::draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, uint32_t flags)
+{
+	GL::enableVertexAttribs(cocos2d::GL::VERTEX_ATTRIB_FLAG_POSITION);
+
+	m_pWorld->DrawDebugData();
+
+	CHECK_GL_ERROR_DEBUG();
+}
+
 
 void GameLayer::onHeroWalk(Point direction, float distance)
 {
 	if(m_pHero->isLive())
 	{
-		//m_pHero->setFlippedX(direction.x < 0 ? true : false);
 		m_pHero->runWalkAction();
 
 		//Point velocity;
-
 		if (direction.x > 0)
 		{
 			m_pHero->setVelocity(distance < 78 ? 1 : 3);
@@ -187,6 +220,7 @@ void GameLayer::onHeroDead(BaseSprite *pTarget)
 
 void GameLayer::update(float dt)
 {
+	this->m_pWorld->Step(dt, 8, 1);
 	this->updateHero(dt);
 	this->updateBullet(dt);
 }

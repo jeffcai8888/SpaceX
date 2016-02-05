@@ -171,14 +171,14 @@
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-		<project id="PompaDroid.null.31159645" name="PompaDroid"/>
+		<project id="SpaceX.null.31159645" name="SpaceX"/>
 	</storageModule>
 	<storageModule moduleId="refreshScope" versionNumber="2">
 		<configuration configurationName="Default">
-			<resource resourceType="PROJECT" workspacePath="/PompaDroid"/>
+			<resource resourceType="PROJECT" workspacePath="/SpaceX"/>
 		</configuration>
 		<configuration configurationName="Debug">
-			<resource resourceType="PROJECT" workspacePath="/PompaDroid"/>
+			<resource resourceType="PROJECT" workspacePath="/SpaceX"/>
 		</configuration>
 	</storageModule>
 </cproject>

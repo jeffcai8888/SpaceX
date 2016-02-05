@@ -10,6 +10,7 @@ public:
 	~Hero();
 
 	bool init();
+	bool initPhysics(b2World*);
 
 	CREATE_FUNC(Hero);
 

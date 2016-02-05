@@ -2,6 +2,7 @@
 #define _BASE_SPRITE_H_
 
 #include <cocos2d.h>
+#include <Box2D/Box2D.h>
 
 typedef enum {
 	ACTION_STATE_NONE = 0,
@@ -46,6 +47,7 @@ public:
 	CC_SYNTHESIZE(unsigned int, m_attack, Attack);
 	CC_SYNTHESIZE(bool, m_isAttacking, IsAttacking);
 	CC_SYNTHESIZE(cocos2d::Vec2, m_fShootDirection, ShootDirection);
+	CC_SYNTHESIZE(b2World*, m_pWorld, PhyWorld);
 
 	CC_SYNTHESIZE(BoundingBox, m_bodyBox, BodyBox);
 	CC_SYNTHESIZE(BoundingBox, m_hitBox, HitBox);
