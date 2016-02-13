@@ -7,39 +7,12 @@
 #include "SimpleAudioEngine.h"
 using namespace cocos2d;
 
-#define PTM_RATIO 32
-bool collisionDetection(const BoundingBox &hitBox, const BoundingBox &bodyBox)
-{
-	Rect hitRect = hitBox.actual;
-	Rect bodyRect = bodyBox.actual;
-	if (hitRect.intersectsRect(bodyRect))
-	{
-		return true;
-	}
-
-	return false;
-}
-
-
 GameLayer::GameLayer()
 	:m_pTiledMap(nullptr),
 	m_pSpriteNodes(nullptr),
-	m_pHero(nullptr),
-	m_pBlood(nullptr),
-	m_pBloodBg(nullptr),
-	m_pWorld(nullptr)
+	m_pHero(nullptr)
 {
 	m_vecBullets.clear();
-
-	b2Vec2 gravity;
-	gravity.Set(0.0f, -9.8f);
-	m_pWorld = new b2World(gravity);
-
-	m_pDebugDraw = new GLESDebugDraw(PTM_RATIO);
-	m_pWorld->SetDebugDraw(m_pDebugDraw);
-	uint32 flags = 0;
-	flags += b2Draw::e_shapeBit;
-	m_pDebugDraw->SetFlags(flags);
 }
 
 GameLayer::~GameLayer()
@@ -47,9 +20,6 @@ GameLayer::~GameLayer()
 	_eventDispatcher->removeAllEventListeners();
 	this->unscheduleUpdate();
 	m_vecBullets.clear();
-
-	CC_SAFE_DELETE(m_pDebugDraw);
-	CC_SAFE_DELETE(m_pWorld);
 }
 
 bool GameLayer::init()
@@ -63,13 +33,9 @@ bool GameLayer::init()
 		this->m_fScreenWidth = visibleSize.width;
 		this->m_fScreenHeight = visibleSize.height;
 
-		m_pCloseItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(GameLayer::exitApp, this));
-		m_pCloseItem->setPosition(this->m_origin + Point(visibleSize) - Point(m_pCloseItem->getContentSize() / 2));
-		auto menu = Menu::create(m_pCloseItem, NULL);
-		menu->setPosition(Point::ZERO);
-		this->addChild(menu, 1);
+		
 
-		m_pTiledMap = TMXTiledMap::create("pd_tilemap.tmx");
+		m_pTiledMap = TMXTiledMap::create("spacex_tilemap.tmx");
 		this->addChild(m_pTiledMap);
 		Size tileSize = m_pTiledMap->getTileSize();
 		m_fTileWidth = tileSize.width;
@@ -80,49 +46,29 @@ bool GameLayer::init()
 		this->addChild(m_pSpriteNodes);
 
 		m_pHero = Hero::create();
-		m_pHero->setPosition( m_origin + Point(100, 100));
+		m_pHero->setPosition(m_origin + Point(100, 100));
 		m_pHero->runIdleAction();
 		m_pHero->setLocalZOrder(m_fScreenHeight - m_pHero->getPositionY());
 		m_pHero->setAttack(5);
 		m_pHero->setHP(100);
 		m_pHero->setIsAttacking(false);
-		m_pHero->initPhysics(m_pWorld);
+	
 		m_pHero->onDeadCallback = CC_CALLBACK_0(GameLayer::onHeroDead, this, m_pHero);
 		m_pHero->attack = CC_CALLBACK_0(GameLayer::onHeroAttack, this);
 		m_pHero->stop = CC_CALLBACK_0(GameLayer::onHeroStop, this);
 		m_pHero->walk = CC_CALLBACK_2(GameLayer::onHeroWalk, this);
 		m_pHero->jump = CC_CALLBACK_2(GameLayer::onHeroJump, this);
-
-		Sprite *pBloodSprite = Sprite::create("blood.png");
-		this->m_pBlood = ProgressTimer::create(pBloodSprite);
-		this->m_pBlood->setType(ProgressTimer::Type::BAR);
-		this->m_pBlood->setMidpoint(Point(0, 0));
-		this->m_pBlood->setBarChangeRate(Point(1, 0));
-		this->m_pBlood->setAnchorPoint(Point(0, 1));
-		this->m_pBlood->setPosition(m_origin + Point(2, m_fScreenHeight - 10));
-		this->m_pBlood->setPercentage(100);
-
-		this->m_pBloodBg = ProgressTimer::create(Sprite::create("bloodBg.png"));
-		this->m_pBloodBg->setType(ProgressTimer::Type::BAR);
-		this->m_pBloodBg->setMidpoint(Point(0, 0));
-		this->m_pBloodBg->setBarChangeRate(Point(1, 0));
-		this->m_pBloodBg->setAnchorPoint(Point(0, 1));
-		this->m_pBloodBg->setPosition(this->m_pBlood->getPosition());
-		this->m_pBloodBg->setPercentage(100);
-
-		this->addChild(m_pBloodBg, 100);
-		this->addChild(m_pBlood, 100);
-		
-		b2BodyDef edgeBodydef;
-		edgeBodydef.position.SetZero();
-		b2Body* edgeBody = m_pWorld->CreateBody(&edgeBodydef);
-		b2EdgeShape edgeShape;
-		edgeShape.Set(b2Vec2::b2Vec2(0, 0), b2Vec2::b2Vec2(m_fScreenWidth / PTM_RATIO, 0));
-		edgeBody->CreateFixture(&edgeShape, 0);
-
-
-
 		m_pSpriteNodes->addChild(m_pHero);
+
+		const PhysicsMaterial m(1.f, 0.f, 1.f);
+		Size boxSize(m_pTiledMap->getMapSize().width * m_pTiledMap->getTileSize().width, m_pTiledMap->getMapSize().height * m_pTiledMap->getTileSize().height);
+		auto body = PhysicsBody::createEdgeBox(boxSize, m, 3);
+		body->setCategoryBitmask(0x04);
+		body->setCollisionBitmask(0x01);
+		auto edgeNode = Node::create();
+		edgeNode->setPosition(Point(boxSize.width / 2, boxSize.height / 2));
+		edgeNode->setPhysicsBody(body);
+		this->addChild(edgeNode);
 
 		auto listener = EventListenerCustom::create("bullet_disappear", [this](EventCustom* event) {
 			Bullet* bullet = static_cast<Bullet *>(event->getUserData());
@@ -144,24 +90,9 @@ bool GameLayer::init()
 	return ret;
 }
 
-void GameLayer::exitApp(Ref* pSender)
-{
-	Director::getInstance()->end();
-}
-
-void GameLayer::draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, uint32_t flags)
-{
-	GL::enableVertexAttribs(cocos2d::GL::VERTEX_ATTRIB_FLAG_POSITION);
-
-	m_pWorld->DrawDebugData();
-
-	CHECK_GL_ERROR_DEBUG();
-}
-
-
 void GameLayer::onHeroWalk(Point direction, float distance)
 {
-	if(m_pHero->isLive())
+	if(m_pHero->isLive() && m_pHero->getCurrActionState() != ACTION_STATE_JUMP)
 	{
 		m_pHero->runWalkAction();
 
@@ -175,21 +106,24 @@ void GameLayer::onHeroWalk(Point direction, float distance)
 		{
 			m_pHero->setVelocity(distance < 78 ? 1 : 3);
 			m_pHero->setMoveDirection(Vec2(-1.f, 0.f));
-		}		
+		}	
+		CCLOG("WALK");
 	}
 }
 
 void GameLayer::onHeroJump(Point direction, float distance)
 {
 	; 
-	if (m_pHero->isLive())
+	if (m_pHero->isLive() && m_pHero->getCurrActionState() != ACTION_STATE_JUMP)
 	{
 		//m_pHero->setFlippedX(direction.x < 0 ? true : false);
 		m_pHero->runJumpAction();
 
-		m_pHero->setVelocity(distance < 78 ? 10 : 30);
+		m_pHero->setVelocity(distance < 78 ? 150 : 450);
 		m_pHero->setMoveDirection(direction);
-		//m_pHero->getPhysicsBody()->applyImpulse(direction * 100.f);
+		//m_pHero->getPhysicsBody()->applyForce(direction * m_pHero->getVelocity());
+		m_pHero->getPhysicsBody()->setVelocity(direction * m_pHero->getVelocity());
+		CCLOG("JUMP");
 	}
 }
 
@@ -220,32 +154,24 @@ void GameLayer::onHeroDead(BaseSprite *pTarget)
 
 void GameLayer::update(float dt)
 {
-	this->m_pWorld->Step(dt, 8, 1);
 	this->updateHero(dt);
 	this->updateBullet(dt);
 }
 
 void GameLayer::updateHero(float dt)
 {
-	if(m_pHero->getCurrActionState() == ACTION_STATE_WALK || m_pHero->getCurrActionState() == ACTION_STATE_JUMP)
+	if(m_pHero->getCurrActionState() == ACTION_STATE_WALK)
 	{
-		float halfHeroFrameHeight = (m_pHero->getSpriteFrame()->getRect().size.height) / 2;
+		
 		Point expectP = m_pHero->getPosition() + m_pHero->getVelocity() * m_pHero->getMoveDirection();
 		Point actualP = expectP;
-		//can not walk on the wall or out of map
-		if(expectP.y < halfHeroFrameHeight || expectP.y > (m_fTileHeight * 3 + halfHeroFrameHeight) )
-		{
-			actualP.y = m_pHero->getPositionY();
-		}
+		//can not walk on the wall or out of map		
 		float mapWidth = m_pTiledMap->getContentSize().width;
 		float halfWinWidth = m_fScreenWidth / 2;
 		float halfHeroFrameWidth = (m_pHero->getSpriteFrame()->getRect().size.width) / 2;
 		if(expectP.x > halfWinWidth && expectP.x <= (mapWidth - halfWinWidth))
 		{
 			this->setPositionX(this->getPositionX() - (m_pHero->getVelocity() * m_pHero->getMoveDirection()).x);
-			this->m_pBlood->setPositionX(this->m_pBlood->getPositionX() + (m_pHero->getVelocity() * m_pHero->getMoveDirection()).x);
-			this->m_pBloodBg->setPositionX(this->m_pBloodBg->getPositionX() + (m_pHero->getVelocity() * m_pHero->getMoveDirection()).x);
-			this->m_pCloseItem->setPositionX(this->m_pCloseItem->getPositionX() + (m_pHero->getVelocity() * m_pHero->getMoveDirection()).x);
 		}else if(expectP.x < halfHeroFrameWidth || expectP.x >= mapWidth - halfHeroFrameWidth)
 		{
 			actualP.x = m_pHero->getPositionX();
@@ -253,6 +179,18 @@ void GameLayer::updateHero(float dt)
 		m_pHero->setPosition(actualP);
 		m_pHero->setLocalZOrder(m_fScreenHeight - m_pHero->getPositionY());
 		m_pHero->setFlippedX(m_pHero->getShootDirection().x < 0 ? true : false);
+	}
+	else if (m_pHero->getCurrActionState() == ACTION_STATE_JUMP)
+	{
+		//setViewPointCenter(m_pHero->getPosition());
+		m_pHero->setFlippedX(m_pHero->getShootDirection().x < 0 ? true : false);
+	}
+
+	setViewPointCenter(m_pHero->getPosition());
+
+	if (m_pHero->getPhysicsBody()->isResting() && m_pHero->getCurrActionState() == ACTION_STATE_JUMP)
+	{
+		m_pHero->runIdleAction();
 	}
 
 	if (m_pHero->getIsAttacking())
@@ -296,4 +234,23 @@ Bullet* GameLayer::getUnusedBullet()
 	auto bullet = Bullet::create();
 	m_vecBullets.pushBack(bullet);
 	return bullet;
+}
+
+void GameLayer::setViewPointCenter(Point position) {
+	auto winSize = Director::getInstance()->getWinSize();
+
+	int x = MAX(position.x, winSize.width / 2);
+	int y = MAX(position.y, winSize.height / 2);
+	int w = m_pTiledMap->getMapSize().width;
+	int h = m_pTiledMap->getMapSize().height;
+	x = MIN(x, (m_pTiledMap->getMapSize().width * m_pTiledMap->getTileSize().width) - winSize.width / 2);
+	y = MIN(y, (m_pTiledMap->getMapSize().height * m_pTiledMap->getTileSize().height) - winSize.height / 2);
+	auto actualPosition = Point(x, y);
+
+	auto centerOfView = Point(winSize.width / 2, winSize.height / 2);
+	auto viewPoint = centerOfView - actualPosition;
+
+	CCLOG("setViewPointCenter %f, %f", position.x, position.y);
+
+	this->setPosition(viewPoint);
 }

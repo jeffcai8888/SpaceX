@@ -34,17 +34,21 @@ bool Hero::init()
 		Animation *pDeadAnim = this->createAnimation("hero_knockout_%02d.png", 5, 12);
 		this->setDeadAction(Sequence::create(Animate::create(pDeadAnim), Blink::create(3, 9), BaseSprite::createDeadCallbackFunc(), NULL));
 
-		Size heroShowSize = this->getSpriteFrame()->getRect().size;
-		this->m_bodyBox = this->createBoundingBox( Point(-heroShowSize.width / 2, -heroShowSize.height / 2), heroShowSize);
-		this->m_hitBox = this->createBoundingBox( Point(heroShowSize.width / 2, -10), Size(20, 20));
+		//Size heroShowSize = this->getSpriteFrame()->getRect().size;
+		//this->m_bodyBox = this->createBoundingBox( Point(-heroShowSize.width / 2, -heroShowSize.height / 2), heroShowSize);
+		//this->m_hitBox = this->createBoundingBox( Point(heroShowSize.width / 2, -10), Size(20, 20));
 
-		/*PhysicsMaterial materail(1.0f, 0.0f, 0.5f);
+		Size size1 = this->getContentSize();
+		Size size2 = this->getSpriteFrame()->getRect().size;
 		auto body = PhysicsBody::create();
-		auto shape = PhysicsShapeBox::create(Size(this->getContentSize().width / 8, this->getContentSize().height / 3), PHYSICSSHAPE_MATERIAL_DEFAULT, Vec2(0.f, -15.f));
+		//body->setGravityEnable(false);
+		body->setRotationEnable(false);
+		const PhysicsMaterial m(0.1f, 0.f, 1.f);
+		auto shape = PhysicsShapeBox::create(Size(this->getContentSize().width / 8, this->getContentSize().height / 3), m, Vec2(0.f, -15.f));
 		body->addShape(shape);
 		body->setCategoryBitmask(0x01);
 		body->setCollisionBitmask(0x04);
-		this->setPhysicsBody(body);*/
+		this->setPhysicsBody(body);
 		ret = true;
 	} while(0);
 
@@ -52,28 +56,4 @@ bool Hero::init()
 }
 
 
-bool Hero::initPhysics(b2World* world)
-{
-	bool ret = false;
-	do {
-		m_pWorld = world;
-		b2BodyDef heroBodyDef;
-		heroBodyDef.type = b2_kinematicBody;
-		heroBodyDef.position.Set(this->getPosition().x / PTM_RATIO, this->getPosition().y / PTM_RATIO);
-		b2Body* heroBody = m_pWorld->CreateBody(&heroBodyDef);
 
-		b2PolygonShape heroShape;
-		heroShape.SetAsBox(this->getContentSize().width / 8, this->getContentSize().height / 3);
-		b2FixtureDef bodyFixture;
-		bodyFixture.shape = &heroShape;
-		bodyFixture.friction = 0.5f;
-		bodyFixture.density = 1;
-		bodyFixture.restitution = 0.5f;
-
-		heroBody->CreateFixture(&bodyFixture);
-		heroBody->SetUserData(this);
-		ret = true;
-	} while (0);
-
-	return ret;
-}

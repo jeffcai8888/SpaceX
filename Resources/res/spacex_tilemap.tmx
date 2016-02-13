@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="50" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="pd_tiles" tilewidth="32" tileheight="32" tilecount="512" columns="32">
+  <image source="pd_tiles.png" width="1024" height="512"/>
+ </tileset>
+ <layer name="块层 1" width="100" height="50">
+  <data encoding="base64" compression="zlib">
+   eJzt2VFuwyAQRVF3GV1PV1OvJMvORxPJQjDzIAxj1PvxpJDYxJ4DDnZ+juM4X/ndJGeRzP6u+5T9tHLdt+zLO7YdkjEWej1qNbc8zsY21nFFnGvtnFcfR1Ysj5Zd7X1rfNTqvNv1MdOmx6NWZ6/+eKz3aPVd65fM87halO3WfMEk1qM0sXzKvkiMh1VnZc2HVZ+Hde3xzLx6U/94j1rbWn9ln/sd43nU6qfcX1qfsfbVPTwjpV1+xvy4l4dlROI8lN8WPOI9FCvPjfge79eqh7r2wmOuR21fz4Lf8rUeI99D9Dqp41kZ78yJNR7KmPfuJclfHoMeveslPO7nkX2uO+Rh1LlV914PLMY9rFrisSafzIlrW92WrPFQ+iB47JbZHt5zSKJ7jNi0+sPjHh4YrPNQxzweczy87bgG3duDebKvBzbzPcrXrHPXefTe4+ER4+E9ex9tkziP8vkhHvkeaj9kzKPnuk+t8fgv8TyUaxOJd/nUA7M5HkotqXWOh3qvSHI9yFoP6z2c8jxa2+ARk+8v7b9wy4z78nl5AqC5BTQ=
+  </data>
+ </layer>
+</map>

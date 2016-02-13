@@ -3,6 +3,7 @@
 
 #include <cocos2d.h>
 #include <Box2D/Box2D.h>
+#include <cocos-ext.h>
 
 typedef enum {
 	ACTION_STATE_NONE = 0,
@@ -47,12 +48,6 @@ public:
 	CC_SYNTHESIZE(unsigned int, m_attack, Attack);
 	CC_SYNTHESIZE(bool, m_isAttacking, IsAttacking);
 	CC_SYNTHESIZE(cocos2d::Vec2, m_fShootDirection, ShootDirection);
-	CC_SYNTHESIZE(b2World*, m_pWorld, PhyWorld);
-
-	CC_SYNTHESIZE(BoundingBox, m_bodyBox, BodyBox);
-	CC_SYNTHESIZE(BoundingBox, m_hitBox, HitBox);
-
-	virtual void setPosition(const cocos2d::Point &position);
 
 	virtual void onDead();
 
@@ -70,7 +65,6 @@ protected:
 
 
 	BoundingBox createBoundingBox(cocos2d::Point origin, cocos2d::Size size);
-	void updateBoxes();
 
 private:
 	bool changeState(ActionState actionState);

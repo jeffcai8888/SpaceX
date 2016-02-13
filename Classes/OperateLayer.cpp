@@ -5,6 +5,9 @@ using namespace cocos2d;
 using namespace std;
 
 OperateLayer::OperateLayer()
+	:m_pCloseItem(nullptr),
+	m_pBlood(nullptr),
+	m_pBloodBg(nullptr)
 {
 	for (int i = 0; i < 2; ++i)
 	{
@@ -35,11 +38,45 @@ bool OperateLayer::init()
 		m_pJoystickBg[JT_Bullet]->setScale(0.75f, 0.75f);
 		this->addChild(m_pJoystick[JT_Bullet], 0);
 		this->addChild(m_pJoystickBg[JT_Bullet], 1);
-		m_pJoystick[JT_Bullet]->setPosition(Point(400.f, 50.f));
-		m_pJoystickBg[JT_Bullet]->setPosition(Point(400.f, 50.f));
+		m_pJoystick[JT_Bullet]->setPosition(Point(900.f, 50.f));
+		m_pJoystickBg[JT_Bullet]->setPosition(Point(900.f, 50.f));
 
+		m_pTarget = Sprite::create("target.jpg");
+		this->addChild(m_pTarget, 2);
 
 		this->hideJoystick(JT_Player);
+		this->hideTarget();
+
+		auto visibleSize = Director::getInstance()->getVisibleSize();
+		auto m_origin = Director::getInstance()->getVisibleOrigin();
+
+		m_pCloseItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(OperateLayer::exitApp, this));
+		m_pCloseItem->setPosition(m_origin + Point(visibleSize) - Point(m_pCloseItem->getContentSize() / 2));
+		auto menu = Menu::create(m_pCloseItem, NULL);
+		menu->setPosition(Point::ZERO);
+		this->addChild(menu, 1);
+
+		Sprite *pBloodSprite = Sprite::create("blood.png");
+		this->m_pBlood = ProgressTimer::create(pBloodSprite);
+		this->m_pBlood->setType(ProgressTimer::Type::BAR);
+		this->m_pBlood->setMidpoint(Point(0, 0));
+		this->m_pBlood->setBarChangeRate(Point(1, 0));
+		this->m_pBlood->setAnchorPoint(Point(0, 1));
+		this->m_pBlood->setPosition(m_origin + Point(2, visibleSize.height - 10));
+		this->m_pBlood->setPercentage(100);
+
+		this->m_pBloodBg = ProgressTimer::create(Sprite::create("bloodBg.png"));
+		this->m_pBloodBg->setType(ProgressTimer::Type::BAR);
+		this->m_pBloodBg->setMidpoint(Point(0, 0));
+		this->m_pBloodBg->setBarChangeRate(Point(1, 0));
+		this->m_pBloodBg->setAnchorPoint(Point(0, 1));
+		this->m_pBloodBg->setPosition(this->m_pBlood->getPosition());
+		this->m_pBloodBg->setPercentage(100);
+
+		this->addChild(m_pBloodBg, 100);
+		this->addChild(m_pBlood, 100);
+
+
 
 		//setTouchEnabled(true);
 		//setTouchMode(Touch::DispatchMode::ALL_AT_ONCE);
@@ -84,7 +121,8 @@ bool OperateLayer::init()
 					direction.normalize();
 					this->updateJoystick(JT_Bullet, direction, distance);
 					m_pHero->setShootDirection(direction);
-					CCLOG("onTouchesMoved direction(%f, %f)", direction.x, direction.y);
+					this->updateTarget(direction);
+					//CCLOG("onTouchesMoved direction(%f, %f)", direction.x, direction.y);
 				}
 			}
 			else
@@ -99,7 +137,7 @@ bool OperateLayer::init()
 				const Vec2 v2(1.f, 0.f);
 				float cos = v1.dot(v2);
 
-				CCLOG("onTouchesMoved %f", cos);
+				//CCLOG("onTouchesMoved %f", cos);
 
 				if (direction.y > 0 && cos >-0.9 && cos < 0.9)
 					m_pHero->jump(direction, distance);
@@ -114,14 +152,19 @@ bool OperateLayer::init()
 			Touch *pTouch = (Touch*)(*touchIter);
 			Point start = pTouch->getStartLocation();
 			if (start.x < winSize.width / 2)
+			{
 				this->hideJoystick(JT_Player);
+				m_pHero->stop();
+					
+			}		
 			else
 			{
 				Point pos = m_pJoystickBg[JT_Bullet]->getPosition();
 				m_pJoystick[JT_Bullet]->setPosition(pos);
 				m_pHero->setIsAttacking(false);
+				this->hideTarget();
 			}
-			m_pHero->stop();
+			
 		};
 		_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 		//_eventDispatcher->addEventListenerWithSceneGraphPriority(listener->clone(), m_pJoystick[JT_Bullet]);
@@ -141,7 +184,7 @@ bool OperateLayer::init()
 			{
 				m_KeyPressedValue |= KB_Up;
 			}
-			DealWithKeyBoard();
+			dealWithKeyBoard();
 		};
 		keyListener->onKeyReleased = [this](EventKeyboard::KeyCode keyCode, Event *event)
 		{
@@ -158,7 +201,7 @@ bool OperateLayer::init()
 			{
 				m_KeyPressedValue ^= KB_Up;
 			}
-			DealWithKeyBoard();
+			dealWithKeyBoard();
 		};
 		_eventDispatcher->addEventListenerWithSceneGraphPriority(keyListener, this);
 
@@ -212,7 +255,7 @@ bool OperateLayer::isTap(cocos2d::Node* pNode, cocos2d::Point point)
 		return false;
 }
 
-void OperateLayer::DealWithKeyBoard()
+void OperateLayer::dealWithKeyBoard()
 {
 	if (m_KeyPressedValue&KB_Up)
 	{
@@ -231,4 +274,20 @@ void OperateLayer::DealWithKeyBoard()
 		m_pHero->stop();
 	}
 
+}
+
+void OperateLayer::updateTarget(Point pos)
+{
+	m_pTarget->setPosition(m_pHero->getPosition() + pos * 200);
+	m_pTarget->setVisible(true);
+}
+
+void OperateLayer::hideTarget()
+{
+	m_pTarget->setVisible(false);
+}
+
+void OperateLayer::exitApp(Ref* pSender)
+{
+	Director::getInstance()->end();
 }
