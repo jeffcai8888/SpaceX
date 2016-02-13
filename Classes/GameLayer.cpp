@@ -250,7 +250,7 @@ void GameLayer::setViewPointCenter(Point position) {
 	auto centerOfView = Point(winSize.width / 2, winSize.height / 2);
 	auto viewPoint = centerOfView - actualPosition;
 
-	CCLOG("setViewPointCenter %f, %f", position.x, position.y);
+	//CCLOG("setViewPointCenter %f, %f", position.x, position.y);
 
 	this->setPosition(viewPoint);
 }

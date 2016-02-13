@@ -16,6 +16,7 @@ Scene* GameScene::createScene()
 	auto operateLayer = OperateLayer::create();
 	scene->addChild(operateLayer, 1);
 	operateLayer->setHero(gameLayer->getHero());
+	operateLayer->setGameLayer(gameLayer);
 
 	/*const PhysicsMaterial m(1.f, 0.f, 1.f);
 	auto body = PhysicsBody::createEdgeSegment(Vec2(0.f, 0.f), Vec2(visibleSize.width, 0.f), PHYSICSSHAPE_MATERIAL_DEFAULT);

@@ -4,6 +4,7 @@
 #include <cocos2d.h>
 
 class Hero;
+class GameLayer;
 class OperateLayer : public cocos2d::Layer
 {
 public:
@@ -29,6 +30,7 @@ public:
 	CREATE_FUNC(OperateLayer);
 
 	CC_SYNTHESIZE(Hero*, m_pHero, Hero);
+	CC_SYNTHESIZE(GameLayer*, m_pGameLayer, GameLayer);
 
 private:
 	void showJoystick(int type, cocos2d::Point pos);

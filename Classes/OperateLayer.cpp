@@ -1,5 +1,6 @@
 #include "OperateLayer.h"
-#include "hero.h"
+#include "Hero.h"
+#include "GameLayer.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -76,15 +77,7 @@ bool OperateLayer::init()
 		this->addChild(m_pBloodBg, 100);
 		this->addChild(m_pBlood, 100);
 
-
-
-		//setTouchEnabled(true);
-		//setTouchMode(Touch::DispatchMode::ALL_AT_ONCE);
-
 		auto listener = EventListenerTouchAllAtOnce::create();
-		//listener->onTouchesBegan = CC_CALLBACK_2(OperateLayer::onTouchesBegan, this);
-		//listener->onTouchesMoved = CC_CALLBACK_2(OperateLayer::onTouchesMoved, this);
-		//listener->onTouchesEnded = CC_CALLBACK_2(OperateLayer::onTouchesEnded, this);
 		listener->onTouchesBegan = [this](const vector<Touch*>& touches, Event *event)
 		{
 			Size winSize = Director::getInstance()->getWinSize();
@@ -122,7 +115,6 @@ bool OperateLayer::init()
 					this->updateJoystick(JT_Bullet, direction, distance);
 					m_pHero->setShootDirection(direction);
 					this->updateTarget(direction);
-					//CCLOG("onTouchesMoved direction(%f, %f)", direction.x, direction.y);
 				}
 			}
 			else
@@ -278,7 +270,9 @@ void OperateLayer::dealWithKeyBoard()
 
 void OperateLayer::updateTarget(Point pos)
 {
-	m_pTarget->setPosition(m_pHero->getPosition() + pos * 200);
+	m_pTarget->setPosition(m_pHero->getPosition() + m_pGameLayer->getPosition() + pos * 200);
+	CCLOG("Hero pos = %f, %f", m_pHero->getPosition().x, m_pHero->getPosition().y);
+	CCLOG("GameLayer pos = %f, %f", m_pGameLayer->getPosition().x, m_pGameLayer->getPosition().y);
 	m_pTarget->setVisible(true);
 }
 
