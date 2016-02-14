@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="50" tilewidth="32" tileheight="32" nextobjectid="11">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="50" tilewidth="32" tileheight="32" nextobjectid="14">
  <tileset firstgid="1" name="pd_tiles" tilewidth="32" tileheight="32" tilecount="512" columns="32">
   <image source="pd_tiles.png" width="1024" height="512"/>
  </tileset>
@@ -12,11 +12,13 @@
   </data>
  </layer>
  <objectgroup name="Objects">
-  <properties>
-   <property name="GroundNum" value="1"/>
-  </properties>
-  <object id="2" name="SpawnPoint" x="3044.12" y="352.242" width="27.2727" height="30.303"/>
-  <object id="6" name="Ground1" x="386.667" y="128" width="320" height="30.6667"/>
+  <object id="2" name="SpawnPoint" x="546.121" y="35.2424" width="27.2727" height="30.303"/>
+ </objectgroup>
+ <objectgroup name="Grounds">
+  <object id="6" name="Ground1" x="400.667" y="162" width="320" height="30.6667"/>
+  <object id="11" name="Ground1" x="400.667" y="162" width="320" height="30.6667"/>
+  <object id="12" name="Ground2" x="117" y="226.667" width="320" height="30.6667"/>
+  <object id="13" name="Ground0" x="641" y="259.667" width="320" height="30.6667"/>
  </objectgroup>
  <layer name="Meta" width="100" height="50">
   <data encoding="base64" compression="zlib">

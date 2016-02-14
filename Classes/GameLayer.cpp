@@ -1,7 +1,7 @@
 #include "GameLayer.h"
 #include "Hero.h"
 #include "Bullet.h"
-#include "GLES-Render.h"
+#include "Ground.h"
 
 #include "SceneManager.h"
 #include "SimpleAudioEngine.h"
@@ -37,28 +37,18 @@ bool GameLayer::init()
 
 		m_pTiledMap = TMXTiledMap::create("spacex_tilemap.tmx");
 		this->addChild(m_pTiledMap);
-		Size tileSize = m_pTiledMap->getTileSize();
-		m_fTileWidth = tileSize.width;
-		m_fTileHeight = tileSize.height;
 
 		TMXObjectGroup *objects = m_pTiledMap->getObjectGroup("Objects");
 		CCASSERT(NULL != objects, "'Objects' object group not found");
-		auto spawnPoint = objects->getObject("SpawnPoint");
-		CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
-		int x = spawnPoint["x"].asInt();
-		int y = spawnPoint["y"].asInt();
-
-		auto ground = objects->getObject("Ground1");
-		CCASSERT(!ground.empty(), "Ground1 object not found");
-
-
 
 		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("pd_sprites.plist");
 		m_pSpriteNodes = SpriteBatchNode::create("pd_sprites.pvr.ccz");
 		this->addChild(m_pSpriteNodes);
 
+		auto spawnPoint = objects->getObject("SpawnPoint");
+		CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
 		m_pHero = Hero::create();
-		m_pHero->setPosition(m_origin + Point(x, y));
+		m_pHero->setPosition(m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat()));
 		m_pHero->runIdleAction();
 		m_pHero->setLocalZOrder(m_fScreenHeight - m_pHero->getPositionY());
 		m_pHero->setAttack(5);
@@ -81,6 +71,8 @@ bool GameLayer::init()
 		edgeNode->setPosition(Point(boxSize.width / 2, boxSize.height / 2));
 		edgeNode->setPhysicsBody(body);
 		this->addChild(edgeNode);
+
+		importGroundData(m_pTiledMap);
 
 		auto listener = EventListenerCustom::create("bullet_disappear", [this](EventCustom* event) {
 			Bullet* bullet = static_cast<Bullet *>(event->getUserData());
@@ -204,7 +196,6 @@ void GameLayer::updateHero(float dt)
 	}
 	else if (m_pHero->isJump())
 	{
-		//setViewPointCenter(m_pHero->getPosition());
 		m_pHero->setFlippedX(m_pHero->getShootDirection().x < 0 ? true : false);
 	}
 
@@ -227,7 +218,6 @@ void GameLayer::updateHero(float dt)
 			Bullet* bullet = getUnusedBullet();
 			bullet->setVelocity(200.f);
 			bullet->setDirection(m_pHero->getShootDirection());
-			CCLOG("m_pHero attack (%f, %f)", m_pHero->getShootDirection().x, m_pHero->getShootDirection().y);
 			bullet->setDisappearDistance(90000.f);
 			bullet->launch(m_pHero);
 			this->addChild(bullet);
@@ -276,7 +266,24 @@ void GameLayer::setViewPointCenter(Point position) {
 	auto centerOfView = Point(winSize.width / 2, winSize.height / 2);
 	auto viewPoint = centerOfView - actualPosition;
 
-	//CCLOG("setViewPointCenter %f, %f", position.x, position.y);
-
 	this->setPosition(viewPoint);
+}
+
+void GameLayer::importGroundData(cocos2d::TMXTiledMap* data)
+{
+	TMXObjectGroup *objects = m_pTiledMap->getObjectGroup("Grounds");
+	int cnt = 0;
+	while (true)
+	{
+		std::string name = "Ground" + Value(cnt).asString();
+		auto object = objects->getObject(name);
+		//CCASSERT(!object.empty(), "Ground object not found");
+		if (object.empty())
+			return;
+		Size boxSize(object["width"].asFloat(), object["height"].asFloat());
+		auto ground = Ground::create();
+		ground->initPhysics(boxSize, Point(object["x"].asFloat() + boxSize.width / 2, object["y"].asFloat() + boxSize.height / 2));
+		this->addChild(ground, 0, name);
+		++cnt;
+	}
 }

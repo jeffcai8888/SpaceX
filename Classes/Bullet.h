@@ -2,14 +2,13 @@
 #include <cocos2d.h>
 
 class Hero;
-class Bullet :
-	public cocos2d::Sprite
+class Bullet : public cocos2d::Sprite
 {
 public:
 	Bullet();
 	virtual ~Bullet();
 
-	bool init();
+	virtual bool init();
 	void update(float dt);
 	void launch(Hero *);
 

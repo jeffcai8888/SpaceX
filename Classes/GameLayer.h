@@ -38,8 +38,6 @@ public:
 private:
 	cocos2d::TMXTiledMap *m_pTiledMap;
 	cocos2d::TMXLayer*	m_pMetaLayer;
-	float m_fTileWidth;
-	float m_fTileHeight;
 
 	float m_fScreenWidth;
 	float m_fScreenHeight;
@@ -52,6 +50,7 @@ private:
 
 	Bullet* getUnusedBullet();
 	void setViewPointCenter(cocos2d::Point position);
+	void importGroundData(cocos2d::TMXTiledMap*);
 };
 
 #endif

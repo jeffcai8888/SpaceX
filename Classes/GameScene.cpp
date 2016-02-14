@@ -18,14 +18,6 @@ Scene* GameScene::createScene()
 	operateLayer->setHero(gameLayer->getHero());
 	operateLayer->setGameLayer(gameLayer);
 
-	/*const PhysicsMaterial m(1.f, 0.f, 1.f);
-	auto body = PhysicsBody::createEdgeSegment(Vec2(0.f, 0.f), Vec2(visibleSize.width, 0.f), PHYSICSSHAPE_MATERIAL_DEFAULT);
-	body->setCategoryBitmask(0x04);
-	body->setCollisionBitmask(0x01);
-	auto edgeNode = Node::create();
-	edgeNode->setPosition(Point(0.f, 0.f));
-	edgeNode->setPhysicsBody(body);
-	scene->addChild(edgeNode);*/
 	return scene;
 }
 

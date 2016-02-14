@@ -2,8 +2,6 @@
 #define _BASE_SPRITE_H_
 
 #include <cocos2d.h>
-#include <Box2D/Box2D.h>
-#include <cocos-ext.h>
 
 typedef enum {
 	ACTION_STATE_NONE = 0,
