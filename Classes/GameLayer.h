@@ -14,6 +14,8 @@ public:
 	~GameLayer();
 
 	virtual bool init();
+	//virtual void onEnter();
+	//virtual void onExit();
 
 	void onHeroWalk(cocos2d::Point direction, float distance);
 	void onHeroJump(cocos2d::Point direction, float distance);
@@ -35,6 +37,7 @@ public:
 
 private:
 	cocos2d::TMXTiledMap *m_pTiledMap;
+	cocos2d::TMXLayer*	m_pMetaLayer;
 	float m_fTileWidth;
 	float m_fTileHeight;
 

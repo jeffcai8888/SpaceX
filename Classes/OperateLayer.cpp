@@ -146,8 +146,8 @@ bool OperateLayer::init()
 			if (start.x < winSize.width / 2)
 			{
 				this->hideJoystick(JT_Player);
-				m_pHero->stop();
-					
+				if(m_pHero->getCurrActionState() == ACTION_STATE_WALK)
+					m_pHero->stop();				
 			}		
 			else
 			{

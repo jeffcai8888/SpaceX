@@ -41,12 +41,24 @@ bool GameLayer::init()
 		m_fTileWidth = tileSize.width;
 		m_fTileHeight = tileSize.height;
 
+		TMXObjectGroup *objects = m_pTiledMap->getObjectGroup("Objects");
+		CCASSERT(NULL != objects, "'Objects' object group not found");
+		auto spawnPoint = objects->getObject("SpawnPoint");
+		CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
+		int x = spawnPoint["x"].asInt();
+		int y = spawnPoint["y"].asInt();
+
+		auto ground = objects->getObject("Ground1");
+		CCASSERT(!ground.empty(), "Ground1 object not found");
+
+
+
 		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("pd_sprites.plist");
 		m_pSpriteNodes = SpriteBatchNode::create("pd_sprites.pvr.ccz");
 		this->addChild(m_pSpriteNodes);
 
 		m_pHero = Hero::create();
-		m_pHero->setPosition(m_origin + Point(100, 100));
+		m_pHero->setPosition(m_origin + Point(x, y));
 		m_pHero->runIdleAction();
 		m_pHero->setLocalZOrder(m_fScreenHeight - m_pHero->getPositionY());
 		m_pHero->setAttack(5);
@@ -90,9 +102,19 @@ bool GameLayer::init()
 	return ret;
 }
 
+/*void GameLayer::onEnter()
+{
+	int i = 0;
+}
+
+void GameLayer::onExit()
+{
+	int i = 0;
+}*/
+
 void GameLayer::onHeroWalk(Point direction, float distance)
 {
-	if(m_pHero->isLive() && m_pHero->getCurrActionState() != ACTION_STATE_JUMP)
+	if(m_pHero->isLive() && !m_pHero->isJump())
 	{
 		m_pHero->runWalkAction();
 
@@ -114,10 +136,10 @@ void GameLayer::onHeroWalk(Point direction, float distance)
 void GameLayer::onHeroJump(Point direction, float distance)
 {
 	; 
-	if (m_pHero->isLive() && m_pHero->getCurrActionState() != ACTION_STATE_JUMP)
+	if (m_pHero->isLive() && !m_pHero->isJump())
 	{
 		//m_pHero->setFlippedX(direction.x < 0 ? true : false);
-		m_pHero->runJumpAction();
+		m_pHero->runJumpAction(true);
 
 		m_pHero->setVelocity(distance < 78 ? 150 : 450);
 		m_pHero->setMoveDirection(direction);
@@ -180,7 +202,7 @@ void GameLayer::updateHero(float dt)
 		m_pHero->setLocalZOrder(m_fScreenHeight - m_pHero->getPositionY());
 		m_pHero->setFlippedX(m_pHero->getShootDirection().x < 0 ? true : false);
 	}
-	else if (m_pHero->getCurrActionState() == ACTION_STATE_JUMP)
+	else if (m_pHero->isJump())
 	{
 		//setViewPointCenter(m_pHero->getPosition());
 		m_pHero->setFlippedX(m_pHero->getShootDirection().x < 0 ? true : false);
@@ -188,10 +210,14 @@ void GameLayer::updateHero(float dt)
 
 	setViewPointCenter(m_pHero->getPosition());
 
-	if (m_pHero->getPhysicsBody()->isResting() && m_pHero->getCurrActionState() == ACTION_STATE_JUMP)
+	if (m_pHero->getPhysicsBody()->getVelocity().y < 0.000000001f && m_pHero->getPhysicsBody()->getVelocity().y > -0.000000001f)
 	{
-		m_pHero->runIdleAction();
+		if(m_pHero->getCurrActionState() == ACTION_STATE_JUMP_UP)
+			m_pHero->runJumpAction(false);
+		else if(m_pHero->getCurrActionState() == ACTION_STATE_JUMP_DOWN)
+			m_pHero->runIdleAction();
 	}
+
 
 	if (m_pHero->getIsAttacking())
 	{

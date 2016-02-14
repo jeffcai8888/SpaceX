@@ -37,9 +37,10 @@ void BaseSprite::runWalkAction()
 	}
 }
 
-void BaseSprite::runJumpAction()
+void BaseSprite::runJumpAction(bool isUp)
 {
-	if (changeState(ACTION_STATE_JUMP))
+	ActionState state = isUp ? ACTION_STATE_JUMP_UP : ACTION_STATE_JUMP_DOWN;
+	if (changeState(state))
 	{
 		this->runAction(m_pIdleAction);
 	}
@@ -118,6 +119,11 @@ bool BaseSprite::isLive()
 	}else {
 		return true;
 	}
+}
+
+bool BaseSprite::isJump()
+{
+	return this->m_currActionState == ACTION_STATE_JUMP_UP || this->m_currActionState == ACTION_STATE_JUMP_DOWN;
 }
 
 bool BaseSprite::changeState(ActionState actionState)

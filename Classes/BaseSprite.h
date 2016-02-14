@@ -9,7 +9,8 @@ typedef enum {
 	ACTION_STATE_NONE = 0,
 	ACTION_STATE_IDLE,
 	ACTION_STATE_WALK,
-	ACTION_STATE_JUMP,
+	ACTION_STATE_JUMP_UP,
+	ACTION_STATE_JUMP_DOWN,
 	ACTION_STATE_HURT,
 	ACTION_STATE_DEAD,
 	ACTION_STATE_REMOVE,
@@ -29,7 +30,7 @@ public:
 
 	void runIdleAction();
 	void runWalkAction();
-	void runJumpAction();
+	void runJumpAction(bool isUp);
 	void runAttackAction();
 	void runHurtAction();
 	void removeSprite();
@@ -52,6 +53,7 @@ public:
 	virtual void onDead();
 
 	virtual bool isLive();
+	virtual bool isJump();
 
 	cocos2d::CallFunc* createDeadCallbackFunc();
 	cocos2d::CallFunc* createIdleCallbackFunc();
