@@ -25,6 +25,8 @@ public:
 	~OperateLayer();
 
 	virtual bool init();
+	virtual void onEnter();
+	virtual void onExit();
 	void exitApp(Ref* pSender);
 
 	CREATE_FUNC(OperateLayer);

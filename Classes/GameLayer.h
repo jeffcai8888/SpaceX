@@ -14,8 +14,8 @@ public:
 	~GameLayer();
 
 	virtual bool init();
-	//virtual void onEnter();
-	//virtual void onExit();
+	virtual void onEnter();
+	virtual void onExit();
 
 	void onHeroWalk(cocos2d::Point direction, float distance);
 	void onHeroJump(cocos2d::Point direction, float distance);

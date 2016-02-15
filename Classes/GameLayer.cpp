@@ -74,19 +74,11 @@ bool GameLayer::init()
 
 		importGroundData(m_pTiledMap);
 
-		auto listener = EventListenerCustom::create("bullet_disappear", [this](EventCustom* event) {
-			Bullet* bullet = static_cast<Bullet *>(event->getUserData());
-			if(bullet)
-				this->removeChild(bullet);
-		});
-
-		_eventDispatcher->addEventListenerWithFixedPriority(listener, 1);
-
 		m_shootTime = 1.f;
 		//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(PATH_BG_MUSIC, true);
 		//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(PATH_HERO_TALK_EFFECT);
 
-		this->scheduleUpdate();
+		
 
 		ret = true;
 	} while(0);
@@ -94,15 +86,25 @@ bool GameLayer::init()
 	return ret;
 }
 
-/*void GameLayer::onEnter()
+void GameLayer::onEnter()
 {
-	int i = 0;
+	Layer::onEnter();
+	auto listener = EventListenerCustom::create("bullet_disappear", [this](EventCustom* event) {
+		Bullet* bullet = static_cast<Bullet *>(event->getUserData());
+		if (bullet)
+			this->removeChild(bullet);
+	});
+
+	_eventDispatcher->addEventListenerWithFixedPriority(listener, 1);
+	this->scheduleUpdate();
 }
 
 void GameLayer::onExit()
 {
-	int i = 0;
-}*/
+	Layer::onExit();
+	_eventDispatcher->removeAllEventListeners();
+	this->unscheduleUpdate();
+}
 
 void GameLayer::onHeroWalk(Point direction, float distance)
 {
