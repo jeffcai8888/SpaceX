@@ -41,12 +41,14 @@ bool Hero::init()
 		Size size1 = this->getContentSize();
 		Size size2 = this->getSpriteFrame()->getRect().size;
 		auto body = PhysicsBody::create();
+		body->setTag(1);
 		//body->setGravityEnable(false);
 		body->setRotationEnable(false);
 		const PhysicsMaterial m(0.1f, 0.f, 1.f);
 		auto shape = PhysicsShapeBox::create(Size(this->getContentSize().width / 8, this->getContentSize().height / 3), m, Vec2(0.f, -15.f));
 		body->addShape(shape);
 		body->setCategoryBitmask(0x01);
+		body->setContactTestBitmask(0x04);
 		body->setCollisionBitmask(0x04);
 		this->setPhysicsBody(body);
 		ret = true;

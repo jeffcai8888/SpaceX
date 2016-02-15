@@ -33,8 +33,6 @@ bool GameLayer::init()
 		this->m_fScreenWidth = visibleSize.width;
 		this->m_fScreenHeight = visibleSize.height;
 
-		
-
 		m_pTiledMap = TMXTiledMap::create("spacex_tilemap.tmx");
 		this->addChild(m_pTiledMap);
 
@@ -54,7 +52,7 @@ bool GameLayer::init()
 		m_pHero->setAttack(5);
 		m_pHero->setHP(100);
 		m_pHero->setIsAttacking(false);
-	
+
 		m_pHero->onDeadCallback = CC_CALLBACK_0(GameLayer::onHeroDead, this, m_pHero);
 		m_pHero->attack = CC_CALLBACK_0(GameLayer::onHeroAttack, this);
 		m_pHero->stop = CC_CALLBACK_0(GameLayer::onHeroStop, this);
@@ -62,19 +60,6 @@ bool GameLayer::init()
 		m_pHero->jump = CC_CALLBACK_2(GameLayer::onHeroJump, this);
 		m_pSpriteNodes->addChild(m_pHero);
 
-		const PhysicsMaterial m(1.f, 0.f, 1.f);
-		Size boxSize(m_pTiledMap->getMapSize().width * m_pTiledMap->getTileSize().width, m_pTiledMap->getMapSize().height * m_pTiledMap->getTileSize().height);
-		auto body = PhysicsBody::createEdgeBox(boxSize, m, 3);
-		body->setCategoryBitmask(0x04);
-		body->setCollisionBitmask(0x01);
-		auto edgeNode = Node::create();
-		edgeNode->setPosition(Point(boxSize.width / 2, boxSize.height / 2));
-		edgeNode->setPhysicsBody(body);
-		this->addChild(edgeNode);
-
-		importGroundData(m_pTiledMap);
-
-		m_shootTime = 1.f;
 		//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(PATH_BG_MUSIC, true);
 		//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(PATH_HERO_TALK_EFFECT);
 
@@ -89,6 +74,24 @@ bool GameLayer::init()
 void GameLayer::onEnter()
 {
 	Layer::onEnter();
+
+	const PhysicsMaterial m(1.f, 0.f, 1.f);
+	Size boxSize(m_pTiledMap->getMapSize().width * m_pTiledMap->getTileSize().width, m_pTiledMap->getMapSize().height * m_pTiledMap->getTileSize().height);
+	auto body = PhysicsBody::createEdgeBox(boxSize, m, 3);
+	body->setTag(0);
+	body->setCategoryBitmask(0x04);
+	body->setContactTestBitmask(0x01);
+	body->setCollisionBitmask(0x03);
+	auto edgeNode = Node::create();
+	edgeNode->setPosition(Point(boxSize.width / 2, boxSize.height / 2));
+	edgeNode->setPhysicsBody(body);
+	this->addChild(edgeNode);
+
+	importGroundData(m_pTiledMap);
+
+	m_shootTime = 1.f;
+
+
 	auto listener = EventListenerCustom::create("bullet_disappear", [this](EventCustom* event) {
 		Bullet* bullet = static_cast<Bullet *>(event->getUserData());
 		if (bullet)
@@ -96,6 +99,27 @@ void GameLayer::onEnter()
 	});
 
 	_eventDispatcher->addEventListenerWithFixedPriority(listener, 1);
+
+
+	auto contactListener = EventListenerPhysicsContact::create();
+	contactListener->onContactBegin = [this](PhysicsContact& contact)->bool
+	{
+		if (contact.getShapeA()->getBody()->getCategoryBitmask() == 0x01 && contact.getShapeB()->getBody()->getCategoryBitmask() == 0x04)
+		{
+			Point posA = contact.getShapeA()->getBody()->getPosition();
+			Point posB = contact.getShapeB()->getBody()->getPosition();
+			return (posA.y >= posB.y);
+		}
+		else if (contact.getShapeA()->getBody()->getCategoryBitmask() == 0x04 && contact.getShapeB()->getBody()->getCategoryBitmask() == 0x01)
+		{
+			Point posA = contact.getShapeA()->getBody()->getPosition();
+			Point posB = contact.getShapeB()->getBody()->getPosition();
+			return (posA.y <= posB.y);
+		}
+		return true;
+	};
+
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 	this->scheduleUpdate();
 }
 
