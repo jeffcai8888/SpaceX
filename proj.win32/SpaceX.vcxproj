@@ -147,6 +147,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\BaseSprite.cpp" />
     <ClCompile Include="..\Classes\Bullet.cpp" />
+    <ClCompile Include="..\Classes\DebugScene.cpp" />
     <ClCompile Include="..\Classes\GameLayer.cpp" />
     <ClCompile Include="..\Classes\GameOverScene.cpp" />
     <ClCompile Include="..\Classes\GameScene.cpp" />
@@ -161,6 +162,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\BaseSprite.h" />
     <ClInclude Include="..\Classes\Bullet.h" />
     <ClInclude Include="..\Classes\commons.h" />
+    <ClInclude Include="..\Classes\DebugScene.h" />
     <ClInclude Include="..\Classes\GameLayer.h" />
     <ClInclude Include="..\Classes\GameOverScene.h" />
     <ClInclude Include="..\Classes\GameScene.h" />

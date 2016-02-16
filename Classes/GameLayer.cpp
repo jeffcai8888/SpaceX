@@ -135,7 +135,8 @@ void GameLayer::onHeroWalk(Point direction, float distance)
 	if(m_pHero->isLive() && !m_pHero->isJump())
 	{
 		m_pHero->runWalkAction();
-
+		if (!m_pHero->getIsAttacking())
+			m_pHero->setFlippedX(direction.x < 0);
 		//Point velocity;
 		if (direction.x > 0)
 		{
@@ -156,6 +157,8 @@ void GameLayer::onHeroJump(Point direction, float distance)
 	{
 		m_pHero->runJumpAction(true);
 
+		if (!m_pHero->getIsAttacking())
+			m_pHero->setFlippedX(direction.x < 0);
 		m_pHero->setVelocity(distance < 78 ? 150 : 200);
         if(distance < 78)
             CCLOG("low speed");
@@ -218,11 +221,6 @@ void GameLayer::updateHero(float dt)
 		}
 		m_pHero->setPosition(actualP);
 		m_pHero->setLocalZOrder(m_fScreenHeight - m_pHero->getPositionY());
-		m_pHero->setFlippedX(m_pHero->getShootDirection().x < 0 ? true : false);
-	}
-	else if (m_pHero->isJump())
-	{
-		m_pHero->setFlippedX(m_pHero->getShootDirection().x < 0 ? true : false);
 	}
 
 	setViewPointCenter(m_pHero->getPosition());
@@ -248,6 +246,7 @@ void GameLayer::updateHero(float dt)
 			bullet->launch(m_pHero);
 			this->addChild(bullet);
 			m_shootTime = 0.f;
+			m_pHero->setFlippedX(m_pHero->getShootDirection().x < 0);
 		}
 	}
     
@@ -293,15 +292,14 @@ Bullet* GameLayer::getUnusedBullet()
 
 void GameLayer::setViewPointCenter(Point position) {
 	auto winSize = Director::getInstance()->getWinSize();
-
-	int x = MAX(position.x, winSize.width / 2);
+	/*int x = MAX(position.x, winSize.width / 2);
 	int y = MAX(position.y, winSize.height / 2);
 	x = MIN(x, (m_pTiledMap->getMapSize().width * m_pTiledMap->getTileSize().width) - winSize.width / 2);
 	y = MIN(y, (m_pTiledMap->getMapSize().height * m_pTiledMap->getTileSize().height) - winSize.height / 2);
-	auto actualPosition = Point(x, y);
+	auto actualPosition = Point(x, y);*/
 
 	auto centerOfView = Point(winSize.width / 2, winSize.height / 2);
-	auto viewPoint = centerOfView - actualPosition;
+	auto viewPoint = centerOfView - position;
 
 	this->setPosition(viewPoint);
 }
