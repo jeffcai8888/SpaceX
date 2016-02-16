@@ -80,7 +80,7 @@ void GameLayer::onEnter()
 	auto body = PhysicsBody::createEdgeBox(boxSize, m, 3);
 	body->setTag(0);
 	body->setCategoryBitmask(0x04);
-	body->setContactTestBitmask(0x01);
+	//body->setContactTestBitmask(0x01);
 	body->setCollisionBitmask(0x03);
 	auto edgeNode = Node::create();
 	edgeNode->setPosition(Point(boxSize.width / 2, boxSize.height / 2));
@@ -146,24 +146,24 @@ void GameLayer::onHeroWalk(Point direction, float distance)
 		{
 			m_pHero->setVelocity(distance < 78 ? 1 : 3);
 			m_pHero->setMoveDirection(Vec2(-1.f, 0.f));
-		}	
-		CCLOG("WALK");
+		}
 	}
 }
 
 void GameLayer::onHeroJump(Point direction, float distance)
 {
-	; 
 	if (m_pHero->isLive() && !m_pHero->isJump())
 	{
-		//m_pHero->setFlippedX(direction.x < 0 ? true : false);
 		m_pHero->runJumpAction(true);
 
-		m_pHero->setVelocity(distance < 78 ? 150 : 450);
+		m_pHero->setVelocity(distance < 78 ? 150 : 200);
+        if(distance < 78)
+            CCLOG("low speed");
+        else
+            CCLOG("high speed");
 		m_pHero->setMoveDirection(direction);
-		//m_pHero->getPhysicsBody()->applyForce(direction * m_pHero->getVelocity());
 		m_pHero->getPhysicsBody()->setVelocity(direction * m_pHero->getVelocity());
-		CCLOG("JUMP");
+        m_pHero->setPreVelocityY(m_pHero->getPhysicsBody()->getVelocity().y);
 	}
 }
 
@@ -227,14 +227,14 @@ void GameLayer::updateHero(float dt)
 
 	setViewPointCenter(m_pHero->getPosition());
 
-	if (m_pHero->getPhysicsBody()->getVelocity().y < 0.000000001f && m_pHero->getPhysicsBody()->getVelocity().y > -0.000000001f)
+	if (m_pHero->getPhysicsBody()->getVelocity().y < 0.00000000000f && m_pHero->getPreVelocityY()> -0.00000000000f)
 	{
 		if(m_pHero->getCurrActionState() == ACTION_STATE_JUMP_UP)
 			m_pHero->runJumpAction(false);
 		else if(m_pHero->getCurrActionState() == ACTION_STATE_JUMP_DOWN)
 			m_pHero->runIdleAction();
 	}
-
+    m_pHero->setPreVelocityY(m_pHero->getPhysicsBody()->getVelocity().y);
 
 	if (m_pHero->getIsAttacking())
 	{
@@ -250,6 +250,19 @@ void GameLayer::updateHero(float dt)
 			m_shootTime = 0.f;
 		}
 	}
+    
+    /*if(m_pHero->getCurrActionState() == ACTION_STATE_JUMP_UP)
+    {
+        CCLOG("ACTION_STATE_JUMP_UP %f %f", m_pHero->getPhysicsBody()->getVelocity().x, m_pHero->getPhysicsBody()->getVelocity().y);
+    }
+    else if(m_pHero->getCurrActionState() == ACTION_STATE_JUMP_DOWN)
+    {
+        CCLOG("ACTION_STATE_JUMP_DOWN %f %f", m_pHero->getPhysicsBody()->getVelocity().x, m_pHero->getPhysicsBody()->getVelocity().y);
+    }
+    else if(m_pHero->getCurrActionState() == ACTION_STATE_WALK)
+    {
+        CCLOG("ACTION_STATE_WALK %f %f", m_pHero->getPhysicsBody()->getVelocity().x, m_pHero->getPhysicsBody()->getVelocity().y);
+    }*/
 }
 
 void GameLayer::updateBullet(float dt)
@@ -283,8 +296,6 @@ void GameLayer::setViewPointCenter(Point position) {
 
 	int x = MAX(position.x, winSize.width / 2);
 	int y = MAX(position.y, winSize.height / 2);
-	int w = m_pTiledMap->getMapSize().width;
-	int h = m_pTiledMap->getMapSize().height;
 	x = MIN(x, (m_pTiledMap->getMapSize().width * m_pTiledMap->getTileSize().width) - winSize.width / 2);
 	y = MIN(y, (m_pTiledMap->getMapSize().height * m_pTiledMap->getTileSize().height) - winSize.height / 2);
 	auto actualPosition = Point(x, y);
