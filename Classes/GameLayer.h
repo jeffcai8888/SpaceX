@@ -31,7 +31,6 @@ public:
 	void callBack(cocos2d::Ref *pSender);
 
 	CC_SYNTHESIZE_READONLY(Hero*, m_pHero, Hero);
-	CC_SYNTHESIZE(cocos2d::PhysicsWorld*, m_pWorld, PhyWorld);
 
 	CREATE_FUNC(GameLayer);
 

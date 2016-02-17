@@ -8,9 +8,9 @@ Scene* GameScene::createScene()
 {
 	auto scene = Scene::createWithPhysics();
 	scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+	scene->getPhysicsWorld()->setSpeed(2.f);
 	
 	auto gameLayer = GameLayer::create();
-	gameLayer->setPhyWorld(scene->getPhysicsWorld());
 	scene->addChild(gameLayer, 0);
 
 	auto operateLayer = OperateLayer::create();

@@ -48,6 +48,9 @@ private:
 	cocos2d::Sprite *m_pJoystick[2];
 	cocos2d::Sprite *m_pJoystickBg[2];
 	cocos2d::Sprite *m_pTarget;
+	cocos2d::Sprite *m_pFront;
+	cocos2d::Sprite *m_pBack;
+	cocos2d::Sprite *m_pUp;
 	cocos2d::ProgressTimer *m_pBlood;
 	cocos2d::ProgressTimer *m_pBloodBg;
 	cocos2d::MenuItemImage *m_pCloseItem;

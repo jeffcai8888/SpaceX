@@ -132,6 +132,7 @@ void GameLayer::onExit()
 	this->unscheduleUpdate();
 }
 
+
 void GameLayer::onHeroWalk(Point direction, float distance)
 {
 	if(m_pHero->isLive() && !m_pHero->isJump())
@@ -155,6 +156,7 @@ void GameLayer::onHeroWalk(Point direction, float distance)
 
 void GameLayer::onHeroJump(Point direction, float distance)
 {
+#ifdef USE_JOYSTICK
 	if (m_pHero->isLive() && !m_pHero->isJump())
 	{
 		m_pHero->runJumpAction(true);
@@ -162,14 +164,23 @@ void GameLayer::onHeroJump(Point direction, float distance)
 		if (!m_pHero->getIsAttacking())
 			m_pHero->setFlippedX(direction.x < 0);
 		m_pHero->setVelocity(distance < 78 ? 150 : 200);
-        if(distance < 78)
-            CCLOG("low speed");
-        else
-            CCLOG("high speed");
 		m_pHero->setMoveDirection(direction);
 		m_pHero->getPhysicsBody()->setVelocity(direction * m_pHero->getVelocity());
         m_pHero->setPreVelocityY(m_pHero->getPhysicsBody()->getVelocity().y);
 	}
+#else
+	if (m_pHero->isLive() && !m_pHero->isJump())
+	{
+		CCLOG("jumping");
+		m_pHero->runJumpAction(true);
+
+		if (!m_pHero->getIsAttacking())
+			m_pHero->setFlippedX(direction.x < 0);
+
+		m_pHero->getPhysicsBody()->setVelocity(direction);
+		m_pHero->setPreVelocityY(m_pHero->getPhysicsBody()->getVelocity().y);
+	}
+#endif
 }
 
 void GameLayer::onHeroAttack()

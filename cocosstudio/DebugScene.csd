@@ -6,13 +6,13 @@
       <ObjectData Name="DebugLayer" CustomClassName="DebugLayer" ctype="GameNodeObjectData">
         <Size X="960.0000" Y="640.0000" />
         <Children>
-          <AbstractNodeData Name="Text_1" ActionTag="-1797114136" Tag="3" IconVisible="False" LeftMargin="25.0000" RightMargin="835.0000" TopMargin="21.0000" BottomMargin="599.0000" FontSize="20" LabelText="Text Label" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+          <AbstractNodeData Name="Text_1" ActionTag="-1797114136" Tag="3" IconVisible="False" LeftMargin="24.0000" RightMargin="836.0000" TopMargin="21.0000" BottomMargin="599.0000" FontSize="20" LabelText="Text Label" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
             <Size X="100.0000" Y="20.0000" />
             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-            <Position X="75.0000" Y="609.0000" />
+            <Position X="74.0000" Y="609.0000" />
             <Scale ScaleX="1.0000" ScaleY="1.0000" />
             <CColor A="255" R="255" G="255" B="255" />
-            <PrePosition X="0.0781" Y="0.9516" />
+            <PrePosition X="0.0771" Y="0.9516" />
             <PreSize X="0.1042" Y="0.0313" />
             <OutlineColor A="255" R="255" G="0" B="0" />
             <ShadowColor A="255" R="110" G="110" B="110" />

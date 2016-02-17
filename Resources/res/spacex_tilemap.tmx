@@ -9,12 +9,11 @@
   </data>
  </layer>
  <objectgroup name="Objects">
-  <object id="2" name="SpawnPoint" x="546.121" y="35.2424" width="27.2727" height="30.303"/>
+  <object id="2" name="SpawnPoint" x="1570.36" y="571.606" width="27.2727" height="30.303"/>
  </objectgroup>
  <objectgroup name="Grounds">
-  <object id="6" name="Ground1" x="400.667" y="162" width="320" height="30.6667"/>
-  <object id="11" name="Ground1" x="400.667" y="162" width="320" height="30.6667"/>
-  <object id="12" name="Ground2" x="117" y="226.667" width="320" height="30.6667"/>
-  <object id="13" name="Ground0" x="641" y="259.667" width="320" height="30.6667"/>
+  <object id="11" name="Ground1" x="1500.67" y="680.182" width="320" height="30.6667"/>
+  <object id="12" name="Ground2" x="1235.18" y="769.091" width="320" height="30.6667"/>
+  <object id="13" name="Ground0" x="1746.09" y="757.606" width="320" height="30.6667"/>
  </objectgroup>
 </map>

@@ -2,7 +2,10 @@
   <Properties>
     <Item Key="TabsParamsKey">
       <Value ctype="TabsInfo">
-        <ActiveDocument />
+        <OpenedDocuments>
+          <FilePathData Path="DebugScene.csd" />
+        </OpenedDocuments>
+        <ActiveDocument Path="DebugScene.csd" />
       </Value>
     </Item>
     <Item Key="CocosRecentOperation">
