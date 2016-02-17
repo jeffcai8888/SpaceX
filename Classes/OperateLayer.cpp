@@ -260,6 +260,21 @@ void OperateLayer::updateJoystick(int type, Point direction, float distance)
 	}
 }
 
+void OperateLayer::resetJoystick(int type)
+{
+    if(type == JT_Player)
+    {
+        m_pJoystick[type]->setPosition(Point(100.f, 100.f));
+        m_pJoystickBg[type]->setPosition(Point(100.f, 100.f));
+    }
+    else if(type == JT_Bullet)
+    {
+        m_pJoystick[type]->setPosition(Point(850.f, 100.f));
+        m_pJoystickBg[type]->setPosition(Point(850.f, 100.f));
+        
+    }
+}
+
 bool OperateLayer::isTap(cocos2d::Node* pNode, cocos2d::Point point)
 {
 	Point pos = pNode->getPosition();
