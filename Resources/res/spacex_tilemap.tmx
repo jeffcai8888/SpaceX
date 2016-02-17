@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="50" tilewidth="32" tileheight="32" nextobjectid="14">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="50" tilewidth="32" tileheight="32" nextobjectid="15">
  <tileset firstgid="1" name="pd_tiles" tilewidth="32" tileheight="32" tilecount="512" columns="32">
   <image source="pd_tiles.png" width="1024" height="512"/>
- </tileset>
- <tileset firstgid="513" name="meta_tiles" tilewidth="32" tileheight="32" spacing="1" margin="1" tilecount="2" columns="2">
-  <image source="meta_tiles.png" width="67" height="34"/>
  </tileset>
  <layer name="Background" width="100" height="50">
   <data encoding="base64" compression="zlib">
@@ -20,9 +17,4 @@
   <object id="12" name="Ground2" x="117" y="226.667" width="320" height="30.6667"/>
   <object id="13" name="Ground0" x="641" y="259.667" width="320" height="30.6667"/>
  </objectgroup>
- <layer name="Meta" width="100" height="50">
-  <data encoding="base64" compression="zlib">
-   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAeDBOIAAB
-  </data>
- </layer>
 </map>
