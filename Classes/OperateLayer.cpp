@@ -1,6 +1,7 @@
 #include "OperateLayer.h"
 #include "Hero.h"
 #include "GameLayer.h"
+#include "SceneManager.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -8,13 +9,15 @@ using namespace std;
 OperateLayer::OperateLayer()
 	:m_pCloseItem(nullptr),
 	m_pBlood(nullptr),
-	m_pBloodBg(nullptr)
+	m_pBloodBg(nullptr),
+	m_pDebugItem(nullptr)
 {
 	for (int i = 0; i < 2; ++i)
 	{
 		m_pJoystick[i] = NULL;
 		m_pJoystickBg[i] = NULL;
 	}
+	m_vecEventListener.clear();
 }
 
 OperateLayer::~OperateLayer()
@@ -56,6 +59,12 @@ bool OperateLayer::init()
 		auto menu = Menu::create(m_pCloseItem, NULL);
 		menu->setPosition(Point::ZERO);
 		this->addChild(menu, 1);
+
+		m_pDebugItem = MenuItemImage::create("DebugNormal.png", "DebugSelected.png", CC_CALLBACK_1(OperateLayer::gotoDebug, this));
+		m_pDebugItem->setPosition(m_origin + Point(visibleSize) - Point(m_pDebugItem->getContentSize().width * 2, m_pDebugItem->getContentSize().height / 2));
+		auto menu_debug = Menu::create(m_pDebugItem, NULL);
+		menu_debug->setPosition(Point::ZERO);
+		this->addChild(menu_debug, 1);
 
 		Sprite *pBloodSprite = Sprite::create("blood.png");
 		this->m_pBlood = ProgressTimer::create(pBloodSprite);
@@ -171,6 +180,7 @@ void OperateLayer::onEnter()
 
 	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+	m_vecEventListener.pushBack(listener);
 	//_eventDispatcher->addEventListenerWithSceneGraphPriority(listener->clone(), m_pJoystick[JT_Bullet]);
 	auto keyListener = EventListenerKeyboard::create();
 	keyListener->onKeyPressed = [this](EventKeyboard::KeyCode keyCode, Event *event)
@@ -208,12 +218,13 @@ void OperateLayer::onEnter()
 		dealWithKeyBoard();
 	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyListener, this);
+	m_vecEventListener.pushBack(keyListener);
 }
 
 void OperateLayer::onExit()
 {
 	Layer::onExit();
-	_eventDispatcher->removeAllEventListeners();
+	removeAllEventListener();
 }
 
 void OperateLayer::showJoystick(int type, Point pos)
@@ -294,4 +305,18 @@ void OperateLayer::hideTarget()
 void OperateLayer::exitApp(Ref* pSender)
 {
 	Director::getInstance()->end();
+}
+
+void OperateLayer::gotoDebug(Ref* pSender)
+{
+	SceneManager::getInstance()->showScene(DEBUG_SCENE, false);
+}
+
+void OperateLayer::removeAllEventListener()
+{
+	for (auto sp_obj : m_vecEventListener)
+	{
+		_eventDispatcher->removeEventListener(sp_obj);
+	}
+	m_vecEventListener.clear();
 }

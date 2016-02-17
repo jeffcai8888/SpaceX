@@ -48,9 +48,12 @@ private:
 	cocos2d::Vector<Bullet *> m_vecBullets;
 	cocos2d::SpriteBatchNode *m_pSpriteNodes;
 
+	cocos2d::Vector<cocos2d::EventListener *> m_vecEventListener;
+
 	Bullet* getUnusedBullet();
 	void setViewPointCenter(cocos2d::Point position);
 	void importGroundData(cocos2d::TMXTiledMap*);
+	void removeAllEventListener();
 };
 
 #endif
