@@ -37,6 +37,7 @@ public:
 private:
 	void showJoystick(int type, cocos2d::Point pos);
 	void hideJoystick(int type);
+    void resetJoystick(int type);
 	void updateJoystick(int type, cocos2d::Point direction, float distance);
 	void updateTarget(cocos2d::Point pos);
 	void hideTarget();

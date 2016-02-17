@@ -30,22 +30,25 @@ bool OperateLayer::init()
 
 		m_pJoystick[JT_Player] = Sprite::create("joystick.png");
 		m_pJoystickBg[JT_Player] = Sprite::create("joystick_bg.png");
+        m_pJoystick[JT_Player]->setScale(2.5f, 2.5f);
+        m_pJoystickBg[JT_Player]->setScale(2.5f, 2.5f);
 		this->addChild(m_pJoystickBg[JT_Player], 0);
 		this->addChild(m_pJoystick[JT_Player], 1);
+        resetJoystick(JT_Player);
+        
 
 		m_pJoystick[JT_Bullet] = Sprite::create("joystick.png");
-		m_pJoystick[JT_Bullet]->setScale(0.75f, 0.75f);
 		m_pJoystickBg[JT_Bullet] = Sprite::create("joystick_bg.png");
-		m_pJoystickBg[JT_Bullet]->setScale(0.75f, 0.75f);
+        m_pJoystick[JT_Bullet]->setScale(2.5f, 2.5f);
+        m_pJoystickBg[JT_Bullet]->setScale(2.5f, 2.5f);
 		this->addChild(m_pJoystick[JT_Bullet], 0);
 		this->addChild(m_pJoystickBg[JT_Bullet], 1);
-		m_pJoystick[JT_Bullet]->setPosition(Point(900.f, 50.f));
-		m_pJoystickBg[JT_Bullet]->setPosition(Point(900.f, 50.f));
-
+        resetJoystick(JT_Bullet);
+		
 		m_pTarget = Sprite::create("target.jpg");
 		this->addChild(m_pTarget, 2);
 
-		this->hideJoystick(JT_Player);
+		//this->hideJoystick(JT_Player);
 		this->hideTarget();
 
 		auto visibleSize = Director::getInstance()->getVisibleSize();
@@ -157,7 +160,7 @@ void OperateLayer::onEnter()
 		Point start = pTouch->getStartLocation();
 		if (start.x < winSize.width / 2)
 		{
-			this->hideJoystick(JT_Player);
+			this->resetJoystick(JT_Player);
 			if (m_pHero->getCurrActionState() == ACTION_STATE_WALK)
 				m_pHero->stop();
 		}
@@ -294,4 +297,19 @@ void OperateLayer::hideTarget()
 void OperateLayer::exitApp(Ref* pSender)
 {
 	Director::getInstance()->end();
+}
+
+void OperateLayer::resetJoystick(int type)
+{
+    if(type == JT_Player)
+    {
+        m_pJoystick[type]->setPosition(Point(100.f, 100.f));
+        m_pJoystickBg[type]->setPosition(Point(100.f, 100.f));
+    }
+    else if(type == JT_Bullet)
+    {
+        m_pJoystick[type]->setPosition(Point(850.f, 100.f));
+        m_pJoystickBg[type]->setPosition(Point(850.f, 100.f));
+
+    }
 }
