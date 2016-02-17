@@ -13,12 +13,11 @@ GameLayer::GameLayer()
 	m_pHero(nullptr)
 {
 	m_vecBullets.clear();
+	m_vecEventListener.clear();
 }
 
 GameLayer::~GameLayer()
 {
-	_eventDispatcher->removeAllEventListeners();
-	this->unscheduleUpdate();
 	m_vecBullets.clear();
 }
 
@@ -99,6 +98,7 @@ void GameLayer::onEnter()
 	});
 
 	_eventDispatcher->addEventListenerWithFixedPriority(listener, 1);
+	m_vecEventListener.pushBack(listener);
 
 
 	auto contactListener = EventListenerPhysicsContact::create();
@@ -120,13 +120,15 @@ void GameLayer::onEnter()
 	};
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
+	m_vecEventListener.pushBack(contactListener);
+
 	this->scheduleUpdate();
 }
 
 void GameLayer::onExit()
 {
 	Layer::onExit();
-	_eventDispatcher->removeAllEventListeners();
+	removeAllEventListener();	
 	this->unscheduleUpdate();
 }
 
@@ -321,4 +323,13 @@ void GameLayer::importGroundData(cocos2d::TMXTiledMap* data)
 		this->addChild(ground, 0, name);
 		++cnt;
 	}
+}
+
+void GameLayer::removeAllEventListener()
+{
+	for (auto sp_obj : m_vecEventListener)
+	{
+		_eventDispatcher->removeEventListener(sp_obj);
+	}
+	m_vecEventListener.clear();
 }

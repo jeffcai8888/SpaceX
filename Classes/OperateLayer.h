@@ -28,6 +28,7 @@ public:
 	virtual void onEnter();
 	virtual void onExit();
 	void exitApp(Ref* pSender);
+	void gotoDebug(Ref* pSender);
 
 	CREATE_FUNC(OperateLayer);
 
@@ -43,12 +44,15 @@ private:
 	void hideTarget();
 	bool isTap(cocos2d::Node*, cocos2d::Point);
 	void dealWithKeyBoard();
+	void removeAllEventListener();
 	cocos2d::Sprite *m_pJoystick[2];
 	cocos2d::Sprite *m_pJoystickBg[2];
 	cocos2d::Sprite *m_pTarget;
 	cocos2d::ProgressTimer *m_pBlood;
 	cocos2d::ProgressTimer *m_pBloodBg;
 	cocos2d::MenuItemImage *m_pCloseItem;
+	cocos2d::MenuItemImage *m_pDebugItem;
+	cocos2d::Vector<cocos2d::EventListener *> m_vecEventListener;
 
 	int m_KeyPressedValue;
 };

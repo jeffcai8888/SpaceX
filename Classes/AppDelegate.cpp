@@ -28,7 +28,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
 	if (!glView)
 	{
-		glView = GLViewImpl::createWithRect("PompaDroid", Rect(0, 0, 960, 640));
+		glView = GLViewImpl::createWithRect("SpaceX", Rect(0, 0, 960, 640));
 		director->setOpenGLView(glView);
 	}
 

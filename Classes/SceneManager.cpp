@@ -1,6 +1,7 @@
 #include "SceneManager.h"
 #include "GameScene.h"
 #include "GameOverScene.h"
+#include "DebugScene.h"
 
 using namespace cocos2d;
 
@@ -16,7 +17,7 @@ SceneManager* SceneManager::getInstance()
 }
 
 
-void SceneManager::showScene(SceneType sceneType)
+void SceneManager::showScene(SceneType sceneType, bool isReplace)
 {
 	Scene *pScene = NULL;
 	switch(sceneType)
@@ -27,10 +28,21 @@ void SceneManager::showScene(SceneType sceneType)
 	case GAME_OVER_SCENE:
 		pScene = GameOverScene::createScene();
 		break;
+	case DEBUG_SCENE:
+		pScene = DebugScene::createScene();
+		break;
 	}
 
 	if(pScene)
 	{
-		Director::getInstance()->replaceScene(pScene);
+		if (isReplace)
+			Director::getInstance()->replaceScene(pScene);
+		else
+			Director::getInstance()->pushScene(pScene);
 	}
+}
+
+void SceneManager::popScene()
+{
+	Director::getInstance()->popScene();
 }

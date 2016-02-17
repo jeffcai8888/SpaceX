@@ -7,6 +7,7 @@
 typedef enum {
 	GAME_SCENE = 0,
 	GAME_OVER_SCENE = 1,
+	DEBUG_SCENE = 2,
 }SceneType;
 
 
@@ -18,7 +19,8 @@ public:
 
 	static SceneManager* getInstance();
 
-	void showScene(SceneType sceneType);
+	void showScene(SceneType sceneType, bool isReplace = true);
+	void popScene();
 
 };
 
