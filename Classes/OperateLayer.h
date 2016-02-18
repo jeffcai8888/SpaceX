@@ -1,10 +1,9 @@
-#ifndef _OPERATE_LAYER_H_
-#define _OPERATE_LAYER_H_
+#ifndef _SPACEX_CLASSES_OPERATELAYER_H_
+#define _SPACEX_CLASSES_OPERATELAYER_H_
 
 #include <cocos2d.h>
 
 class Hero;
-class GameLayer;
 class OperateLayer : public cocos2d::Layer
 {
 public:

@@ -1,5 +1,5 @@
-#ifndef _SCENE_MANAGER_H_
-#define _SCENE_MANAGER_H_
+#ifndef _SPACEX_CLASSES_SCENEMANAGER_H_
+#define _SPACEX_CLASSES_SCENEMANAGER_H_
 
 #include <cocos2d.h>
 

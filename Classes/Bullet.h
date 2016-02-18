@@ -1,4 +1,6 @@
-#pragma once
+#ifndef _SPACEX_CLASSES_BULLET_H_
+#define _SPACEX_CLASSES_BULLET_H_
+
 #include <cocos2d.h>
 
 class Hero;
@@ -19,10 +21,11 @@ public:
 	CC_SYNTHESIZE(float, m_fDisappearDistance, DisappearDistance);
 	CC_SYNTHESIZE(unsigned int, m_gravity, Gravity);
 	CC_SYNTHESIZE(unsigned int, m_power, Power);
-	CC_SYNTHESIZE_READONLY(bool, m_isActive, IsActive);
+	CC_SYNTHESIZE(bool, m_isActive, IsActive);
 	CC_SYNTHESIZE(Hero*,  m_owner, Owner);
 	
 private:
 	cocos2d::Point m_startPostion;
 };
 
+#endif

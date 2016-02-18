@@ -1,5 +1,5 @@
-#ifndef _BASE_SPRITE_H_
-#define _BASE_SPRITE_H_
+#ifndef _SPACEX_CLASSES_BASESPRITE_H_
+#define _SPACEX_CLASSES_BASESPRITE_H_
 
 #include <cocos2d.h>
 

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef _SPACEX_CLASSES_GROUND_H_
+#define _SPACEX_CLASSES_GROUND_H_
+
 #include <cocos2d.h>
 class Ground : public cocos2d::Sprite
 {
@@ -10,4 +12,6 @@ public:
 
 	CREATE_FUNC(Ground);
 };
+
+#endif
 

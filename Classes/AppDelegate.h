@@ -1,5 +1,5 @@
-#ifndef  _APP_DELEGATE_H_
-#define  _APP_DELEGATE_H_
+#ifndef  _SPACEX_CLASSES_APPDELEGATE_H_
+#define  _SPACEX_CLASSES_APPDELEGATE_H_
 
 #include "cocos2d.h"
 

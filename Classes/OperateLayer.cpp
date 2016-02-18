@@ -1,9 +1,9 @@
+#include "Macro.h"
 #include "OperateLayer.h"
 #include "Hero.h"
-#include "GameScene.h"
 #include "SceneManager.h"
 
-using namespace cocos2d;
+USING_NS_CC;
 using namespace std;
 
 OperateLayer::OperateLayer()

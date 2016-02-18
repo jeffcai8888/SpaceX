@@ -1,5 +1,5 @@
-#ifndef _GAMEOVER_SCENE_
-#define _GAMEOVER_SCENE_
+#ifndef _SPACEX_CLASSES_GAMEOVERSCENE_
+#define _SPACEX_CLASSES_GAMEOVERSCENE_
 
 #include <cocos2d.h>
 

@@ -1,13 +1,14 @@
+#include "Macro.h"
 #include "GameLayer.h"
 #include "Hero.h"
 #include "Bullet.h"
 #include "Ground.h"
-#include "GameScene.h"
 #include "OperateLayer.h"
 
 #include "SceneManager.h"
 #include "SimpleAudioEngine.h"
-using namespace cocos2d;
+
+USING_NS_CC;
 
 GameLayer::GameLayer()
 	:m_pTiledMap(nullptr),
@@ -81,7 +82,7 @@ void GameLayer::onEnter()
 	auto body = PhysicsBody::createEdgeBox(boxSize, m, 3);
 	body->setTag(0);
 	body->setCategoryBitmask(0x04);
-	//body->setContactTestBitmask(0x01);
+	body->setContactTestBitmask(0x02);
 	body->setCollisionBitmask(0x03);
 	auto edgeNode = Node::create();
 	edgeNode->setPosition(Point(boxSize.width / 2, boxSize.height / 2));
@@ -106,18 +107,36 @@ void GameLayer::onEnter()
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = [this](PhysicsContact& contact)->bool
 	{
-		if (contact.getShapeA()->getBody()->getCategoryBitmask() == 0x01 && contact.getShapeB()->getBody()->getCategoryBitmask() == 0x04)
+		if (contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Hero && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Ground)
 		{
 			Point posA = contact.getShapeA()->getBody()->getPosition();
 			Point posB = contact.getShapeB()->getBody()->getPosition();
 			return (posA.y >= posB.y);
 		}
-		else if (contact.getShapeA()->getBody()->getCategoryBitmask() == 0x04 && contact.getShapeB()->getBody()->getCategoryBitmask() == 0x01)
+		else if (contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Hero)
 		{
 			Point posA = contact.getShapeA()->getBody()->getPosition();
 			Point posB = contact.getShapeB()->getBody()->getPosition();
 			return (posA.y <= posB.y);
 		}
+        else if(contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Bullet && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Ground)
+        {
+            Bullet* bullet = static_cast<Bullet *>(contact.getShapeA()->getBody()->getNode());
+            if(bullet)
+            {
+                bullet->setIsActive(false);
+                this->removeChild(bullet);
+            }
+        }
+        else if(contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Bullet)
+        {
+            Bullet* bullet = static_cast<Bullet *>(contact.getShapeB()->getBody()->getNode());
+            if(bullet)
+            {
+                bullet->setIsActive(false);
+                this->removeChild(bullet);
+            }
+        }
 		return true;
 	};
 

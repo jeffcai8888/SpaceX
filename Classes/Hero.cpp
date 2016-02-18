@@ -1,11 +1,11 @@
 #include <cocos2d.h>
 #include <Box2D/Box2D.h>
+#include "Macro.h"
 #include "Hero.h"
 #include "Bullet.h"
 
-using namespace cocos2d;
+USING_NS_CC;
 
-#define PTM_RATIO 32
 
 Hero::Hero()
 {}
@@ -45,9 +45,9 @@ bool Hero::init()
 		const PhysicsMaterial m(1.0f, 0.f, 1.f);
 		auto shape = PhysicsShapeBox::create(Size(this->getContentSize().width / 8, this->getContentSize().height / 3), m, Vec2(0.f, -15.f));
 		body->addShape(shape);
-		body->setCategoryBitmask(0x01);
-		body->setContactTestBitmask(0x04);
-		body->setCollisionBitmask(0x04);
+		body->setCategoryBitmask(PC_Hero);
+		body->setContactTestBitmask(PC_Ground);
+		body->setCollisionBitmask(PC_Ground);
 		this->setPhysicsBody(body);
 		ret = true;
 	} while(0);

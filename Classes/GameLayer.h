@@ -1,5 +1,5 @@
-#ifndef _GAME_LAYER_H_
-#define _GAME_LAYER_H_
+#ifndef _SPACEX_CLASSES_GAMELAYER_H_
+#define _SPACEX_CLASSES_GAMELAYER_H_
 
 #include <cocos2d.h>
 

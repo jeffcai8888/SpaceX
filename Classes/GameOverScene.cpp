@@ -1,7 +1,7 @@
 #include "GameOverScene.h"
 #include "SceneManager.h"
 
-using namespace cocos2d;
+USING_NS_CC;
 
 GameOverLayer::GameOverLayer()
 	:m_pLabel(NULL)

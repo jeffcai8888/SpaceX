@@ -1,8 +1,9 @@
+#include "Macro.h"
 #include "GameScene.h"
 #include "GameLayer.h"
 #include "OperateLayer.h"
 
-using namespace cocos2d;
+USING_NS_CC;
 
 Scene* GameScene::createScene()
 {

@@ -1,5 +1,5 @@
-#ifndef _HERO_H_
-#define _HERO_H_
+#ifndef _SPACEX_CLASSES_HERO_H_
+#define _SPACEX_CLASSES_HERO_H_
 
 #include "BaseSprite.h"
 class Bullet;

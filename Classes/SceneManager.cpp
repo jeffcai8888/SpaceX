@@ -3,7 +3,7 @@
 #include "GameOverScene.h"
 #include "DebugScene.h"
 
-using namespace cocos2d;
+USING_NS_CC;
 
 static SceneManager *s_pSceneManager = NULL;
 

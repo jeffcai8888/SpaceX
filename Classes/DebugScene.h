@@ -1,6 +1,7 @@
-#pragma once
+#ifndef _SPACEX_CLASSES_DEBUGSCENE_H_
+#define _SPACEX_CLASSES_DEBUGSCENE_H_
 
-#include <cocos2d.h> 
+#include <cocos2d.h>
 #include "cocostudio/WidgetCallBackHandlerProtocol.h"
 #include "cocostudio/WidgetReader/NodeReader/NodeReader.h"
 
@@ -43,3 +44,4 @@ public:
 	static cocos2d::Scene* createScene();
 };
 
+#endif

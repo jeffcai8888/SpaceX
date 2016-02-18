@@ -1,6 +1,6 @@
 #include "BaseSprite.h"
 
-using namespace cocos2d;
+USING_NS_CC;
 
 BaseSprite::BaseSprite() :
 	m_pIdleAction(NULL),
