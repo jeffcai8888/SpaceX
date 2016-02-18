@@ -55,8 +55,8 @@ bool GameLayer::init()
 		m_pHero->onDeadCallback = CC_CALLBACK_0(GameLayer::onHeroDead, this, m_pHero);
 		m_pHero->attack = CC_CALLBACK_0(GameLayer::onHeroAttack, this);
 		m_pHero->stop = CC_CALLBACK_0(GameLayer::onHeroStop, this);
-		m_pHero->walk = CC_CALLBACK_2(GameLayer::onHeroWalk, this);
-		m_pHero->jump = CC_CALLBACK_2(GameLayer::onHeroJump, this);
+		m_pHero->walk = CC_CALLBACK_1(GameLayer::onHeroWalk, this);
+		m_pHero->jump = CC_CALLBACK_1(GameLayer::onHeroJump, this);
 		m_pSpriteNodes->addChild(m_pHero);
 
 		//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(PATH_BG_MUSIC, true);
@@ -133,54 +133,29 @@ void GameLayer::onExit()
 }
 
 
-void GameLayer::onHeroWalk(Point direction, float distance)
+void GameLayer::onHeroWalk(Vec2 velocity)
 {
 	if(m_pHero->isLive() && !m_pHero->isJump())
 	{
 		m_pHero->runWalkAction();
 		if (!m_pHero->getIsAttacking())
-			m_pHero->setFlippedX(direction.x < 0);
-		//Point velocity;
-		if (direction.x > 0)
-		{
-			m_pHero->setVelocity(distance < 78 ? 1 : 3);
-			m_pHero->setMoveDirection(Vec2(1.f, 0.f));
-		}
-		else
-		{
-			m_pHero->setVelocity(distance < 78 ? 1 : 3);
-			m_pHero->setMoveDirection(Vec2(-1.f, 0.f));
-		}
+			m_pHero->setFlippedX(velocity.x < 0);
+		m_pHero->setWalkVelocity(velocity);
 	}
 }
 
-void GameLayer::onHeroJump(Point direction, float distance)
+void GameLayer::onHeroJump(Vec2 velocity)
 {
-#ifdef USE_JOYSTICK
 	if (m_pHero->isLive() && !m_pHero->isJump())
 	{
 		m_pHero->runJumpAction(true);
 
 		if (!m_pHero->getIsAttacking())
-			m_pHero->setFlippedX(direction.x < 0);
-		m_pHero->setVelocity(distance < 78 ? 150 : 200);
-		m_pHero->setMoveDirection(direction);
-		m_pHero->getPhysicsBody()->setVelocity(direction * m_pHero->getVelocity());
-        m_pHero->setPreVelocityY(m_pHero->getPhysicsBody()->getVelocity().y);
-	}
-#else
-	if (m_pHero->isLive() && !m_pHero->isJump())
-	{
-		CCLOG("jumping");
-		m_pHero->runJumpAction(true);
+			m_pHero->setFlippedX(velocity.x < 0);
 
-		if (!m_pHero->getIsAttacking())
-			m_pHero->setFlippedX(direction.x < 0);
-
-		m_pHero->getPhysicsBody()->setVelocity(direction);
+		m_pHero->getPhysicsBody()->setVelocity(velocity);
 		m_pHero->setPreVelocityY(m_pHero->getPhysicsBody()->getVelocity().y);
 	}
-#endif
 }
 
 void GameLayer::onHeroAttack()
@@ -196,6 +171,7 @@ void GameLayer::onHeroStop()
 	if(m_pHero->isLive())
 	{
 		m_pHero->runIdleAction();
+		m_pHero->setWalkVelocity(Vec2(0.f, 0.f));
 	}
 }
 
@@ -218,8 +194,7 @@ void GameLayer::updateHero(float dt)
 {
 	if(m_pHero->getCurrActionState() == ACTION_STATE_WALK)
 	{
-		
-		Point expectP = m_pHero->getPosition() + m_pHero->getVelocity() * m_pHero->getMoveDirection();
+		Point expectP = m_pHero->getPosition() + m_pHero->getWalkVelocity() *dt;
 		Point actualP = expectP;
 		//can not walk on the wall or out of map		
 		float mapWidth = m_pTiledMap->getContentSize().width;
@@ -227,7 +202,7 @@ void GameLayer::updateHero(float dt)
 		float halfHeroFrameWidth = (m_pHero->getSpriteFrame()->getRect().size.width) / 2;
 		if(expectP.x > halfWinWidth && expectP.x <= (mapWidth - halfWinWidth))
 		{
-			this->setPositionX(this->getPositionX() - (m_pHero->getVelocity() * m_pHero->getMoveDirection()).x);
+			this->setPositionX(this->getPositionX() - (m_pHero->getWalkVelocity() *dt).x);
 		}else if(expectP.x < halfHeroFrameWidth || expectP.x >= mapWidth - halfHeroFrameWidth)
 		{
 			actualP.x = m_pHero->getPositionX();

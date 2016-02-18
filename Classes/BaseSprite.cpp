@@ -9,7 +9,7 @@ BaseSprite::BaseSprite():
 	m_pHurtAction(NULL),
 	m_pDeadAction(NULL),
 	m_currActionState(ACTION_STATE_NONE),
-	m_fVelocity(0.f)
+	m_fWalkVelocity(Vec2(0.f, 0.f))
 {
 
 }

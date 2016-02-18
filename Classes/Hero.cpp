@@ -38,8 +38,6 @@ bool Hero::init()
 		//this->m_bodyBox = this->createBoundingBox( Point(-heroShowSize.width / 2, -heroShowSize.height / 2), heroShowSize);
 		//this->m_hitBox = this->createBoundingBox( Point(heroShowSize.width / 2, -10), Size(20, 20));
 
-		Size size1 = this->getContentSize();
-		Size size2 = this->getSpriteFrame()->getRect().size;
 		auto body = PhysicsBody::create();
 		body->setTag(1);
 		//body->setGravityEnable(false);

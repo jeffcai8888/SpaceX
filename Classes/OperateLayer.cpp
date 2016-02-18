@@ -135,19 +135,19 @@ void OperateLayer::onEnter()
 			if( p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4 )
 			{
 				CCLOG("Walk back");
-				m_pHero->walk(Vec2(-1.f, 0.f), 50);
+				m_pHero->walk(Vec2(-50.f, 0.f));
 			}
 			else if( p.x > winSize.width / 8 && p.x <= winSize.width / 4 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
 			{
 				CCLOG("Walk front");
-				m_pHero->walk(Vec2(1.f, 0.f), 50);
+				m_pHero->walk(Vec2(50.f, 0.f));
 			}
 			else if ( p.x > winSize.width * 7 / 8 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
 			{
 				CCLOG("Jump");
-				float vx = m_pHero->getVelocity();
-				Vec2 v = Vec2(0.f, 150.f) + Vec2(vx, 0.f);
-				m_pHero->jump(v, 150.f);
+				Vec2 wv = m_pHero->getWalkVelocity();
+				Vec2 v = Vec2(0.f, 150.f) + wv;
+				m_pHero->jump(v);
 			}
 #endif
 			else
@@ -346,15 +346,15 @@ void OperateLayer::dealWithKeyBoard()
 {
 	if (m_KeyPressedValue&KB_Up)
 	{
-		m_pHero->jump(Vec2(0.f, 1.f), 5.f);
+		m_pHero->jump(Vec2(0.f, 150.f));
 	}
 	else if (m_KeyPressedValue&KB_Front)
 	{
-		m_pHero->walk(Vec2(1.f, 0.f), 5.f);
+		m_pHero->walk(Vec2(50.f, 0.f));
 	}
 	else if (m_KeyPressedValue&KB_Back)
 	{
-		m_pHero->walk(Vec2(-1.f, 0.f), 5.f);
+		m_pHero->walk(Vec2(-50.f, 0.f));
 	}
 	else
 	{

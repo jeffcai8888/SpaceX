@@ -17,8 +17,8 @@ public:
 	virtual void onEnter();
 	virtual void onExit();
 
-	void onHeroWalk(cocos2d::Point direction, float distance);
-	void onHeroJump(cocos2d::Point direction, float distance);
+	void onHeroWalk(cocos2d::Vec2 velocity);
+	void onHeroJump(cocos2d::Vec2 velocity);
 	void onHeroAttack();
 	void onHeroStop();
 	void onHeroDead(BaseSprite *pTarget);
