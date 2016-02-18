@@ -29,18 +29,17 @@ public:
 	virtual void onExit();
 	void exitApp(Ref* pSender);
 	void gotoDebug(Ref* pSender);
+	void resetTarget();
 
 	CREATE_FUNC(OperateLayer);
 
 	CC_SYNTHESIZE(Hero*, m_pHero, Hero);
-	CC_SYNTHESIZE(GameLayer*, m_pGameLayer, GameLayer);
 
 private:
 	void showJoystick(cocos2d::Point pos);
     void resetJoystick();
 	void updateJoystick(cocos2d::Point direction, float distance);
 	void updateTarget(cocos2d::Point pos);
-    void resetTarget();
 	bool isTap(cocos2d::Node*, cocos2d::Point);
 	void dealWithKeyBoard();
 	void removeAllEventListener();

@@ -2,6 +2,8 @@
 #include "Hero.h"
 #include "Bullet.h"
 #include "Ground.h"
+#include "GameScene.h"
+#include "OperateLayer.h"
 
 #include "SceneManager.h"
 #include "SimpleAudioEngine.h"
@@ -135,10 +137,13 @@ void GameLayer::onExit()
 
 void GameLayer::onHeroWalk(Vec2 velocity)
 {
-	if(m_pHero->isLive() && !m_pHero->isJump())
+	if(m_pHero->isLive())
 	{
-		m_pHero->runWalkAction();
-		if (!m_pHero->getIsAttacking())
+		if (!m_pHero->isJump())
+		{
+			m_pHero->runWalkAction();
+		}		
+		if (!m_pHero->getIsAttacking() && velocity.x != 0)
 			m_pHero->setFlippedX(velocity.x < 0);
 		m_pHero->setWalkVelocity(velocity);
 	}
@@ -149,9 +154,12 @@ void GameLayer::onHeroJump(Vec2 velocity)
 	if (m_pHero->isLive() && !m_pHero->isJump())
 	{
 		m_pHero->runJumpAction(true);
-
-		if (!m_pHero->getIsAttacking())
+		
+		if (!m_pHero->getIsAttacking() && velocity.x != 0)
+		{
 			m_pHero->setFlippedX(velocity.x < 0);
+		}
+			
 
 		m_pHero->getPhysicsBody()->setVelocity(velocity);
 		m_pHero->setPreVelocityY(m_pHero->getPhysicsBody()->getVelocity().y);
@@ -210,23 +218,44 @@ void GameLayer::updateHero(float dt)
 		m_pHero->setPosition(actualP);
 		m_pHero->setLocalZOrder(m_fScreenHeight - m_pHero->getPositionY());
 	}
+	else if (m_pHero->isJump())
+	{
+		if (m_pHero->getIsWalkPressed())
+		{
+			Vec2 wv = m_pHero->getWalkVelocity();
+			float yv = m_pHero->getPhysicsBody()->getVelocity().y;
+			Vec2 velocity = Vec2(0.f, yv) + wv;
+			if (!m_pHero->getIsAttacking() && velocity.x != 0)
+			{
+				m_pHero->setFlippedX(velocity.x < 0);
+			}
+
+
+			m_pHero->getPhysicsBody()->setVelocity(velocity);
+		}
+	}
 
 	setViewPointCenter(m_pHero->getPosition());
 
+	if (m_pHero->getPhysicsBody()->getVelocity().y < -0.00000000000001f)
+		m_pHero->runJumpAction(false);
+
 	if (m_pHero->getPhysicsBody()->getVelocity().y < 0.00000000000f && m_pHero->getPreVelocityY()> -0.00000000000f)
 	{
-		if(m_pHero->getCurrActionState() == ACTION_STATE_JUMP_UP)
-			m_pHero->runJumpAction(false);
-		else if(m_pHero->getCurrActionState() == ACTION_STATE_JUMP_DOWN)
-        {
-            m_pHero->runIdleAction();
-            if(m_pHero->getIsWalkPressed())
-            {
-                Vec2 wv = m_pHero->getWalkVelocity();
-                m_pHero->walk(wv);
-            }
-        }
+		//if(m_pHero->getCurrActionState() == ACTION_STATE_JUMP_UP)
+		//	m_pHero->runJumpAction(false);
+		if (m_pHero->getCurrActionState() == ACTION_STATE_JUMP_DOWN)
+		{
+			m_pHero->runIdleAction();
+			if (m_pHero->getIsWalkPressed())
+			{
+				Vec2 wv = m_pHero->getWalkVelocity();
+				m_pHero->walk(wv);
+			}
+		}
 	}
+
+
     m_pHero->setPreVelocityY(m_pHero->getPhysicsBody()->getVelocity().y);
 
 	if (m_pHero->getIsAttacking())
@@ -241,11 +270,17 @@ void GameLayer::updateHero(float dt)
 			bullet->launch(m_pHero);
 			this->addChild(bullet);
 			m_shootTime = 0.f;
-			m_pHero->setFlippedX(m_pHero->getShootDirection().x < 0);
+			if(m_pHero->getShootDirection().x != 0)
+				m_pHero->setFlippedX(m_pHero->getShootDirection().x < 0);
 		}
 	}
+	else
+	{
+		auto operatorLayer = static_cast<OperateLayer *>(this->getScene()->getChildByTag(LT_Operate));		
+		operatorLayer->resetTarget();
+	}
     
-    /*if(m_pHero->getCurrActionState() == ACTION_STATE_JUMP_UP)
+    if(m_pHero->getCurrActionState() == ACTION_STATE_JUMP_UP)
     {
         CCLOG("ACTION_STATE_JUMP_UP %f %f", m_pHero->getPhysicsBody()->getVelocity().x, m_pHero->getPhysicsBody()->getVelocity().y);
     }
@@ -256,7 +291,7 @@ void GameLayer::updateHero(float dt)
     else if(m_pHero->getCurrActionState() == ACTION_STATE_WALK)
     {
         CCLOG("ACTION_STATE_WALK %f %f", m_pHero->getPhysicsBody()->getVelocity().x, m_pHero->getPhysicsBody()->getVelocity().y);
-    }*/
+    }
 }
 
 void GameLayer::updateBullet(float dt)
@@ -297,8 +332,6 @@ void GameLayer::setViewPointCenter(Point position) {
 	auto viewPoint = centerOfView - position;
 
 	this->setPosition(viewPoint);
-    
-    CCLOG("setViewPointCenter");
 }
 
 void GameLayer::importGroundData(cocos2d::TMXTiledMap* data)

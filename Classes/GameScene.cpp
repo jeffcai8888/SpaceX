@@ -11,12 +11,11 @@ Scene* GameScene::createScene()
 	scene->getPhysicsWorld()->setSpeed(2.f);
 	
 	auto gameLayer = GameLayer::create();
-	scene->addChild(gameLayer, 0);
+	scene->addChild(gameLayer, 0, LT_Game);
 
 	auto operateLayer = OperateLayer::create();
-	scene->addChild(operateLayer, 1);
+	scene->addChild(operateLayer, 1, LT_Operate);
 	operateLayer->setHero(gameLayer->getHero());
-	operateLayer->setGameLayer(gameLayer);
 
 	return scene;
 }

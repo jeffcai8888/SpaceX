@@ -4,6 +4,13 @@
 #include <cocos2d.h>
 
 using namespace cocos2d;
+
+enum LayerTag
+{
+	LT_Game = 0,
+	LT_Operate
+};
+
 class GameScene
 {
 public:

@@ -1,6 +1,6 @@
 #include "OperateLayer.h"
 #include "Hero.h"
-#include "GameLayer.h"
+#include "GameScene.h"
 #include "SceneManager.h"
 
 using namespace cocos2d;
@@ -185,7 +185,6 @@ void OperateLayer::onEnter()
 			Point pos = m_pJoystickBg->getPosition();
 			m_pJoystick->setPosition(pos);
 			m_pHero->setIsAttacking(false);
-            resetTarget();
 		}
 
 	};
@@ -299,20 +298,21 @@ void OperateLayer::dealWithKeyBoard()
 
 void OperateLayer::updateTarget(Point pos)
 {
-	m_pTarget->setPosition(m_pHero->getPosition() + m_pGameLayer->getPosition() + pos * 200);
+	auto gameLayer = this->getScene()->getChildByTag(LT_Game);
+	m_pTarget->setPosition(m_pHero->getPosition() + gameLayer->getPosition() + pos * 200);
 	m_pTarget->setVisible(true);
 }
 
 void OperateLayer::resetTarget()
 {
+	auto gameLayer = this->getScene()->getChildByTag(LT_Game);
     if(m_pHero->isFlippedX())
     {
-        m_pTarget->setPosition(m_pHero->getPosition() + m_pGameLayer->getPosition() + Point(-1.f, 0.f) * 200);
+        m_pTarget->setPosition(m_pHero->getPosition() + gameLayer->getPosition() + Point(-1.f, 0.f) * 200);
     }
     else
     {
-        m_pTarget->setPosition(m_pHero->getPosition() + m_pGameLayer->getPosition() + Point(1.f, 0.f) * 200);
-        CCLOG("resetTarget %f, %f", m_pTarget->getPosition().x, m_pTarget->getPosition().y);
+        m_pTarget->setPosition(m_pHero->getPosition() + gameLayer->getPosition() + Point(1.f, 0.f) * 200);
     }
 }
 
