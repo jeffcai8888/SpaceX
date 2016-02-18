@@ -42,7 +42,7 @@ bool Hero::init()
 		body->setTag(1);
 		//body->setGravityEnable(false);
 		body->setRotationEnable(false);
-		const PhysicsMaterial m(1.0f, 0.f, 1.f);
+		const PhysicsMaterial m(1.0f, 0.f, 0.f);
 		auto shape = PhysicsShapeBox::create(Size(this->getContentSize().width / 8, this->getContentSize().height / 3), m, Vec2(0.f, -15.f));
 		body->addShape(shape);
 		body->setCategoryBitmask(PC_Hero);

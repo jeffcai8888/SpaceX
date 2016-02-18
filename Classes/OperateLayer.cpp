@@ -129,12 +129,6 @@ void OperateLayer::onEnter()
                 Vec2 v = Vec2(0.f, 150.f) + wv;
                 m_pHero->jump(v);
             }
-			else
-			{
-				if (this->isTap(m_pJoystickBg, pTouch->getLocation()))
-					m_pHero->attack();
-			}
-
 			++touchIter;
 		}
 	};
@@ -144,19 +138,37 @@ void OperateLayer::onEnter()
 		std::vector<Touch*>::const_iterator touchIter = touches.begin();
 		Touch *pTouch = (Touch*)(*touchIter);
 		Point start = pTouch->getStartLocation();
-		if (start.x > winSize.width / 2)
-		{
-			if (this->isTap(m_pJoystickBg, start))
-			{
-				Point dest = pTouch->getLocation();
-				float distance = start.getDistance(dest);
-				Vec2 direction = dest - start;
-				direction.normalize();
-				this->updateJoystick(direction, distance);
-				m_pHero->setShootDirection(direction);
-				this->updateTarget(direction);
-			}
-		}
+        Point p = pTouch->getLocation();
+        if (this->isTap(m_pJoystickBg, start))
+        {
+            m_pHero->attack();
+            Point dest = pTouch->getLocation();
+            float distance = start.getDistance(dest);
+            Vec2 direction = dest - start;
+            direction.normalize();
+            this->updateJoystick(direction, distance);
+            m_pHero->setShootDirection(direction);
+            this->updateTarget(direction);
+        }
+        else if( p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4 )
+        {
+            CCLOG("Walk back");
+            m_pHero->walk(Vec2(-100.f, 0.f));
+            m_pHero->setIsWalkPressed(true);
+        }
+        else if( p.x > winSize.width / 8 && p.x <= winSize.width / 4 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
+        {
+            CCLOG("Walk front");
+            m_pHero->walk(Vec2(100.f, 0.f));
+            m_pHero->setIsWalkPressed(true);
+        }
+        else if ( p.x > winSize.width * 7 / 8 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
+        {
+            CCLOG("Jump");
+            Vec2 wv = m_pHero->getWalkVelocity();
+            Vec2 v = Vec2(0.f, 150.f) + wv;
+            m_pHero->jump(v);
+        }
 	};
 	listener->onTouchesEnded = [this](const vector<Touch*>& touches, Event *event)
 	{
@@ -264,8 +276,8 @@ void OperateLayer::updateJoystick(Point direction, float distance)
 
 void OperateLayer::resetJoystick()
 {
-    m_pJoystick->setPosition(Point(800, 100.f));
-    m_pJoystickBg->setPosition(Point(800.f, 100.f));
+    m_pJoystick->setPosition(Point(750, 100.f));
+    m_pJoystickBg->setPosition(Point(750.f, 100.f));
 }
 
 bool OperateLayer::isTap(cocos2d::Node* pNode, cocos2d::Point point)

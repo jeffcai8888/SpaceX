@@ -14,7 +14,7 @@ Ground::~Ground()
 
 void Ground::initPhysics(Size size, Point pos)
 {
-	const PhysicsMaterial m(1.f, 0.f, 1.f);
+	const PhysicsMaterial m(1.f, 0.f, 0.f);
 	auto body = PhysicsBody::createBox(size, m);
 	body->setTag(0);
 	body->setCategoryBitmask(PC_Ground);

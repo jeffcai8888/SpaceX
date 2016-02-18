@@ -77,7 +77,7 @@ void GameLayer::onEnter()
 {
 	Layer::onEnter();
 
-	const PhysicsMaterial m(1.f, 0.f, 1.f);
+	const PhysicsMaterial m(1.f, 0.f, 0.f);
 	Size boxSize(m_pTiledMap->getMapSize().width * m_pTiledMap->getTileSize().width, m_pTiledMap->getMapSize().height * m_pTiledMap->getTileSize().height);
 	auto body = PhysicsBody::createEdgeBox(boxSize, m, 3);
 	body->setTag(0);
@@ -91,7 +91,7 @@ void GameLayer::onEnter()
 
 	importGroundData(m_pTiledMap);
 
-	m_shootTime = 1.f;
+	m_shootTime = 0.1f;
 
 
 	auto listener = EventListenerCustom::create("bullet_disappear", [this](EventCustom* event) {
@@ -165,6 +165,7 @@ void GameLayer::onHeroWalk(Vec2 velocity)
 		if (!m_pHero->getIsAttacking() && velocity.x != 0)
 			m_pHero->setFlippedX(velocity.x < 0);
 		m_pHero->setWalkVelocity(velocity);
+        m_pHero->getPhysicsBody()->setVelocity(velocity);
 	}
 }
 
@@ -199,6 +200,7 @@ void GameLayer::onHeroStop()
 	{
 		m_pHero->runIdleAction();
 		m_pHero->setWalkVelocity(Vec2(0.f, 0.f));
+        m_pHero->getPhysicsBody()->setVelocity(Vec2(0.f, 0.f));
 	}
 }
 
@@ -219,25 +221,7 @@ void GameLayer::update(float dt)
 
 void GameLayer::updateHero(float dt)
 {
-	if(m_pHero->getCurrActionState() == ACTION_STATE_WALK)
-	{
-		Point expectP = m_pHero->getPosition() + m_pHero->getWalkVelocity() * dt;
-		Point actualP = expectP;
-		//can not walk on the wall or out of map		
-		float mapWidth = m_pTiledMap->getContentSize().width;
-		float halfWinWidth = m_fScreenWidth / 2;
-		float halfHeroFrameWidth = (m_pHero->getSpriteFrame()->getRect().size.width) / 2;
-		if(expectP.x > halfWinWidth && expectP.x <= (mapWidth - halfWinWidth))
-		{
-			this->setPositionX(this->getPositionX() - (m_pHero->getWalkVelocity() *dt).x);
-		}else if(expectP.x < halfHeroFrameWidth || expectP.x >= mapWidth - halfHeroFrameWidth)
-		{
-			actualP.x = m_pHero->getPositionX();
-		}
-		m_pHero->setPosition(actualP);
-		m_pHero->setLocalZOrder(m_fScreenHeight - m_pHero->getPositionY());
-	}
-	else if (m_pHero->isJump())
+	if (m_pHero->isJump())
 	{
 		if (m_pHero->getIsWalkPressed())
 		{
@@ -248,8 +232,6 @@ void GameLayer::updateHero(float dt)
 			{
 				m_pHero->setFlippedX(velocity.x < 0);
 			}
-
-
 			m_pHero->getPhysicsBody()->setVelocity(velocity);
 		}
 	}
@@ -299,7 +281,7 @@ void GameLayer::updateHero(float dt)
 		operatorLayer->resetTarget();
 	}
     
-    if(m_pHero->getCurrActionState() == ACTION_STATE_JUMP_UP)
+    /*if(m_pHero->getCurrActionState() == ACTION_STATE_JUMP_UP)
     {
         CCLOG("ACTION_STATE_JUMP_UP %f %f", m_pHero->getPhysicsBody()->getVelocity().x, m_pHero->getPhysicsBody()->getVelocity().y);
     }
@@ -307,7 +289,7 @@ void GameLayer::updateHero(float dt)
     {
         CCLOG("ACTION_STATE_JUMP_DOWN %f %f", m_pHero->getPhysicsBody()->getVelocity().x, m_pHero->getPhysicsBody()->getVelocity().y);
     }
-    /*else if(m_pHero->getCurrActionState() == ACTION_STATE_WALK)
+    else if(m_pHero->getCurrActionState() == ACTION_STATE_WALK)
     {
         CCLOG("ACTION_STATE_WALK %f %f", m_pHero->getPhysicsBody()->getVelocity().x, m_pHero->getPhysicsBody()->getVelocity().y);
     }*/
