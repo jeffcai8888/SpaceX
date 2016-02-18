@@ -167,13 +167,16 @@ void OperateLayer::onEnter()
         if (start.x <= winSize.width / 8 && start.y >= 0.f && start.y <= winSize.height * 3 / 4)
         {
             CCLOG("Walk back finish");
-            m_pHero->stop();
+            
+            if(!m_pHero->isJump())
+                m_pHero->stop();
             m_pHero->setIsWalkPressed(false);
         }
         else if (start.x > winSize.width / 8 && start.x <= winSize.width / 4 && start.y >= 0.f && start.y <= winSize.height * 3 / 4)
         {
             CCLOG("Walk front finish");
-            m_pHero->stop();
+            if(!m_pHero->isJump())
+                m_pHero->stop();
             m_pHero->setIsWalkPressed(false);
         }
         else if (start.x > winSize.width * 7 / 8 && start.x <= winSize.width && start.y >= 0.f && start.y <= winSize.height * 3 / 4)

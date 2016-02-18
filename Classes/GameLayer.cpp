@@ -237,14 +237,14 @@ void GameLayer::updateHero(float dt)
 
 	setViewPointCenter(m_pHero->getPosition());
 
-	if (m_pHero->getPhysicsBody()->getVelocity().y < -0.00000000000001f)
-		m_pHero->runJumpAction(false);
+	//if (m_pHero->getPhysicsBody()->getVelocity().y < -0.000001f)
+	//	m_pHero->runJumpAction(false);
 
 	if (m_pHero->getPhysicsBody()->getVelocity().y < 0.00000000000f && m_pHero->getPreVelocityY()> -0.00000000000f)
 	{
-		//if(m_pHero->getCurrActionState() == ACTION_STATE_JUMP_UP)
-		//	m_pHero->runJumpAction(false);
-		if (m_pHero->getCurrActionState() == ACTION_STATE_JUMP_DOWN)
+		if(m_pHero->getCurrActionState() == ACTION_STATE_JUMP_UP)
+			m_pHero->runJumpAction(false);
+		else if (m_pHero->getCurrActionState() == ACTION_STATE_JUMP_DOWN)
 		{
 			m_pHero->runIdleAction();
 			if (m_pHero->getIsWalkPressed())
@@ -261,10 +261,10 @@ void GameLayer::updateHero(float dt)
 	if (m_pHero->getIsAttacking())
 	{
 		m_shootTime += dt;
-		if (m_shootTime >= 1.f)
+		if (m_shootTime >= 0.1f)
 		{
 			Bullet* bullet = getUnusedBullet();
-			bullet->setVelocity(200.f);
+			bullet->setVelocity(300.f);
 			bullet->setDirection(m_pHero->getShootDirection());
 			bullet->setDisappearDistance(90000.f);
 			bullet->launch(m_pHero);
@@ -288,10 +288,10 @@ void GameLayer::updateHero(float dt)
     {
         CCLOG("ACTION_STATE_JUMP_DOWN %f %f", m_pHero->getPhysicsBody()->getVelocity().x, m_pHero->getPhysicsBody()->getVelocity().y);
     }
-    else if(m_pHero->getCurrActionState() == ACTION_STATE_WALK)
+    /*else if(m_pHero->getCurrActionState() == ACTION_STATE_WALK)
     {
         CCLOG("ACTION_STATE_WALK %f %f", m_pHero->getPhysicsBody()->getVelocity().x, m_pHero->getPhysicsBody()->getVelocity().y);
-    }
+    }*/
 }
 
 void GameLayer::updateBullet(float dt)
