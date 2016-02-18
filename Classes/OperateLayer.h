@@ -36,17 +36,16 @@ public:
 	CC_SYNTHESIZE(GameLayer*, m_pGameLayer, GameLayer);
 
 private:
-	void showJoystick(int type, cocos2d::Point pos);
-	void hideJoystick(int type);
-    void resetJoystick(int type);
-	void updateJoystick(int type, cocos2d::Point direction, float distance);
+	void showJoystick(cocos2d::Point pos);
+    void resetJoystick();
+	void updateJoystick(cocos2d::Point direction, float distance);
 	void updateTarget(cocos2d::Point pos);
-	void hideTarget();
+    void resetTarget();
 	bool isTap(cocos2d::Node*, cocos2d::Point);
 	void dealWithKeyBoard();
 	void removeAllEventListener();
-	cocos2d::Sprite *m_pJoystick[2];
-	cocos2d::Sprite *m_pJoystickBg[2];
+	cocos2d::Sprite *m_pJoystick;
+	cocos2d::Sprite *m_pJoystickBg;
 	cocos2d::Sprite *m_pTarget;
 	cocos2d::Sprite *m_pFront;
 	cocos2d::Sprite *m_pBack;

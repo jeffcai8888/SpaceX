@@ -10,16 +10,14 @@ OperateLayer::OperateLayer()
 	:m_pCloseItem(nullptr),
 	m_pBlood(nullptr),
 	m_pBloodBg(nullptr),
-	m_pDebugItem(nullptr)
+	m_pDebugItem(nullptr),
+    m_pHero(nullptr),
+    m_pJoystick(nullptr),
+    m_pJoystickBg(nullptr),
+    m_pFront(nullptr),
+    m_pBack(nullptr),
+    m_pUp(nullptr)
 {
-	for (int i = 0; i < 2; ++i)
-	{
-		m_pJoystick[i] = nullptr;
-		m_pJoystickBg[i] = nullptr;
-	}
-	m_pFront = nullptr;
-	m_pBack = nullptr;
-	m_pUp = nullptr;
 	m_vecEventListener.clear();
 }
 
@@ -37,41 +35,26 @@ bool OperateLayer::init()
 		auto visibleSize = Director::getInstance()->getVisibleSize();
 		auto m_origin = Director::getInstance()->getVisibleOrigin();
 
-#ifdef USE_JOYSTICK
-		m_pJoystick[JT_Player] = Sprite::create("joystick.png");
-		m_pJoystickBg[JT_Player] = Sprite::create("joystick_bg.png");
-        m_pJoystick[JT_Player]->setScale(2.5f, 2.5f);
-        m_pJoystickBg[JT_Player]->setScale(2.5f, 2.5f);
-		this->addChild(m_pJoystickBg[JT_Player], 0);
-		this->addChild(m_pJoystick[JT_Player], 1);
-        resetJoystick(JT_Player);
-#else 
-		m_pFront = Sprite::create("front.jpg");
-		m_pBack = Sprite::create("back.jpg");
-		m_pUp = Sprite::create("up.jpg");
+        
+        m_pFront = Sprite::create("front.jpg");
+        m_pBack = Sprite::create("back.jpg");
+        m_pUp = Sprite::create("up.jpg");
+        
+        m_pFront->setPosition(m_origin + Point(visibleSize.width * 3 / 16, 50));
+        m_pBack->setPosition(m_origin + Point(visibleSize.width / 16, 100));
+        m_pUp->setPosition(m_origin + Point(visibleSize.width * 15 / 16, 120));
+        this->addChild(m_pFront);
+        this->addChild(m_pBack);
+        this->addChild(m_pUp);
 
-		m_pFront->setPosition(m_origin + Point(visibleSize.width * 3 / 16, 50));
-		m_pBack->setPosition(m_origin + Point(visibleSize.width / 16, 100));
-		m_pUp->setPosition(m_origin + Point(visibleSize.width * 15 / 16, 120));
-		this->addChild(m_pFront);
-		this->addChild(m_pBack);
-		this->addChild(m_pUp);
-#endif
-
-		m_pJoystick[JT_Bullet] = Sprite::create("joystick.png");
-		m_pJoystickBg[JT_Bullet] = Sprite::create("joystick_bg.png");
-        m_pJoystick[JT_Bullet]->setScale(1.0f, 1.0f);
-        m_pJoystickBg[JT_Bullet]->setScale(1.0f, 1.0f);
-		this->addChild(m_pJoystick[JT_Bullet], 0);
-		this->addChild(m_pJoystickBg[JT_Bullet], 1);
-        resetJoystick(JT_Bullet);
+		m_pJoystick = Sprite::create("joystick.png");
+		m_pJoystickBg = Sprite::create("joystick_bg.png");
+		this->addChild(m_pJoystick, 0);
+		this->addChild(m_pJoystickBg, 1);
+        resetJoystick();
 		
 		m_pTarget = Sprite::create("target.jpg");
 		this->addChild(m_pTarget, 2);
-
-		this->hideTarget();
-
-		
 
 		m_pCloseItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(OperateLayer::exitApp, this));
 		m_pCloseItem->setPosition(m_origin + Point(visibleSize) - Point(m_pCloseItem->getContentSize() / 2));
@@ -126,35 +109,29 @@ void OperateLayer::onEnter()
 		{
 			Touch *pTouch = (Touch*)(*touchIter);
 			Point p = pTouch->getLocation();
-#ifdef USE_JOYSTICK
-			if (p.x <= winSize.width / 2)
-			{
-				this->showJoystick(JT_Player, p);
-			}
-#else
-			if( p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4 )
-			{
-				CCLOG("Walk back");
-				m_pHero->walk(Vec2(-50.f, 0.f));
-				m_pHero->setIsWalkPressed(true);
-			}
-			else if( p.x > winSize.width / 8 && p.x <= winSize.width / 4 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
-			{
-				CCLOG("Walk front");
-				m_pHero->walk(Vec2(50.f, 0.f));
-				m_pHero->setIsWalkPressed(true);
-			}
-			else if ( p.x > winSize.width * 7 / 8 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
-			{
-				CCLOG("Jump");
-				Vec2 wv = m_pHero->getWalkVelocity();
-				Vec2 v = Vec2(0.f, 150.f) + wv;
-				m_pHero->jump(v);
-			}
-#endif
+            
+            if( p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4 )
+            {
+                CCLOG("Walk back");
+                m_pHero->walk(Vec2(-100.f, 0.f));
+                m_pHero->setIsWalkPressed(true);
+            }
+            else if( p.x > winSize.width / 8 && p.x <= winSize.width / 4 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
+            {
+                CCLOG("Walk front");
+                m_pHero->walk(Vec2(100.f, 0.f));
+                m_pHero->setIsWalkPressed(true);
+            }
+            else if ( p.x > winSize.width * 7 / 8 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
+            {
+                CCLOG("Jump");
+                Vec2 wv = m_pHero->getWalkVelocity();
+                Vec2 v = Vec2(0.f, 150.f) + wv;
+                m_pHero->jump(v);
+            }
 			else
 			{
-				if (this->isTap(m_pJoystickBg[JT_Bullet], pTouch->getLocation()))
+				if (this->isTap(m_pJoystickBg, pTouch->getLocation()))
 					m_pHero->attack();
 			}
 
@@ -169,38 +146,17 @@ void OperateLayer::onEnter()
 		Point start = pTouch->getStartLocation();
 		if (start.x > winSize.width / 2)
 		{
-			if (this->isTap(m_pJoystickBg[JT_Bullet], start))
+			if (this->isTap(m_pJoystickBg, start))
 			{
 				Point dest = pTouch->getLocation();
 				float distance = start.getDistance(dest);
 				Vec2 direction = dest - start;
 				direction.normalize();
-				this->updateJoystick(JT_Bullet, direction, distance);
+				this->updateJoystick(direction, distance);
 				m_pHero->setShootDirection(direction);
 				this->updateTarget(direction);
 			}
 		}
-#ifdef USE_JOYSTICK
-		else
-		{
-			Point dest = pTouch->getLocation();
-			float distance = start.getDistance(dest);
-			Vec2 direction = dest - start;
-			direction.normalize();
-			this->updateJoystick(JT_Player, direction, distance);
-
-			const Vec2 v1(direction.x, direction.y);
-			const Vec2 v2(1.f, 0.f);
-			float cos = v1.dot(v2);
-
-			//CCLOG("onTouchesMoved %f", cos);
-
-			if (direction.y > 0 && cos > -0.9 && cos < 0.9)
-				m_pHero->jump(direction, distance);
-			else
-				m_pHero->walk(direction, distance);
-		}
-#endif
 	};
 	listener->onTouchesEnded = [this](const vector<Touch*>& touches, Event *event)
 	{
@@ -208,46 +164,28 @@ void OperateLayer::onEnter()
 		std::vector<Touch*>::const_iterator touchIter = touches.begin();
 		Touch *pTouch = (Touch*)(*touchIter);
 		Point start = pTouch->getStartLocation();
-#ifdef USE_JOYSTICK
-		if (start.x < winSize.width / 2)
-		{
-			this->resetJoystick(JT_Player);
-			if (m_pHero->getCurrActionState() == ACTION_STATE_WALK)
-				m_pHero->stop();
-		}
-#else
-		if (start.x <= winSize.width / 8 && start.y >= 0.f && start.y <= winSize.height * 3 / 4)
-		{
-			CCLOG("Walk back finish");
-			m_pHero->stop();
-			m_pHero->setIsWalkPressed(false);
-		}
-		else if (start.x > winSize.width / 8 && start.x <= winSize.width / 4 && start.y >= 0.f && start.y <= winSize.height * 3 / 4)
-		{
-			CCLOG("Walk front finish");
-			m_pHero->stop();
-			m_pHero->setIsWalkPressed(false);
-		}
-		else if (start.x > winSize.width * 7 / 8 && start.x <= winSize.width && start.y >= 0.f && start.y <= winSize.height * 3 / 4)
-		{
-			CCLOG("Jump finish");
-			if (m_pHero->getIsWalkPressed())
-			{
-				Vec2 wv = m_pHero->getWalkVelocity();
-				m_pHero->walk(wv);
-			}
-			else
-			{
-				m_pHero->stop();
-			}
-		}
-#endif
+        if (start.x <= winSize.width / 8 && start.y >= 0.f && start.y <= winSize.height * 3 / 4)
+        {
+            CCLOG("Walk back finish");
+            m_pHero->stop();
+            m_pHero->setIsWalkPressed(false);
+        }
+        else if (start.x > winSize.width / 8 && start.x <= winSize.width / 4 && start.y >= 0.f && start.y <= winSize.height * 3 / 4)
+        {
+            CCLOG("Walk front finish");
+            m_pHero->stop();
+            m_pHero->setIsWalkPressed(false);
+        }
+        else if (start.x > winSize.width * 7 / 8 && start.x <= winSize.width && start.y >= 0.f && start.y <= winSize.height * 3 / 4)
+        {
+            CCLOG("Jump finish");
+        }
 		else
 		{
-			Point pos = m_pJoystickBg[JT_Bullet]->getPosition();
-			m_pJoystick[JT_Bullet]->setPosition(pos);
+			Point pos = m_pJoystickBg->getPosition();
+			m_pJoystick->setPosition(pos);
 			m_pHero->setIsAttacking(false);
-			this->hideTarget();
+            resetTarget();
 		}
 
 	};
@@ -299,49 +237,33 @@ void OperateLayer::onExit()
 	removeAllEventListener();
 }
 
-void OperateLayer::showJoystick(int type, Point pos)
+void OperateLayer::showJoystick(Point pos)
 {
-	m_pJoystick[type]->setPosition(pos);
-	m_pJoystickBg[type]->setPosition(pos);
+	m_pJoystick->setPosition(pos);
+	m_pJoystickBg->setPosition(pos);
 
-	m_pJoystick[type]->setVisible(true);
-	m_pJoystickBg[type]->setVisible(true);
+	m_pJoystick->setVisible(true);
+	m_pJoystickBg->setVisible(true);
 }
 
-void OperateLayer::hideJoystick(int type)
+void OperateLayer::updateJoystick(Point direction, float distance)
 {
-	m_pJoystick[type]->setPosition(m_pJoystickBg[type]->getPosition());
-	m_pJoystick[type]->setVisible(false);
-	m_pJoystickBg[type]->setVisible(false);
-}
-
-void OperateLayer::updateJoystick(int type, Point direction, float distance)
-{
-	Point start = m_pJoystickBg[type]->getPosition();
+	Point start = m_pJoystickBg->getPosition();
 
 	if(distance < 33)
 	{
-		m_pJoystick[type]->setPosition(start + (direction * distance));
+		m_pJoystick->setPosition(start + (direction * distance));
 	//}else if(distance > 78) {
 	//	m_pJoystick[type]->setPosition(start + (direction * 45));
 	}else {
-		m_pJoystick[type]->setPosition(start + (direction * 33));
+		m_pJoystick->setPosition(start + (direction * 33));
 	}
 }
 
-void OperateLayer::resetJoystick(int type)
+void OperateLayer::resetJoystick()
 {
-    if(type == JT_Player)
-    {
-        m_pJoystick[type]->setPosition(Point(100.f, 100.f));
-        m_pJoystickBg[type]->setPosition(Point(100.f, 100.f));
-    }
-    else if(type == JT_Bullet)
-    {
-        m_pJoystick[type]->setPosition(Point(800, 100.f));
-        m_pJoystickBg[type]->setPosition(Point(800.f, 100.f));
-        
-    }
+    m_pJoystick->setPosition(Point(800, 100.f));
+    m_pJoystickBg->setPosition(Point(800.f, 100.f));
 }
 
 bool OperateLayer::isTap(cocos2d::Node* pNode, cocos2d::Point point)
@@ -363,17 +285,16 @@ void OperateLayer::dealWithKeyBoard()
 	}
 	else if (m_KeyPressedValue&KB_Front)
 	{
-		m_pHero->walk(Vec2(50.f, 0.f));
+		m_pHero->walk(Vec2(100.f, 0.f));
 	}
 	else if (m_KeyPressedValue&KB_Back)
 	{
-		m_pHero->walk(Vec2(-50.f, 0.f));
+		m_pHero->walk(Vec2(-100.f, 0.f));
 	}
 	else
 	{
 		m_pHero->stop();
 	}
-
 }
 
 void OperateLayer::updateTarget(Point pos)
@@ -382,9 +303,17 @@ void OperateLayer::updateTarget(Point pos)
 	m_pTarget->setVisible(true);
 }
 
-void OperateLayer::hideTarget()
+void OperateLayer::resetTarget()
 {
-	m_pTarget->setVisible(false);
+    if(m_pHero->isFlippedX())
+    {
+        m_pTarget->setPosition(m_pHero->getPosition() + m_pGameLayer->getPosition() + Point(-1.f, 0.f) * 200);
+    }
+    else
+    {
+        m_pTarget->setPosition(m_pHero->getPosition() + m_pGameLayer->getPosition() + Point(1.f, 0.f) * 200);
+        CCLOG("resetTarget %f, %f", m_pTarget->getPosition().x, m_pTarget->getPosition().y);
+    }
 }
 
 void OperateLayer::exitApp(Ref* pSender)

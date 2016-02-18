@@ -194,7 +194,7 @@ void GameLayer::updateHero(float dt)
 {
 	if(m_pHero->getCurrActionState() == ACTION_STATE_WALK)
 	{
-		Point expectP = m_pHero->getPosition() + m_pHero->getWalkVelocity() *dt;
+		Point expectP = m_pHero->getPosition() + m_pHero->getWalkVelocity() * dt;
 		Point actualP = expectP;
 		//can not walk on the wall or out of map		
 		float mapWidth = m_pTiledMap->getContentSize().width;
@@ -218,7 +218,14 @@ void GameLayer::updateHero(float dt)
 		if(m_pHero->getCurrActionState() == ACTION_STATE_JUMP_UP)
 			m_pHero->runJumpAction(false);
 		else if(m_pHero->getCurrActionState() == ACTION_STATE_JUMP_DOWN)
-			m_pHero->runIdleAction();
+        {
+            m_pHero->runIdleAction();
+            if(m_pHero->getIsWalkPressed())
+            {
+                Vec2 wv = m_pHero->getWalkVelocity();
+                m_pHero->walk(wv);
+            }
+        }
 	}
     m_pHero->setPreVelocityY(m_pHero->getPhysicsBody()->getVelocity().y);
 
@@ -290,6 +297,8 @@ void GameLayer::setViewPointCenter(Point position) {
 	auto viewPoint = centerOfView - position;
 
 	this->setPosition(viewPoint);
+    
+    CCLOG("setViewPointCenter");
 }
 
 void GameLayer::importGroundData(cocos2d::TMXTiledMap* data)
