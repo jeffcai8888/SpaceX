@@ -12,6 +12,17 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
+		3D6DA7331C74E2AA0068FE19 /* DebugScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D6DA7311C74E2AA0068FE19 /* DebugScene.cpp */; };
+		3D6DA7341C7545D00068FE19 /* DebugScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D6DA7311C74E2AA0068FE19 /* DebugScene.cpp */; };
+		3D6DA7351C7545D40068FE19 /* BaseSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E969750C1C72F24300959DB1 /* BaseSprite.cpp */; };
+		3D6DA7361C7545D70068FE19 /* Bullet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E969750E1C72F24300959DB1 /* Bullet.cpp */; };
+		3D6DA7371C7545DB0068FE19 /* GameLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E96975111C72F24300959DB1 /* GameLayer.cpp */; };
+		3D6DA7381C7545DE0068FE19 /* GameOverScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E96975131C72F24300959DB1 /* GameOverScene.cpp */; };
+		3D6DA7391C7545E20068FE19 /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E96975151C72F24300959DB1 /* GameScene.cpp */; };
+		3D6DA73A1C7545E50068FE19 /* Ground.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E96975171C72F24300959DB1 /* Ground.cpp */; };
+		3D6DA73B1C7545E80068FE19 /* Hero.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E96975191C72F24300959DB1 /* Hero.cpp */; };
+		3D6DA73C1C7545EC0068FE19 /* OperateLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E969751B1C72F24300959DB1 /* OperateLayer.cpp */; };
+		3D6DA73D1C7545EF0068FE19 /* SceneManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E969751D1C72F24300959DB1 /* SceneManager.cpp */; };
 		3EACC98F19EE6D4300EB3C5E /* res in Resources */ = {isa = PBXBuildFile; fileRef = 3EACC98E19EE6D4300EB3C5E /* res */; };
 		3EACC99019EE6D4300EB3C5E /* res in Resources */ = {isa = PBXBuildFile; fileRef = 3EACC98E19EE6D4300EB3C5E /* res */; };
 		46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8419C43A87006E1F66 /* AppDelegate.cpp */; };
@@ -108,6 +119,8 @@
 		1D6058910D05DD3D006BFB54 /* SpaceX-mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SpaceX-mobile.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		3D6DA7311C74E2AA0068FE19 /* DebugScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DebugScene.cpp; sourceTree = "<group>"; };
+		3D6DA7321C74E2AA0068FE19 /* DebugScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugScene.h; sourceTree = "<group>"; };
 		3EACC98E19EE6D4300EB3C5E /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
 		46880B8419C43A87006E1F66 /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppDelegate.cpp; sourceTree = "<group>"; };
 		46880B8519C43A87006E1F66 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -305,6 +318,8 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				3D6DA7311C74E2AA0068FE19 /* DebugScene.cpp */,
+				3D6DA7321C74E2AA0068FE19 /* DebugScene.h */,
 				E969750C1C72F24300959DB1 /* BaseSprite.cpp */,
 				E969750D1C72F24300959DB1 /* BaseSprite.h */,
 				E969750E1C72F24300959DB1 /* Bullet.cpp */,
@@ -517,6 +532,7 @@
 				E969751F1C72F24300959DB1 /* BaseSprite.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
+				3D6DA7331C74E2AA0068FE19 /* DebugScene.cpp in Sources */,
 				E96975211C72F24300959DB1 /* GameLayer.cpp in Sources */,
 				E96975221C72F24300959DB1 /* GameOverScene.cpp in Sources */,
 				E96975231C72F24300959DB1 /* GameScene.cpp in Sources */,
@@ -531,8 +547,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D6DA7381C7545DE0068FE19 /* GameOverScene.cpp in Sources */,
+				3D6DA7361C7545D70068FE19 /* Bullet.cpp in Sources */,
+				3D6DA73D1C7545EF0068FE19 /* SceneManager.cpp in Sources */,
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
+				3D6DA7351C7545D40068FE19 /* BaseSprite.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
+				3D6DA73C1C7545EC0068FE19 /* OperateLayer.cpp in Sources */,
+				3D6DA7341C7545D00068FE19 /* DebugScene.cpp in Sources */,
+				3D6DA7391C7545E20068FE19 /* GameScene.cpp in Sources */,
+				3D6DA73A1C7545E50068FE19 /* Ground.cpp in Sources */,
+				3D6DA7371C7545DB0068FE19 /* GameLayer.cpp in Sources */,
+				3D6DA73B1C7545E80068FE19 /* Hero.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
