@@ -136,11 +136,13 @@ void OperateLayer::onEnter()
 			{
 				CCLOG("Walk back");
 				m_pHero->walk(Vec2(-50.f, 0.f));
+				m_pHero->setIsWalkPressed(true);
 			}
 			else if( p.x > winSize.width / 8 && p.x <= winSize.width / 4 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
 			{
 				CCLOG("Walk front");
 				m_pHero->walk(Vec2(50.f, 0.f));
+				m_pHero->setIsWalkPressed(true);
 			}
 			else if ( p.x > winSize.width * 7 / 8 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
 			{
@@ -218,15 +220,26 @@ void OperateLayer::onEnter()
 		{
 			CCLOG("Walk back finish");
 			m_pHero->stop();
+			m_pHero->setIsWalkPressed(false);
 		}
 		else if (start.x > winSize.width / 8 && start.x <= winSize.width / 4 && start.y >= 0.f && start.y <= winSize.height * 3 / 4)
 		{
 			CCLOG("Walk front finish");
 			m_pHero->stop();
+			m_pHero->setIsWalkPressed(false);
 		}
 		else if (start.x > winSize.width * 7 / 8 && start.x <= winSize.width && start.y >= 0.f && start.y <= winSize.height * 3 / 4)
 		{
 			CCLOG("Jump finish");
+			if (m_pHero->getIsWalkPressed())
+			{
+				Vec2 wv = m_pHero->getWalkVelocity();
+				m_pHero->walk(wv);
+			}
+			else
+			{
+				m_pHero->stop();
+			}
 		}
 #endif
 		else

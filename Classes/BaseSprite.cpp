@@ -2,14 +2,15 @@
 
 using namespace cocos2d;
 
-BaseSprite::BaseSprite():
+BaseSprite::BaseSprite() :
 	m_pIdleAction(NULL),
 	m_pWalkAction(NULL),
 	m_pAttackAction(NULL),
 	m_pHurtAction(NULL),
 	m_pDeadAction(NULL),
 	m_currActionState(ACTION_STATE_NONE),
-	m_fWalkVelocity(Vec2(0.f, 0.f))
+	m_fWalkVelocity(Vec2(0.f, 0.f)),
+	m_isWalkPressed(false)
 {
 
 }
@@ -49,16 +50,10 @@ void BaseSprite::runJumpAction(bool isUp)
 
 void BaseSprite::runAttackAction()
 {
-	/*if(changeState(ACTION_STATE_ATTACK))
-	{
-		this->runAction(m_pAttackAction);
-	}*/
-
 	if (this->getIsAttacking() == false)
 	{
 		this->setIsAttacking(true);
 	}
-
 }
 
 void BaseSprite::runHurtAction()

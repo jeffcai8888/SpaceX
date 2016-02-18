@@ -47,6 +47,7 @@ public:
 	CC_SYNTHESIZE(bool, m_isAttacking, IsAttacking);
 	CC_SYNTHESIZE(cocos2d::Vec2, m_fShootDirection, ShootDirection);
     CC_SYNTHESIZE(float, m_fPreVelocityY, PreVelocityY);
+	CC_SYNTHESIZE(bool, m_isWalkPressed, IsWalkPressed);
 
 	virtual void onDead();
 
