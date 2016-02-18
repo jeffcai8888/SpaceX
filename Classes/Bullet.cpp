@@ -57,5 +57,4 @@ void Bullet::launch(Hero* pHero)
 	this->m_startPostion = pos;
 	this->getPhysicsBody()->setVelocity(Vec2(0.f, 0.f));
 	this->getPhysicsBody()->applyImpulse(m_fVelocity * m_fDirection);
-	CCLOG("Bullet::launch (%f, %f)", m_fDirection.x, m_fDirection.y);
 }

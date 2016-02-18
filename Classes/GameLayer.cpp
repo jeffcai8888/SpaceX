@@ -1,3 +1,4 @@
+#include <math.h>
 #include "Macro.h"
 #include "GameLayer.h"
 #include "Hero.h"
@@ -330,9 +331,14 @@ void GameLayer::setViewPointCenter(Point position) {
 	auto actualPosition = Point(x, y);*/
 
 	auto centerOfView = Point(winSize.width / 2, winSize.height / 2);
-	auto viewPoint = centerOfView - position;
-
-	this->setPosition(viewPoint);
+    //auto heroPos = position + this->getPosition();
+    //auto diff = heroPos - centerOfView;
+    //if(fabs(diff.x) > 50.f ||  fabs(diff.y) > 50.f)
+    {
+        auto viewPoint = centerOfView - position;
+        this->setPosition(viewPoint);
+    }
+	
 }
 
 void GameLayer::importGroundData(cocos2d::TMXTiledMap* data)
