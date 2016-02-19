@@ -55,6 +55,7 @@ bool GameLayer::init()
 		m_pHero->setAttack(5);
 		m_pHero->setHP(100);
 		m_pHero->setIsAttacking(false);
+		m_pHero->setJumpStage(0);
 
 		m_pHero->onDeadCallback = CC_CALLBACK_0(GameLayer::onHeroDead, this, m_pHero);
 		m_pHero->attack = CC_CALLBACK_0(GameLayer::onHeroAttack, this);
@@ -112,13 +113,57 @@ void GameLayer::onEnter()
 		{
 			Point posA = contact.getShapeA()->getBody()->getPosition();
 			Point posB = contact.getShapeB()->getBody()->getPosition();
-			return (posA.y >= posB.y);
+			if (posA.y >= posB.y)
+			{
+				Hero* hero = static_cast<Hero *>(contact.getShapeA()->getBody()->getNode());
+				if (hero->getCurrActionState() == ACTION_STATE_MOVE && hero->isInMoveAction(MOVE_STATE_DOWN))
+				{
+					if (hero->isInMoveAction(MOVE_STATE_WALK))
+					{
+						hero->stopMoveAction(MOVE_STATE_DOWN);
+						Vec2 v = hero->getPhysicsBody()->getVelocity();
+						hero->walk(v.x);				
+					}
+					else
+					{
+						hero->stop();
+					}
+					hero->setJumpStage(0);
+				}
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		else if (contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Hero)
 		{
 			Point posA = contact.getShapeA()->getBody()->getPosition();
 			Point posB = contact.getShapeB()->getBody()->getPosition();
-			return (posA.y <= posB.y);
+			if (posA.y <= posB.y)
+			{
+				Hero* hero = static_cast<Hero *>(contact.getShapeB()->getBody()->getNode());
+				if (hero->getCurrActionState() == ACTION_STATE_MOVE && hero->isInMoveAction(MOVE_STATE_DOWN))
+				{
+					if (hero->isInMoveAction(MOVE_STATE_WALK))
+					{
+						hero->stopMoveAction(MOVE_STATE_DOWN);
+						Vec2 v = hero->getPhysicsBody()->getVelocity();
+						hero->walk(v.x);
+					}
+					else
+					{
+						hero->stop();
+					}
+					hero->setJumpStage(0);
+				}
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
         else if(contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Bullet && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Ground)
         {
@@ -143,6 +188,8 @@ void GameLayer::onEnter()
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 	m_vecEventListener.pushBack(contactListener);
+
+	this->getScene()->getPhysicsWorld()->setAutoStep(false);
 
 	this->scheduleUpdate();
 }
@@ -175,11 +222,10 @@ void GameLayer::onHeroWalk(float horizontalVelocity)
 
 void GameLayer::onHeroJump(float verticalVelocity)
 {
-	if (m_pHero->isLive() && !m_pHero->isJump())
-	{
-        
+	if (m_pHero->isLive() && m_pHero->getJumpStage() < 2)
+	{ 
 		m_pHero->runJumpAction(true);
-        CCLOG("onHeroJump %d", m_pHero->getCurrMoveState());
+		m_pHero->setJumpStage(m_pHero->getJumpStage() + 1);
         
 		Vec2 velocity = m_pHero->getPhysicsBody()->getVelocity();
         velocity.y = verticalVelocity;
@@ -187,8 +233,6 @@ void GameLayer::onHeroJump(float verticalVelocity)
 		{
 			m_pHero->setFlippedX(velocity.x < 0);
 		}
-			
-
 		m_pHero->getPhysicsBody()->setVelocity(velocity);
 		m_pHero->setPreVelocityY(m_pHero->getPhysicsBody()->getVelocity().y);
 	}
@@ -224,50 +268,20 @@ void GameLayer::update(float dt)
 {
 	this->updateHero(dt);
 	this->updateBullet(dt);
+	this->updatePhysicsWorld(dt);
 }
 
 void GameLayer::updateHero(float dt)
 {
-	/*if (m_pHero->isJump())
-	{
-		if (m_pHero->getIsWalkPressed())
-		{
-			float horizontalVelocity =
-			float yv = m_pHero->getPhysicsBody()->getVelocity().y;
-			Vec2 velocity = Vec2(0.f, yv) + wv;
-			if (!m_pHero->getIsAttacking() && velocity.x != 0)
-			{
-				m_pHero->setFlippedX(velocity.x < 0);
-			}
-			m_pHero->getPhysicsBody()->setVelocity(velocity);
-		}
-	}*/
-
 	setViewPointCenter(m_pHero->getPosition());
-
-	//if (m_pHero->getPhysicsBody()->getVelocity().y < -0.000001f)
-	//	m_pHero->runJumpAction(false);
 
 	if (m_pHero->getPhysicsBody()->getVelocity().y < -0.00000000000f && m_pHero->getPreVelocityY()> 0.00000000000f)
 	{
 		if(m_pHero->getCurrActionState() == ACTION_STATE_MOVE && m_pHero->isInMoveAction(MOVE_STATE_UP) )
         {
 			m_pHero->runJumpAction(false);
-            CCLOG("Up->Down");
         }
-		else if (m_pHero->getCurrActionState() == ACTION_STATE_MOVE && m_pHero->isInMoveAction(MOVE_STATE_DOWN))
-		{
-			m_pHero->runIdleAction();
-			if (m_pHero->isInMoveAction(MOVE_STATE_WALK))
-			{
-				//Vec2 wv = m_pHero->getWalkVelocity();
-				//m_pHero->walk(wv);
-                m_pHero->walk(100.f);
-			}
-		}
 	}
-
-
     m_pHero->setPreVelocityY(m_pHero->getPhysicsBody()->getVelocity().y);
 
 	if (m_pHero->getIsAttacking())
@@ -322,6 +336,16 @@ void GameLayer::updateBullet(float dt)
 	}
 }
 
+void GameLayer::updatePhysicsWorld(float dt)
+{
+	for (int i = 0; i < 3; ++i)
+	{
+
+		getScene()->getPhysicsWorld()->step(1 / 180.0f);
+
+	}
+}
+
 Bullet* GameLayer::getUnusedBullet()
 {
 	for (auto sp_obj : m_vecBullets)
@@ -346,8 +370,8 @@ void GameLayer::setViewPointCenter(Point position) {
 	auto actualPosition = Point(x, y);*/
 
 	auto centerOfView = Point(winSize.width / 2, winSize.height / 2);
-    //auto heroPos = position + this->getPosition();
-    //auto diff = heroPos - centerOfView;
+    auto heroPos = position + this->getPosition();
+    auto diff = heroPos - centerOfView;
     //if(fabs(diff.x) > 50.f ||  fabs(diff.y) > 50.f)
     {
         auto viewPoint = centerOfView - position;

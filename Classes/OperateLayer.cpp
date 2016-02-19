@@ -204,7 +204,6 @@ void OperateLayer::onEnter()
 	auto keyListener = EventListenerKeyboard::create();
 	keyListener->onKeyPressed = [this](EventKeyboard::KeyCode keyCode, Event *event)
 	{
-		CCLOG("KeyPressed %d", keyCode);
 		if (keyCode == EventKeyboard::KeyCode::KEY_D)
 		{
 			m_KeyPressedValue |= KB_Front;
@@ -221,14 +220,15 @@ void OperateLayer::onEnter()
 	};
 	keyListener->onKeyReleased = [this](EventKeyboard::KeyCode keyCode, Event *event)
 	{
-		CCLOG("KeyReleased %d", keyCode);
 		if (keyCode == EventKeyboard::KeyCode::KEY_D)
 		{
 			m_KeyPressedValue &= ~KB_Front;
+			m_pHero->stopMoveAction(MOVE_STATE_WALK);
 		}
 		else if (keyCode == EventKeyboard::KeyCode::KEY_A)
 		{
 			m_KeyPressedValue &= ~KB_Back;
+			m_pHero->stopMoveAction(MOVE_STATE_WALK);
 		}
 		else if (keyCode == EventKeyboard::KeyCode::KEY_W)
 		{
@@ -296,13 +296,14 @@ void OperateLayer::dealWithKeyBoard()
 	{
 		m_pHero->walk(100.f);
 	}
-	else if (m_KeyPressedValue&KB_Back)
+	else if (m_KeyPressedValue & KB_Back)
 	{
 		m_pHero->walk(-100.f);
 	}
 	else
 	{
-		m_pHero->stop();
+		if(!m_pHero->isJump())
+			m_pHero->stop();
 	}
 }
 

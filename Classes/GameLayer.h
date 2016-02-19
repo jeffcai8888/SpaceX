@@ -26,6 +26,7 @@ public:
 	void update(float dt);
 	void updateHero(float dt);
 	void updateBullet(float dt);
+	void updatePhysicsWorld(float dt);
 
 
 	void callBack(cocos2d::Ref *pSender);

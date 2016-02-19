@@ -128,7 +128,7 @@ bool BaseSprite::isLive()
 
 bool BaseSprite::isJump()
 {
-    return this->m_currActionState == ACTION_STATE_MOVE && isInMoveAction(MOVE_STATE_UP | MOVE_STATE_DOWN);
+    return (this->m_currActionState == ACTION_STATE_MOVE) && this->isInMoveAction(MOVE_STATE_UP | MOVE_STATE_DOWN);
 }
 
 bool BaseSprite::changeState(ActionState actionState)
@@ -154,7 +154,7 @@ int BaseSprite::stopMoveAction(int moveAction)
 
 bool BaseSprite::isInMoveAction(int moveAction)
 {
-    return (m_currMoveState & moveAction);
+    return ((m_currMoveState & moveAction) > 0);
 }
 
 BoundingBox BaseSprite::createBoundingBox(cocos2d::Point origin, cocos2d::Size size)

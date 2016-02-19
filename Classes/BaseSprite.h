@@ -41,6 +41,7 @@ public:
     int  stopMoveAction(int moveAction);
     bool isInMoveAction(int moveAction);
 
+
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pIdleAction, IdleAction);
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pWalkAction, WalkAction);
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pAttackAction, AttackAction);
@@ -54,6 +55,7 @@ public:
 	CC_SYNTHESIZE(bool, m_isAttacking, IsAttacking);
 	CC_SYNTHESIZE(cocos2d::Vec2, m_fShootDirection, ShootDirection);
     CC_SYNTHESIZE(float, m_fPreVelocityY, PreVelocityY);
+	CC_SYNTHESIZE(int, m_JumpStage, JumpStage);
 
 	virtual void onDead();
 
