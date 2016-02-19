@@ -41,18 +41,18 @@ void BaseSprite::runWalkAction()
 void BaseSprite::runJumpAction(bool isUp)
 {
 	if (changeState(ACTION_STATE_MOVE))
-	{
-        if(isUp)
-        {
-            m_currMoveState &= ~MOVE_STATE_DOWN;
-            m_currMoveState |= MOVE_STATE_UP;
-        }
-        else
-        {
-            m_currMoveState &= ~MOVE_STATE_UP;
-            m_currMoveState |= MOVE_STATE_DOWN;
-        }
+	{      
 		this->runAction(m_pIdleAction);
+	}
+	if (isUp)
+	{
+		m_currMoveState &= ~MOVE_STATE_DOWN;
+		m_currMoveState |= MOVE_STATE_UP;
+	}
+	else
+	{
+		m_currMoveState &= ~MOVE_STATE_UP;
+		m_currMoveState |= MOVE_STATE_DOWN;
 	}
 }
 

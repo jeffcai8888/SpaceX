@@ -248,13 +248,12 @@ void GameLayer::updateHero(float dt)
 	//if (m_pHero->getPhysicsBody()->getVelocity().y < -0.000001f)
 	//	m_pHero->runJumpAction(false);
 
-	if (m_pHero->getPhysicsBody()->getVelocity().y < 0.00000000000f && m_pHero->getPreVelocityY()> -0.00000000000f)
+	if (m_pHero->getPhysicsBody()->getVelocity().y < -0.00000000000f && m_pHero->getPreVelocityY()> 0.00000000000f)
 	{
-        //CCLOG("MoveState %d", m_pHero->getCurrMoveState());
 		if(m_pHero->getCurrActionState() == ACTION_STATE_MOVE && m_pHero->isInMoveAction(MOVE_STATE_UP) )
         {
 			m_pHero->runJumpAction(false);
-            //CCLOG("Up->Down");
+            CCLOG("Up->Down");
         }
 		else if (m_pHero->getCurrActionState() == ACTION_STATE_MOVE && m_pHero->isInMoveAction(MOVE_STATE_DOWN))
 		{
