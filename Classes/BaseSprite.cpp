@@ -7,10 +7,7 @@ BaseSprite::BaseSprite() :
 	m_pWalkAction(NULL),
 	m_pAttackAction(NULL),
 	m_pHurtAction(NULL),
-	m_pDeadAction(NULL),
-	m_currActionState(ACTION_STATE_NONE),
-	m_fWalkVelocity(Vec2(0.f, 0.f)),
-	m_isWalkPressed(false)
+	m_pDeadAction(NULL)
 {
 
 }
@@ -28,22 +25,33 @@ void BaseSprite::runIdleAction()
 	if(changeState(ACTION_STATE_IDLE))
 	{
 		this->runAction(m_pIdleAction);
+        this->m_currMoveState = 0;
 	}
 }
 	
 void BaseSprite::runWalkAction()
 {
-	if(changeState(ACTION_STATE_WALK))
+	if(changeState(ACTION_STATE_MOVE))
 	{
+        m_currMoveState |= MOVE_STATE_WALK;
 		this->runAction(m_pWalkAction);
 	}
 }
 
 void BaseSprite::runJumpAction(bool isUp)
 {
-	ActionState state = isUp ? ACTION_STATE_JUMP_UP : ACTION_STATE_JUMP_DOWN;
-	if (changeState(state))
+	if (changeState(ACTION_STATE_MOVE))
 	{
+        if(isUp)
+        {
+            m_currMoveState &= ~MOVE_STATE_DOWN;
+            m_currMoveState |= MOVE_STATE_UP;
+        }
+        else
+        {
+            m_currMoveState &= ~MOVE_STATE_UP;
+            m_currMoveState |= MOVE_STATE_DOWN;
+        }
 		this->runAction(m_pIdleAction);
 	}
 }
@@ -71,13 +79,14 @@ void BaseSprite::runDeadAction()
 	{
 		this->m_hp = 0;
 		this->runAction(m_pDeadAction);
+        this->m_currMoveState = 0;
 	}
 }
 
 void BaseSprite::removeSprite()
 {
 	changeState(ACTION_STATE_REMOVE);
-	log("BaseSprite::removeSprite m_currActionState=%d", m_currActionState);
+    this->m_currMoveState = 0;
 }
 
 Animation* BaseSprite::createAnimation(const char* formatStr, int frameCount, int fps)
@@ -119,7 +128,7 @@ bool BaseSprite::isLive()
 
 bool BaseSprite::isJump()
 {
-	return this->m_currActionState == ACTION_STATE_JUMP_UP || this->m_currActionState == ACTION_STATE_JUMP_DOWN;
+    return this->m_currActionState == ACTION_STATE_MOVE && isInMoveAction(MOVE_STATE_UP | MOVE_STATE_DOWN);
 }
 
 bool BaseSprite::changeState(ActionState actionState)
@@ -135,6 +144,17 @@ bool BaseSprite::changeState(ActionState actionState)
 		return false;
 	else
 		return true;
+}
+
+int BaseSprite::stopMoveAction(int moveAction)
+{
+    m_currMoveState &= ~moveAction;
+    return m_currMoveState;
+}
+
+bool BaseSprite::isInMoveAction(int moveAction)
+{
+    return (m_currMoveState & moveAction);
 }
 
 BoundingBox BaseSprite::createBoundingBox(cocos2d::Point origin, cocos2d::Size size)

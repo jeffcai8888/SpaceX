@@ -113,21 +113,17 @@ void OperateLayer::onEnter()
             if( p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4 )
             {
                 CCLOG("Walk back");
-                m_pHero->walk(Vec2(-100.f, 0.f));
-                m_pHero->setIsWalkPressed(true);
+                m_pHero->walk(-100.f);
             }
             else if( p.x > winSize.width / 8 && p.x <= winSize.width / 4 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
             {
                 CCLOG("Walk front");
-                m_pHero->walk(Vec2(100.f, 0.f));
-                m_pHero->setIsWalkPressed(true);
+                m_pHero->walk(100.f);
             }
             else if ( p.x > winSize.width * 7 / 8 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
             {
                 CCLOG("Jump");
-                Vec2 wv = m_pHero->getWalkVelocity();
-                Vec2 v = Vec2(0.f, 150.f) + wv;
-                m_pHero->jump(v);
+                m_pHero->jump(150.f);
             }
 			++touchIter;
 		}
@@ -153,21 +149,17 @@ void OperateLayer::onEnter()
         else if( p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4 )
         {
             CCLOG("Walk back");
-            m_pHero->walk(Vec2(-100.f, 0.f));
-            m_pHero->setIsWalkPressed(true);
+            m_pHero->walk(-100.f);
         }
         else if( p.x > winSize.width / 8 && p.x <= winSize.width / 4 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
         {
             CCLOG("Walk front");
-            m_pHero->walk(Vec2(100.f, 0.f));
-            m_pHero->setIsWalkPressed(true);
+            m_pHero->walk(100.f);
         }
         else if ( p.x > winSize.width * 7 / 8 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
         {
             CCLOG("Jump");
-            Vec2 wv = m_pHero->getWalkVelocity();
-            Vec2 v = Vec2(0.f, 150.f) + wv;
-            m_pHero->jump(v);
+            m_pHero->jump(150.f);
         }
 	};
 	listener->onTouchesEnded = [this](const vector<Touch*>& touches, Event *event)
@@ -178,22 +170,23 @@ void OperateLayer::onEnter()
 		Point start = pTouch->getStartLocation();
         if (start.x <= winSize.width / 8 && start.y >= 0.f && start.y <= winSize.height * 3 / 4)
         {
-            CCLOG("Walk back finish");
+            
             
             if(!m_pHero->isJump())
                 m_pHero->stop();
-            m_pHero->setIsWalkPressed(false);
+            m_pHero->stopMoveAction(MOVE_STATE_WALK);
+            CCLOG("Walk back finish %d", m_pHero->getCurrMoveState());
         }
         else if (start.x > winSize.width / 8 && start.x <= winSize.width / 4 && start.y >= 0.f && start.y <= winSize.height * 3 / 4)
         {
-            CCLOG("Walk front finish");
             if(!m_pHero->isJump())
                 m_pHero->stop();
-            m_pHero->setIsWalkPressed(false);
+            m_pHero->stopMoveAction(MOVE_STATE_WALK);
+            CCLOG("Walk front finish %d", m_pHero->getCurrMoveState());
         }
         else if (start.x > winSize.width * 7 / 8 && start.x <= winSize.width && start.y >= 0.f && start.y <= winSize.height * 3 / 4)
         {
-            CCLOG("Jump finish");
+            CCLOG("Jump finish %d",  m_pHero->getCurrMoveState());
         }
 		else
 		{
@@ -229,15 +222,15 @@ void OperateLayer::onEnter()
 		CCLOG("KeyReleased %d", keyCode);
 		if (keyCode == EventKeyboard::KeyCode::KEY_D)
 		{
-			m_KeyPressedValue ^= KB_Front;
+			m_KeyPressedValue &= ~KB_Front;
 		}
 		else if (keyCode == EventKeyboard::KeyCode::KEY_A)
 		{
-			m_KeyPressedValue ^= KB_Back;
+			m_KeyPressedValue &= ~KB_Back;
 		}
 		else if (keyCode == EventKeyboard::KeyCode::KEY_W)
 		{
-			m_KeyPressedValue ^= KB_Up;
+			m_KeyPressedValue &= ~KB_Up;
 		}
 		dealWithKeyBoard();
 	};
@@ -293,17 +286,17 @@ bool OperateLayer::isTap(cocos2d::Node* pNode, cocos2d::Point point)
 
 void OperateLayer::dealWithKeyBoard()
 {
-	if (m_KeyPressedValue&KB_Up)
+	if (m_KeyPressedValue & KB_Up)
 	{
-		m_pHero->jump(Vec2(0.f, 150.f));
+		m_pHero->jump(150.f);
 	}
-	else if (m_KeyPressedValue&KB_Front)
+	else if (m_KeyPressedValue & KB_Front)
 	{
-		m_pHero->walk(Vec2(100.f, 0.f));
+		m_pHero->walk(100.f);
 	}
 	else if (m_KeyPressedValue&KB_Back)
 	{
-		m_pHero->walk(Vec2(-100.f, 0.f));
+		m_pHero->walk(-100.f);
 	}
 	else
 	{

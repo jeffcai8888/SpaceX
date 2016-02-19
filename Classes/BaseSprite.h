@@ -6,13 +6,17 @@
 typedef enum {
 	ACTION_STATE_NONE = 0,
 	ACTION_STATE_IDLE,
-	ACTION_STATE_WALK,
-	ACTION_STATE_JUMP_UP,
-	ACTION_STATE_JUMP_DOWN,
+	ACTION_STATE_MOVE,
 	ACTION_STATE_HURT,
 	ACTION_STATE_DEAD,
 	ACTION_STATE_REMOVE,
 }ActionState;
+
+enum {
+    MOVE_STATE_WALK = 1 << 0,
+    MOVE_STATE_UP = 1 << 1,
+    MOVE_STATE_DOWN = 1 << 2
+};
 
 typedef struct _BoundingBox
 {
@@ -33,6 +37,9 @@ public:
 	void runHurtAction();
 	void removeSprite();
 	void runDeadAction();
+    
+    int  stopMoveAction(int moveAction);
+    bool isInMoveAction(int moveAction);
 
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pIdleAction, IdleAction);
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pWalkAction, WalkAction);
@@ -41,13 +48,12 @@ public:
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pDeadAction, DeadAction);
 
 	CC_SYNTHESIZE(ActionState, m_currActionState, CurrActionState);
-	CC_SYNTHESIZE(cocos2d::Vec2, m_fWalkVelocity, WalkVelocity);
+    CC_SYNTHESIZE(int, m_currMoveState, CurrMoveState);
 	CC_SYNTHESIZE(unsigned int, m_hp, HP);
 	CC_SYNTHESIZE(unsigned int, m_attack, Attack);
 	CC_SYNTHESIZE(bool, m_isAttacking, IsAttacking);
 	CC_SYNTHESIZE(cocos2d::Vec2, m_fShootDirection, ShootDirection);
     CC_SYNTHESIZE(float, m_fPreVelocityY, PreVelocityY);
-	CC_SYNTHESIZE(bool, m_isWalkPressed, IsWalkPressed);
 
 	virtual void onDead();
 
@@ -58,7 +64,6 @@ public:
 	cocos2d::CallFunc* createIdleCallbackFunc();
 
 	std::function<void(void)> onDeadCallback;
-
 	std::function<void(void)> attack;
 
 protected:

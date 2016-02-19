@@ -155,27 +155,34 @@ void GameLayer::onExit()
 }
 
 
-void GameLayer::onHeroWalk(Vec2 velocity)
+void GameLayer::onHeroWalk(float horizontalVelocity)
 {
 	if(m_pHero->isLive())
 	{
 		if (!m_pHero->isJump())
 		{
 			m_pHero->runWalkAction();
-		}		
-		if (!m_pHero->getIsAttacking() && velocity.x != 0)
-			m_pHero->setFlippedX(velocity.x < 0);
-		m_pHero->setWalkVelocity(velocity);
+		}
+        CCLOG("onHeroWalk %d", m_pHero->getCurrMoveState());
+		if (!m_pHero->getIsAttacking() && horizontalVelocity != 0)
+			m_pHero->setFlippedX(horizontalVelocity < 0);
+        
+        Vec2 velocity = m_pHero->getPhysicsBody()->getVelocity();
+        velocity.x = horizontalVelocity;
         m_pHero->getPhysicsBody()->setVelocity(velocity);
 	}
 }
 
-void GameLayer::onHeroJump(Vec2 velocity)
+void GameLayer::onHeroJump(float verticalVelocity)
 {
 	if (m_pHero->isLive() && !m_pHero->isJump())
 	{
+        
 		m_pHero->runJumpAction(true);
-		
+        CCLOG("onHeroJump %d", m_pHero->getCurrMoveState());
+        
+		Vec2 velocity = m_pHero->getPhysicsBody()->getVelocity();
+        velocity.y = verticalVelocity;
 		if (!m_pHero->getIsAttacking() && velocity.x != 0)
 		{
 			m_pHero->setFlippedX(velocity.x < 0);
@@ -200,7 +207,6 @@ void GameLayer::onHeroStop()
 	if(m_pHero->isLive())
 	{
 		m_pHero->runIdleAction();
-		m_pHero->setWalkVelocity(Vec2(0.f, 0.f));
         m_pHero->getPhysicsBody()->setVelocity(Vec2(0.f, 0.f));
 	}
 }
@@ -222,11 +228,11 @@ void GameLayer::update(float dt)
 
 void GameLayer::updateHero(float dt)
 {
-	if (m_pHero->isJump())
+	/*if (m_pHero->isJump())
 	{
 		if (m_pHero->getIsWalkPressed())
 		{
-			Vec2 wv = m_pHero->getWalkVelocity();
+			float horizontalVelocity =
 			float yv = m_pHero->getPhysicsBody()->getVelocity().y;
 			Vec2 velocity = Vec2(0.f, yv) + wv;
 			if (!m_pHero->getIsAttacking() && velocity.x != 0)
@@ -235,7 +241,7 @@ void GameLayer::updateHero(float dt)
 			}
 			m_pHero->getPhysicsBody()->setVelocity(velocity);
 		}
-	}
+	}*/
 
 	setViewPointCenter(m_pHero->getPosition());
 
@@ -244,15 +250,20 @@ void GameLayer::updateHero(float dt)
 
 	if (m_pHero->getPhysicsBody()->getVelocity().y < 0.00000000000f && m_pHero->getPreVelocityY()> -0.00000000000f)
 	{
-		if(m_pHero->getCurrActionState() == ACTION_STATE_JUMP_UP)
+        //CCLOG("MoveState %d", m_pHero->getCurrMoveState());
+		if(m_pHero->getCurrActionState() == ACTION_STATE_MOVE && m_pHero->isInMoveAction(MOVE_STATE_UP) )
+        {
 			m_pHero->runJumpAction(false);
-		else if (m_pHero->getCurrActionState() == ACTION_STATE_JUMP_DOWN)
+            //CCLOG("Up->Down");
+        }
+		else if (m_pHero->getCurrActionState() == ACTION_STATE_MOVE && m_pHero->isInMoveAction(MOVE_STATE_DOWN))
 		{
 			m_pHero->runIdleAction();
-			if (m_pHero->getIsWalkPressed())
+			if (m_pHero->isInMoveAction(MOVE_STATE_WALK))
 			{
-				Vec2 wv = m_pHero->getWalkVelocity();
-				m_pHero->walk(wv);
+				//Vec2 wv = m_pHero->getWalkVelocity();
+				//m_pHero->walk(wv);
+                m_pHero->walk(100.f);
 			}
 		}
 	}
@@ -282,17 +293,22 @@ void GameLayer::updateHero(float dt)
 		operatorLayer->resetTarget();
 	}
     
-    /*if(m_pHero->getCurrActionState() == ACTION_STATE_JUMP_UP)
+    /*if(m_pHero->getCurrActionState() == ACTION_STATE_MOVE)
     {
-        CCLOG("ACTION_STATE_JUMP_UP %f %f", m_pHero->getPhysicsBody()->getVelocity().x, m_pHero->getPhysicsBody()->getVelocity().y);
-    }
-    else if(m_pHero->getCurrActionState() == ACTION_STATE_JUMP_DOWN)
-    {
-        CCLOG("ACTION_STATE_JUMP_DOWN %f %f", m_pHero->getPhysicsBody()->getVelocity().x, m_pHero->getPhysicsBody()->getVelocity().y);
-    }
-    else if(m_pHero->getCurrActionState() == ACTION_STATE_WALK)
-    {
-        CCLOG("ACTION_STATE_WALK %f %f", m_pHero->getPhysicsBody()->getVelocity().x, m_pHero->getPhysicsBody()->getVelocity().y);
+        CCLOG("ACTION_STATE_MOVE START");
+        if(m_pHero->isInMoveAction(MOVE_STATE_UP))
+        {
+            CCLOG("MOVE_STATE_UP %f %f", m_pHero->getPhysicsBody()->getVelocity().x, m_pHero->getPhysicsBody()->getVelocity().y);
+        }
+        if(m_pHero->isInMoveAction(MOVE_STATE_DOWN))
+        {
+            CCLOG("MOVE_STATE_DOWN %f %f", m_pHero->getPhysicsBody()->getVelocity().x, m_pHero->getPhysicsBody()->getVelocity().y);
+        }
+        if(m_pHero->isInMoveAction(MOVE_STATE_WALK))
+        {
+            CCLOG("MOVE_STATE_WALK %f %f", m_pHero->getPhysicsBody()->getVelocity().x, m_pHero->getPhysicsBody()->getVelocity().y);
+        }
+        CCLOG("ACTION_STATE_MOVE END");
     }*/
 }
 
