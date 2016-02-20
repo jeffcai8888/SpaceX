@@ -120,7 +120,7 @@ void OperateLayer::onEnter()
             }
             else if ( p.x > winSize.width * 7 / 8 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
             {
-                m_pHero->jump(150.f);
+                m_pHero->jump(300.f);
             }
 			++touchIter;
 		}
@@ -153,7 +153,7 @@ void OperateLayer::onEnter()
         }
         else if ( p.x > winSize.width * 7 / 8 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
         {
-            m_pHero->jump(150.f);
+            m_pHero->jump(300.f);
         }
 	};
 	listener->onTouchesEnded = [this](const vector<Touch*>& touches, Event *event)
@@ -280,7 +280,7 @@ void OperateLayer::dealWithKeyBoard()
 {
 	if (m_KeyPressedValue & KB_Up)
 	{
-		m_pHero->jump(150.f);
+		m_pHero->jump(300.f);
 	}
 	else if (m_KeyPressedValue & KB_Front)
 	{

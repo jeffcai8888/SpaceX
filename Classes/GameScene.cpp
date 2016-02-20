@@ -10,6 +10,7 @@ Scene* GameScene::createScene()
 	auto scene = Scene::createWithPhysics();
 	scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 	scene->getPhysicsWorld()->setSpeed(2.f);
+	scene->getPhysicsWorld()->setGravity(Vec2(0.f, -500.f));
 	
 	auto gameLayer = GameLayer::create();
 	scene->addChild(gameLayer, 0, LT_Game);

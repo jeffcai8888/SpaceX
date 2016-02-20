@@ -288,9 +288,9 @@ void GameLayer::updateHero(float dt)
 		if (m_shootTime >= 0.1f)
 		{
 			Bullet* bullet = getUnusedBullet();
-			bullet->setVelocity(300.f);
-			bullet->setDirection(m_pHero->getShootDirection());
-			bullet->setDisappearDistance(90000.f);
+			bullet->setVelocity(750.f);
+			bullet->setDirection(m_pHero->getShootDirection().rotateByAngle(Vec2(0.f,0.f), CC_DEGREES_TO_RADIANS((int)(-rand_0_1() * 10))));
+			bullet->setDisappearDistance(900000.f);
 			bullet->launch(m_pHero);
 			this->addChild(bullet);
 			m_shootTime = 0.f;
@@ -378,7 +378,7 @@ void GameLayer::setViewPointCenter() {
 	this->setPositionX(centerOfView.x - heroPos.x);
 
     auto diff = heroPosInScreen - centerOfView;
-    if(fabs(diff.y) > 50.f)
+    if(fabs(diff.y) > 25.f)
     {
 		//this->setPositionY(centerOfView.y - heroPos.y);
 		auto heroPrePosY = m_pHero->getPrePositionY();
