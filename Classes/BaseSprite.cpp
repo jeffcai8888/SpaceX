@@ -126,7 +126,7 @@ bool BaseSprite::isLive()
 	}
 }
 
-bool BaseSprite::isJump()
+bool BaseSprite::isInAir()
 {
     return (this->m_currActionState == ACTION_STATE_MOVE) && this->isInMoveAction(MOVE_STATE_UP | MOVE_STATE_DOWN);
 }

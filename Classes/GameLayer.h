@@ -51,7 +51,7 @@ private:
 	cocos2d::Vector<cocos2d::EventListener *> m_vecEventListener;
 
 	Bullet* getUnusedBullet();
-	void setViewPointCenter(cocos2d::Point position);
+	void setViewPointCenter();
 	void importGroundData(cocos2d::TMXTiledMap*);
 	void removeAllEventListener();
 };

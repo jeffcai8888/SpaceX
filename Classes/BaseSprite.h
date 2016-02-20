@@ -54,13 +54,13 @@ public:
 	CC_SYNTHESIZE(unsigned int, m_attack, Attack);
 	CC_SYNTHESIZE(bool, m_isAttacking, IsAttacking);
 	CC_SYNTHESIZE(cocos2d::Vec2, m_fShootDirection, ShootDirection);
-    CC_SYNTHESIZE(float, m_fPreVelocityY, PreVelocityY);
+    CC_SYNTHESIZE(float, m_fPrePositionY, PrePositionY);
 	CC_SYNTHESIZE(int, m_JumpStage, JumpStage);
 
 	virtual void onDead();
 
 	virtual bool isLive();
-	virtual bool isJump();
+	virtual bool isInAir();
 
 	cocos2d::CallFunc* createDeadCallbackFunc();
 	cocos2d::CallFunc* createIdleCallbackFunc();

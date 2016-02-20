@@ -30,7 +30,6 @@ bool GameLayer::init()
 	bool ret = false;
 	do {
 		CC_BREAK_IF( !Layer::init());
-
 		auto visibleSize = Director::getInstance()->getVisibleSize();
 		this->m_origin = Director::getInstance()->getVisibleOrigin();
 		this->m_fScreenWidth = visibleSize.width;
@@ -63,7 +62,8 @@ bool GameLayer::init()
 		m_pHero->walk = CC_CALLBACK_1(GameLayer::onHeroWalk, this);
 		m_pHero->jump = CC_CALLBACK_1(GameLayer::onHeroJump, this);
 		m_pSpriteNodes->addChild(m_pHero);
-
+		auto centerOfView = Point(visibleSize.width / 2, visibleSize.height / 2);
+		this->setPosition(centerOfView - m_pHero->getPosition());
 		//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(PATH_BG_MUSIC, true);
 		//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(PATH_HERO_TALK_EFFECT);
 
@@ -78,6 +78,7 @@ bool GameLayer::init()
 void GameLayer::onEnter()
 {
 	Layer::onEnter();
+
 
 	const PhysicsMaterial m(1.f, 0.f, 0.f);
 	Size boxSize(m_pTiledMap->getMapSize().width * m_pTiledMap->getTileSize().width, m_pTiledMap->getMapSize().height * m_pTiledMap->getTileSize().height);
@@ -206,11 +207,11 @@ void GameLayer::onHeroWalk(float horizontalVelocity)
 {
 	if(m_pHero->isLive())
 	{
-		if (!m_pHero->isJump())
+		if (!m_pHero->isInAir())
 		{
 			m_pHero->runWalkAction();
 		}
-        CCLOG("onHeroWalk %d", m_pHero->getCurrMoveState());
+
 		if (!m_pHero->getIsAttacking() && horizontalVelocity != 0)
 			m_pHero->setFlippedX(horizontalVelocity < 0);
         
@@ -234,7 +235,7 @@ void GameLayer::onHeroJump(float verticalVelocity)
 			m_pHero->setFlippedX(velocity.x < 0);
 		}
 		m_pHero->getPhysicsBody()->setVelocity(velocity);
-		m_pHero->setPreVelocityY(m_pHero->getPhysicsBody()->getVelocity().y);
+		m_pHero->setPrePositionY(m_pHero->getPosition().y);
 	}
 }
 
@@ -273,16 +274,13 @@ void GameLayer::update(float dt)
 
 void GameLayer::updateHero(float dt)
 {
-	setViewPointCenter(m_pHero->getPosition());
+	setViewPointCenter();
 
-	if (m_pHero->getPhysicsBody()->getVelocity().y < -0.00000000000f && m_pHero->getPreVelocityY()> 0.00000000000f)
+	if (m_pHero->getCurrActionState() == ACTION_STATE_MOVE && m_pHero->isInMoveAction(MOVE_STATE_UP) && m_pHero->getPhysicsBody()->getPosition().y < m_pHero->getPrePositionY())
 	{
-		if(m_pHero->getCurrActionState() == ACTION_STATE_MOVE && m_pHero->isInMoveAction(MOVE_STATE_UP) )
-        {
-			m_pHero->runJumpAction(false);
-        }
+		m_pHero->runJumpAction(false);
 	}
-    m_pHero->setPreVelocityY(m_pHero->getPhysicsBody()->getVelocity().y);
+    m_pHero->setPrePositionY(m_pHero->getPosition().y);
 
 	if (m_pHero->getIsAttacking())
 	{
@@ -323,6 +321,7 @@ void GameLayer::updateHero(float dt)
         }
         CCLOG("ACTION_STATE_MOVE END");
     }*/
+	//CCLOG("(%f, %f) (%f, %f)", m_pHero->getPhysicsBody()->getPosition().x, m_pHero->getPhysicsBody()->getPosition().y, m_pHero->getPosition().x, m_pHero->getPosition().y);
 }
 
 void GameLayer::updateBullet(float dt)
@@ -361,7 +360,7 @@ Bullet* GameLayer::getUnusedBullet()
 	return bullet;
 }
 
-void GameLayer::setViewPointCenter(Point position) {
+void GameLayer::setViewPointCenter() {
 	auto winSize = Director::getInstance()->getWinSize();
 	/*int x = MAX(position.x, winSize.width / 2);
 	int y = MAX(position.y, winSize.height / 2);
@@ -370,12 +369,21 @@ void GameLayer::setViewPointCenter(Point position) {
 	auto actualPosition = Point(x, y);*/
 
 	auto centerOfView = Point(winSize.width / 2, winSize.height / 2);
-    auto heroPos = position + this->getPosition();
-    auto diff = heroPos - centerOfView;
-    //if(fabs(diff.x) > 50.f ||  fabs(diff.y) > 50.f)
+    //dauto heroPos = m_pHero->getPhysicsBody()->getPosition();
+	
+
+	auto heroPos = m_pHero->getPosition();
+	auto layerPos = this->getPosition();
+	auto heroPosInScreen = heroPos + layerPos;
+	this->setPositionX(centerOfView.x - heroPos.x);
+
+    auto diff = heroPosInScreen - centerOfView;
+    if(fabs(diff.y) > 50.f)
     {
-        auto viewPoint = centerOfView - position;
-        this->setPosition(viewPoint);
+		//this->setPositionY(centerOfView.y - heroPos.y);
+		auto heroPrePosY = m_pHero->getPrePositionY();
+		CCLOG("%f, %f, %f, %f", heroPrePosY+layerPos.y, heroPrePosY , layerPos.y, heroPos.y);
+		this->setPositionY(heroPrePosY + layerPos.y - heroPos.y);
     }
 	
 }

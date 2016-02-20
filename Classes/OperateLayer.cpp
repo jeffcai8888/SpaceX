@@ -112,17 +112,14 @@ void OperateLayer::onEnter()
             
             if( p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4 )
             {
-                CCLOG("Walk back");
                 m_pHero->walk(-100.f);
             }
             else if( p.x > winSize.width / 8 && p.x <= winSize.width / 4 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
             {
-                CCLOG("Walk front");
                 m_pHero->walk(100.f);
             }
             else if ( p.x > winSize.width * 7 / 8 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
             {
-                CCLOG("Jump");
                 m_pHero->jump(150.f);
             }
 			++touchIter;
@@ -148,17 +145,14 @@ void OperateLayer::onEnter()
         }
         else if( p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4 )
         {
-            CCLOG("Walk back");
             m_pHero->walk(-100.f);
         }
         else if( p.x > winSize.width / 8 && p.x <= winSize.width / 4 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
         {
-            CCLOG("Walk front");
             m_pHero->walk(100.f);
         }
         else if ( p.x > winSize.width * 7 / 8 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
         {
-            CCLOG("Jump");
             m_pHero->jump(150.f);
         }
 	};
@@ -170,25 +164,21 @@ void OperateLayer::onEnter()
 		Point start = pTouch->getStartLocation();
         if (start.x <= winSize.width / 8 && start.y >= 0.f && start.y <= winSize.height * 3 / 4)
         { 
-            if(!m_pHero->isJump())
+            if(!m_pHero->isInAir())
                 m_pHero->stop();
             m_pHero->stopMoveAction(MOVE_STATE_WALK);
-            CCLOG("Walk back finish %d", m_pHero->getCurrMoveState());
         }
         else if (start.x > winSize.width / 8 && start.x <= winSize.width / 4 && start.y >= 0.f && start.y <= winSize.height * 3 / 4)
         {
-			if (!m_pHero->isJump())
+			if (!m_pHero->isInAir())
 			{
 				m_pHero->stop();
-				CCLOG("Stop");
-			}
-               
+			}              
             m_pHero->stopMoveAction(MOVE_STATE_WALK);
-            CCLOG("Walk front finish %d", m_pHero->getCurrMoveState());
         }
         else if (start.x > winSize.width * 7 / 8 && start.x <= winSize.width && start.y >= 0.f && start.y <= winSize.height * 3 / 4)
         {
-            CCLOG("Jump finish %d",  m_pHero->getCurrMoveState());
+            
         }
 		else
 		{
@@ -302,7 +292,7 @@ void OperateLayer::dealWithKeyBoard()
 	}
 	else
 	{
-		if(!m_pHero->isJump())
+		if(!m_pHero->isInAir())
 			m_pHero->stop();
 	}
 }
