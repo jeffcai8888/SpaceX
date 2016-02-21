@@ -253,6 +253,7 @@ void GameLayer::onExit()
 	Layer::onExit();
 	removeAllEventListener();	
 	this->unscheduleUpdate();
+	this->removeAllChildren();
 }
 
 
