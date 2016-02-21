@@ -123,10 +123,12 @@ void GameLayer::onEnter()
 					{
 						hero->stopMoveAction(MOVE_STATE_DOWN);
 						Vec2 v = hero->getPhysicsBody()->getVelocity();
-						hero->walk(v.x);				
+						hero->walk(v.x);
+						CCLOG("Hero Walk");
 					}
 					else
 					{
+						CCLOG("Hero Stop");
 						hero->stop();
 					}
 					hero->setJumpStage(0);
@@ -152,9 +154,11 @@ void GameLayer::onEnter()
 						hero->stopMoveAction(MOVE_STATE_DOWN);
 						Vec2 v = hero->getPhysicsBody()->getVelocity();
 						hero->walk(v.x);
+						CCLOG("Hero Walk");
 					}
 					else
 					{
+						CCLOG("Hero Stop");
 						hero->stop();
 					}
 					hero->setJumpStage(0);
@@ -276,9 +280,10 @@ void GameLayer::updateHero(float dt)
 {
 	setViewPointCenter();
 
-	if (m_pHero->getCurrActionState() == ACTION_STATE_MOVE && m_pHero->isInMoveAction(MOVE_STATE_UP) && m_pHero->getPhysicsBody()->getPosition().y < m_pHero->getPrePositionY())
+	if (m_pHero->getCurrActionState() == ACTION_STATE_MOVE && m_pHero->isInMoveAction(MOVE_STATE_UP) && m_pHero->getPosition().y < m_pHero->getPrePositionY())
 	{
 		m_pHero->runJumpAction(false);
+		CCLOG("Up -> Down");
 	}
     m_pHero->setPrePositionY(m_pHero->getPosition().y);
 
@@ -382,7 +387,7 @@ void GameLayer::setViewPointCenter() {
     {
 		//this->setPositionY(centerOfView.y - heroPos.y);
 		auto heroPrePosY = m_pHero->getPrePositionY();
-		CCLOG("%f, %f, %f, %f", heroPrePosY+layerPos.y, heroPrePosY , layerPos.y, heroPos.y);
+		//CCLOG("%f, %f, %f, %f", heroPrePosY+layerPos.y, heroPrePosY , layerPos.y, heroPos.y);
 		this->setPositionY(heroPrePosY + layerPos.y - heroPos.y);
     }
 	
