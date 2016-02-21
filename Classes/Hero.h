@@ -16,6 +16,9 @@ public:
 	std::function<void(float)> walk;
 	std::function<void(float)> jump;
 	std::function<void(void)> stop;	
+
+	CC_SYNTHESIZE(float, m_walkVelocity, WalkVelocity);
+	CC_SYNTHESIZE(float, m_jumpVelocity, JumpVelocity);
 };
 
 

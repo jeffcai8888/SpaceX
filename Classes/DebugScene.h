@@ -4,6 +4,7 @@
 #include <cocos2d.h>
 #include "cocostudio/WidgetCallBackHandlerProtocol.h"
 #include "cocostudio/WidgetReader/NodeReader/NodeReader.h"
+#include "ui/CocosGUI.h"
 
 class DebugLayer : public cocos2d::Layer, public cocostudio::WidgetCallBackHandlerProtocol
 {
@@ -19,7 +20,8 @@ public:
 	virtual cocos2d::ui::Widget::ccWidgetEventCallback onLocateEventCallback(const std::string &callBackName);
 
 	//bool init();
-	void exitDebug(Ref* pSender);
+	void exitDebug(cocos2d::Ref* pSender);
+	void textFieldEvent(cocos2d::Ref *pSender, int type);
 
 private:
 	cocos2d::MenuItemImage *m_pCloseItem;

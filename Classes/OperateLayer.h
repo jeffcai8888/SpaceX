@@ -32,8 +32,6 @@ public:
 
 	CREATE_FUNC(OperateLayer);
 
-	CC_SYNTHESIZE(Hero*, m_pHero, Hero);
-
 private:
 	void showJoystick(cocos2d::Point pos);
     void resetJoystick();
@@ -53,6 +51,8 @@ private:
 	cocos2d::MenuItemImage *m_pCloseItem;
 	cocos2d::MenuItemImage *m_pDebugItem;
 	cocos2d::Vector<cocos2d::EventListener *> m_vecEventListener;
+
+	Hero*	m_pHero;
 
 	int m_KeyPressedValue;
 };

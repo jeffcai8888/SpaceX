@@ -17,24 +17,6 @@ DebugLayer::~DebugLayer()
 
 }
 
-/*bool DebugLayer::init()
-{
-	bool ret = false;
-	do
-	{
-		CC_BREAK_IF(!Layer::init());
-
-		
-		auto node = CSLoader::createNode("DebugScene.csb");
-		addChild(node);
-
-
-		ret = true;
-	} while (false);
-
-	return ret;
-}*/
-
 Widget::ccWidgetTouchCallback DebugLayer::onLocateTouchCallback(const std::string &callBackName)
 {
 	return nullptr;
@@ -51,12 +33,41 @@ Widget::ccWidgetClickCallback DebugLayer::onLocateClickCallback(const std::strin
 
 Widget::ccWidgetEventCallback DebugLayer::onLocateEventCallback(const std::string &callBackName)
 {
+	if (callBackName == "TextFieldEvent")
+	{
+		return CC_CALLBACK_2(DebugLayer::textFieldEvent, this);
+	}
 	return nullptr;
 }
 
 void DebugLayer::exitDebug(Ref* pSender)
 {
 	SceneManager::getInstance()->popScene();
+}
+
+void DebugLayer::textFieldEvent(Ref *pSender, int type)
+{
+	switch (type)
+	{
+	case TextField::EventType::ATTACH_WITH_IME:
+		CCLOG("attach with IME");
+		break;
+
+	case TextField::EventType::DETACH_WITH_IME:
+		CCLOG("detach with IME");
+		break;
+
+	case TextField::EventType::INSERT_TEXT:
+		CCLOG("insert words");
+		break;
+
+	case TextField::EventType::DELETE_BACKWARD:
+		CCLOG("delete words");
+		break;
+
+	default:
+		break;
+	}
 }
 
 static DebugLayerReader* _instanceDebugLayerReader = nullptr;

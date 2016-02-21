@@ -5,6 +5,7 @@
 #include "Bullet.h"
 #include "Ground.h"
 #include "OperateLayer.h"
+#include "JsonParser.h"
 
 #include "SceneManager.h"
 #include "SimpleAudioEngine.h"
@@ -30,40 +31,8 @@ bool GameLayer::init()
 	bool ret = false;
 	do {
 		CC_BREAK_IF( !Layer::init());
-		auto visibleSize = Director::getInstance()->getVisibleSize();
-		this->m_origin = Director::getInstance()->getVisibleOrigin();
-		this->m_fScreenWidth = visibleSize.width;
-		this->m_fScreenHeight = visibleSize.height;
 
-		m_pTiledMap = TMXTiledMap::create("spacex_tilemap.tmx");
-		this->addChild(m_pTiledMap);
 
-		TMXObjectGroup *objects = m_pTiledMap->getObjectGroup("Objects");
-		CCASSERT(NULL != objects, "'Objects' object group not found");
-
-		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("pd_sprites.plist");
-		m_pSpriteNodes = SpriteBatchNode::create("pd_sprites.pvr.ccz");
-		this->addChild(m_pSpriteNodes);
-
-		auto spawnPoint = objects->getObject("SpawnPoint");
-		CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
-		m_pHero = Hero::create();
-		m_pHero->setPosition(m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat()));
-		m_pHero->runIdleAction();
-		m_pHero->setLocalZOrder(m_fScreenHeight - m_pHero->getPositionY());
-		m_pHero->setAttack(5);
-		m_pHero->setHP(100);
-		m_pHero->setIsAttacking(false);
-		m_pHero->setJumpStage(0);
-
-		m_pHero->onDeadCallback = CC_CALLBACK_0(GameLayer::onHeroDead, this, m_pHero);
-		m_pHero->attack = CC_CALLBACK_0(GameLayer::onHeroAttack, this);
-		m_pHero->stop = CC_CALLBACK_0(GameLayer::onHeroStop, this);
-		m_pHero->walk = CC_CALLBACK_1(GameLayer::onHeroWalk, this);
-		m_pHero->jump = CC_CALLBACK_1(GameLayer::onHeroJump, this);
-		m_pSpriteNodes->addChild(m_pHero);
-		auto centerOfView = Point(visibleSize.width / 2, visibleSize.height / 2);
-		this->setPosition(centerOfView - m_pHero->getPosition());
 		//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(PATH_BG_MUSIC, true);
 		//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(PATH_HERO_TALK_EFFECT);
 
@@ -79,6 +48,67 @@ void GameLayer::onEnter()
 {
 	Layer::onEnter();
 
+	std::vector<std::string> path = FileUtils::getInstance()->getSearchPaths();
+
+	
+
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	this->m_origin = Director::getInstance()->getVisibleOrigin();
+
+	m_pTiledMap = TMXTiledMap::create("spacex_tilemap.tmx");
+	this->addChild(m_pTiledMap);
+
+	TMXObjectGroup *objects = m_pTiledMap->getObjectGroup("Objects");
+	CCASSERT(NULL != objects, "'Objects' object group not found");
+
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("pd_sprites.plist");
+	m_pSpriteNodes = SpriteBatchNode::create("pd_sprites.pvr.ccz");
+	this->addChild(m_pSpriteNodes);
+
+	auto spawnPoint = objects->getObject("SpawnPoint");
+	CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
+	m_pHero = Hero::create();
+	m_pHero->setPosition(m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat()));
+	m_pHero->runIdleAction();
+	m_pHero->setLocalZOrder(visibleSize.height - m_pHero->getPositionY());
+	m_pHero->setHP(100);
+	m_pHero->setIsAttacking(false);
+	m_pHero->setJumpStage(0);
+	m_pHero->onDeadCallback = CC_CALLBACK_0(GameLayer::onHeroDead, this, m_pHero);
+	m_pHero->attack = CC_CALLBACK_0(GameLayer::onHeroAttack, this);
+	m_pHero->stop = CC_CALLBACK_0(GameLayer::onHeroStop, this);
+	m_pHero->walk = CC_CALLBACK_1(GameLayer::onHeroWalk, this);
+	m_pHero->jump = CC_CALLBACK_1(GameLayer::onHeroJump, this);
+	m_pSpriteNodes->addChild(m_pHero);
+	auto centerOfView = Point(visibleSize.width / 2, visibleSize.height / 2);
+	this->setPosition(centerOfView - m_pHero->getPosition());
+
+	JsonParser* parser = JsonParser::createWithFile("Debug.json");
+	parser->decodeDebugData();
+	auto list = parser->getList();
+	for (auto& v : list)
+	{
+		ValueMap row = v.asValueMap();
+
+		for (auto& pair : row)
+		{
+			CCLOG("%s %s", pair.first.c_str(), pair.second.asString().c_str());
+			if (pair.first.compare("HeroHSpeed") == 0)
+			{
+				float s = pair.second.asDouble();
+				m_pHero->setWalkVelocity(s);
+		
+			}
+			else if (pair.first.compare("HeroVSpeed") == 0)
+			{
+				m_pHero->setJumpVelocity(pair.second.asDouble());
+			}
+			else if (pair.first.compare("WorldG") == 0)
+			{
+				getScene()->getPhysicsWorld()->setGravity(Vec2(0.f,pair.second.asDouble()));
+			}
+		}
+	}
 
 	const PhysicsMaterial m(1.f, 0.f, 0.f);
 	Size boxSize(m_pTiledMap->getMapSize().width * m_pTiledMap->getTileSize().width, m_pTiledMap->getMapSize().height * m_pTiledMap->getTileSize().height);
@@ -283,7 +313,6 @@ void GameLayer::updateHero(float dt)
 	if (m_pHero->getCurrActionState() == ACTION_STATE_MOVE && m_pHero->isInMoveAction(MOVE_STATE_UP) && m_pHero->getPosition().y < m_pHero->getPrePositionY())
 	{
 		m_pHero->runJumpAction(false);
-		CCLOG("Up -> Down");
 	}
     m_pHero->setPrePositionY(m_pHero->getPosition().y);
 
@@ -295,7 +324,7 @@ void GameLayer::updateHero(float dt)
 			Bullet* bullet = getUnusedBullet();
 			bullet->setVelocity(750.f);
 			bullet->setDirection(m_pHero->getShootDirection().rotateByAngle(Vec2(0.f,0.f), CC_DEGREES_TO_RADIANS((int)(-rand_0_1() * 10))));
-			bullet->setDisappearDistance(900000.f);
+			bullet->setDisappearTime(2.5f);
 			bullet->launch(m_pHero);
 			this->addChild(bullet);
 			m_shootTime = 0.f;

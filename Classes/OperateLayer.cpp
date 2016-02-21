@@ -1,5 +1,6 @@
 #include "Macro.h"
 #include "OperateLayer.h"
+#include "GameLayer.h"
 #include "Hero.h"
 #include "SceneManager.h"
 
@@ -88,6 +89,8 @@ bool OperateLayer::init()
 		this->addChild(m_pBloodBg, 100);
 		this->addChild(m_pBlood, 100);
 
+		
+
 		m_KeyPressedValue = 0;
 		
 		ret = true;
@@ -100,6 +103,7 @@ bool OperateLayer::init()
 void OperateLayer::onEnter()
 {
 	Layer::onEnter();
+	m_pHero = static_cast<GameLayer *>(this->getScene()->getChildByTag(LT_Game))->getHero();
 	auto listener = EventListenerTouchAllAtOnce::create();
 	listener->onTouchesBegan = [this](const vector<Touch*>& touches, Event *event)
 	{
@@ -112,15 +116,15 @@ void OperateLayer::onEnter()
             
             if( p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4 )
             {
-                m_pHero->walk(-100.f);
+                m_pHero->walk(-m_pHero->getWalkVelocity());
             }
             else if( p.x > winSize.width / 8 && p.x <= winSize.width / 4 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
             {
-                m_pHero->walk(100.f);
+                m_pHero->walk(m_pHero->getWalkVelocity());
             }
             else if ( p.x > winSize.width * 7 / 8 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
             {
-                m_pHero->jump(300.f);
+                m_pHero->jump(m_pHero->getJumpVelocity());
             }
 			++touchIter;
 		}
@@ -145,15 +149,15 @@ void OperateLayer::onEnter()
         }
         else if( p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4 )
         {
-            m_pHero->walk(-100.f);
+            m_pHero->walk(-m_pHero->getWalkVelocity());
         }
         else if( p.x > winSize.width / 8 && p.x <= winSize.width / 4 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
         {
-            m_pHero->walk(100.f);
+            m_pHero->walk(m_pHero->getWalkVelocity());
         }
         else if ( p.x > winSize.width * 7 / 8 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
         {
-            m_pHero->jump(300.f);
+            m_pHero->jump(m_pHero->getJumpVelocity());
         }
 	};
 	listener->onTouchesEnded = [this](const vector<Touch*>& touches, Event *event)
@@ -280,15 +284,15 @@ void OperateLayer::dealWithKeyBoard()
 {
 	if (m_KeyPressedValue & KB_Up)
 	{
-		m_pHero->jump(300.f);
+		m_pHero->jump(m_pHero->getWalkVelocity());
 	}
 	else if (m_KeyPressedValue & KB_Front)
 	{
-		m_pHero->walk(100.f);
+		m_pHero->walk(m_pHero->getWalkVelocity());
 	}
 	else if (m_KeyPressedValue & KB_Back)
 	{
-		m_pHero->walk(-100.f);
+		m_pHero->walk(-m_pHero->getWalkVelocity());
 	}
 	else
 	{

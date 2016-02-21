@@ -6,7 +6,6 @@
         <Image Name="DebugNormal.png" />
         <Project Name="DebugScene.csd" Type="Scene" />
         <Image Name="DebugSelected.png" />
-        <TmxFile Name="pd_tilemap.tmx" />
       </RootFolder>
     </Group>
   </SolutionFolder>

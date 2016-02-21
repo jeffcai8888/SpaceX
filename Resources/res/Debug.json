@@ -1,0 +1,9 @@
+{"Data":[
+{"Attr":"HeroHSpeed","Value":100.0},
+{"Attr":"HeroVSpeed","Value":300.0},
+{"Attr":"BulletPower","Value":5.0},
+{"Attr":"BulletSpeed","Value":750.0},
+{"Attr":"BulletDisappearTime","Value":2.5},
+{"Attr":"BulletAngle","Value":10.0},
+{"Attr":"WorldG","Value":-500.0}
+]}

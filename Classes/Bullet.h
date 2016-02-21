@@ -18,7 +18,7 @@ public:
 
 	CC_SYNTHESIZE(float, m_fVelocity, Velocity);
 	CC_SYNTHESIZE(cocos2d::Point, m_fDirection, Direction);
-	CC_SYNTHESIZE(float, m_fDisappearDistance, DisappearDistance);
+	CC_SYNTHESIZE(float, m_fDisappearTime, DisappearTime);
 	CC_SYNTHESIZE(unsigned int, m_gravity, Gravity);
 	CC_SYNTHESIZE(unsigned int, m_power, Power);
 	CC_SYNTHESIZE(bool, m_isActive, IsActive);
@@ -26,6 +26,7 @@ public:
 	
 private:
 	cocos2d::Point m_startPostion;
+	float m_launchTime;
 };
 
 #endif

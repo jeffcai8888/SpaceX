@@ -39,9 +39,6 @@ private:
 	cocos2d::TMXTiledMap *m_pTiledMap;
 	cocos2d::TMXLayer*	m_pMetaLayer;
 
-	float m_fScreenWidth;
-	float m_fScreenHeight;
-
 	float m_shootTime;
 	cocos2d::Point m_origin;
 

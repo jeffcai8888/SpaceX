@@ -4,6 +4,7 @@
 USING_NS_CC;
 
 Bullet::Bullet()
+	:m_launchTime(0.f)
 {
 }
 
@@ -35,11 +36,11 @@ void Bullet::update(float dt)
 	if (this->m_isActive)
 	{
 		Point curPos = this->getPosition();
-		//this->setPosition(curPos + m_fDirection * m_fVelocity);
 
-		float distance = curPos.distanceSquared(this->m_startPostion);
-		if (distance >= m_fDisappearDistance)
+		m_launchTime += dt;
+		if (m_launchTime >= m_fDisappearTime)
 		{
+			m_launchTime = 0.f;
 			this->m_isActive = false;
 			EventCustom event("bullet_disappear");
 			event.setUserData(this);
@@ -57,4 +58,5 @@ void Bullet::launch(Hero* pHero)
 	this->m_startPostion = pos;
 	this->getPhysicsBody()->setVelocity(Vec2(0.f, 0.f));
 	this->getPhysicsBody()->applyImpulse(m_fVelocity * m_fDirection);
+	m_launchTime = 0.f;
 }

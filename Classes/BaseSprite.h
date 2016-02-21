@@ -51,7 +51,6 @@ public:
 	CC_SYNTHESIZE(ActionState, m_currActionState, CurrActionState);
     CC_SYNTHESIZE(int, m_currMoveState, CurrMoveState);
 	CC_SYNTHESIZE(unsigned int, m_hp, HP);
-	CC_SYNTHESIZE(unsigned int, m_attack, Attack);
 	CC_SYNTHESIZE(bool, m_isAttacking, IsAttacking);
 	CC_SYNTHESIZE(cocos2d::Vec2, m_fShootDirection, ShootDirection);
     CC_SYNTHESIZE(float, m_fPrePositionY, PrePositionY);
