@@ -133,7 +133,7 @@ void DebugLayer::exitDebug(Ref* pSender)
 
 void DebugLayer::textFieldEvent(Ref *pSender, int type)
 {
-	switch (type)
+	switch ((TextField::EventType)type)
 	{
 	case TextField::EventType::ATTACH_WITH_IME:
 		CCLOG("attach with IME");

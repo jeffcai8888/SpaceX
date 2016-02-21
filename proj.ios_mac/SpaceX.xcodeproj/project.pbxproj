@@ -23,6 +23,7 @@
 		3D6DA73B1C7545E80068FE19 /* Hero.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E96975191C72F24300959DB1 /* Hero.cpp */; };
 		3D6DA73C1C7545EC0068FE19 /* OperateLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E969751B1C72F24300959DB1 /* OperateLayer.cpp */; };
 		3D6DA73D1C7545EF0068FE19 /* SceneManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E969751D1C72F24300959DB1 /* SceneManager.cpp */; };
+		3D89168D1C7A165F00F442C9 /* JsonParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D89168B1C7A165F00F442C9 /* JsonParser.cpp */; };
 		3EACC98F19EE6D4300EB3C5E /* res in Resources */ = {isa = PBXBuildFile; fileRef = 3EACC98E19EE6D4300EB3C5E /* res */; };
 		3EACC99019EE6D4300EB3C5E /* res in Resources */ = {isa = PBXBuildFile; fileRef = 3EACC98E19EE6D4300EB3C5E /* res */; };
 		46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8419C43A87006E1F66 /* AppDelegate.cpp */; };
@@ -121,6 +122,8 @@
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		3D6DA7311C74E2AA0068FE19 /* DebugScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DebugScene.cpp; sourceTree = "<group>"; };
 		3D6DA7321C74E2AA0068FE19 /* DebugScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugScene.h; sourceTree = "<group>"; };
+		3D89168B1C7A165F00F442C9 /* JsonParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JsonParser.cpp; sourceTree = "<group>"; };
+		3D89168C1C7A165F00F442C9 /* JsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JsonParser.h; sourceTree = "<group>"; };
 		3DD433F71C761EED009CA3A2 /* Macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macro.h; sourceTree = "<group>"; };
 		3EACC98E19EE6D4300EB3C5E /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
 		46880B8419C43A87006E1F66 /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppDelegate.cpp; sourceTree = "<group>"; };
@@ -319,6 +322,8 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				3D89168B1C7A165F00F442C9 /* JsonParser.cpp */,
+				3D89168C1C7A165F00F442C9 /* JsonParser.h */,
 				3D6DA7311C74E2AA0068FE19 /* DebugScene.cpp */,
 				3D6DA7321C74E2AA0068FE19 /* DebugScene.h */,
 				E969750C1C72F24300959DB1 /* BaseSprite.cpp */,
@@ -536,6 +541,7 @@
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				3D6DA7331C74E2AA0068FE19 /* DebugScene.cpp in Sources */,
 				E96975211C72F24300959DB1 /* GameLayer.cpp in Sources */,
+				3D89168D1C7A165F00F442C9 /* JsonParser.cpp in Sources */,
 				E96975221C72F24300959DB1 /* GameOverScene.cpp in Sources */,
 				E96975231C72F24300959DB1 /* GameScene.cpp in Sources */,
 				E96975241C72F24300959DB1 /* Ground.cpp in Sources */,
@@ -603,6 +609,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../cocos2d/cocos/platform/ios",
 					"$(SRCROOT)/../cocos2d/cocos/platform/ios/Simulation",
+					"$(SRCROOT)/../cocos2d/external/json",
 				);
 				INFOPLIST_FILE = ios/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
@@ -641,6 +648,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../cocos2d/cocos/platform/ios",
 					"$(SRCROOT)/../cocos2d/cocos/platform/ios/Simulation",
+					"$(SRCROOT)/../cocos2d/external/json",
 				);
 				INFOPLIST_FILE = ios/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
