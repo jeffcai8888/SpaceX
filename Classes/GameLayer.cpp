@@ -95,17 +95,36 @@ void GameLayer::onEnter()
 			CCLOG("%s %s", pair.first.c_str(), pair.second.asString().c_str());
 			if (pair.first.compare("HeroHSpeed") == 0)
 			{
-				float s = pair.second.asDouble();
+				float s = pair.second.asFloat();
 				m_pHero->setWalkVelocity(s);
-		
 			}
 			else if (pair.first.compare("HeroVSpeed") == 0)
 			{
-				m_pHero->setJumpVelocity(pair.second.asDouble());
+				m_pHero->setJumpVelocity(pair.second.asFloat());
+			}
+			else if (pair.first.compare("BulletPower") == 0)
+			{
+				m_pHero->setBullletPower(pair.second.asInt());
+			}
+			else if (pair.first.compare("BulletSpeed") == 0)
+			{
+				m_pHero->setBulletLaunchVelocity(pair.second.asFloat());
+			}
+			else if (pair.first.compare("BulletDisappearTime") == 0)
+			{
+				m_pHero->setBulletDisappearTime(pair.second.asFloat());
+			}
+			else if (pair.first.compare("BulletAngle") == 0)
+			{
+				m_pHero->setBullletAngle(pair.second.asInt());
+			}
+			else if (pair.first.compare("BulletInterval") == 0)
+			{
+				m_pHero->setBulletInterval(pair.second.asFloat());
 			}
 			else if (pair.first.compare("WorldG") == 0)
 			{
-				getScene()->getPhysicsWorld()->setGravity(Vec2(0.f,pair.second.asDouble()));
+				getScene()->getPhysicsWorld()->setGravity(Vec2(0.f,pair.second.asFloat()));
 			}
 		}
 	}
@@ -124,7 +143,7 @@ void GameLayer::onEnter()
 
 	importGroundData(m_pTiledMap);
 
-	m_shootTime = 0.1f;
+	m_shootTime = m_pHero->getBulletInterval();
 
 
 	auto listener = EventListenerCustom::create("bullet_disappear", [this](EventCustom* event) {
@@ -319,12 +338,9 @@ void GameLayer::updateHero(float dt)
 	if (m_pHero->getIsAttacking())
 	{
 		m_shootTime += dt;
-		if (m_shootTime >= 0.1f)
+		if (m_shootTime >= m_pHero->getBulletInterval())
 		{
 			Bullet* bullet = getUnusedBullet();
-			bullet->setVelocity(750.f);
-			bullet->setDirection(m_pHero->getShootDirection().rotateByAngle(Vec2(0.f,0.f), CC_DEGREES_TO_RADIANS((int)(-rand_0_1() * 10))));
-			bullet->setDisappearTime(2.5f);
 			bullet->launch(m_pHero);
 			this->addChild(bullet);
 			m_shootTime = 0.f;

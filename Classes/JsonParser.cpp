@@ -16,7 +16,11 @@ JsonParser* JsonParser::createWithFile(const char *_fileName)
 
 bool JsonParser::initWithFile(const char *_fileName)
 {
-	std::string path = FileUtils::getInstance()->fullPathForFilename(_fileName);
+	std::string path = FileUtils::getInstance()->getWritablePath() + _fileName;
+	if (FileUtils::getInstance()->isFileExist(path) == false)
+	{
+		path = FileUtils::getInstance()->fullPathForFilename(_fileName);
+	}
 	Data data = FileUtils::getInstance()->getDataFromFile(path);
 	content = std::string((const char*)data.getBytes(), 0, data.getSize());
 	return true;
@@ -82,7 +86,7 @@ void JsonParser::decodeDebugData()
 	}
 }
 
-void JsonParser::encodeDebugData()
+void JsonParser::encodeDebugData(const char *fileName)
 {
 	rapidjson::Document document;
 	document.SetObject();
@@ -98,7 +102,7 @@ void JsonParser::encodeDebugData()
 		object.AddMember("Attr", v_attr, allocator);
 
 		rapidjson::Value v_Value;
-		v_Value.SetString(row["Value"].asString().c_str(), allocator);
+		v_Value.SetDouble(row["Value"].asFloat());
 		object.AddMember("Value", v_Value, allocator);
 
 		array.PushBack(object, allocator);
@@ -111,4 +115,12 @@ void JsonParser::encodeDebugData()
 
 	auto out = buffer.GetString();
 	CCLOG("encode %s", out);
+	
+	
+	FILE *fp = fopen(fileName, "wb");
+	if (fp)
+	{
+		size_t ret = fwrite(out, 1, strlen(out), fp);
+		fclose(fp);
+	}
 }

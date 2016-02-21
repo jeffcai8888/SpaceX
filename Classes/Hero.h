@@ -19,6 +19,11 @@ public:
 
 	CC_SYNTHESIZE(float, m_walkVelocity, WalkVelocity);
 	CC_SYNTHESIZE(float, m_jumpVelocity, JumpVelocity);
+	CC_SYNTHESIZE(float, m_bulletDisappearTime, BulletDisappearTime);
+	CC_SYNTHESIZE(float, m_bulletLaunchVelocity, BulletLaunchVelocity);
+	CC_SYNTHESIZE(int,   m_bullletAngle, BullletAngle);
+	CC_SYNTHESIZE(int,   m_bullletPower, BullletPower);
+	CC_SYNTHESIZE(float, m_bulletInterval, BulletInterval);
 };
 
 

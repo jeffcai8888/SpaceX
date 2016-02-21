@@ -17,7 +17,7 @@ public:
 	static JsonParser *createWithArray(cocos2d::ValueVector);	
 	bool initWithArray(cocos2d::ValueVector);
 	void decodeDebugData();
-	void encodeDebugData();
+	void encodeDebugData(const char *);
 
 
 	CC_SYNTHESIZE(cocos2d::ValueVector, list, List);

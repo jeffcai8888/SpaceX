@@ -5,5 +5,6 @@
 {"Attr":"BulletSpeed","Value":750.0},
 {"Attr":"BulletDisappearTime","Value":2.5},
 {"Attr":"BulletAngle","Value":10.0},
+{"Attr":"BulletInterval","Value":0.1},
 {"Attr":"WorldG","Value":-500.0}
 ]}

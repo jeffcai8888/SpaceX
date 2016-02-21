@@ -18,6 +18,8 @@ public:
 	virtual cocos2d::ui::Widget::ccWidgetTouchCallback onLocateTouchCallback(const std::string &callBackName);
 	virtual cocos2d::ui::Widget::ccWidgetClickCallback onLocateClickCallback(const std::string &callBackName);
 	virtual cocos2d::ui::Widget::ccWidgetEventCallback onLocateEventCallback(const std::string &callBackName);
+	virtual void onEnter();
+	virtual void onExit();
 
 	//bool init();
 	void exitDebug(cocos2d::Ref* pSender);
