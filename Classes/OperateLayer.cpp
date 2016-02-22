@@ -43,13 +43,15 @@ bool OperateLayer::init()
         
         m_pFront->setPosition(m_origin + Point(visibleSize.width * 3 / 16, 50));
         m_pBack->setPosition(m_origin + Point(visibleSize.width / 16, 100));
-        m_pUp->setPosition(m_origin + Point(visibleSize.width * 15 / 16, 120));
+        m_pUp->setPosition(m_origin + Point(visibleSize.width * 15 / 16, 200));
         this->addChild(m_pFront);
         this->addChild(m_pBack);
         this->addChild(m_pUp);
 
 		m_pJoystick = Sprite::create("joystick.png");
 		m_pJoystickBg = Sprite::create("joystick_bg.png");
+        m_pJoystick->setScale(1.5f, 1.5f);
+        m_pJoystickBg->setScale(1.5f, 1.5f);
 		this->addChild(m_pJoystick, 0);
 		this->addChild(m_pJoystickBg, 1);
         resetJoystick();
@@ -113,8 +115,16 @@ void OperateLayer::onEnter()
 		{
 			Touch *pTouch = (Touch*)(*touchIter);
 			Point p = pTouch->getLocation();
-            
-            if( p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4 )
+            if (this->isTap(m_pJoystickBg, p))
+            {
+                m_pHero->attack();
+                if(m_pHero->isFlippedX())
+                    m_pHero->setShootDirection(Vec2(-1.f,0.f));
+                else
+                    m_pHero->setShootDirection(Vec2(1.f,0.f));
+                
+            }
+            else if( p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4 )
             {
                 m_pHero->walk(-m_pHero->getWalkVelocity());
             }
@@ -265,8 +275,8 @@ void OperateLayer::updateJoystick(Point direction, float distance)
 
 void OperateLayer::resetJoystick()
 {
-    m_pJoystick->setPosition(Point(750, 100.f));
-    m_pJoystickBg->setPosition(Point(750.f, 100.f));
+    m_pJoystick->setPosition(Point(700, 100.f));
+    m_pJoystickBg->setPosition(Point(700.f, 100.f));
 }
 
 bool OperateLayer::isTap(cocos2d::Node* pNode, cocos2d::Point point)
