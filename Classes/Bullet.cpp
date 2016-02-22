@@ -61,6 +61,6 @@ void Bullet::launch(Hero* pHero)
 	this->m_fDirection = pHero->getShootDirection().rotateByAngle(Vec2(0.f, 0.f), CC_DEGREES_TO_RADIANS((int)(-rand_0_1() * pHero->getBullletAngle())));
 	this->m_power = pHero->getBullletPower();
 	this->getPhysicsBody()->setVelocity(Vec2(0.f, 0.f));
-	this->getPhysicsBody()->applyImpulse(m_fVelocity * m_fDirection);
+	this->getPhysicsBody()->applyImpulse(m_fVelocity * m_fDirection + pHero->getPhysicsBody()->getVelocity());
 	m_launchTime = 0.f;
 }
