@@ -17,7 +17,9 @@ OperateLayer::OperateLayer()
     m_pJoystickBg(nullptr),
     m_pFront(nullptr),
     m_pBack(nullptr),
-    m_pUp(nullptr)
+    m_pUp(nullptr),
+    m_firstTouchJoystickLocation(Point(0.f, 0.f)),
+    m_firstTouchJoystickID(-1)
 {
 	m_vecEventListener.clear();
 }
@@ -146,12 +148,24 @@ void OperateLayer::onEnter()
 		Touch *pTouch = (Touch*)(*touchIter);
 		Point start = pTouch->getStartLocation();
         Point p = pTouch->getLocation();
-        if (this->isTap(m_pJoystickBg, start))
+        if(this->isTap(m_pJoystickBg, start))
+        {
+            m_firstTouchJoystickLocation = start;
+            m_firstTouchJoystickID = pTouch->getID();
+        }
+        else{
+            if(this->isTap(m_pJoystickBg, p))
+            {
+                m_firstTouchJoystickID = pTouch->getID();
+                m_firstTouchJoystickLocation = p;
+            }
+        }
+        
+        if(m_firstTouchJoystickID == pTouch->getID())
         {
             m_pHero->attack();
-            Point dest = pTouch->getLocation();
-            float distance = start.getDistance(dest);
-            Vec2 direction = dest - start;
+            float distance = m_firstTouchJoystickLocation.getDistance(p);
+            Vec2 direction = p - m_firstTouchJoystickLocation;
             direction.normalize();
             this->updateJoystick(direction, distance);
             m_pHero->setShootDirection(direction);
@@ -176,6 +190,7 @@ void OperateLayer::onEnter()
 		std::vector<Touch*>::const_iterator touchIter = touches.begin();
 		Touch *pTouch = (Touch*)(*touchIter);
 		Point start = pTouch->getStartLocation();
+        
         if (start.x <= winSize.width / 8 && start.y >= 0.f && start.y <= winSize.height * 3 / 4)
         { 
             if(!m_pHero->isInAir())
@@ -194,13 +209,13 @@ void OperateLayer::onEnter()
         {
             
         }
-		else
-		{
-			Point pos = m_pJoystickBg->getPosition();
-			m_pJoystick->setPosition(pos);
-			m_pHero->setIsAttacking(false);
-		}
-
+        else if(m_firstTouchJoystickID == pTouch->getID())
+        {
+            Point pos = m_pJoystickBg->getPosition();
+            m_pJoystick->setPosition(pos);
+            m_pHero->setIsAttacking(false);
+            m_firstTouchJoystickID = -1;
+        }
 	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 	m_vecEventListener.pushBack(listener);
@@ -275,8 +290,8 @@ void OperateLayer::updateJoystick(Point direction, float distance)
 
 void OperateLayer::resetJoystick()
 {
-    m_pJoystick->setPosition(Point(700, 100.f));
-    m_pJoystickBg->setPosition(Point(700.f, 100.f));
+    m_pJoystick->setPosition(Point(730, 100.f));
+    m_pJoystickBg->setPosition(Point(730.f, 100.f));
 }
 
 bool OperateLayer::isTap(cocos2d::Node* pNode, cocos2d::Point point)

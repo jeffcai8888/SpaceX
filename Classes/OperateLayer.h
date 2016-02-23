@@ -51,6 +51,8 @@ private:
 	cocos2d::MenuItemImage *m_pCloseItem;
 	cocos2d::MenuItemImage *m_pDebugItem;
 	cocos2d::Vector<cocos2d::EventListener *> m_vecEventListener;
+    cocos2d::Point m_firstTouchJoystickLocation;
+    int           m_firstTouchJoystickID;
 
 	Hero*	m_pHero;
 
