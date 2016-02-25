@@ -63,6 +63,9 @@
     <ClCompile Include="..\Classes\socket\SocketServer.cpp">
       <Filter>src\socket</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\SelectLayer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -118,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\socket\SocketServer.h">
       <Filter>src\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SelectLayer.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

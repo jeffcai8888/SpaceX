@@ -2,6 +2,8 @@
 #define _SPACEX_CLASSES_GAMELAYER_H_
 
 #include <cocos2d.h>
+#include "socket/SocketClient.h"
+#include "socket/SocketServer.h"
 
 class BaseSprite;
 class Hero;
@@ -22,6 +24,8 @@ public:
 	void onHeroAttack();
 	void onHeroStop();
 	void onHeroDead(BaseSprite *pTarget);
+	void onRecv(const char* data, int count);
+	void onDisconnect();
 
 	void update(float dt);
 	void updateHero(float dt);
@@ -32,6 +36,9 @@ public:
 	void callBack(cocos2d::Ref *pSender);
 
 	CC_SYNTHESIZE_READONLY(Hero*, m_pHero, Hero);
+	CC_SYNTHESIZE(SocketClient*, m_pSocketClient, SocketClient);
+	CC_SYNTHESIZE(SocketServer*, m_pSocketServer, SocketServer);
+	CC_SYNTHESIZE(int, m_networkType, NetworkType);
 
 	CREATE_FUNC(GameLayer);
 

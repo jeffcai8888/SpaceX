@@ -22,9 +22,9 @@ void SceneManager::showScene(SceneType sceneType, bool isReplace)
 	Scene *pScene = NULL;
 	switch(sceneType)
 	{
-	case GAME_SCENE:
-		pScene = GameScene::createScene();
-		break;
+	//case GAME_SCENE:
+	//	pScene = GameScene::createScene();
+	//	break;
 	case GAME_OVER_SCENE:
 		pScene = GameOverScene::createScene();
 		break;

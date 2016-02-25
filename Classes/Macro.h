@@ -22,5 +22,12 @@ enum PhysicsCategory
     PC_Ground = 1 << 2
 };
 
+enum NetworkType
+{
+	NT_Offline,
+	NT_Server,
+	NT_Client
+};
+
 
 #endif /* Macro_h */

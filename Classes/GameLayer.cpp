@@ -15,7 +15,10 @@ USING_NS_CC;
 GameLayer::GameLayer()
 	:m_pTiledMap(nullptr),
 	m_pSpriteNodes(nullptr),
-	m_pHero(nullptr)
+	m_pHero(nullptr),
+	m_networkType(NT_Offline),
+	m_pSocketClient(nullptr),
+	m_pSocketServer(nullptr)
 {
 	m_vecBullets.clear();
 	m_vecEventListener.clear();
@@ -48,10 +51,22 @@ void GameLayer::onEnter()
 {
 	Layer::onEnter();
 
-	std::vector<std::string> path = FileUtils::getInstance()->getSearchPaths();
 
-	
-
+	if (NT_Client == m_networkType)
+	{
+		m_pSocketClient = SocketClient::construct();
+		m_pSocketClient->onRecv = CC_CALLBACK_2(GameLayer::onRecv, this);
+		m_pSocketClient->onDisconnect = CC_CALLBACK_0(GameLayer::onDisconnect, this);
+		if (!m_pSocketClient->connectServer("127.0.0.1", 8000))
+		{
+			CCLOG("Client connect error");
+		}
+	}
+	else if (NT_Server == m_networkType)
+	{
+		m_pSocketServer = SocketServer::getInstance();
+		m_pSocketServer->startServer(8000);
+	}
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	this->m_origin = Director::getInstance()->getVisibleOrigin();
 
@@ -465,4 +480,38 @@ void GameLayer::removeAllEventListener()
 		_eventDispatcher->removeEventListener(sp_obj);
 	}
 	m_vecEventListener.clear();
+}
+
+void GameLayer::onRecv(const char* data, int count)
+{
+	/*GameData* gameData = (GameData*)data;
+	if (gameData->dataSize == sizeof(GameData))
+	{
+		switch (gameData->dataType)
+		{
+		case RUN:
+			_enemy->stopAllActions();
+			_enemy->runAction(RepeatForever::create(_runAnim));
+			break;
+		case STAND:
+			_enemy->stopAllActions();
+			_enemy->runAction(RepeatForever::create(_standAnim));
+			break;
+		case POSITION:
+			if (gameData->position.x < _enemy->getPositionX())
+				_enemy->setFlippedX(true);
+			else if (fabs(gameData->position.x - _enemy->getPositionX()) > MATH_EPSILON)
+				_enemy->setFlippedX(false);
+			_enemy->setPosition(gameData->position);
+			break;
+
+		default:
+			break;
+		}
+	}*/
+}
+
+void GameLayer::onDisconnect()
+{
+	CCLOG("Client disconnect");
 }
