@@ -10,6 +10,9 @@
     <Filter Include="src">
       <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\socket">
+      <UniqueIdentifier>{3c0f8ecb-2c9f-4b84-bcd6-853191c8f5a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -50,6 +53,15 @@
     </ClCompile>
     <ClCompile Include="..\Classes\JsonParser.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\socket\SocketBase.cpp">
+      <Filter>src\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\socket\SocketClient.cpp">
+      <Filter>src\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\socket\SocketServer.cpp">
+      <Filter>src\socket</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -97,6 +109,15 @@
     </ClInclude>
     <ClInclude Include="..\Classes\JsonParser.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\socket\SocketBase.h">
+      <Filter>src\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\socket\SocketClient.h">
+      <Filter>src\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\socket\SocketServer.h">
+      <Filter>src\socket</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

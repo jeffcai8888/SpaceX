@@ -156,6 +156,9 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\JsonParser.cpp" />
     <ClCompile Include="..\Classes\OperateLayer.cpp" />
     <ClCompile Include="..\Classes\SceneManager.cpp" />
+    <ClCompile Include="..\Classes\socket\SocketBase.cpp" />
+    <ClCompile Include="..\Classes\socket\SocketClient.cpp" />
+    <ClCompile Include="..\Classes\socket\SocketServer.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -173,6 +176,9 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Macro.h" />
     <ClInclude Include="..\Classes\OperateLayer.h" />
     <ClInclude Include="..\Classes\SceneManager.h" />
+    <ClInclude Include="..\Classes\socket\SocketBase.h" />
+    <ClInclude Include="..\Classes\socket\SocketClient.h" />
+    <ClInclude Include="..\Classes\socket\SocketServer.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>
