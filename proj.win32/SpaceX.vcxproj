@@ -148,6 +148,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\BaseSprite.cpp" />
     <ClCompile Include="..\Classes\Bullet.cpp" />
     <ClCompile Include="..\Classes\DebugScene.cpp" />
+    <ClCompile Include="..\Classes\GameData.cpp" />
     <ClCompile Include="..\Classes\GameLayer.cpp" />
     <ClCompile Include="..\Classes\GameOverScene.cpp" />
     <ClCompile Include="..\Classes\GameScene.cpp" />
@@ -157,6 +158,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\OperateLayer.cpp" />
     <ClCompile Include="..\Classes\SceneManager.cpp" />
     <ClCompile Include="..\Classes\SelectLayer.cpp" />
+    <ClCompile Include="..\Classes\SocketManager.cpp" />
     <ClCompile Include="..\Classes\socket\SocketBase.cpp" />
     <ClCompile Include="..\Classes\socket\SocketClient.cpp" />
     <ClCompile Include="..\Classes\socket\SocketServer.cpp" />
@@ -168,6 +170,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Bullet.h" />
     <ClInclude Include="..\Classes\commons.h" />
     <ClInclude Include="..\Classes\DebugScene.h" />
+    <ClInclude Include="..\Classes\GameData.h" />
     <ClInclude Include="..\Classes\GameLayer.h" />
     <ClInclude Include="..\Classes\GameOverScene.h" />
     <ClInclude Include="..\Classes\GameScene.h" />
@@ -178,6 +181,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\OperateLayer.h" />
     <ClInclude Include="..\Classes\SceneManager.h" />
     <ClInclude Include="..\Classes\SelectLayer.h" />
+    <ClInclude Include="..\Classes\SocketManager.h" />
     <ClInclude Include="..\Classes\socket\SocketBase.h" />
     <ClInclude Include="..\Classes\socket\SocketClient.h" />
     <ClInclude Include="..\Classes\socket\SocketServer.h" />

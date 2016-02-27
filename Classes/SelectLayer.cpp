@@ -1,6 +1,7 @@
 #include "Macro.h"
 #include "SelectLayer.h"
 #include "GameScene.h"
+#include "SocketManager.h"
 //#include "ServerLayer.h"
 //#include "ClientLayer.h"
 USING_NS_CC;

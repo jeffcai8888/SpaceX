@@ -14,13 +14,16 @@ typedef enum {
 class SceneManager
 {
 public:
-	SceneManager(){};
-	~SceneManager(){};
-
 	static SceneManager* getInstance();
 
 	void showScene(SceneType sceneType, bool isReplace = true);
 	void popScene();
+
+private:
+	SceneManager() {};
+	~SceneManager() {};
+
+	static SceneManager* instance;
 
 };
 

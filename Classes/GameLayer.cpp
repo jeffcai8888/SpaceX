@@ -9,16 +9,14 @@
 
 #include "SceneManager.h"
 #include "SimpleAudioEngine.h"
+#include "SocketManager.h"
 
 USING_NS_CC;
 
 GameLayer::GameLayer()
-	:m_pTiledMap(nullptr),
-	m_pSpriteNodes(nullptr),
-	m_pHero(nullptr),
-	m_networkType(NT_Offline),
-	m_pSocketClient(nullptr),
-	m_pSocketServer(nullptr)
+	:m_pTiledMap(nullptr)
+	,m_pSpriteNodes(nullptr)
+	,m_pHero(nullptr)
 {
 	m_vecBullets.clear();
 	m_vecEventListener.clear();
@@ -39,8 +37,12 @@ bool GameLayer::init()
 		//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(PATH_BG_MUSIC, true);
 		//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(PATH_HERO_TALK_EFFECT);
 
+		if (SocketManager::getInstance()->getNetworkType() == NT_Client)
+		{
+			SocketManager::getInstance()->getSocketClient()->onRecv = CC_CALLBACK_2(GameLayer::onRecv, this);
+			SocketManager::getInstance()->getSocketClient()->onDisconnect = CC_CALLBACK_0(GameLayer::onDisconnect, this);
+		}
 		
-
 		ret = true;
 	} while(0);
 
@@ -51,22 +53,6 @@ void GameLayer::onEnter()
 {
 	Layer::onEnter();
 
-
-	if (NT_Client == m_networkType)
-	{
-		m_pSocketClient = SocketClient::construct();
-		m_pSocketClient->onRecv = CC_CALLBACK_2(GameLayer::onRecv, this);
-		m_pSocketClient->onDisconnect = CC_CALLBACK_0(GameLayer::onDisconnect, this);
-		if (!m_pSocketClient->connectServer("127.0.0.1", 8000))
-		{
-			CCLOG("Client connect error");
-		}
-	}
-	else if (NT_Server == m_networkType)
-	{
-		m_pSocketServer = SocketServer::getInstance();
-		m_pSocketServer->startServer(8000);
-	}
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	this->m_origin = Director::getInstance()->getVisibleOrigin();
 
@@ -80,10 +66,22 @@ void GameLayer::onEnter()
 	m_pSpriteNodes = SpriteBatchNode::create("pd_sprites.pvr.ccz");
 	this->addChild(m_pSpriteNodes);
 
-	auto spawnPoint = objects->getObject("SpawnPoint");
-	CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
 	m_pHero = Hero::create();
-	m_pHero->setPosition(m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat()));
+	//Point heroInitPos;
+	if(SocketManager::getInstance()->getNetworkType() == NT_Client)
+	{
+		
+	}
+	else
+	{
+		auto spawnPoint = objects->getObject("SpawnPoint");
+		CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
+		Point heroInitPos = m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
+		SocketManager::getInstance()->sendData(NDT_HeroPos, heroInitPos);
+		m_pHero->setPosition(heroInitPos);
+	}
+	
+	
 	m_pHero->runIdleAction();
 	m_pHero->setLocalZOrder(visibleSize.height - m_pHero->getPositionY());
 	m_pHero->setHP(100);
@@ -304,7 +302,7 @@ void GameLayer::onHeroJump(float verticalVelocity)
 			m_pHero->setFlippedX(velocity.x < 0);
 		}
 		m_pHero->getPhysicsBody()->setVelocity(velocity);
-		m_pHero->setPrePositionY(m_pHero->getPosition().y);
+		m_pHero->setPrePosition(m_pHero->getPosition());
 	}
 }
 
@@ -345,11 +343,22 @@ void GameLayer::updateHero(float dt)
 {
 	setViewPointCenter();
 
-	if (m_pHero->getCurrActionState() == ACTION_STATE_MOVE && m_pHero->isInMoveAction(MOVE_STATE_UP) && m_pHero->getPosition().y < m_pHero->getPrePositionY())
+	if (m_pHero->getCurrActionState() == ACTION_STATE_MOVE && m_pHero->isInMoveAction(MOVE_STATE_UP) && m_pHero->getPosition().y < m_pHero->getPrePosition().y)
 	{
 		m_pHero->runJumpAction(false);
 	}
-    m_pHero->setPrePositionY(m_pHero->getPosition().y);
+
+	if (SocketManager::getInstance()->getNetworkType() == NT_Server)
+	{
+		Point diff = m_pHero->getPosition() - m_pHero->getPrePosition();
+		if (fabs(diff.x) > EPSILON || fabs(diff.x) > EPSILON)
+		{
+			SocketManager::getInstance()->sendData(NDT_HeroPos, m_pHero->getPosition());
+		}
+	}
+	
+
+	m_pHero->setPrePosition(m_pHero->getPosition());
 
 	if (m_pHero->getIsAttacking())
 	{
@@ -360,15 +369,16 @@ void GameLayer::updateHero(float dt)
 			bullet->launch(m_pHero);
 			this->addChild(bullet);
 			m_shootTime = 0.f;
-			if(m_pHero->getShootDirection().x != 0)
+			if (m_pHero->getShootDirection().x != 0)
 				m_pHero->setFlippedX(m_pHero->getShootDirection().x < 0);
 		}
 	}
 	else
 	{
-		auto operatorLayer = static_cast<OperateLayer *>(this->getScene()->getChildByTag(LT_Operate));		
+		auto operatorLayer = static_cast<OperateLayer *>(this->getScene()->getChildByTag(LT_Operate));
 		operatorLayer->resetTarget();
 	}
+	
     
     /*if(m_pHero->getCurrActionState() == ACTION_STATE_MOVE)
     {
@@ -447,7 +457,7 @@ void GameLayer::setViewPointCenter() {
     if(fabs(diff.y) > 25.f)
     {
 		//this->setPositionY(centerOfView.y - heroPos.y);
-		auto heroPrePosY = m_pHero->getPrePositionY();
+		auto heroPrePosY = m_pHero->getPrePosition().y;
 		//CCLOG("%f, %f, %f, %f", heroPrePosY+layerPos.y, heroPrePosY , layerPos.y, heroPos.y);
 		this->setPositionY(heroPrePosY + layerPos.y - heroPos.y);
     }
@@ -484,31 +494,40 @@ void GameLayer::removeAllEventListener()
 
 void GameLayer::onRecv(const char* data, int count)
 {
-	/*GameData* gameData = (GameData*)data;
-	if (gameData->dataSize == sizeof(GameData))
+	NetworkData* networkData = (NetworkData*)data;
+	if (networkData->dataSize == sizeof(NetworkData))
 	{
-		switch (gameData->dataType)
+		switch (networkData->dataType)
 		{
-		case RUN:
-			_enemy->stopAllActions();
-			_enemy->runAction(RepeatForever::create(_runAnim));
+		case NDT_HeroWalk:
+			m_pHero->runWalkAction();
+			m_pHero->setPosition(networkData->position);
 			break;
-		case STAND:
-			_enemy->stopAllActions();
-			_enemy->runAction(RepeatForever::create(_standAnim));
+		case NDT_HeroJumpUp:
+			m_pHero->runJumpAction(true);
+			m_pHero->setPosition(networkData->position);
 			break;
-		case POSITION:
-			if (gameData->position.x < _enemy->getPositionX())
-				_enemy->setFlippedX(true);
-			else if (fabs(gameData->position.x - _enemy->getPositionX()) > MATH_EPSILON)
-				_enemy->setFlippedX(false);
-			_enemy->setPosition(gameData->position);
+		case NDT_HeroJumpDown:
+			m_pHero->runJumpAction(false);
+			m_pHero->setPosition(networkData->position);
+			break;
+		case NDT_HeroStop:
+			m_pHero->runIdleAction();
+			m_pHero->setPosition(networkData->position);
+			break;
+		case NDT_HeroPos:
+			//if (networkData->position.x < _enemy->getPositionX())
+			//	_enemy->setFlippedX(true);
+			//else if (fabs(gameData->position.x - _enemy->getPositionX()) > MATH_EPSILON)
+			//	_enemy->setFlippedX(false);
+			//_enemy->setPosition(gameData->position);
+			m_pHero->setPosition(networkData->position);
 			break;
 
 		default:
 			break;
 		}
-	}*/
+	}
 }
 
 void GameLayer::onDisconnect()

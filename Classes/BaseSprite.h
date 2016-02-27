@@ -53,7 +53,7 @@ public:
 	CC_SYNTHESIZE(unsigned int, m_hp, HP);
 	CC_SYNTHESIZE(bool, m_isAttacking, IsAttacking);
 	CC_SYNTHESIZE(cocos2d::Vec2, m_fShootDirection, ShootDirection);
-    CC_SYNTHESIZE(float, m_fPrePositionY, PrePositionY);
+    CC_SYNTHESIZE(cocos2d::Vec2, m_fPrePosition, PrePosition);
 	CC_SYNTHESIZE(int, m_JumpStage, JumpStage);
 
 	virtual void onDead();

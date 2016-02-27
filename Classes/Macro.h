@@ -22,12 +22,7 @@ enum PhysicsCategory
     PC_Ground = 1 << 2
 };
 
-enum NetworkType
-{
-	NT_Offline,
-	NT_Server,
-	NT_Client
-};
+#define EPSILON 0.00001f
 
 
 #endif /* Macro_h */

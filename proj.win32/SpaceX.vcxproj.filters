@@ -66,6 +66,12 @@
     <ClCompile Include="..\Classes\SelectLayer.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\GameData.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SocketManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -123,6 +129,12 @@
       <Filter>src\socket</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\SelectLayer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameData.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SocketManager.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

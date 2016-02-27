@@ -2,18 +2,19 @@
 #include "GameScene.h"
 #include "GameOverScene.h"
 #include "DebugScene.h"
+#include "SocketManager.h"
 
 USING_NS_CC;
 
-static SceneManager *s_pSceneManager = NULL;
+SceneManager *SceneManager::instance = nullptr;
 
 SceneManager* SceneManager::getInstance()
 {
-	if(!s_pSceneManager)
+	if (instance == nullptr)
 	{
-		s_pSceneManager = new SceneManager();
+		instance = new SceneManager();
 	}
-	return s_pSceneManager;
+	return instance;
 }
 
 
@@ -22,9 +23,12 @@ void SceneManager::showScene(SceneType sceneType, bool isReplace)
 	Scene *pScene = NULL;
 	switch(sceneType)
 	{
-	//case GAME_SCENE:
-	//	pScene = GameScene::createScene();
-	//	break;
+	case GAME_SCENE:
+	{
+		int networkType = SocketManager::getInstance()->getNetworkType();
+		pScene = GameScene::createScene(networkType);
+	}
+		break;
 	case GAME_OVER_SCENE:
 		pScene = GameOverScene::createScene();
 		break;

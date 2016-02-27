@@ -1,4 +1,5 @@
 #include "BaseSprite.h"
+#include "SocketManager.h"
 
 USING_NS_CC;
 
@@ -26,6 +27,11 @@ void BaseSprite::runIdleAction()
 	{
 		this->runAction(m_pIdleAction);
         this->m_currMoveState = 0;
+
+		if (SocketManager::getInstance()->getNetworkType() == NT_Server)
+		{
+			SocketManager::getInstance()->sendData(NDT_HeroStop, getPosition());
+		}
 	}
 }
 	
@@ -35,6 +41,10 @@ void BaseSprite::runWalkAction()
 	{
         m_currMoveState |= MOVE_STATE_WALK;
 		this->runAction(m_pWalkAction);
+		if (SocketManager::getInstance()->getNetworkType() == NT_Server)
+		{
+			SocketManager::getInstance()->sendData(NDT_HeroWalk, getPosition());
+		}
 	}
 }
 
@@ -53,6 +63,14 @@ void BaseSprite::runJumpAction(bool isUp)
 	{
 		m_currMoveState &= ~MOVE_STATE_UP;
 		m_currMoveState |= MOVE_STATE_DOWN;
+	}
+
+	if (SocketManager::getInstance()->getNetworkType() == NT_Server)
+	{
+		if(isUp)
+			SocketManager::getInstance()->sendData(NDT_HeroJumpUp, getPosition());
+		else
+			SocketManager::getInstance()->sendData(NDT_HeroJumpDown, getPosition());
 	}
 }
 
