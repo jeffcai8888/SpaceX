@@ -1,6 +1,8 @@
 #include "Macro.h"
 #include "GameScene.h"
 #include "GameLayer.h"
+#include "ClientGameLayer.h"
+#include "ServerGameLayer.h"
 #include "OperateLayer.h"
 #include "SocketManager.h"
 
@@ -15,9 +17,22 @@ Scene* GameScene::createScene(int networkType)
 	SocketManager::getInstance()->setNetworkType(networkType);
 	SocketManager::getInstance()->init();
 	
-	auto gameLayer = GameLayer::create();
-	scene->addChild(gameLayer, 0, LT_Game);
-
+	if (networkType == NT_Client)
+	{
+		auto gameLayer = ClientGameLayer::create();
+		scene->addChild(gameLayer, 0, LT_Game);
+	}
+	else if (networkType == NT_Server)
+	{
+		auto gameLayer = ServerGameLayer::create();
+		scene->addChild(gameLayer, 0, LT_Game);
+	}
+	else
+	{
+		auto gameLayer = GameLayer::create();
+		scene->addChild(gameLayer, 0, LT_Game);
+	}
+	
 	auto operateLayer = OperateLayer::create();
 	scene->addChild(operateLayer, 1, LT_Operate);
 

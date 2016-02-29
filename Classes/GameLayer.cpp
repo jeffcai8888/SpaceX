@@ -24,7 +24,7 @@ GameLayer::GameLayer()
 
 GameLayer::~GameLayer()
 {
-	m_vecBullets.clear();
+	
 }
 
 bool GameLayer::init()
@@ -36,13 +36,6 @@ bool GameLayer::init()
 
 		//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(PATH_BG_MUSIC, true);
 		//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(PATH_HERO_TALK_EFFECT);
-
-		if (SocketManager::getInstance()->getNetworkType() == NT_Client)
-		{
-			SocketManager::getInstance()->getSocketClient()->onRecv = CC_CALLBACK_2(GameLayer::onRecv, this);
-			SocketManager::getInstance()->getSocketClient()->onDisconnect = CC_CALLBACK_0(GameLayer::onDisconnect, this);
-		}
-		
 		ret = true;
 	} while(0);
 
@@ -66,22 +59,12 @@ void GameLayer::onEnter()
 	m_pSpriteNodes = SpriteBatchNode::create("pd_sprites.pvr.ccz");
 	this->addChild(m_pSpriteNodes);
 
+	
+	auto spawnPoint = objects->getObject("SpawnPoint");
+	CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
+	Point heroInitPos = m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
 	m_pHero = Hero::create();
-	//Point heroInitPos;
-	if(SocketManager::getInstance()->getNetworkType() == NT_Client)
-	{
-		
-	}
-	else
-	{
-		auto spawnPoint = objects->getObject("SpawnPoint");
-		CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
-		Point heroInitPos = m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
-		SocketManager::getInstance()->sendData(NDT_HeroPos, heroInitPos);
-		m_pHero->setPosition(heroInitPos);
-	}
-	
-	
+	m_pHero->setPosition(heroInitPos);
 	m_pHero->runIdleAction();
 	m_pHero->setLocalZOrder(visibleSize.height - m_pHero->getPositionY());
 	m_pHero->setHP(100);
@@ -348,16 +331,6 @@ void GameLayer::updateHero(float dt)
 		m_pHero->runJumpAction(false);
 	}
 
-	if (SocketManager::getInstance()->getNetworkType() == NT_Server)
-	{
-		Point diff = m_pHero->getPosition() - m_pHero->getPrePosition();
-		if (fabs(diff.x) > EPSILON || fabs(diff.x) > EPSILON)
-		{
-			SocketManager::getInstance()->sendData(NDT_HeroPos, m_pHero->getPosition());
-		}
-	}
-	
-
 	m_pHero->setPrePosition(m_pHero->getPosition());
 
 	if (m_pHero->getIsAttacking())
@@ -490,47 +463,4 @@ void GameLayer::removeAllEventListener()
 		_eventDispatcher->removeEventListener(sp_obj);
 	}
 	m_vecEventListener.clear();
-}
-
-void GameLayer::onRecv(const char* data, int count)
-{
-	NetworkData* networkData = (NetworkData*)data;
-	if (networkData->dataSize == sizeof(NetworkData))
-	{
-		switch (networkData->dataType)
-		{
-		case NDT_HeroWalk:
-			m_pHero->runWalkAction();
-			m_pHero->setPosition(networkData->position);
-			break;
-		case NDT_HeroJumpUp:
-			m_pHero->runJumpAction(true);
-			m_pHero->setPosition(networkData->position);
-			break;
-		case NDT_HeroJumpDown:
-			m_pHero->runJumpAction(false);
-			m_pHero->setPosition(networkData->position);
-			break;
-		case NDT_HeroStop:
-			m_pHero->runIdleAction();
-			m_pHero->setPosition(networkData->position);
-			break;
-		case NDT_HeroPos:
-			//if (networkData->position.x < _enemy->getPositionX())
-			//	_enemy->setFlippedX(true);
-			//else if (fabs(gameData->position.x - _enemy->getPositionX()) > MATH_EPSILON)
-			//	_enemy->setFlippedX(false);
-			//_enemy->setPosition(gameData->position);
-			m_pHero->setPosition(networkData->position);
-			break;
-
-		default:
-			break;
-		}
-	}
-}
-
-void GameLayer::onDisconnect()
-{
-	CCLOG("Client disconnect");
 }

@@ -284,7 +284,8 @@ void OperateLayer::updateJoystick(Point direction, float distance)
 	//}else if(distance > 78) {
 	//	m_pJoystick[type]->setPosition(start + (direction * 45));
 	}else {
-		m_pJoystick->setPosition(start + (direction * 33));
+		m_pJoystick->setPosition(start + (direction * 33)); 
+		 
 	}
 }
 

@@ -13,7 +13,7 @@ class GameLayer : public cocos2d::Layer
 {
 public:
 	GameLayer();
-	~GameLayer();
+	virtual ~GameLayer();
 
 	virtual bool init();
 	virtual void onEnter();
@@ -24,12 +24,10 @@ public:
 	void onHeroAttack();
 	void onHeroStop();
 	void onHeroDead(BaseSprite *pTarget);
-	void onRecv(const char* data, int count);
-	void onDisconnect();
 
-	void update(float dt);
-	void updateHero(float dt);
-	void updateBullet(float dt);
+	virtual void update(float dt);
+	virtual void updateHero(float dt);
+	virtual void updateBullet(float dt);
 	void updatePhysicsWorld(float dt);
 
 
@@ -39,7 +37,7 @@ public:
 
 	CREATE_FUNC(GameLayer);
 
-private:
+protected:
 	cocos2d::TMXTiledMap *m_pTiledMap;
 	cocos2d::TMXLayer*	m_pMetaLayer;
 

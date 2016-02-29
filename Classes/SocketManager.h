@@ -26,6 +26,7 @@ struct NetworkData
 	int dataSize;
 	int dataType;
 	cocos2d::Vec2 position;
+	cocos2d::Vec2 velocity;
 };
 
 class SocketManager
@@ -34,7 +35,7 @@ public:
 	static SocketManager* getInstance();
 
 	void init();
-	void sendData(int, cocos2d::Vec2);
+	void sendData(int, cocos2d::Vec2, cocos2d::Vec2);
 
 	CC_SYNTHESIZE(SocketClient*, m_pSocketClient, SocketClient);
 	CC_SYNTHESIZE(SocketServer*, m_pSocketServer, SocketServer);

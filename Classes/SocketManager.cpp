@@ -41,11 +41,12 @@ void SocketManager::init()
 	}
 }
 
-void SocketManager::sendData(int type, cocos2d::Vec2 pos)
+void SocketManager::sendData(int type, cocos2d::Vec2 pos, Vec2 vel)
 {
 	NetworkData data;
 	data.dataType = type;
 	data.position = pos;
+	data.velocity = vel;
 	data.dataSize = sizeof(data);
 	m_pSocketServer->sendMessage((const char*)&data, sizeof(data));
 }
