@@ -277,7 +277,7 @@ void GameLayer::onHeroJump(float verticalVelocity)
 	if (m_pHero->isLive() && m_pHero->getJumpStage() < 2)
 	{ 
 		m_pHero->runJumpAction(true);
-		m_pHero->setJumpStage(m_pHero->getJumpStage() + 1);
+		//m_pHero->setJumpStage(m_pHero->getJumpStage() + 1);
         
 		Vec2 velocity = m_pHero->getPhysicsBody()->getVelocity();
         velocity.y = verticalVelocity;

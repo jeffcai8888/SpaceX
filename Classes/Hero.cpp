@@ -28,6 +28,9 @@ bool Hero::init()
 		Animation *pJumpAnim = this->createAnimation("SQ_jump_%02d.png", 5, 15);;
 		this->setJumpAction(Sequence::create(Animate::create(pJumpAnim), nullptr));
 
+		Animation *pJumpRotateAnim = this->createAnimation("SQ_jump02.png", 1, 30);
+		this->setJump2Action(Sequence::create(Animate::create(pJumpRotateAnim), RotateBy::create(0.2f, 360), RepeatForever::create(Animate::create(pJumpAnim)), nullptr));
+
 		Animation *pDown1Anim = this->createAnimation("SQ_down_%02d.png", 8, 15);
 		Animation *pDown2Anim = this->createAnimation("SQ_down_09.png", 1, 15);
 		this->setDownAction(Sequence::create(Animate::create(pDown1Anim), RepeatForever::create(Animate::create(pDown2Anim)), nullptr));

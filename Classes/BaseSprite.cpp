@@ -9,6 +9,7 @@ BaseSprite::BaseSprite() :
 	m_pHurtAction(NULL),
 	m_pDeadAction(NULL),
 	m_pJumpAction(NULL),
+	m_pJump2Action(NULL),
 	m_pDownAction(NULL),
 	m_pWalkFireAction(NULL),
 	m_pIdleFireAction(NULL)
@@ -23,6 +24,7 @@ BaseSprite::~BaseSprite()
 	CC_SAFE_RELEASE_NULL(m_pHurtAction);
 	CC_SAFE_RELEASE_NULL(m_pDeadAction);
 	CC_SAFE_RELEASE_NULL(m_pJumpAction);
+	CC_SAFE_RELEASE_NULL(m_pJump2Action);
 	CC_SAFE_RELEASE_NULL(m_pDownAction);
 	CC_SAFE_RELEASE_NULL(m_pWalkFireAction);
 	CC_SAFE_RELEASE_NULL(m_pIdleFireAction);
@@ -63,8 +65,12 @@ void BaseSprite::runJumpAction(bool isUp)
 		stopMoveAction(MOVE_STATE_UP);
 		stopMoveAction(MOVE_STATE_WALK);
 		stopMoveAction(MOVE_STATE_DOWN);
-		m_currMoveState |= MOVE_STATE_UP;
-		this->runAction(m_pJumpAction);
+		if(m_JumpStage == 1)
+			this->runAction(m_pJump2Action);
+		else
+			this->runAction(m_pJumpAction);
+		++m_JumpStage;
+		m_currMoveState |= MOVE_STATE_UP;		
 	}
 	else
 	{
@@ -214,7 +220,11 @@ int BaseSprite::stopMoveAction(int moveAction)
 	else if (moveAction == MOVE_STATE_DOWN)
 		this->stopAction(m_pDownAction);
 	else if (moveAction == MOVE_STATE_UP)
+	{
 		this->stopAction(m_pJumpAction);
+		this->stopAction(m_pJump2Action);
+	}
+		
     return m_currMoveState;
 }
 

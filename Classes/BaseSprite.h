@@ -50,6 +50,7 @@ public:
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pHurtAction, HurtAction);
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pDeadAction, DeadAction);
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pJumpAction, JumpAction);
+	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pJump2Action, Jump2Action);
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pDownAction, DownAction);
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pWalkFireAction, WalkFireAction);
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pIdleFireAction, IdleFireAction);
