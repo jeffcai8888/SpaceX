@@ -55,8 +55,8 @@ void GameLayer::onEnter()
 	TMXObjectGroup *objects = m_pTiledMap->getObjectGroup("Objects");
 	CCASSERT(NULL != objects, "'Objects' object group not found");
 
-	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("pd_sprites.plist");
-	m_pSpriteNodes = SpriteBatchNode::create("pd_sprites.pvr.ccz");
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("hero.plist");
+	m_pSpriteNodes = SpriteBatchNode::create("hero.png");
 	this->addChild(m_pSpriteNodes);
 
 	
@@ -64,6 +64,7 @@ void GameLayer::onEnter()
 	CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
 	Point heroInitPos = m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
 	m_pHero = Hero::create();
+	m_pHero->setScale(0.5f);
 	m_pHero->setPosition(heroInitPos);
 	m_pHero->runIdleAction();
 	m_pHero->setLocalZOrder(visibleSize.height - m_pHero->getPositionY());

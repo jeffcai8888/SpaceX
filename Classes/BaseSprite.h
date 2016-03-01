@@ -47,6 +47,8 @@ public:
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pAttackAction, AttackAction);
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pHurtAction, HurtAction);
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pDeadAction, DeadAction);
+	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pJumpAction, JumpAction);
+	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pDownAction, DownAction);
 
 	CC_SYNTHESIZE(ActionState, m_currActionState, CurrActionState);
     CC_SYNTHESIZE(int, m_currMoveState, CurrMoveState);

@@ -8,7 +8,9 @@ BaseSprite::BaseSprite() :
 	m_pWalkAction(NULL),
 	m_pAttackAction(NULL),
 	m_pHurtAction(NULL),
-	m_pDeadAction(NULL)
+	m_pDeadAction(NULL),
+	m_pJumpAction(NULL),
+	m_pDownAction(NULL)
 {
 
 }
@@ -19,6 +21,8 @@ BaseSprite::~BaseSprite()
 	CC_SAFE_RELEASE_NULL(m_pAttackAction);
 	CC_SAFE_RELEASE_NULL(m_pHurtAction);
 	CC_SAFE_RELEASE_NULL(m_pDeadAction);
+	CC_SAFE_RELEASE_NULL(m_pJumpAction);
+	CC_SAFE_RELEASE_NULL(m_pDownAction);
 }
 
 void BaseSprite::runIdleAction()
@@ -52,17 +56,19 @@ void BaseSprite::runJumpAction(bool isUp)
 {
 	if (changeState(ACTION_STATE_MOVE))
 	{      
-		this->runAction(m_pIdleAction);
+		
 	}
 	if (isUp)
 	{
 		m_currMoveState &= ~MOVE_STATE_DOWN;
 		m_currMoveState |= MOVE_STATE_UP;
+		this->runAction(m_pJumpAction);
 	}
 	else
 	{
 		m_currMoveState &= ~MOVE_STATE_UP;
 		m_currMoveState |= MOVE_STATE_DOWN;
+		this->runAction(m_pDownAction);
 	}
 
 	if (SocketManager::getInstance()->getNetworkType() == NT_Server)
@@ -110,7 +116,7 @@ void BaseSprite::removeSprite()
 Animation* BaseSprite::createAnimation(const char* formatStr, int frameCount, int fps)
 {
 	Vector<SpriteFrame*>  vec(frameCount);
-	for(int i = 0; i < frameCount; ++ i) 
+	for(int i = 1; i <= frameCount; ++ i) 
 	{
 		const char* imgName = String::createWithFormat(formatStr, i)->getCString();
 		SpriteFrame *pFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(imgName);
