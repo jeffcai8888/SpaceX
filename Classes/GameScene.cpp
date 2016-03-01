@@ -1,6 +1,6 @@
 #include "Macro.h"
 #include "GameScene.h"
-#include "GameLayer.h"
+#include "OfflineGameLayer.h"
 #include "ClientGameLayer.h"
 #include "ServerGameLayer.h"
 #include "OperateLayer.h"
@@ -29,7 +29,7 @@ Scene* GameScene::createScene(int networkType)
 	}
 	else
 	{
-		auto gameLayer = GameLayer::create();
+		auto gameLayer = OfflineGameLayer::create();
 		scene->addChild(gameLayer, 0, LT_Game);
 	}
 	

@@ -6,23 +6,26 @@ USING_NS_CC;
 BaseSprite::BaseSprite() :
 	m_pIdleAction(NULL),
 	m_pWalkAction(NULL),
-	m_pAttackAction(NULL),
 	m_pHurtAction(NULL),
 	m_pDeadAction(NULL),
 	m_pJumpAction(NULL),
-	m_pDownAction(NULL)
+	m_pDownAction(NULL),
+	m_pWalkFireAction(NULL),
+	m_pIdleFireAction(NULL)
 {
 
 }
+
 BaseSprite::~BaseSprite()
 {
 	CC_SAFE_RELEASE_NULL(m_pIdleAction);
 	CC_SAFE_RELEASE_NULL(m_pWalkAction);
-	CC_SAFE_RELEASE_NULL(m_pAttackAction);
 	CC_SAFE_RELEASE_NULL(m_pHurtAction);
 	CC_SAFE_RELEASE_NULL(m_pDeadAction);
 	CC_SAFE_RELEASE_NULL(m_pJumpAction);
 	CC_SAFE_RELEASE_NULL(m_pDownAction);
+	CC_SAFE_RELEASE_NULL(m_pWalkFireAction);
+	CC_SAFE_RELEASE_NULL(m_pIdleFireAction);
 }
 
 void BaseSprite::runIdleAction()
@@ -54,19 +57,20 @@ void BaseSprite::runWalkAction()
 
 void BaseSprite::runJumpAction(bool isUp)
 {
-	if (changeState(ACTION_STATE_MOVE))
-	{      
-		
-	}
+	changeState(ACTION_STATE_MOVE);
 	if (isUp)
 	{
-		m_currMoveState &= ~MOVE_STATE_DOWN;
+		stopMoveAction(MOVE_STATE_UP);
+		stopMoveAction(MOVE_STATE_WALK);
+		stopMoveAction(MOVE_STATE_DOWN);
 		m_currMoveState |= MOVE_STATE_UP;
 		this->runAction(m_pJumpAction);
 	}
 	else
 	{
-		m_currMoveState &= ~MOVE_STATE_UP;
+		stopMoveAction(MOVE_STATE_DOWN);
+		stopMoveAction(MOVE_STATE_WALK);
+		stopMoveAction(MOVE_STATE_UP);
 		m_currMoveState |= MOVE_STATE_DOWN;
 		this->runAction(m_pDownAction);
 	}
@@ -77,14 +81,6 @@ void BaseSprite::runJumpAction(bool isUp)
 			SocketManager::getInstance()->sendData(NDT_HeroJumpUp, getPosition(), getPhysicsBody()->getVelocity());
 		else
 			SocketManager::getInstance()->sendData(NDT_HeroJumpDown, getPosition(), getPhysicsBody()->getVelocity());
-	}
-}
-
-void BaseSprite::runAttackAction()
-{
-	if (this->getIsAttacking() == false)
-	{
-		this->setIsAttacking(true);
 	}
 }
 
@@ -104,6 +100,45 @@ void BaseSprite::runDeadAction()
 		this->m_hp = 0;
 		this->runAction(m_pDeadAction);
         this->m_currMoveState = 0;
+	}
+}
+
+void BaseSprite::runAttackAction()
+{
+	if (this->getIsAttacking() == false)
+	{
+		this->setIsAttacking(true);
+		if (this->getCurrActionState() == ACTION_STATE_IDLE)
+		{
+			this->stopAction(m_pIdleAction);
+			this->runAction(m_pIdleFireAction);
+		}
+		else if (this->getCurrActionState() == ACTION_STATE_MOVE && this->getCurrMoveState() == MOVE_STATE_WALK)
+		{
+			this->stopAction(m_pWalkAction);
+			this->runAction(m_pWalkFireAction);
+		}
+	}
+}
+
+void BaseSprite::stopAttackAction()
+{
+	if (this->getIsAttacking() == true)
+	{
+		this->setIsAttacking(false);
+		if (this->getCurrActionState() == ACTION_STATE_IDLE)
+		{
+			this->stopAction(m_pIdleAction);
+			this->stopAction(m_pIdleFireAction);
+			this->runAction(m_pIdleAction);
+			
+		}
+		else if (this->getCurrActionState() == ACTION_STATE_MOVE && this->getCurrMoveState() == MOVE_STATE_WALK)
+		{
+			this->stopAction(m_pWalkAction);
+			this->stopAction(m_pWalkFireAction);
+			this->runAction(m_pWalkAction);		
+		}
 	}
 }
 
@@ -173,6 +208,13 @@ bool BaseSprite::changeState(ActionState actionState)
 int BaseSprite::stopMoveAction(int moveAction)
 {
     m_currMoveState &= ~moveAction;
+
+	if (moveAction == MOVE_STATE_WALK)
+		this->stopAction(m_pWalkAction);
+	else if (moveAction == MOVE_STATE_DOWN)
+		this->stopAction(m_pDownAction);
+	else if (moveAction == MOVE_STATE_UP)
+		this->stopAction(m_pJumpAction);
     return m_currMoveState;
 }
 

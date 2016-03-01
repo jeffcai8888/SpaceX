@@ -33,10 +33,13 @@ public:
 	void runIdleAction();
 	void runWalkAction();
 	void runJumpAction(bool isUp);
-	void runAttackAction();
 	void runHurtAction();
 	void removeSprite();
 	void runDeadAction();
+	void runAttackAction();
+	void stopAttackAction();
+	void runWalkFireAction();
+	void runIdleFireAction();
     
     int  stopMoveAction(int moveAction);
     bool isInMoveAction(int moveAction);
@@ -44,11 +47,12 @@ public:
 
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pIdleAction, IdleAction);
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pWalkAction, WalkAction);
-	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pAttackAction, AttackAction);
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pHurtAction, HurtAction);
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pDeadAction, DeadAction);
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pJumpAction, JumpAction);
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pDownAction, DownAction);
+	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pWalkFireAction, WalkFireAction);
+	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pIdleFireAction, IdleFireAction);
 
 	CC_SYNTHESIZE(ActionState, m_currActionState, CurrActionState);
     CC_SYNTHESIZE(int, m_currMoveState, CurrMoveState);

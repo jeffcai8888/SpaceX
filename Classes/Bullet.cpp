@@ -54,7 +54,10 @@ void Bullet::launch(Hero* pHero)
 	this->m_isActive = true;
 	this->m_owner = pHero;
 	Point pos = pHero->getPosition();
-	this->setPosition(pos);
+	if(pHero->isFlippedX())
+		this->setPosition(pos + Vec2(-15.f, -20.f));
+	else
+		this->setPosition(pos + Vec2(15.f, -20.f));
 	this->m_startPostion = pos;
 	this->m_fVelocity = pHero->getBulletLaunchVelocity();
 	this->m_fDisappearTime = pHero->getBulletDisappearTime();

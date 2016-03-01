@@ -25,11 +25,18 @@ bool Hero::init()
 		Animation *pWalkAnim = this->createAnimation("SQ_walk_%02d.png", 12, 15);
 		this->setWalkAction(RepeatForever::create(Animate::create(pWalkAnim)));
 
-		Animation *pJumpAnim = this->createAnimation("SQ_jump_%02d.png", 5, 15);
-		this->setJumpAction(Sequence::create(Animate::create()));
+		Animation *pJumpAnim = this->createAnimation("SQ_jump_%02d.png", 5, 15);;
+		this->setJumpAction(Sequence::create(Animate::create(pJumpAnim), nullptr));
 
-		Animation *pDownAnim = this->createAnimation("SQ_down_%02d.png", 9, 15);
-		this->setDownAction(RepeatForever::create(Animate::create(pDownAnim)));
+		Animation *pDown1Anim = this->createAnimation("SQ_down_%02d.png", 8, 15);
+		Animation *pDown2Anim = this->createAnimation("SQ_down_09.png", 1, 15);
+		this->setDownAction(Sequence::create(Animate::create(pDown1Anim), RepeatForever::create(Animate::create(pDown2Anim)), nullptr));
+
+		Animation *pWalkFireAnim = this->createAnimation("SQ_walkFire_%02d.png", 12, 15);
+		this->setWalkFireAction(RepeatForever::create(Animate::create(pWalkFireAnim)));
+
+		Animation *pIdleFireAnim = this->createAnimation("SQ_idleFire_%02d.png", 4, 5);
+		this->setIdleFireAction(RepeatForever::create(Animate::create(pIdleFireAnim)));
 
 		
 		//Animation *pAttackAnim = this->createAnimation("hero_attack_00_%02d.png", 3, 20);

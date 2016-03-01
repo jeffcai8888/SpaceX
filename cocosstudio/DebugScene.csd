@@ -205,7 +205,7 @@
             <OutlineColor A="255" R="255" G="0" B="0" />
             <ShadowColor A="255" R="110" G="110" B="110" />
           </AbstractNodeData>
-          <AbstractNodeData Name="TextField_2_5" ActionTag="1600803639" Tag="21" IconVisible="False" LeftMargin="115.7990" RightMargin="744.2009" TopMargin="311.4585" BottomMargin="308.5415" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="Text Field" MaxLengthText="10" ctype="TextFieldObjectData">
+          <AbstractNodeData Name="TextField_2_5" ActionTag="1600803639" Tag="21" IconVisible="False" LeftMargin="115.7990" RightMargin="744.2010" TopMargin="311.4585" BottomMargin="308.5415" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="Text Field" MaxLengthText="10" ctype="TextFieldObjectData">
             <Size X="100.0000" Y="20.0000" />
             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
             <Position X="165.7990" Y="318.5415" />

@@ -213,7 +213,7 @@ void OperateLayer::onEnter()
         {
             Point pos = m_pJoystickBg->getPosition();
             m_pJoystick->setPosition(pos);
-            m_pHero->setIsAttacking(false);
+            m_pHero->stopAttackAction();
             m_firstTouchJoystickID = -1;
         }
 	};
@@ -310,7 +310,7 @@ void OperateLayer::dealWithKeyBoard()
 {
 	if (m_KeyPressedValue & KB_Up)
 	{
-		m_pHero->jump(m_pHero->getWalkVelocity());
+		m_pHero->jump(m_pHero->getJumpVelocity());
 	}
 	else if (m_KeyPressedValue & KB_Front)
 	{

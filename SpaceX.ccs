@@ -3,9 +3,49 @@
   <SolutionFolder>
     <Group ctype="ResourceGroup">
       <RootFolder Name=".">
+        <Folder Name="d1">
+          <Image Name="SQ_01.png" />
+          <Image Name="SQ_010.png" />
+          <Image Name="SQ_011.png" />
+          <Image Name="SQ_012.png" />
+          <Image Name="SQ_02.png" />
+          <Image Name="SQ_03.png" />
+          <Image Name="SQ_04.png" />
+          <Image Name="SQ_05.png" />
+          <Image Name="SQ_06.png" />
+          <Image Name="SQ_07.png" />
+          <Image Name="SQ_08.png" />
+          <Image Name="SQ_09.png" />
+          <Image Name="SQ_down_01.png" />
+          <Image Name="SQ_down_02.png" />
+          <Image Name="SQ_down_03.png" />
+          <Image Name="SQ_down_04.png" />
+          <Image Name="SQ_down_05.png" />
+          <Image Name="SQ_down_06.png" />
+          <Image Name="SQ_down_07.png" />
+          <Image Name="SQ_down_08.png" />
+          <Image Name="SQ_down_09.png" />
+          <Image Name="SQ_jump_01.png" />
+          <Image Name="SQ_jump_02.png" />
+          <Image Name="SQ_jump_03.png" />
+          <Image Name="SQ_jump_04.png" />
+          <Image Name="SQ_jump_05.png" />
+          <Image Name="SQ0.png" />
+          <Image Name="SQ1.png" />
+          <Image Name="SQ10.png" />
+          <Image Name="SQ2.png" />
+          <Image Name="SQ3.png" />
+          <Image Name="SQ4.png" />
+          <Image Name="SQ5.png" />
+          <Image Name="SQ6.png" />
+          <Image Name="SQ7.png" />
+          <Image Name="SQ8.png" />
+          <Image Name="SQ9.png" />
+        </Folder>
         <Image Name="DebugNormal.png" />
         <Project Name="DebugScene.csd" Type="Scene" />
         <Image Name="DebugSelected.png" />
+        <Project Name="Hero.csd" Type="Scene" />
       </RootFolder>
     </Group>
   </SolutionFolder>

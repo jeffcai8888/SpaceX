@@ -156,6 +156,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\Ground.cpp" />
     <ClCompile Include="..\Classes\Hero.cpp" />
     <ClCompile Include="..\Classes\JsonParser.cpp" />
+    <ClCompile Include="..\Classes\OfflineGameLayer.cpp" />
     <ClCompile Include="..\Classes\OperateLayer.cpp" />
     <ClCompile Include="..\Classes\SceneManager.cpp" />
     <ClCompile Include="..\Classes\SelectLayer.cpp" />
@@ -181,6 +182,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Hero.h" />
     <ClInclude Include="..\Classes\JsonParser.h" />
     <ClInclude Include="..\Classes\Macro.h" />
+    <ClInclude Include="..\Classes\OfflineGameLayer.h" />
     <ClInclude Include="..\Classes\OperateLayer.h" />
     <ClInclude Include="..\Classes\SceneManager.h" />
     <ClInclude Include="..\Classes\SelectLayer.h" />
