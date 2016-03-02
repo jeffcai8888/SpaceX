@@ -3,6 +3,7 @@
 #include "GameLayer.h"
 #include "Hero.h"
 #include "SceneManager.h"
+#include "Foresight.h"
 
 USING_NS_CC;
 using namespace std;
@@ -19,7 +20,8 @@ OperateLayer::OperateLayer()
     m_pBack(nullptr),
     m_pUp(nullptr),
     m_firstTouchJoystickLocation(Point(0.f, 0.f)),
-    m_firstTouchJoystickID(-1)
+    m_firstTouchJoystickID(-1),
+	m_preTouchJoystickLocation(Point(0.f, 0.f))
 {
 	m_vecEventListener.clear();
 }
@@ -57,9 +59,6 @@ bool OperateLayer::init()
 		this->addChild(m_pJoystick, 0);
 		this->addChild(m_pJoystickBg, 1);
         resetJoystick();
-		
-		m_pTarget = Sprite::create("target.jpg");
-		this->addChild(m_pTarget, 2);
 
 		m_pCloseItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(OperateLayer::exitApp, this));
 		m_pCloseItem->setPosition(m_origin + Point(visibleSize) - Point(m_pCloseItem->getContentSize() / 2));
@@ -108,6 +107,7 @@ void OperateLayer::onEnter()
 {
 	Layer::onEnter();
 	m_pHero = static_cast<GameLayer *>(this->getScene()->getChildByTag(LT_Game))->getHero();
+	m_pTarget = static_cast<GameLayer *>(this->getScene()->getChildByTag(LT_Game))->getForesight();
 	auto listener = EventListenerTouchAllAtOnce::create();
 	listener->onTouchesBegan = [this](const vector<Touch*>& touches, Event *event)
 	{
@@ -148,18 +148,22 @@ void OperateLayer::onEnter()
 		Touch *pTouch = (Touch*)(*touchIter);
 		Point start = pTouch->getStartLocation();
         Point p = pTouch->getLocation();
-        if(this->isTap(m_pJoystickBg, start))
-        {
-            m_firstTouchJoystickLocation = start;
-            m_firstTouchJoystickID = pTouch->getID();
-        }
-        else{
-            if(this->isTap(m_pJoystickBg, p))
-            {
-                m_firstTouchJoystickID = pTouch->getID();
-                m_firstTouchJoystickLocation = p;
-            }
-        }
+		if (m_firstTouchJoystickID == -1)
+		{
+			if (this->isTap(m_pJoystickBg, start))
+			{
+				m_firstTouchJoystickLocation = start;
+				m_preTouchJoystickLocation = start;
+				m_firstTouchJoystickID = pTouch->getID();
+			}
+			else if (this->isTap(m_pJoystickBg, p))
+			{
+				m_firstTouchJoystickLocation = p;
+				m_preTouchJoystickLocation = p;
+				m_firstTouchJoystickID = pTouch->getID();
+			}
+		}
+        
         
         if(m_firstTouchJoystickID == pTouch->getID())
         {
@@ -168,8 +172,19 @@ void OperateLayer::onEnter()
             Vec2 direction = p - m_firstTouchJoystickLocation;
             direction.normalize();
             this->updateJoystick(direction, distance);
-            m_pHero->setShootDirection(direction);
-            this->updateTarget(direction);
+            //this->updateTarget(direction);
+			distance = m_preTouchJoystickLocation.getDistance(p);
+			direction = p - m_preTouchJoystickLocation;
+			direction.normalize();
+			m_pTarget->setVelocity(distance);
+			m_pTarget->setDirection(direction);
+			direction = m_pTarget->getPosition() - m_pHero->getPosition();
+			direction.normalize();
+			CCLOG("Forsight Position(%f, %f)", m_pTarget->getPosition().x, m_pTarget->getPosition().y);
+			CCLOG("Hero Position(%f, %f)", m_pHero->getPosition().x, m_pHero->getPosition().y);
+			CCLOG("Bullet direction(%f, %f)", direction.x, direction.y);
+			m_pHero->setShootDirection(direction);
+			m_preTouchJoystickLocation = p;
         }
         else if( p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4 )
         {
@@ -334,18 +349,7 @@ void OperateLayer::updateTarget(Point pos)
 	m_pTarget->setVisible(true);
 }
 
-void OperateLayer::resetTarget()
-{
-	auto gameLayer = this->getScene()->getChildByTag(LT_Game);
-    if(m_pHero->isFlippedX())
-    {
-        m_pTarget->setPosition(m_pHero->getPosition() + gameLayer->getPosition() + Point(-1.f, 0.f) * 200);
-    }
-    else
-    {
-        m_pTarget->setPosition(m_pHero->getPosition() + gameLayer->getPosition() + Point(1.f, 0.f) * 200);
-    }
-}
+
 
 void OperateLayer::exitApp(Ref* pSender)
 {

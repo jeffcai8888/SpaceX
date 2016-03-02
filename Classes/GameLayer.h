@@ -8,6 +8,7 @@ class BaseSprite;
 class Hero;
 class Bullet;
 class GameData;
+class Foresight;
 
 class GameLayer : public cocos2d::Layer
 {
@@ -34,6 +35,7 @@ public:
 	void callBack(cocos2d::Ref *pSender);
 
 	CC_SYNTHESIZE_READONLY(Hero*, m_pHero, Hero);
+	CC_SYNTHESIZE_READONLY(Foresight*, m_pForesight, Foresight);
 
 	CREATE_FUNC(GameLayer);
 
@@ -53,6 +55,7 @@ protected:
 	void setViewPointCenter();
 	void importGroundData(cocos2d::TMXTiledMap*);
 	void removeAllEventListener();
+	void resetTarget();
 };
 
 #endif

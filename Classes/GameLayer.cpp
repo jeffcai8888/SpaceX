@@ -4,6 +4,7 @@
 #include "Hero.h"
 #include "Bullet.h"
 #include "Ground.h"
+#include "Foresight.h"
 #include "OperateLayer.h"
 #include "JsonParser.h"
 
@@ -76,9 +77,16 @@ void GameLayer::onEnter()
 	m_pHero->stop = CC_CALLBACK_0(GameLayer::onHeroStop, this);
 	m_pHero->walk = CC_CALLBACK_1(GameLayer::onHeroWalk, this);
 	m_pHero->jump = CC_CALLBACK_1(GameLayer::onHeroJump, this);
+	//m_pHero->ignoreAnchorPointForPosition(false);
+	//m_pHero->setAnchorPoint(Point(1.0f, 1.0f));
 	m_pSpriteNodes->addChild(m_pHero);
 	auto centerOfView = Point(visibleSize.width / 2, visibleSize.height / 2);
 	this->setPosition(centerOfView - m_pHero->getPosition());
+
+	//m_pTarget = Sprite::createWithSpriteFrameName("Foresight.png");
+	//this->addChild(m_pTarget);
+	m_pForesight = Foresight::create();
+	this->addChild(m_pForesight);
 
 	JsonParser* parser = JsonParser::createWithFile("Debug.json");
 	parser->decodeDebugData();
@@ -321,6 +329,7 @@ void GameLayer::update(float dt)
 	this->updateHero(dt);
 	this->updateBullet(dt);
 	this->updatePhysicsWorld(dt);
+	this->m_pForesight->update(dt);
 }
 
 void GameLayer::updateHero(float dt)
@@ -349,8 +358,7 @@ void GameLayer::updateHero(float dt)
 	}
 	else
 	{
-		auto operatorLayer = static_cast<OperateLayer *>(this->getScene()->getChildByTag(LT_Operate));
-		operatorLayer->resetTarget();
+		resetTarget();
 	}
 	
     
@@ -464,4 +472,16 @@ void GameLayer::removeAllEventListener()
 		_eventDispatcher->removeEventListener(sp_obj);
 	}
 	m_vecEventListener.clear();
+}
+
+void GameLayer::resetTarget()
+{
+	if (m_pHero->isFlippedX())
+	{
+		m_pForesight->setPosition(m_pHero->getPosition()  + Point(-1.f, 0.f) * 200);
+	}
+	else
+	{
+		m_pForesight->setPosition(m_pHero->getPosition()  + Point(1.f, 0.f) * 200);
+	}
 }

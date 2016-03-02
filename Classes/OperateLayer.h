@@ -4,6 +4,7 @@
 #include <cocos2d.h>
 
 class Hero;
+class Foresight;
 class OperateLayer : public cocos2d::Layer
 {
 public:
@@ -28,7 +29,6 @@ public:
 	virtual void onExit();
 	void exitApp(Ref* pSender);
 	void gotoDebug(Ref* pSender);
-	void resetTarget();
 
 	CREATE_FUNC(OperateLayer);
 
@@ -42,7 +42,6 @@ private:
 	void removeAllEventListener();
 	cocos2d::Sprite *m_pJoystick;
 	cocos2d::Sprite *m_pJoystickBg;
-	cocos2d::Sprite *m_pTarget;
 	cocos2d::Sprite *m_pFront;
 	cocos2d::Sprite *m_pBack;
 	cocos2d::Sprite *m_pUp;
@@ -53,8 +52,10 @@ private:
 	cocos2d::Vector<cocos2d::EventListener *> m_vecEventListener;
     cocos2d::Point m_firstTouchJoystickLocation;
     int           m_firstTouchJoystickID;
+	cocos2d::Point m_preTouchJoystickLocation;
 
 	Hero*	m_pHero;
+	Foresight *m_pTarget;
 
 	int m_KeyPressedValue;
 };

@@ -77,8 +77,7 @@ void ServerGameLayer::updateHero(float dt)
 	}
 	else
 	{
-		auto operatorLayer = static_cast<OperateLayer *>(this->getScene()->getChildByTag(LT_Operate));
-		operatorLayer->resetTarget();
+		resetTarget();
 	}
 
 	Point diff = m_pHero->getPosition() - m_pHero->getPrePosition();

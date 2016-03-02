@@ -4,6 +4,7 @@
 #include "Hero.h"
 #include "Bullet.h"
 #include "Ground.h"
+#include "Foresight.h"
 #include "OperateLayer.h"
 #include "JsonParser.h"
 
@@ -50,6 +51,7 @@ void OfflineGameLayer::update(float dt)
 	this->updateHero(dt);
 	this->updateBullet(dt);
 	this->updatePhysicsWorld(dt);
+	this->m_pForesight->update(dt);
 }
 
 void OfflineGameLayer::updateHero(float dt)
@@ -78,8 +80,7 @@ void OfflineGameLayer::updateHero(float dt)
 	}
 	else
 	{
-		auto operatorLayer = static_cast<OperateLayer *>(this->getScene()->getChildByTag(LT_Operate));
-		operatorLayer->resetTarget();
+		resetTarget();
 	}
 	
     
