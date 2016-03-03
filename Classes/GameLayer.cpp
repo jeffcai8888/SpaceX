@@ -474,7 +474,10 @@ void GameLayer::importGroundData(cocos2d::TMXTiledMap* data)
 				{
 					Size boxSize(dict.at("width").asFloat(), dict.at("height").asFloat());
 					auto ground = Ground::create();
-					ground->initPhysics(boxSize, Point(dict.at("x").asFloat() + boxSize.width / 2, dict.at("y").asFloat() + boxSize.height / 2));
+					if(dict.find("rotation") != dict.end())
+						ground->initPhysics(boxSize, Point(dict.at("x").asFloat() + boxSize.width / 2, dict.at("y").asFloat() + boxSize.height / 2), dict.at("rotation").asInt());
+					else
+						ground->initPhysics(boxSize, Point(dict.at("x").asFloat() + boxSize.width / 2, dict.at("y").asFloat() + boxSize.height / 2), 0);
 					this->addChild(ground);
 				}
 			}

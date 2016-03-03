@@ -8,7 +8,7 @@ public:
 	Ground();
 	virtual ~Ground();
 
-	void initPhysics(cocos2d::Size size, cocos2d::Point pos);
+	void initPhysics(cocos2d::Size size, cocos2d::Point pos, int rotaion);
 
 	CREATE_FUNC(Ground);
 };
