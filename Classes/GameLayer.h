@@ -29,6 +29,7 @@ public:
 	virtual void update(float dt);
 	virtual void updateHero(float dt);
 	virtual void updateBullet(float dt);
+	virtual void updateForesight(float dt);
 	void updatePhysicsWorld(float dt);
 
 
@@ -56,7 +57,7 @@ protected:
 	void setViewPointCenter();
 	void importGroundData(cocos2d::TMXTiledMap*);
 	void removeAllEventListener();
-	void resetTarget();
+	void initForesight();
 };
 
 #endif
