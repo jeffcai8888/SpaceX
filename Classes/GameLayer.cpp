@@ -50,8 +50,15 @@ void GameLayer::onEnter()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	this->m_origin = Director::getInstance()->getVisibleOrigin();
 
-	m_pTiledMap = TMXTiledMap::create("spacex_tilemap.tmx");
+
+
+	
+
+	m_pTiledMap = TMXTiledMap::create("TYCHEs_COFEE.tmx");
+	m_TiledMapSize.setSize(m_pTiledMap->getMapSize().width * m_pTiledMap->getTileSize().width, m_pTiledMap->getMapSize().height * m_pTiledMap->getTileSize().height);
 	this->addChild(m_pTiledMap);
+
+	
 
 	TMXObjectGroup *objects = m_pTiledMap->getObjectGroup("Objects");
 	CCASSERT(NULL != objects, "'Objects' object group not found");
@@ -77,16 +84,12 @@ void GameLayer::onEnter()
 	m_pHero->stop = CC_CALLBACK_0(GameLayer::onHeroStop, this);
 	m_pHero->walk = CC_CALLBACK_1(GameLayer::onHeroWalk, this);
 	m_pHero->jump = CC_CALLBACK_1(GameLayer::onHeroJump, this);
-	//m_pHero->ignoreAnchorPointForPosition(false);
-	//m_pHero->setAnchorPoint(Point(1.0f, 1.0f));
 	m_pSpriteNodes->addChild(m_pHero);
 	auto centerOfView = Point(visibleSize.width / 2, visibleSize.height / 2);
 	this->setPosition(centerOfView - m_pHero->getPosition());
 
-	//m_pTarget = Sprite::createWithSpriteFrameName("Foresight.png");
-	//this->addChild(m_pTarget);
 	m_pForesight = Foresight::create();
-	this->addChild(m_pForesight);
+	m_pSpriteNodes->addChild(m_pForesight);
 
 	JsonParser* parser = JsonParser::createWithFile("Debug.json");
 	parser->decodeDebugData();
@@ -230,7 +233,7 @@ void GameLayer::onEnter()
             if(bullet)
             {
                 bullet->setIsActive(false);
-                this->removeChild(bullet);
+				this->removeChild(bullet);
             }
         }
         else if(contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Bullet)
@@ -239,7 +242,7 @@ void GameLayer::onEnter()
             if(bullet)
             {
                 bullet->setIsActive(false);
-                this->removeChild(bullet);
+				this->removeChild(bullet);
             }
         }
 		return true;
@@ -449,19 +452,23 @@ void GameLayer::setViewPointCenter() {
 void GameLayer::importGroundData(cocos2d::TMXTiledMap* data)
 {
 	TMXObjectGroup *objects = m_pTiledMap->getObjectGroup("Grounds");
-	int cnt = 0;
-	while (true)
+	const ValueVector _objects = objects->getObjects();
+	if (!_objects.empty())
 	{
-		std::string name = "Ground" + Value(cnt).asString();
-		auto object = objects->getObject(name);
-		//CCASSERT(!object.empty(), "Ground object not found");
-		if (object.empty())
-			return;
-		Size boxSize(object["width"].asFloat(), object["height"].asFloat());
-		auto ground = Ground::create();
-		ground->initPhysics(boxSize, Point(object["x"].asFloat() + boxSize.width / 2, object["y"].asFloat() + boxSize.height / 2));
-		this->addChild(ground, 0, name);
-		++cnt;
+		for (const auto& v : _objects)
+		{
+			const ValueMap& dict = v.asValueMap();
+			if (dict.find("name") != dict.end())
+			{
+				if (dict.at("name").asString() == "Ground")
+				{
+					Size boxSize(dict.at("width").asFloat(), dict.at("height").asFloat());
+					auto ground = Ground::create();
+					ground->initPhysics(boxSize, Point(dict.at("x").asFloat() + boxSize.width / 2, dict.at("y").asFloat() + boxSize.height / 2));
+					this->addChild(ground);
+				}
+			}
+		}
 	}
 }
 

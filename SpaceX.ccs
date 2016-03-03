@@ -4,18 +4,8 @@
     <Group ctype="ResourceGroup">
       <RootFolder Name=".">
         <Folder Name="d1">
-          <Image Name="SQ_01.png" />
-          <Image Name="SQ_010.png" />
-          <Image Name="SQ_011.png" />
-          <Image Name="SQ_012.png" />
-          <Image Name="SQ_02.png" />
-          <Image Name="SQ_03.png" />
-          <Image Name="SQ_04.png" />
-          <Image Name="SQ_05.png" />
-          <Image Name="SQ_06.png" />
-          <Image Name="SQ_07.png" />
-          <Image Name="SQ_08.png" />
-          <Image Name="SQ_09.png" />
+          <Image Name="bullet.png" />
+          <Image Name="Foresight.png" />
           <Image Name="SQ_down_01.png" />
           <Image Name="SQ_down_02.png" />
           <Image Name="SQ_down_03.png" />
@@ -25,27 +15,55 @@
           <Image Name="SQ_down_07.png" />
           <Image Name="SQ_down_08.png" />
           <Image Name="SQ_down_09.png" />
+          <Image Name="SQ_down02_01.png" />
+          <Image Name="SQ_down02_02.png" />
+          <Image Name="SQ_down02_03.png" />
+          <Image Name="SQ_down02_04.png" />
+          <Image Name="SQ_down02_05.png" />
+          <Image Name="SQ_idle_01.png" />
+          <Image Name="SQ_idle_02.png" />
+          <Image Name="SQ_idle_03.png" />
+          <Image Name="SQ_idle_04.png" />
+          <Image Name="SQ_idleFire_01.png" />
+          <Image Name="SQ_idleFire_02.png" />
+          <Image Name="SQ_idleFire_03.png" />
+          <Image Name="SQ_idleFire_04.png" />
           <Image Name="SQ_jump_01.png" />
           <Image Name="SQ_jump_02.png" />
           <Image Name="SQ_jump_03.png" />
           <Image Name="SQ_jump_04.png" />
           <Image Name="SQ_jump_05.png" />
-          <Image Name="SQ0.png" />
-          <Image Name="SQ1.png" />
-          <Image Name="SQ10.png" />
-          <Image Name="SQ2.png" />
-          <Image Name="SQ3.png" />
-          <Image Name="SQ4.png" />
-          <Image Name="SQ5.png" />
-          <Image Name="SQ6.png" />
-          <Image Name="SQ7.png" />
-          <Image Name="SQ8.png" />
-          <Image Name="SQ9.png" />
+          <Image Name="SQ_jump02.png" />
+          <Image Name="SQ_walk_01.png" />
+          <Image Name="SQ_walk_02.png" />
+          <Image Name="SQ_walk_03.png" />
+          <Image Name="SQ_walk_04.png" />
+          <Image Name="SQ_walk_05.png" />
+          <Image Name="SQ_walk_06.png" />
+          <Image Name="SQ_walk_07.png" />
+          <Image Name="SQ_walk_08.png" />
+          <Image Name="SQ_walk_09.png" />
+          <Image Name="SQ_walk_10.png" />
+          <Image Name="SQ_walk_11.png" />
+          <Image Name="SQ_walk_12.png" />
+          <Image Name="SQ_walkFire_01.png" />
+          <Image Name="SQ_walkFire_02.png" />
+          <Image Name="SQ_walkFire_03.png" />
+          <Image Name="SQ_walkFire_04.png" />
+          <Image Name="SQ_walkFire_05.png" />
+          <Image Name="SQ_walkFire_06.png" />
+          <Image Name="SQ_walkFire_07.png" />
+          <Image Name="SQ_walkFire_08.png" />
+          <Image Name="SQ_walkFire_09.png" />
+          <Image Name="SQ_walkFire_10.png" />
+          <Image Name="SQ_walkFire_11.png" />
+          <Image Name="SQ_walkFire_12.png" />
         </Folder>
+        <Image Name="background.png" />
+        <Project Name="BackgroundLayer.csd" Type="Layer" />
         <Image Name="DebugNormal.png" />
         <Project Name="DebugScene.csd" Type="Scene" />
         <Image Name="DebugSelected.png" />
-        <Project Name="Hero.csd" Type="Scene" />
       </RootFolder>
     </Group>
   </SolutionFolder>

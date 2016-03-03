@@ -36,6 +36,7 @@ public:
 
 	CC_SYNTHESIZE_READONLY(Hero*, m_pHero, Hero);
 	CC_SYNTHESIZE_READONLY(Foresight*, m_pForesight, Foresight);
+	CC_SYNTHESIZE_READONLY(cocos2d::Size, m_TiledMapSize, TiledMapSize);
 
 	CREATE_FUNC(GameLayer);
 

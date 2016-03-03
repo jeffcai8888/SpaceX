@@ -40,7 +40,6 @@ bool OperateLayer::init()
 		auto visibleSize = Director::getInstance()->getVisibleSize();
 		auto m_origin = Director::getInstance()->getVisibleOrigin();
 
-        
         m_pFront = Sprite::create("front.jpg");
         m_pBack = Sprite::create("back.jpg");
         m_pUp = Sprite::create("up.jpg");

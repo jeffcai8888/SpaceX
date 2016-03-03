@@ -20,7 +20,7 @@ bool Foresight::init()
 	do 
 	{
 		CC_BREAK_IF(!Sprite::init());
-		this->initWithFile("Foresight.png");
+		this->initWithSpriteFrameName("Foresight.png");
 		ret = true;
 	} while (false);
 	return ret;

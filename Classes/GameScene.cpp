@@ -5,6 +5,7 @@
 #include "ServerGameLayer.h"
 #include "OperateLayer.h"
 #include "SocketManager.h"
+#include "cocostudio/CocoStudio.h"
 
 USING_NS_CC;
 
@@ -16,6 +17,9 @@ Scene* GameScene::createScene(int networkType)
 
 	SocketManager::getInstance()->setNetworkType(networkType);
 	SocketManager::getInstance()->init();
+
+	auto layer = CSLoader::createNode("BackgroundLayer.csb");
+	scene->addChild(layer);
 	
 	if (networkType == NT_Client)
 	{

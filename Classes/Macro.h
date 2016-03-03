@@ -11,7 +11,8 @@
 
 enum LayerTag
 {
-    LT_Game = 0,
+	LT_Background = 0,
+    LT_Game,
     LT_Operate
 };
 

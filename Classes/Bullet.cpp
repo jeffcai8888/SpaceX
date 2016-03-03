@@ -18,7 +18,7 @@ bool Bullet::init()
 	bool ret = false;
 	do 
 	{
-		this->initWithFile("bullet.jpg");
+		this->initWithSpriteFrameName("bullet.png");
 		auto body = PhysicsBody::create();
 		auto shape = PhysicsShapeBox::create(Size(this->getContentSize().width, this->getContentSize().height), PHYSICSSHAPE_MATERIAL_DEFAULT);
 		body->addShape(shape);
