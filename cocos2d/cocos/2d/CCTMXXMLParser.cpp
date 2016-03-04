@@ -473,6 +473,12 @@ void TMXMapInfo::startElement(void *ctx, const char *name, const char **atts)
         s = CC_SIZE_PIXELS_TO_POINTS(s);
         dict["width"] = Value(s.width);
         dict["height"] = Value(s.height);
+		
+		if (attributeDict.find("rotation") != attributeDict.end())
+		{
+			int rotation = attributeDict["rotation"].asInt();
+			dict["rotation"] = rotation;
+		}
 
         // Add the object to the objectGroup
         objectGroup->getObjects().push_back(Value(dict));
