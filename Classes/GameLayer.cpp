@@ -89,6 +89,7 @@ void GameLayer::onEnter()
 	this->setPosition(centerOfView - m_pHero->getPosition());
 
 	m_pForesight = Foresight::create();
+	initForesight();
 	m_pSpriteNodes->addChild(m_pForesight);
 
 	JsonParser* parser = JsonParser::createWithFile("Debug.json");
@@ -332,7 +333,7 @@ void GameLayer::update(float dt)
 	this->updateHero(dt);
 	this->updateBullet(dt);
 	this->updatePhysicsWorld(dt);
-	this->m_pForesight->update(dt);
+	this->updateForesight(dt);
 }
 
 void GameLayer::updateHero(float dt)
@@ -358,10 +359,6 @@ void GameLayer::updateHero(float dt)
 			if (m_pHero->getShootDirection().x != 0)
 				m_pHero->setFlippedX(m_pHero->getShootDirection().x < 0);
 		}
-	}
-	else
-	{
-		resetTarget();
 	}
 	
     
@@ -396,6 +393,28 @@ void GameLayer::updateBullet(float dt)
 	}
 }
 
+void GameLayer::updateForesight(float dt)
+{
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	m_pForesight->update(dt);
+	if (m_pForesight->getPositionX() + getPositionX() > visibleSize.width)
+	{
+		m_pForesight->setPositionX(visibleSize.width - getPositionX());
+	}
+	else if (m_pForesight->getPositionX() + getPositionX() < 0)
+	{
+		m_pForesight->setPositionX(-getPositionX());
+	}
+	if (m_pForesight->getPositionY() + getPositionY() > visibleSize.height)
+	{
+		m_pForesight->setPositionY(visibleSize.height - getPositionY());
+	}
+	else if(m_pForesight->getPositionY() + getPositionY() < 0)
+	{
+		m_pForesight->setPositionY(-getPositionY());
+	}
+}
+
 void GameLayer::updatePhysicsWorld(float dt)
 {
 	for (int i = 0; i < 3; ++i)
@@ -423,14 +442,7 @@ Bullet* GameLayer::getUnusedBullet()
 
 void GameLayer::setViewPointCenter() {
 	auto winSize = Director::getInstance()->getWinSize();
-	/*int x = MAX(position.x, winSize.width / 2);
-	int y = MAX(position.y, winSize.height / 2);
-	x = MIN(x, (m_pTiledMap->getMapSize().width * m_pTiledMap->getTileSize().width) - winSize.width / 2);
-	y = MIN(y, (m_pTiledMap->getMapSize().height * m_pTiledMap->getTileSize().height) - winSize.height / 2);
-	auto actualPosition = Point(x, y);*/
-
 	auto centerOfView = Point(winSize.width / 2, winSize.height / 2);
-    //dauto heroPos = m_pHero->getPhysicsBody()->getPosition();
 	
 
 	auto heroPos = m_pHero->getPosition();
@@ -441,9 +453,7 @@ void GameLayer::setViewPointCenter() {
     auto diff = heroPosInScreen - centerOfView;
     if(fabs(diff.y) > 25.f)
     {
-		//this->setPositionY(centerOfView.y - heroPos.y);
 		auto heroPrePosY = m_pHero->getPrePosition().y;
-		//CCLOG("%f, %f, %f, %f", heroPrePosY+layerPos.y, heroPrePosY , layerPos.y, heroPos.y);
 		this->setPositionY(heroPrePosY + layerPos.y - heroPos.y);
     }
 	
@@ -464,7 +474,10 @@ void GameLayer::importGroundData(cocos2d::TMXTiledMap* data)
 				{
 					Size boxSize(dict.at("width").asFloat(), dict.at("height").asFloat());
 					auto ground = Ground::create();
-					ground->initPhysics(boxSize, Point(dict.at("x").asFloat() + boxSize.width / 2, dict.at("y").asFloat() + boxSize.height / 2));
+					if(dict.find("rotation") != dict.end())
+						ground->initPhysics(boxSize, Point(dict.at("x").asFloat() + boxSize.width / 2, dict.at("y").asFloat() + boxSize.height / 2), dict.at("rotation").asInt());
+					else
+						ground->initPhysics(boxSize, Point(dict.at("x").asFloat() + boxSize.width / 2, dict.at("y").asFloat() + boxSize.height / 2), 0);
 					this->addChild(ground);
 				}
 			}
@@ -481,7 +494,7 @@ void GameLayer::removeAllEventListener()
 	m_vecEventListener.clear();
 }
 
-void GameLayer::resetTarget()
+void GameLayer::initForesight()
 {
 	if (m_pHero->isFlippedX())
 	{

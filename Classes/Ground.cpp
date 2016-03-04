@@ -12,7 +12,7 @@ Ground::~Ground()
 {
 }
 
-void Ground::initPhysics(Size size, Point pos)
+void Ground::initPhysics(Size size, Point pos, int rotation)
 {
 	const PhysicsMaterial m(1.f, 0.f, 0.f);
 	auto body = PhysicsBody::createBox(size, m);
@@ -23,4 +23,5 @@ void Ground::initPhysics(Size size, Point pos)
 	body->setDynamic(false);
 	this->setPosition(pos);
 	this->setPhysicsBody(body);
+	this->setRotation(rotation);
 }

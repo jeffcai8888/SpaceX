@@ -29,7 +29,6 @@ bool Foresight::init()
 void Foresight::update(float dt)
 {
 	Sprite::update(dt);
-	CCLOG("v = %f, (%f, %f)", this->m_fVelocity, this->m_fDirection.x, this->m_fDirection.y);
 	this->setPosition(this->getPosition() + this->m_fVelocity * this->m_fDirection * dt * 100);
 	m_fVelocity = 0.f;
 	m_fDirection.x = 0.f;

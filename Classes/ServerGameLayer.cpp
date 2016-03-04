@@ -75,10 +75,6 @@ void ServerGameLayer::updateHero(float dt)
 				m_pHero->setFlippedX(m_pHero->getShootDirection().x < 0);
 		}
 	}
-	else
-	{
-		resetTarget();
-	}
 
 	Point diff = m_pHero->getPosition() - m_pHero->getPrePosition();
 	if (fabs(diff.x) > EPSILON || fabs(diff.y) > EPSILON)

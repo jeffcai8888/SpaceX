@@ -51,7 +51,7 @@ void OfflineGameLayer::update(float dt)
 	this->updateHero(dt);
 	this->updateBullet(dt);
 	this->updatePhysicsWorld(dt);
-	this->m_pForesight->update(dt);
+	this->updateForesight(dt);
 }
 
 void OfflineGameLayer::updateHero(float dt)
@@ -78,11 +78,7 @@ void OfflineGameLayer::updateHero(float dt)
 				m_pHero->setFlippedX(m_pHero->getShootDirection().x < 0);
 		}
 	}
-	else
-	{
-		resetTarget();
-	}
-	
+	CCLOG("(%f, %f) (%f, %f)", m_pForesight->getPosition().x, m_pForesight->getPosition().y, this->getPositionX(), this->getPositionY());
     
     /*if(m_pHero->getCurrActionState() == ACTION_STATE_MOVE)
     {
