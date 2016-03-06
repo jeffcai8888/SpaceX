@@ -63,8 +63,11 @@ void OfflineGameLayer::updateHero(float dt)
 		m_pHero->runJumpAction(false);
 	}
 
-	m_pHero->setPrePosition(m_pHero->getPosition());
+	Point diff = m_pHero->getPosition() - m_pHero->getPrePosition();
+	CCLOG("aaa %f", diff.x / dt );
+	//CCLOG("bbb %f", m_pHero->getPhysicsBody()->getVelocity().x * dt);
 
+	m_pHero->setPrePosition(m_pHero->getPosition());
 	if (m_pHero->getIsAttacking())
 	{
 		m_shootTime += dt;
@@ -78,7 +81,10 @@ void OfflineGameLayer::updateHero(float dt)
 				m_pHero->setFlippedX(m_pHero->getShootDirection().x < 0);
 		}
 	}
-	CCLOG("(%f, %f) (%f, %f)", m_pForesight->getPosition().x, m_pForesight->getPosition().y, this->getPositionX(), this->getPositionY());
+	else
+	{
+		m_pForesight->setPosition(m_pForesight->getPosition() + diff);
+	}
     
     /*if(m_pHero->getCurrActionState() == ACTION_STATE_MOVE)
     {
