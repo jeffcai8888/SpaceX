@@ -57,7 +57,7 @@ protected:
 	void setViewPointCenter();
 	void importGroundData(cocos2d::TMXTiledMap*);
 	void removeAllEventListener();
-	void initForesight();
+	void initForesight(float);
 };
 
 #endif

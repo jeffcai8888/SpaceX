@@ -34,7 +34,6 @@ public:
 
 private:
 	void showJoystick(cocos2d::Point pos);
-    void resetJoystick();
 	void updateJoystick(cocos2d::Point direction, float distance);
 	void updateTarget(cocos2d::Point pos);
 	bool isTap(cocos2d::Node*, cocos2d::Point);

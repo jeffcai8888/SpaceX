@@ -1,10 +1,15 @@
 {"Data":[
 {"Attr":"HeroHSpeed","Value":100.0},
 {"Attr":"HeroVSpeed","Value":300.0},
+{"Attr":"AmmoCapacity","Value":100.0},
 {"Attr":"BulletPower","Value":5.0},
 {"Attr":"BulletSpeed","Value":750.0},
 {"Attr":"BulletDisappearTime","Value":2.5},
 {"Attr":"BulletAngle","Value":10.0},
 {"Attr":"BulletInterval","Value":0.1},
-{"Attr":"WorldG","Value":-500.0}
+{"Attr":"WorldG","Value":-500.0},
+{"Attr":"ForesightSpeed","Value":100.0},
+{"Attr":"JoystickX","Value":730.0},
+{"Attr":"JoystickY","Value":100.0},
+{"Attr":"JoystickScale","Value":1.5}
 ]}

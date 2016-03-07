@@ -89,7 +89,6 @@ void GameLayer::onEnter()
 	this->setPosition(centerOfView - m_pHero->getPosition());
 
 	m_pForesight = Foresight::create();
-	initForesight();
 	m_pSpriteNodes->addChild(m_pForesight);
 
 	JsonParser* parser = JsonParser::createWithFile("Debug.json");
@@ -134,6 +133,10 @@ void GameLayer::onEnter()
 			else if (pair.first.compare("WorldG") == 0)
 			{
 				getScene()->getPhysicsWorld()->setGravity(Vec2(0.f,pair.second.asFloat()));
+			}
+			else if (pair.first.compare("ForesightSpeed") == 0)
+			{
+				initForesight(pair.second.asFloat());
 			}
 		}
 	}
@@ -494,7 +497,7 @@ void GameLayer::removeAllEventListener()
 	m_vecEventListener.clear();
 }
 
-void GameLayer::initForesight()
+void GameLayer::initForesight(float vel)
 {
 	if (m_pHero->isFlippedX())
 	{
@@ -504,4 +507,6 @@ void GameLayer::initForesight()
 	{
 		m_pForesight->setPosition(m_pHero->getPosition()  + Point(1.f, 0.f) * 200);
 	}
+
+	m_pForesight->setVelocity(vel);
 }

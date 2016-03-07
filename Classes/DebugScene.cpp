@@ -38,6 +38,10 @@ void DebugLayer::onEnter()
 			{
 				static_cast<TextField *>(getChildByName("TextField_1_2"))->setString(Value(pair.second.asFloat()).asString());
 			}
+			else if (pair.first.compare("AmmoCapacity") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_1_3"))->setString(Value(pair.second.asInt()).asString());
+			}
 			else if (pair.first.compare("BulletPower") == 0)
 			{
 				static_cast<TextField *>(getChildByName("TextField_2_1"))->setString(Value(pair.second.asInt()).asString());
@@ -62,6 +66,22 @@ void DebugLayer::onEnter()
 			{
 				static_cast<TextField *>(getChildByName("TextField_3_1"))->setString(Value(pair.second.asFloat()).asString());
 			}
+			else if (pair.first.compare("ForesightSpeed") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_3_2"))->setString(Value(pair.second.asFloat()).asString());
+			}
+			else if (pair.first.compare("JoystickX") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_3_3"))->setString(Value(pair.second.asFloat()).asString());
+			}
+			else if (pair.first.compare("JoystickY") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_3_4"))->setString(Value(pair.second.asFloat()).asString());
+			}
+			else if (pair.first.compare("JoystickScale") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_3_5"))->setString(Value(pair.second.asFloat()).asString());
+			}
 		}
 	}
 
@@ -78,6 +98,9 @@ void DebugLayer::onExit()
 	listData.push_back(Value(m));
 	m["Attr"] = Value("HeroVSpeed");
 	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_2"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("AmmoCapacity");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_3"))->getString());
 	listData.push_back(Value(m));
 	m["Attr"] = Value("BulletPower");
 	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_2_1"))->getString());
@@ -96,6 +119,18 @@ void DebugLayer::onExit()
 	listData.push_back(Value(m));
 	m["Attr"] = Value("WorldG");
 	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_3_1"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("ForesightSpeed");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_3_2"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("JoystickX");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_3_3"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("JoystickY");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_3_4"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("JoystickScale");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_3_5"))->getString());
 	listData.push_back(Value(m));
 	auto parser = JsonParser::createWithArray(listData);
 	std::string writablePath = FileUtils::getInstance()->getWritablePath();

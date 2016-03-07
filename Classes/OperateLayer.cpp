@@ -4,6 +4,7 @@
 #include "Hero.h"
 #include "SceneManager.h"
 #include "Foresight.h"
+#include "JsonParser.h"
 
 USING_NS_CC;
 using namespace std;
@@ -53,11 +54,8 @@ bool OperateLayer::init()
 
 		m_pJoystick = Sprite::create("joystick.png");
 		m_pJoystickBg = Sprite::create("joystick_bg.png");
-        m_pJoystick->setScale(1.5f, 1.5f);
-        m_pJoystickBg->setScale(1.5f, 1.5f);
 		this->addChild(m_pJoystick, 0);
 		this->addChild(m_pJoystickBg, 1);
-        resetJoystick();
 
 		m_pCloseItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(OperateLayer::exitApp, this));
 		m_pCloseItem->setPosition(m_origin + Point(visibleSize) - Point(m_pCloseItem->getContentSize() / 2));
@@ -107,6 +105,41 @@ void OperateLayer::onEnter()
 	Layer::onEnter();
 	m_pHero = static_cast<GameLayer *>(this->getScene()->getChildByTag(LT_Game))->getHero();
 	m_pTarget = static_cast<GameLayer *>(this->getScene()->getChildByTag(LT_Game))->getForesight();
+	float joystickScale = 1.0f;
+	float joystickPosX = 0.f;
+	float joystickPosY = 0.f;
+
+	JsonParser* parser = JsonParser::createWithFile("Debug.json");
+	parser->decodeDebugData();
+	auto list = parser->getList();
+	for (auto& v : list)
+	{
+		ValueMap row = v.asValueMap();
+
+		for (auto& pair : row)
+		{
+			if (pair.first.compare("JoystickScale") == 0)
+			{
+				joystickScale = pair.second.asFloat();
+			}
+			else if (pair.first.compare("JoystickX") == 0)
+			{
+				joystickPosX = pair.second.asFloat();
+			}
+			else if (pair.first.compare("JoystickY") == 0)
+			{
+				joystickPosY = pair.second.asFloat();
+			}
+		}
+	}
+
+	
+	m_pJoystick->setScale(joystickScale, joystickScale);
+	m_pJoystickBg->setScale(joystickScale, joystickScale);
+	m_pJoystick->setPosition(Point(joystickPosX, joystickPosY));
+	m_pJoystickBg->setPosition(Point(joystickPosX, joystickPosY));
+	
+
 	auto listener = EventListenerTouchAllAtOnce::create();
 	listener->onTouchesBegan = [this](const vector<Touch*>& touches, Event *event)
 	{
@@ -175,8 +208,7 @@ void OperateLayer::onEnter()
 			distance = m_preTouchJoystickLocation.getDistance(p);
 			direction = p - m_preTouchJoystickLocation;
 			direction.normalize();
-			m_pTarget->setVelocity(distance);
-			m_pTarget->setDirection(direction);
+			m_pTarget->setDirection(direction * distance);
 			direction = m_pTarget->getPosition() - m_pHero->getPosition();
 			direction.normalize();
 			CCLOG("Forsight Position(%f, %f)", m_pTarget->getPosition().x, m_pTarget->getPosition().y);
@@ -301,12 +333,6 @@ void OperateLayer::updateJoystick(Point direction, float distance)
 		m_pJoystick->setPosition(start + (direction * 33)); 
 		 
 	}
-}
-
-void OperateLayer::resetJoystick()
-{
-    m_pJoystick->setPosition(Point(730, 100.f));
-    m_pJoystickBg->setPosition(Point(730.f, 100.f));
 }
 
 bool OperateLayer::isTap(cocos2d::Node* pNode, cocos2d::Point point)
