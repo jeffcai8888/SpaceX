@@ -24,6 +24,8 @@ public:
 	CC_SYNTHESIZE(int,   m_bullletAngle, BullletAngle);
 	CC_SYNTHESIZE(int,   m_bullletPower, BullletPower);
 	CC_SYNTHESIZE(float, m_bulletInterval, BulletInterval);
+	CC_SYNTHESIZE(int,	 m_ammoCapacity, AmmoCapacity);
+	CC_SYNTHESIZE(int, m_maxAmmoCapacity, MaxAmmoCapacity);
 };
 
 

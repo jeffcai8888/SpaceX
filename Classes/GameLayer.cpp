@@ -132,11 +132,16 @@ void GameLayer::onEnter()
 			}
 			else if (pair.first.compare("WorldG") == 0)
 			{
-				getScene()->getPhysicsWorld()->setGravity(Vec2(0.f,pair.second.asFloat()));
+				getScene()->getPhysicsWorld()->setGravity(Vec2(0.f, pair.second.asFloat()));
 			}
 			else if (pair.first.compare("ForesightSpeed") == 0)
 			{
 				initForesight(pair.second.asFloat());
+			}
+			else if (pair.first.compare("AmmoCapacity") == 0)
+			{
+				m_pHero->setMaxAmmoCapacity(pair.second.asInt());
+				m_pHero->setAmmoCapacity(pair.second.asInt());
 			}
 		}
 	}
@@ -355,12 +360,18 @@ void GameLayer::updateHero(float dt)
 		m_shootTime += dt;
 		if (m_shootTime >= m_pHero->getBulletInterval())
 		{
+			//int curAmmoCapacity = m_pHero->getAmmoCapacity();
+			//if(curAmmoCapacity == 0)
+
+
+
 			Bullet* bullet = getUnusedBullet();
 			bullet->launch(m_pHero);
 			this->addChild(bullet);
 			m_shootTime = 0.f;
 			if (m_pHero->getShootDirection().x != 0)
 				m_pHero->setFlippedX(m_pHero->getShootDirection().x < 0);
+			
 		}
 	}
 	
@@ -478,9 +489,9 @@ void GameLayer::importGroundData(cocos2d::TMXTiledMap* data)
 					Size boxSize(dict.at("width").asFloat(), dict.at("height").asFloat());
 					auto ground = Ground::create();
 					if(dict.find("rotation") != dict.end())
-						ground->initPhysics(boxSize, Point(dict.at("x").asFloat() + boxSize.width / 2, dict.at("y").asFloat() + boxSize.height / 2), dict.at("rotation").asInt());
+						ground->initPhysics(boxSize, Point(dict.at("x").asFloat(), dict.at("y").asFloat()), dict.at("rotation").asInt());
 					else
-						ground->initPhysics(boxSize, Point(dict.at("x").asFloat() + boxSize.width / 2, dict.at("y").asFloat() + boxSize.height / 2), 0);
+						ground->initPhysics(boxSize, Point(dict.at("x").asFloat(), dict.at("y").asFloat()), 0);
 					this->addChild(ground);
 				}
 			}
