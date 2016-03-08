@@ -481,7 +481,7 @@ void GameLayer::importGroundData(cocos2d::TMXTiledMap* data)
 			const ValueMap& dict = v.asValueMap();
 			if (dict.find("name") != dict.end())
 			{
-				if (dict.at("name").asString() == "Ground")
+				if (dict.at("name").asString() == "Ground" || dict.at("name").asString() == "Box")
 				{
 					Size boxSize(dict.at("width").asFloat(), dict.at("height").asFloat());
 					auto ground = Ground::create();
