@@ -31,7 +31,7 @@ public:
 	~BaseSprite();
 
 	void runIdleAction();
-	void runWalkAction();
+	void runWalkAction(bool isPlayAnim);
 	void runJumpAction(bool isUp);
 	void runHurtAction();
 	void removeSprite();
@@ -41,7 +41,7 @@ public:
 	void runWalkFireAction();
 	void runIdleFireAction();
     
-    int  stopMoveAction(int moveAction);
+    int  stopMoveAction(int moveAction, bool clear);
     bool isInMoveAction(int moveAction);
 
 

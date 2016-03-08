@@ -44,16 +44,16 @@ void BaseSprite::runIdleAction()
 	}
 }
 	
-void BaseSprite::runWalkAction()
+void BaseSprite::runWalkAction(bool isPlayAnim)
 {
-	if(changeState(ACTION_STATE_MOVE))
-	{
-        m_currMoveState |= MOVE_STATE_WALK;
+	changeState(ACTION_STATE_MOVE);
+	m_currMoveState |= MOVE_STATE_WALK;
+
+	if(isPlayAnim)
 		this->runAction(m_pWalkAction);
-		if (SocketManager::getInstance()->getNetworkType() == NT_Server)
-		{
-			SocketManager::getInstance()->sendData(NDT_HeroWalk, getPosition(), getPhysicsBody()->getVelocity());
-		}
+	if (SocketManager::getInstance()->getNetworkType() == NT_Server)
+	{
+		SocketManager::getInstance()->sendData(NDT_HeroWalk, getPosition(), getPhysicsBody()->getVelocity());
 	}
 }
 
@@ -62,9 +62,9 @@ void BaseSprite::runJumpAction(bool isUp)
 	changeState(ACTION_STATE_MOVE);
 	if (isUp)
 	{
-		stopMoveAction(MOVE_STATE_UP);
-		stopMoveAction(MOVE_STATE_WALK);
-		stopMoveAction(MOVE_STATE_DOWN);
+		stopMoveAction(MOVE_STATE_UP, true);
+		stopMoveAction(MOVE_STATE_WALK, false);
+		stopMoveAction(MOVE_STATE_DOWN, true);
 		if(m_JumpStage == 1)
 			this->runAction(m_pJump2Action);
 		else
@@ -74,9 +74,9 @@ void BaseSprite::runJumpAction(bool isUp)
 	}
 	else
 	{
-		stopMoveAction(MOVE_STATE_DOWN);
-		stopMoveAction(MOVE_STATE_WALK);
-		stopMoveAction(MOVE_STATE_UP);
+		stopMoveAction(MOVE_STATE_DOWN, true);
+		stopMoveAction(MOVE_STATE_WALK, false);
+		stopMoveAction(MOVE_STATE_UP, true);
 		m_currMoveState |= MOVE_STATE_DOWN;
 		this->runAction(m_pDownAction);
 	}
@@ -211,9 +211,10 @@ bool BaseSprite::changeState(ActionState actionState)
 		return true;
 }
 
-int BaseSprite::stopMoveAction(int moveAction)
+int BaseSprite::stopMoveAction(int moveAction, bool clear)
 {
-    m_currMoveState &= ~moveAction;
+	if(clear)
+		m_currMoveState &= ~moveAction;
 
 	if (moveAction == MOVE_STATE_WALK)
 		this->stopAction(m_pWalkAction);

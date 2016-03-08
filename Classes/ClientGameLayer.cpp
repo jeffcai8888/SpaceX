@@ -73,7 +73,7 @@ void ClientGameLayer::onRecv(const char* data, int count)
 		switch (networkData->dataType)
 		{
 		case NDT_HeroWalk:
-			m_pHero->runWalkAction();
+			m_pHero->runWalkAction(!m_pHero->isInAir());
 			m_pHero->setPosition(networkData->position);
 			break;
 		case NDT_HeroJumpUp:

@@ -187,7 +187,7 @@ void GameLayer::onEnter()
 				{
 					if (hero->isInMoveAction(MOVE_STATE_WALK))
 					{
-						hero->stopMoveAction(MOVE_STATE_DOWN);
+						hero->stopMoveAction(MOVE_STATE_DOWN, true);
 						Vec2 v = hero->getPhysicsBody()->getVelocity();
 						hero->walk(v.x);
 						CCLOG("Hero Walk");
@@ -217,7 +217,7 @@ void GameLayer::onEnter()
 				{
 					if (hero->isInMoveAction(MOVE_STATE_WALK))
 					{
-						hero->stopMoveAction(MOVE_STATE_DOWN);
+						hero->stopMoveAction(MOVE_STATE_DOWN, true);
 						Vec2 v = hero->getPhysicsBody()->getVelocity();
 						hero->walk(v.x);
 						CCLOG("Hero Walk");
@@ -278,11 +278,7 @@ void GameLayer::onHeroWalk(float horizontalVelocity)
 {
 	if(m_pHero->isLive())
 	{
-		if (!m_pHero->isInAir())
-		{
-			m_pHero->runWalkAction();
-		}
-
+		m_pHero->runWalkAction(!m_pHero->isInAir());
 		if (!m_pHero->getIsAttacking() && horizontalVelocity != 0)
 			m_pHero->setFlippedX(horizontalVelocity < 0);
         

@@ -241,7 +241,7 @@ void OperateLayer::onEnter()
         { 
             if(!m_pHero->isInAir())
                 m_pHero->stop();
-            m_pHero->stopMoveAction(MOVE_STATE_WALK);
+            m_pHero->stopMoveAction(MOVE_STATE_WALK, true);
         }
         else if (start.x > winSize.width / 8 && start.x <= winSize.width / 4 && start.y >= 0.f && start.y <= winSize.height * 3 / 4)
         {
@@ -249,7 +249,7 @@ void OperateLayer::onEnter()
 			{
 				m_pHero->stop();
 			}              
-            m_pHero->stopMoveAction(MOVE_STATE_WALK);
+            m_pHero->stopMoveAction(MOVE_STATE_WALK, true);
         }
         else if (start.x > winSize.width * 7 / 8 && start.x <= winSize.width && start.y >= 0.f && start.y <= winSize.height * 3 / 4)
         {
@@ -288,12 +288,12 @@ void OperateLayer::onEnter()
 		if (keyCode == EventKeyboard::KeyCode::KEY_D)
 		{
 			m_KeyPressedValue &= ~KB_Front;
-			m_pHero->stopMoveAction(MOVE_STATE_WALK);
+			m_pHero->stopMoveAction(MOVE_STATE_WALK, true);
 		}
 		else if (keyCode == EventKeyboard::KeyCode::KEY_A)
 		{
 			m_KeyPressedValue &= ~KB_Back;
-			m_pHero->stopMoveAction(MOVE_STATE_WALK);
+			m_pHero->stopMoveAction(MOVE_STATE_WALK, true);
 		}
 		else if (keyCode == EventKeyboard::KeyCode::KEY_W)
 		{

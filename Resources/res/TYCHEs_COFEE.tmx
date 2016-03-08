@@ -14,7 +14,7 @@
  <objectgroup name="Grounds">
   <object id="11" name="Ground" x="42" y="1218.73" width="1040.73" height="30.6667"/>
   <object id="12" name="Ground" x="1249.12" y="1217.88" width="512" height="32"/>
-  <object id="15" name="Ground" x="0" y="1599" width="3200" height="1"/>
+  <object id="15" name="Ground" x="0" y="1590" width="3200" height="10"/>
   <object id="23" name="Ground" x="1340" y="1440" width="320" height="32"/>
   <object id="25" name="Ground" x="1086" y="1218" width="336.552" height="32" rotation="41"/>
   <object id="26" name="Ground" x="1664.72" y="1442" width="336.552" height="32" rotation="-41"/>
