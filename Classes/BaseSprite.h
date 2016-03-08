@@ -62,6 +62,7 @@ public:
 	CC_SYNTHESIZE(cocos2d::Vec2, m_fShootDirection, ShootDirection);
     CC_SYNTHESIZE(cocos2d::Vec2, m_fPrePosition, PrePosition);
 	CC_SYNTHESIZE(int, m_JumpStage, JumpStage);
+	CC_SYNTHESIZE(bool, m_isWalking, IsWalk);
 
 	virtual void onDead();
 

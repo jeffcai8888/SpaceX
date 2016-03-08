@@ -12,7 +12,8 @@ BaseSprite::BaseSprite() :
 	m_pJump2Action(NULL),
 	m_pDownAction(NULL),
 	m_pWalkFireAction(NULL),
-	m_pIdleFireAction(NULL)
+	m_pIdleFireAction(NULL),
+	m_isWalking(false)
 {
 
 }
@@ -49,8 +50,12 @@ void BaseSprite::runWalkAction(bool isPlayAnim)
 	changeState(ACTION_STATE_MOVE);
 	m_currMoveState |= MOVE_STATE_WALK;
 
-	if(isPlayAnim)
+	if (isPlayAnim)
+	{
 		this->runAction(m_pWalkAction);
+		m_isWalking = true;
+	}
+		
 	if (SocketManager::getInstance()->getNetworkType() == NT_Server)
 	{
 		SocketManager::getInstance()->sendData(NDT_HeroWalk, getPosition(), getPhysicsBody()->getVelocity());
@@ -122,6 +127,7 @@ void BaseSprite::runAttackAction()
 		else if (this->getCurrActionState() == ACTION_STATE_MOVE && this->getCurrMoveState() == MOVE_STATE_WALK)
 		{
 			this->stopAction(m_pWalkAction);
+			this->m_isWalking = false;
 			this->runAction(m_pWalkFireAction);
 		}
 	}
@@ -143,7 +149,8 @@ void BaseSprite::stopAttackAction()
 		{
 			this->stopAction(m_pWalkAction);
 			this->stopAction(m_pWalkFireAction);
-			this->runAction(m_pWalkAction);		
+			this->runAction(m_pWalkAction);
+			this->m_isWalking = false;
 		}
 	}
 }
@@ -217,7 +224,10 @@ int BaseSprite::stopMoveAction(int moveAction, bool clear)
 		m_currMoveState &= ~moveAction;
 
 	if (moveAction == MOVE_STATE_WALK)
+	{
+		this->m_isWalking = false;
 		this->stopAction(m_pWalkAction);
+	}		
 	else if (moveAction == MOVE_STATE_DOWN)
 		this->stopAction(m_pDownAction);
 	else if (moveAction == MOVE_STATE_UP)

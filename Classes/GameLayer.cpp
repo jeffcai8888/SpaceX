@@ -278,7 +278,8 @@ void GameLayer::onHeroWalk(float horizontalVelocity)
 {
 	if(m_pHero->isLive())
 	{
-		m_pHero->runWalkAction(!m_pHero->isInAir());
+		bool isWalking = m_pHero->getIsWalk();
+		m_pHero->runWalkAction(!m_pHero->isInAir() && !isWalking);
 		if (!m_pHero->getIsAttacking() && horizontalVelocity != 0)
 			m_pHero->setFlippedX(horizontalVelocity < 0);
         
