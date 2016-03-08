@@ -147,10 +147,12 @@ void BaseSprite::stopAttackAction()
 		}
 		else if (this->getCurrActionState() == ACTION_STATE_MOVE && this->getCurrMoveState() == MOVE_STATE_WALK)
 		{
-			this->stopAction(m_pWalkAction);
 			this->stopAction(m_pWalkFireAction);
-			this->runAction(m_pWalkAction);
-			this->m_isWalking = false;
+			if (this->m_isWalking == false)
+			{
+				this->runAction(m_pWalkAction);
+				this->m_isWalking = true;
+			}		
 		}
 	}
 }
