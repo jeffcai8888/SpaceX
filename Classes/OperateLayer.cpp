@@ -25,6 +25,7 @@ OperateLayer::OperateLayer()
 	m_preTouchJoystickLocation(Point(0.f, 0.f))
 {
 	m_vecEventListener.clear();
+	m_mapPressType.clear();
 }
 
 OperateLayer::~OperateLayer()
@@ -41,9 +42,11 @@ bool OperateLayer::init()
 		auto visibleSize = Director::getInstance()->getVisibleSize();
 		auto m_origin = Director::getInstance()->getVisibleOrigin();
 
-        m_pFront = Sprite::create("front.jpg");
-        m_pBack = Sprite::create("back.jpg");
-        m_pUp = Sprite::create("up.jpg");
+		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("ui.plist");
+
+        m_pFront = Sprite::createWithSpriteFrameName("right.png");
+        m_pBack = Sprite::createWithSpriteFrameName("left.png");
+        m_pUp = Sprite::createWithSpriteFrameName("jump.png");
         
         m_pFront->setPosition(m_origin + Point(visibleSize.width * 3 / 16, 50));
         m_pBack->setPosition(m_origin + Point(visibleSize.width / 16, 100));
@@ -52,8 +55,8 @@ bool OperateLayer::init()
         this->addChild(m_pBack);
         this->addChild(m_pUp);
 
-		m_pJoystick = Sprite::create("joystick.png");
-		m_pJoystickBg = Sprite::create("joystick_bg.png");
+		m_pJoystick = Sprite::createWithSpriteFrameName("joystick.png");
+		m_pJoystickBg = Sprite::createWithSpriteFrameName("joystick_bg.png");
 		this->addChild(m_pJoystick, 0);
 		this->addChild(m_pJoystickBg, 1);
 
@@ -156,19 +159,26 @@ void OperateLayer::onEnter()
                     m_pHero->setShootDirection(Vec2(-1.f,0.f));
                 else
                     m_pHero->setShootDirection(Vec2(1.f,0.f));
-                
             }
             else if( p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4 )
             {
                 m_pHero->walk(-m_pHero->getWalkVelocity());
+				switchButtonStatus(BT_Left, true);
+				switchButtonStatus(BT_Right, false);
+				m_mapPressType[pTouch->getID()] = Value(BT_Left);
             }
             else if( p.x > winSize.width / 8 && p.x <= winSize.width / 4 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
             {
                 m_pHero->walk(m_pHero->getWalkVelocity());
+				switchButtonStatus(BT_Left, false);
+				switchButtonStatus(BT_Right, true);
+				m_mapPressType[pTouch->getID()] = Value(BT_Right);
             }
             else if ( p.x > winSize.width * 7 / 8 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
             {
                 m_pHero->jump(m_pHero->getJumpVelocity());
+				switchButtonStatus(BT_Jump, true);
+				m_mapPressType[pTouch->getID()] = Value(BT_Jump);
             }
 			++touchIter;
 		}
@@ -211,24 +221,46 @@ void OperateLayer::onEnter()
 			m_pTarget->setDirection(direction * distance);
 			direction = m_pTarget->getPosition() - m_pHero->getPosition();
 			direction.normalize();
-			CCLOG("Forsight Position(%f, %f)", m_pTarget->getPosition().x, m_pTarget->getPosition().y);
-			CCLOG("Hero Position(%f, %f)", m_pHero->getPosition().x, m_pHero->getPosition().y);
-			CCLOG("Bullet direction(%f, %f)", direction.x, direction.y);
+			//CCLOG("Forsight Position(%f, %f)", m_pTarget->getPosition().x, m_pTarget->getPosition().y);
+			//CCLOG("Hero Position(%f, %f)", m_pHero->getPosition().x, m_pHero->getPosition().y);
+			//CCLOG("Bullet direction(%f, %f)", direction.x, direction.y);
 			m_pHero->setShootDirection(direction);
 			m_preTouchJoystickLocation = p;
         }
         else if( p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4 )
         {
             m_pHero->walk(-m_pHero->getWalkVelocity());
+			if (m_mapPressType[pTouch->getID()].asInt() != BT_Left)
+			{
+				m_mapPressType[pTouch->getID()] =  Value(BT_Left);
+				switchButtonStatus(BT_Left, true);
+				switchButtonStatus(BT_Right, false);
+			}		
         }
         else if( p.x > winSize.width / 8 && p.x <= winSize.width / 4 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
         {
             m_pHero->walk(m_pHero->getWalkVelocity());
+			if (m_mapPressType[pTouch->getID()].asInt() != BT_Right)
+			{
+				m_mapPressType[pTouch->getID()] =  Value(BT_Right);
+				switchButtonStatus(BT_Left, false);
+				switchButtonStatus(BT_Right, true);
+			}
+			
         }
         else if ( p.x > winSize.width * 7 / 8 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
         {
             m_pHero->jump(m_pHero->getJumpVelocity());
+			switchButtonStatus(BT_Jump, true);
         }
+		else
+		{
+			if (m_mapPressType[pTouch->getID()].asInt() == BT_Jump)
+			{
+				m_mapPressType.erase(pTouch->getID());
+				switchButtonStatus(BT_Jump, false);
+			}
+		}
 	};
 	listener->onTouchesEnded = [this](const vector<Touch*>& touches, Event *event)
 	{
@@ -236,24 +268,28 @@ void OperateLayer::onEnter()
 		std::vector<Touch*>::const_iterator touchIter = touches.begin();
 		Touch *pTouch = (Touch*)(*touchIter);
 		Point start = pTouch->getStartLocation();
-        
-        if (start.x <= winSize.width / 8 && start.y >= 0.f && start.y <= winSize.height * 3 / 4)
+		Point p = pTouch->getLocation();
+        if (p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
         { 
             if(!m_pHero->isInAir())
                 m_pHero->stop();
             m_pHero->stopMoveAction(MOVE_STATE_WALK, true);
+			switchButtonStatus(BT_Left, false);
+			m_mapPressType.erase(pTouch->getID());
+
         }
-        else if (start.x > winSize.width / 8 && start.x <= winSize.width / 4 && start.y >= 0.f && start.y <= winSize.height * 3 / 4)
+        else if (p.x > winSize.width / 8 && p.x <= winSize.width / 4 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
         {
 			if (!m_pHero->isInAir())
-			{
 				m_pHero->stop();
-			}              
             m_pHero->stopMoveAction(MOVE_STATE_WALK, true);
+			switchButtonStatus(BT_Right, false);
+			m_mapPressType.erase(pTouch->getID());
         }
-        else if (start.x > winSize.width * 7 / 8 && start.x <= winSize.width && start.y >= 0.f && start.y <= winSize.height * 3 / 4)
+        else if (p.x > winSize.width * 7 / 8 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
         {
-            
+			switchButtonStatus(BT_Jump, false);
+			m_mapPressType.erase(pTouch->getID());
         }
         else if(m_firstTouchJoystickID == pTouch->getID())
         {
@@ -393,4 +429,41 @@ void OperateLayer::removeAllEventListener()
 		_eventDispatcher->removeEventListener(sp_obj);
 	}
 	m_vecEventListener.clear();
+}
+
+void OperateLayer::switchButtonStatus(int type, bool isPressed)
+{
+	if (type == BT_Left)
+	{
+		if (isPressed)
+		{
+			m_pBack->setSpriteFrame("left_down.png");
+		}
+		else
+		{
+			m_pBack->setSpriteFrame("left.png");
+		}
+	}
+	else if (type == BT_Right)
+	{
+		if (isPressed)
+		{
+			m_pFront->setSpriteFrame("right_down.png");
+		}
+		else
+		{
+			m_pFront->setSpriteFrame("right.png");
+		}
+	}
+	else if (type == BT_Jump)
+	{
+		if (isPressed)
+		{
+			m_pUp->setSpriteFrame("jump_down.png");
+		}
+		else
+		{
+			m_pUp->setSpriteFrame("jump.png");
+		}
+	}
 }

@@ -8,10 +8,12 @@ class Foresight;
 class OperateLayer : public cocos2d::Layer
 {
 public:
-	enum JoystickType
+	enum ButtonType
 	{
-		JT_Player,
-		JT_Bullet
+		BT_None,
+		BT_Right,
+		BT_Left,
+		BT_Jump
 	};
 
 	enum KeyBoard
@@ -39,6 +41,7 @@ private:
 	bool isTap(cocos2d::Node*, cocos2d::Point);
 	void dealWithKeyBoard();
 	void removeAllEventListener();
+	void switchButtonStatus(int type, bool isPressed);
 	cocos2d::Sprite *m_pJoystick;
 	cocos2d::Sprite *m_pJoystickBg;
 	cocos2d::Sprite *m_pFront;
@@ -52,11 +55,14 @@ private:
     cocos2d::Point m_firstTouchJoystickLocation;
     int           m_firstTouchJoystickID;
 	cocos2d::Point m_preTouchJoystickLocation;
+	int			  m_PressType;
 
 	Hero*	m_pHero;
 	Foresight *m_pTarget;
 
 	int m_KeyPressedValue;
+
+	cocos2d::ValueMapIntKey m_mapPressType;
 };
 
 #endif

@@ -16,7 +16,6 @@ USING_NS_CC;
 
 GameLayer::GameLayer()
 	:m_pTiledMap(nullptr)
-	,m_pSpriteNodes(nullptr)
 	,m_pHero(nullptr)
 {
 	m_vecBullets.clear();
@@ -64,8 +63,6 @@ void GameLayer::onEnter()
 	CCASSERT(NULL != objects, "'Objects' object group not found");
 
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("hero.plist");
-	m_pSpriteNodes = SpriteBatchNode::create("hero.png");
-	this->addChild(m_pSpriteNodes);
 
 	
 	auto spawnPoint = objects->getObject("SpawnPoint");
@@ -84,12 +81,12 @@ void GameLayer::onEnter()
 	m_pHero->stop = CC_CALLBACK_0(GameLayer::onHeroStop, this);
 	m_pHero->walk = CC_CALLBACK_1(GameLayer::onHeroWalk, this);
 	m_pHero->jump = CC_CALLBACK_1(GameLayer::onHeroJump, this);
-	m_pSpriteNodes->addChild(m_pHero);
+	this->addChild(m_pHero);
 	auto centerOfView = Point(visibleSize.width / 2, visibleSize.height / 2);
 	this->setPosition(centerOfView - m_pHero->getPosition());
 
 	m_pForesight = Foresight::create();
-	m_pSpriteNodes->addChild(m_pForesight);
+	this->addChild(m_pForesight);
 
 	JsonParser* parser = JsonParser::createWithFile("Debug.json");
 	parser->decodeDebugData();

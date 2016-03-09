@@ -64,7 +64,7 @@ void OfflineGameLayer::updateHero(float dt)
 	}
 
 	Point diff = m_pHero->getPosition() - m_pHero->getPrePosition();
-	CCLOG("aaa %f", diff.x / dt );
+	//CCLOG("aaa %f", diff.x / dt );
 	//CCLOG("bbb %f", m_pHero->getPhysicsBody()->getVelocity().x * dt);
 
 	m_pHero->setPrePosition(m_pHero->getPosition());

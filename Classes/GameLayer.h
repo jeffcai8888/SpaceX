@@ -49,9 +49,10 @@ protected:
 	cocos2d::Point m_origin;
 
 	cocos2d::Vector<Bullet *> m_vecBullets;
-	cocos2d::SpriteBatchNode *m_pSpriteNodes;
 
 	cocos2d::Vector<cocos2d::EventListener *> m_vecEventListener;
+
+	Hero* m_pEnemy[3];
 
 	Bullet* getUnusedBullet();
 	void setViewPointCenter();
