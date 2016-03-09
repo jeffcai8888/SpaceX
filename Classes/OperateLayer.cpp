@@ -137,8 +137,8 @@ void OperateLayer::onEnter()
 	}
 
 	
-	m_pJoystick->setScale(joystickScale, joystickScale);
-	m_pJoystickBg->setScale(joystickScale, joystickScale);
+	//m_pJoystick->setScale(joystickScale, joystickScale);
+	//m_pJoystickBg->setScale(joystickScale, joystickScale);
 	m_pJoystick->setPosition(Point(joystickPosX, joystickPosY));
 	m_pJoystickBg->setPosition(Point(joystickPosX, joystickPosY));
 	
@@ -214,11 +214,12 @@ void OperateLayer::onEnter()
             Vec2 direction = p - m_firstTouchJoystickLocation;
             direction.normalize();
             this->updateJoystick(direction, distance);
-            //this->updateTarget(direction);
 			distance = m_preTouchJoystickLocation.getDistance(p);
 			direction = p - m_preTouchJoystickLocation;
 			direction.normalize();
-			m_pTarget->setDirection(direction * distance);
+			Vec2 v = m_pHero->getPhysicsBody()->getVelocity();
+			m_pTarget->setDirection(direction * distance * m_pTarget->getVelocity() + v);
+			m_pTarget->setIsStatic(false);
 			direction = m_pTarget->getPosition() - m_pHero->getPosition();
 			direction.normalize();
 			//CCLOG("Forsight Position(%f, %f)", m_pTarget->getPosition().x, m_pTarget->getPosition().y);

@@ -18,6 +18,15 @@ enum {
     MOVE_STATE_DOWN = 1 << 2
 };
 
+enum {
+	ACTION_TAG_IDEL = 0,
+	ACTION_TAG_WALK,
+	ACTION_TAG_UP,
+	ACTION_TAG_DOWN,
+	ACTION_TAG_WALK_ATTACK,
+	ACTION_TAG_JUMP_ATTACK
+};
+
 typedef struct _BoundingBox
 {
 	cocos2d::Rect actual;

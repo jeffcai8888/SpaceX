@@ -13,7 +13,7 @@ Scene* GameScene::createScene(int networkType)
 {
 	auto scene = Scene::createWithPhysics();
 	scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
-	scene->getPhysicsWorld()->setSpeed(2.f);
+	//scene->getPhysicsWorld()->setSpeed(2.f);
 
 	SocketManager::getInstance()->setNetworkType(networkType);
 	SocketManager::getInstance()->init();

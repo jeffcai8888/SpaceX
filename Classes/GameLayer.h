@@ -1,6 +1,7 @@
 #ifndef _SPACEX_CLASSES_GAMELAYER_H_
 #define _SPACEX_CLASSES_GAMELAYER_H_
 
+#include <Box2D/Box2D.h>
 #include <cocos2d.h>
 
 
@@ -53,6 +54,7 @@ protected:
 	cocos2d::Vector<cocos2d::EventListener *> m_vecEventListener;
 
 	Hero* m_pEnemy[3];
+
 
 	Bullet* getUnusedBullet();
 	void setViewPointCenter();

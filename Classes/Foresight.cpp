@@ -6,6 +6,7 @@ USING_NS_CC;
 Foresight::Foresight()
 	:m_fVelocity(0.0f)
 	,m_fDirection(Vec2(0.f, 0.f))
+	,m_isStatic(true)
 {
 }
 
@@ -29,7 +30,10 @@ bool Foresight::init()
 void Foresight::update(float dt)
 {
 	Sprite::update(dt);
-	this->setPosition(this->getPosition() + this->m_fVelocity * this->m_fDirection * dt);
-	m_fDirection.x = 0.f;
-	m_fDirection.y = 0.f;
+	if(!m_isStatic)
+	{
+		this->setPosition(this->getPosition() + this->m_fDirection * dt);
+		m_isStatic = true;
+	}
+	
 }
