@@ -1,8 +1,7 @@
-#include <cocos2d.h>
-#include <Box2D/Box2D.h>
 #include "Macro.h"
 #include "Hero.h"
 #include "Bullet.h"
+#include "PhysicsWorldManager.h"
 
 USING_NS_CC;
 
@@ -17,6 +16,8 @@ bool Hero::init()
 {
 	bool ret = false;
 	do {
+		CC_BREAK_IF(!PhysicsSprite::init());
+
 		this->initWithSpriteFrameName("SQ_idle_01.png");
 
 		Animation *pIdleAnim = this->createAnimation("SQ_idle_%02d.png", 4, 5);
@@ -41,8 +42,7 @@ bool Hero::init()
 		Animation *pIdleFireAnim = this->createAnimation("SQ_idleFire_%02d.png", 4, 5);
 		this->setIdleFireAction(RepeatForever::create(Animate::create(pIdleFireAnim)));
 
-		auto body = PhysicsBody::create();
-		//body->setGravityEnable(false);
+		/*auto body = PhysicsBody::create();
 		body->setRotationEnable(false);
 		const PhysicsMaterial m(1.0f, 0.f, 0.f);
 		auto shape = PhysicsShapeBox::create(Size(this->getContentSize().width / 2, this->getContentSize().height / 2), m, Vec2(0.f, -this->getContentSize().height / 4));
@@ -50,7 +50,25 @@ bool Hero::init()
 		body->setCategoryBitmask(PC_Hero);
 		body->setContactTestBitmask(PC_Ground);
 		body->setCollisionBitmask(PC_Ground);
-		this->setPhysicsBody(body);
+		this->setPhysicsBody(body);*/
+		
+		b2BodyDef bd;
+		bd.type = b2_dynamicBody;
+		auto body = PhysicsWorldManager::getInstance()->getWorld()->CreateBody(&bd);
+		this->setB2Body(body);
+		this->setPTMRatio(PTM_RADIO);
+
+		b2PolygonShape polygon;
+		polygon.SetAsBox(this->getContentSize().width / 4 / PTM_RADIO, this->getContentSize().height / 4 / PTM_RADIO);
+
+		b2FixtureDef fd;
+		fd.shape = &polygon;
+		fd.density = 1.0f;
+		fd.friction = 0.f;
+		fd.restitution = 0.f;
+		body->CreateFixture(&fd);
+
+		
 		ret = true;
 	} while(0);
 

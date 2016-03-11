@@ -2,9 +2,10 @@
 #define _SPACEX_CLASSES_BULLET_H_
 
 #include <cocos2d.h>
+#include "extensions/cocos-ext.h"
 
 class Hero;
-class Bullet : public cocos2d::Sprite
+class Bullet : public cocos2d::extension::PhysicsSprite
 {
 public:
 	Bullet();

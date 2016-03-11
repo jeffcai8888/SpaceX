@@ -2,6 +2,7 @@
 #define _SPACEX_CLASSES_BASESPRITE_H_
 
 #include <cocos2d.h>
+#include "extensions/cocos-ext.h"
 
 typedef enum {
 	ACTION_STATE_NONE = 0,
@@ -33,7 +34,7 @@ typedef struct _BoundingBox
 	cocos2d::Rect original;
 }BoundingBox;
 
-class BaseSprite : public cocos2d::Sprite
+class BaseSprite : public cocos2d::extension::PhysicsSprite
 {
 public:
 	BaseSprite();

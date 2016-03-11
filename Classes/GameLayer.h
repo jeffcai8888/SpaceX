@@ -1,8 +1,8 @@
 #ifndef _SPACEX_CLASSES_GAMELAYER_H_
 #define _SPACEX_CLASSES_GAMELAYER_H_
 
-#include <Box2D/Box2D.h>
 #include <cocos2d.h>
+
 
 
 class BaseSprite;
@@ -11,7 +11,7 @@ class Bullet;
 class GameData;
 class Foresight;
 
-class GameLayer : public cocos2d::Layer
+class GameLayer : public cocos2d::Layer, public b2ContactListener
 {
 public:
 	GameLayer();
@@ -20,6 +20,7 @@ public:
 	virtual bool init();
 	virtual void onEnter();
 	virtual void onExit();
+	virtual void draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, uint32_t flags) override;
 
 	void onHeroWalk(float velocity);
 	void onHeroJump(float velocity);
@@ -43,6 +44,8 @@ public:
 	CREATE_FUNC(GameLayer);
 
 protected:
+	cocos2d::Mat4 _modelViewMV;
+	cocos2d::CustomCommand _customCommand;
 	cocos2d::TMXTiledMap *m_pTiledMap;
 	cocos2d::TMXLayer*	m_pMetaLayer;
 
@@ -61,6 +64,7 @@ protected:
 	void importGroundData(cocos2d::TMXTiledMap*);
 	void removeAllEventListener();
 	void initForesight(float);
+	void onDraw();
 };
 
 #endif

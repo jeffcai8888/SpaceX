@@ -10,6 +10,7 @@
 #include "SceneManager.h"
 #include "SimpleAudioEngine.h"
 #include "SocketManager.h"
+#include "Box2D/Box2D.h"
 
 USING_NS_CC;
 
@@ -79,7 +80,8 @@ void ServerGameLayer::updateHero(float dt)
 	Point diff = m_pHero->getPosition() - m_pHero->getPrePosition();
 	if (fabs(diff.x) > EPSILON || fabs(diff.y) > EPSILON)
 	{
-		SocketManager::getInstance()->sendData(NDT_HeroPos, m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
+		b2Vec2 v = m_pHero->getB2Body()->GetLinearVelocity();
+		SocketManager::getInstance()->sendData(NDT_HeroPos, m_pHero->getPosition(), Vec2(v.x, v.y));
 	}
 
 	m_pHero->setPrePosition(m_pHero->getPosition());

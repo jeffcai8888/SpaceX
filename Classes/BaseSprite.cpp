@@ -1,5 +1,6 @@
 #include "BaseSprite.h"
 #include "SocketManager.h"
+#include "PhysicsWorldManager.h"
 
 USING_NS_CC;
 
@@ -40,7 +41,8 @@ void BaseSprite::runIdleAction()
 
 		if (SocketManager::getInstance()->getNetworkType() == NT_Server)
 		{
-			SocketManager::getInstance()->sendData(NDT_HeroStop, getPosition(), getPhysicsBody()->getVelocity());
+			b2Vec2 v = this->getB2Body()->GetLinearVelocity();
+			SocketManager::getInstance()->sendData(NDT_HeroStop, getPosition(), Vec2(v.x, v.y));
 		}
 	}
 }
@@ -58,7 +60,8 @@ void BaseSprite::runWalkAction(bool isPlayAnim)
 		
 	if (SocketManager::getInstance()->getNetworkType() == NT_Server)
 	{
-		SocketManager::getInstance()->sendData(NDT_HeroWalk, getPosition(), getPhysicsBody()->getVelocity());
+		b2Vec2 v = this->getB2Body()->GetLinearVelocity();
+		SocketManager::getInstance()->sendData(NDT_HeroWalk, getPosition(), Vec2(v.x, v.y));
 	}
 }
 
@@ -88,10 +91,11 @@ void BaseSprite::runJumpAction(bool isUp)
 
 	if (SocketManager::getInstance()->getNetworkType() == NT_Server)
 	{
+		b2Vec2 v = this->getB2Body()->GetLinearVelocity();
 		if(isUp)
-			SocketManager::getInstance()->sendData(NDT_HeroJumpUp, getPosition(), getPhysicsBody()->getVelocity());
+			SocketManager::getInstance()->sendData(NDT_HeroJumpUp, getPosition(), Vec2(v.x, v.y));
 		else
-			SocketManager::getInstance()->sendData(NDT_HeroJumpDown, getPosition(), getPhysicsBody()->getVelocity());
+			SocketManager::getInstance()->sendData(NDT_HeroJumpDown, getPosition(), Vec2(v.x, v.y));
 	}
 }
 

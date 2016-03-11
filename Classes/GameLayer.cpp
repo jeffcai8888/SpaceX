@@ -11,6 +11,7 @@
 #include "SceneManager.h"
 #include "SimpleAudioEngine.h"
 #include "SocketManager.h"
+#include "PhysicsWorldManager.h"
 
 USING_NS_CC;
 
@@ -129,7 +130,7 @@ void GameLayer::onEnter()
 			}
 			else if (pair.first.compare("WorldG") == 0)
 			{
-				getScene()->getPhysicsWorld()->setGravity(Vec2(0.f, pair.second.asFloat()));
+				//getScene()->getPhysicsWorld()->setGravity(Vec2(0.f, pair.second.asFloat()));
 			}
 			else if (pair.first.compare("ForesightSpeed") == 0)
 			{
@@ -143,7 +144,7 @@ void GameLayer::onEnter()
 		}
 	}
 
-	const PhysicsMaterial m(1.f, 0.f, 0.f);
+	/*const PhysicsMaterial m(1.f, 0.f, 0.f);
 	Size boxSize(m_pTiledMap->getMapSize().width * m_pTiledMap->getTileSize().width, m_pTiledMap->getMapSize().height * m_pTiledMap->getTileSize().height);
 	auto body = PhysicsBody::createEdgeBox(boxSize, m, 3);
 	body->setTag(0);
@@ -153,7 +154,7 @@ void GameLayer::onEnter()
 	auto edgeNode = Node::create();
 	edgeNode->setPosition(Point(boxSize.width / 2, boxSize.height / 2));
 	edgeNode->setPhysicsBody(body);
-	this->addChild(edgeNode);
+	this->addChild(edgeNode);*/
 
 	importGroundData(m_pTiledMap);
 
@@ -170,7 +171,7 @@ void GameLayer::onEnter()
 	m_vecEventListener.pushBack(listener);
 
 
-	auto contactListener = EventListenerPhysicsContact::create();
+	/*auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = [this](PhysicsContact& contact)->bool
 	{
 		if (contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Hero && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Ground)
@@ -255,9 +256,9 @@ void GameLayer::onEnter()
 	};
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
-	m_vecEventListener.pushBack(contactListener);
+	m_vecEventListener.pushBack(contactListener);*/
 
-	this->getScene()->getPhysicsWorld()->setAutoStep(false);
+	//this->getScene()->getPhysicsWorld()->setAutoStep(false);
 
 	this->scheduleUpdate();
 }
@@ -280,9 +281,10 @@ void GameLayer::onHeroWalk(float horizontalVelocity)
 		if (!m_pHero->getIsAttacking() && horizontalVelocity != 0)
 			m_pHero->setFlippedX(horizontalVelocity < 0);
         
-        Vec2 velocity = m_pHero->getPhysicsBody()->getVelocity();
-        velocity.x = horizontalVelocity;
-        m_pHero->getPhysicsBody()->setVelocity(velocity);
+        b2Vec2 velocity = m_pHero->getB2Body()->GetLinearVelocity();
+        velocity.x = horizontalVelocity / PTM_RADIO;
+		
+        m_pHero->getB2Body()->SetLinearVelocity(velocity);
 	}
 }
 
@@ -293,13 +295,13 @@ void GameLayer::onHeroJump(float verticalVelocity)
 		m_pHero->runJumpAction(true);
 		//m_pHero->setJumpStage(m_pHero->getJumpStage() + 1);
         
-		Vec2 velocity = m_pHero->getPhysicsBody()->getVelocity();
-        velocity.y = verticalVelocity;
+		b2Vec2 velocity = m_pHero->getB2Body()->GetLinearVelocity();
+        velocity.y = verticalVelocity / PTM_RADIO;
 		if (!m_pHero->getIsAttacking() && velocity.x != 0)
 		{
 			m_pHero->setFlippedX(velocity.x < 0);
 		}
-		m_pHero->getPhysicsBody()->setVelocity(velocity);
+		m_pHero->getB2Body()->SetLinearVelocity(velocity);
 		m_pHero->setPrePosition(m_pHero->getPosition());
 	}
 }
@@ -317,7 +319,8 @@ void GameLayer::onHeroStop()
 	if(m_pHero->isLive())
 	{
 		m_pHero->runIdleAction();
-        m_pHero->getPhysicsBody()->setVelocity(Vec2(0.f, 0.f));
+
+        m_pHero->getB2Body()->SetLinearVelocity(b2Vec2(0.f, 0.f));
 	}
 }
 
@@ -425,12 +428,37 @@ void GameLayer::updateForesight(float dt)
 
 void GameLayer::updatePhysicsWorld(float dt)
 {
-	for (int i = 0; i < 3; ++i)
-	{
+	PhysicsWorldManager::getInstance()->update(dt);
+	CCLOG("(%f, %f)", m_pHero->getB2Body()->GetPosition().x, m_pHero->getB2Body()->GetPosition().y);
+}
 
-		getScene()->getPhysicsWorld()->step(1 / 180.0f);
+void GameLayer::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
+{
+	Layer::draw(renderer, transform, flags);
+	//PhysicsWorldManager::getInstance()->draw();
+	GL::enableVertexAttribs(cocos2d::GL::VERTEX_ATTRIB_FLAG_POSITION);
+	Director* director = Director::getInstance();
+	CCASSERT(nullptr != director, "Director is null when seting matrix stack");
+	director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 
-	}
+	_modelViewMV = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+
+	_customCommand.init(_globalZOrder);
+	_customCommand.func = CC_CALLBACK_0(GameLayer::onDraw, this);
+	renderer->addCommand(&_customCommand);
+
+	director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+}
+
+void GameLayer::onDraw()
+{
+	Director* director = Director::getInstance();
+	CCASSERT(nullptr != director, "Director is null when seting matrix stack");
+
+	auto oldMV = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+	director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewMV);
+	PhysicsWorldManager::getInstance()->draw();
+	director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, oldMV);
 }
 
 Bullet* GameLayer::getUnusedBullet()

@@ -25,5 +25,7 @@ enum PhysicsCategory
 
 #define EPSILON 0.00001f
 
+#define PTM_RADIO 32.0
+
 
 #endif /* Macro_h */

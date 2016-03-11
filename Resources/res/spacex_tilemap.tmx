@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="50" tilewidth="32" tileheight="32" nextobjectid="29">
- <tileset firstgid="1" name="pd_tiles" tilewidth="32" tileheight="32" tilecount="512" columns="32">
-  <image source="pd_tiles.png" width="1024" height="512"/>
+ <tileset firstgid="1" name="background" tilewidth="32" tileheight="32" tilecount="170" columns="17">
+  <image source="background.png" width="572" height="325"/>
  </tileset>
- <layer name="Background" width="100" height="50">
+ <layer name="Background" width="100" height="50" visible="0">
   <data encoding="base64" compression="zlib">
-   eJzt2mFSwyAQhuF4Fa/iD8/SnsRjW0ed6TCw+y0sgej745u2SmizDwkUvR3HcX/kdqHci6zs7/mYsp9Wno8t+7L6j7zHyqwYC1GPWs1VD/VzzTjX2jmf/TlWJeJxb/zeGx+1Oq8Y11dNq+5eW7X+eOQ6KR7WsTiM191rb83/pRsmuU7emszy6TX/j/HGrjK2LStrzYfVuIc3n6j1pv5xj1o9lbWy9b2pZkX8mrY8lPorppjoHt49KnLv4frYz8MyIrpN1EPdh8Fjrodi5bkRv26/z9X6qWsvPOZ4ePOztbZafb67Z9RD7R+LuEdZP3U9O9KGjHuoe1vsU/n5wGOr9HpE16/UP9fDqq/ngUW/h5Xe6wOPvET2dtW2JN8gsreIR3/98VifbA9vH5LoHj02rf7w2MMDg/M81DGPR46H14570N4eXCfX9cAm36N8zjr3PI/odzw85ni06jn6mszzqP19Co+1Hmo/JMcjcgzB46+mZx7AYx8f1QOzPAf2QdaH/1HYKxEPcq6H9TOc5uXtkdeX78fIHI3HnHxZvP88WvVvvVbbEC2fBUUEMg==
+   eJztwSEBAAAAAiD9f9obBqABAAAAAAAAAAAAAAAAAAAAAAAA4MEAnEAAAg==
   </data>
  </layer>
  <objectgroup name="Objects">

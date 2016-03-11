@@ -2,7 +2,9 @@
 #define _SPACEX_CLASSES_GROUND_H_
 
 #include <cocos2d.h>
-class Ground : public cocos2d::Sprite
+#include "extensions/cocos-ext.h"
+
+class Ground : public cocos2d::extension::PhysicsSprite
 {
 public:
 	Ground();

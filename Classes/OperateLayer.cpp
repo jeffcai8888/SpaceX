@@ -5,6 +5,7 @@
 #include "SceneManager.h"
 #include "Foresight.h"
 #include "JsonParser.h"
+#include "Box2D/Box2D.h"
 
 USING_NS_CC;
 using namespace std;
@@ -217,8 +218,8 @@ void OperateLayer::onEnter()
 			distance = m_preTouchJoystickLocation.getDistance(p);
 			direction = p - m_preTouchJoystickLocation;
 			direction.normalize();
-			Vec2 v = m_pHero->getPhysicsBody()->getVelocity();
-			m_pTarget->setDirection(direction * distance * m_pTarget->getVelocity() + v);
+			b2Vec2 v = m_pHero->getB2Body()->GetLinearVelocity();
+			m_pTarget->setDirection(direction * distance * m_pTarget->getVelocity() + Vec2(v.x, v.y));
 			m_pTarget->setIsStatic(false);
 			direction = m_pTarget->getPosition() - m_pHero->getPosition();
 			direction.normalize();

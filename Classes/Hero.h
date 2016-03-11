@@ -3,6 +3,7 @@
 
 #include "BaseSprite.h"
 class Bullet;
+class b2Body;
 class Hero : public BaseSprite
 {
 public:
