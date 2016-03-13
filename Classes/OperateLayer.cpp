@@ -47,14 +47,16 @@ bool OperateLayer::init()
         m_pFront = Sprite::createWithSpriteFrameName("right.png");
         m_pBack = Sprite::createWithSpriteFrameName("left.png");
         m_pUp = Sprite::createWithSpriteFrameName("jump.png");
+		auto centerSprite = Sprite::createWithSpriteFrameName("button_bg.png");
+		centerSprite->setPosition(m_origin + Point(200.f, 100.f));
         
-        m_pFront->setPosition(m_origin + Point(visibleSize.width * 3 / 16, 50));
-        m_pBack->setPosition(m_origin + Point(visibleSize.width / 16, 100));
-        m_pUp->setPosition(m_origin + Point(visibleSize.width * 15 / 16, 200));
+        m_pFront->setPosition(m_origin + Point(250, 100));
+        m_pBack->setPosition(m_origin + Point(150, 100));
+        m_pUp->setPosition(m_origin + Point(1086, 220));
         this->addChild(m_pFront);
         this->addChild(m_pBack);
         this->addChild(m_pUp);
-
+		this->addChild(centerSprite);
 		m_pJoystick = Sprite::createWithSpriteFrameName("joystick.png");
 		m_pJoystickBg = Sprite::createWithSpriteFrameName("joystick_bg.png");
 		this->addChild(m_pJoystick, 0);
@@ -160,21 +162,21 @@ void OperateLayer::onEnter()
                 else
                     m_pHero->setShootDirection(Vec2(1.f,0.f));
             }
-            else if( p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4 )
+            else if( p.x <= 200.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4 )
             {
                 m_pHero->walk(-m_pHero->getWalkVelocity());
 				switchButtonStatus(BT_Left, true);
 				switchButtonStatus(BT_Right, false);
 				m_mapPressType[pTouch->getID()] = Value(BT_Left);
             }
-            else if( p.x > winSize.width / 8 && p.x <= winSize.width / 4 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
+            else if( p.x > 200.f && p.x <= 400.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
             {
                 m_pHero->walk(m_pHero->getWalkVelocity());
 				switchButtonStatus(BT_Left, false);
 				switchButtonStatus(BT_Right, true);
 				m_mapPressType[pTouch->getID()] = Value(BT_Right);
             }
-            else if ( p.x > winSize.width * 7 / 8 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
+            else if ( p.x > 1036 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
             {
                 m_pHero->jump(m_pHero->getJumpVelocity());
 				switchButtonStatus(BT_Jump, true);

@@ -28,11 +28,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
 	if (!glView)
 	{
-		glView = GLViewImpl::createWithRect("SpaceX", Rect(0, 0, 960, 640));
+		glView = GLViewImpl::createWithRect("SpaceX", Rect(0, 0, 1136, 640));
 		director->setOpenGLView(glView);
 	}
 
-	director->getOpenGLView()->setDesignResolutionSize(960,640, ResolutionPolicy::SHOW_ALL);
+	director->getOpenGLView()->setDesignResolutionSize(1136,640, ResolutionPolicy::SHOW_ALL);
 
     // turn on display FPS
     director->setDisplayStats(false);

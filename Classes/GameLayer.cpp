@@ -182,87 +182,48 @@ void GameLayer::onEnter()
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = [this](PhysicsContact& contact)->bool
 	{
-		if (contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Hero && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Ground)
+		if ((contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Hero && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Ground)
+			|| (contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Hero))
 		{
-			CCLOG("aaa %d", contact.getContactData()->normal.y);
-			Point posA = contact.getShapeA()->getBody()->getPosition();
-			Point posB = contact.getShapeB()->getBody()->getPosition();
-			if (posA.y >= posB.y)
+			BaseSprite* hero;
+			if(contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Hero)
+				hero = static_cast<BaseSprite *>(contact.getShapeA()->getBody()->getNode());
+			else 
+				hero = static_cast<BaseSprite *>(contact.getShapeB()->getBody()->getNode());
+			if (hero->getCurrActionState() == ACTION_STATE_MOVE && hero->isInMoveAction(MOVE_STATE_DOWN))
 			{
-				Hero* hero = static_cast<Hero *>(contact.getShapeA()->getBody()->getNode());
-				if (hero->getCurrActionState() == ACTION_STATE_MOVE && hero->isInMoveAction(MOVE_STATE_DOWN))
+				if (hero->isInMoveAction(MOVE_STATE_WALK))
 				{
-					if (hero->isInMoveAction(MOVE_STATE_WALK))
-					{
-						hero->stopMoveAction(MOVE_STATE_DOWN, true);
-						Vec2 v = hero->getPhysicsBody()->getVelocity();
-						hero->walk(v.x);
-						CCLOG("Hero Walk");
-					}
-					else
-					{
-						CCLOG("Hero Stop");
-						hero->stop();
-					}
-					hero->setJumpStage(0);
+					hero->stopMoveAction(MOVE_STATE_DOWN, true);
+					Vec2 v = hero->getPhysicsBody()->getVelocity();
+					hero->walk(v.x);
 				}
+				else
+				{
+					hero->stop();
+				}			
+				hero->setJumpStage(0);
 				return true;
 			}
-			else
+			else if (hero->getCurrActionState() == ACTION_STATE_MOVE && hero->isInMoveAction(MOVE_STATE_UP))
 			{
 				return false;
 			}
 		}
-		else if (contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Hero)
-		{
-			CCLOG("bbb %d", contact.getContactData()->normal.y);
-			Point posA = contact.getShapeA()->getBody()->getPosition();
-			Point posB = contact.getShapeB()->getBody()->getPosition();
-			if (posA.y <= posB.y)
-			{
-				Hero* hero = static_cast<Hero *>(contact.getShapeB()->getBody()->getNode());
-				if (hero->getCurrActionState() == ACTION_STATE_MOVE && hero->isInMoveAction(MOVE_STATE_DOWN))
-				{
-					if (hero->isInMoveAction(MOVE_STATE_WALK))
-					{
-						hero->stopMoveAction(MOVE_STATE_DOWN, true);
-						Vec2 v = hero->getPhysicsBody()->getVelocity();
-						hero->walk(v.x);
-						CCLOG("Hero Walk");
-					}
-					else
-					{
-						CCLOG("Hero Stop");
-						hero->stop();
-					}
-					hero->setJumpStage(0);
-				}
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-        else if(contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Bullet && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Ground)
+        else if((contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Bullet && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Ground) ||
+			(contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Bullet))
         {
-			CCLOG("ccc %d", contact.getContactData()->normal.y);
-            Bullet* bullet = static_cast<Bullet *>(contact.getShapeA()->getBody()->getNode());
+			Bullet* bullet;
+			if(contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Bullet)		
+				bullet = static_cast<Bullet *>(contact.getShapeA()->getBody()->getNode());
+			else
+				bullet = static_cast<Bullet *>(contact.getShapeB()->getBody()->getNode());
             if(bullet)
             {
                 bullet->setIsActive(false);
 				this->removeChild(bullet);
             }
-        }
-        else if(contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Bullet)
-        {
-			CCLOG("ddd %d", contact.getContactData()->normal.y);
-            Bullet* bullet = static_cast<Bullet *>(contact.getShapeB()->getBody()->getNode());
-            if(bullet)
-            {
-                bullet->setIsActive(false);
-				this->removeChild(bullet);
-            }
+			return true;
         }
 		return true;
 	};
