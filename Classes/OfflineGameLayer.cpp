@@ -58,6 +58,11 @@ void OfflineGameLayer::updateHero(float dt)
 {
 	setViewPointCenter();
 
+	float x = m_pHero->getPhysicsBody()->getVelocity().x;
+	float y = m_pHero->getPhysicsBody()->getVelocity().y;
+	y += -500.f * dt;
+	m_pHero->getPhysicsBody()->setVelocity(Vec2(x, y));
+
 	if (m_pHero->getCurrActionState() == ACTION_STATE_MOVE && m_pHero->isInMoveAction(MOVE_STATE_UP) && m_pHero->getPosition().y < m_pHero->getPrePosition().y)
 	{
 		m_pHero->runJumpAction(false);

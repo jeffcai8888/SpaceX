@@ -1,5 +1,5 @@
 #include "Bullet.h"
-#include "Hero.h"
+#include "BaseSprite.h"
 
 USING_NS_CC;
 
@@ -35,6 +35,11 @@ void Bullet::update(float dt)
 {
 	if (this->m_isActive)
 	{
+		float x = this->getPhysicsBody()->getVelocity().x;
+		float y = this->getPhysicsBody()->getVelocity().y;
+		y += -100.f * dt;
+		this->getPhysicsBody()->setVelocity(Vec2(x, y));
+
 		Point curPos = this->getPosition();
 
 		m_launchTime += dt;
@@ -49,7 +54,7 @@ void Bullet::update(float dt)
 	}
 }
 
-void Bullet::launch(Hero* pHero)
+void Bullet::launch(BaseSprite* pHero)
 {
 	this->m_isActive = true;
 	this->m_owner = pHero;

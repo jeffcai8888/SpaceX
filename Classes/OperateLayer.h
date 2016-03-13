@@ -3,7 +3,7 @@
 
 #include <cocos2d.h>
 
-class Hero;
+class BaseSprite;
 class Foresight;
 class OperateLayer : public cocos2d::Layer
 {
@@ -57,7 +57,7 @@ private:
 	cocos2d::Point m_preTouchJoystickLocation;
 	int			  m_PressType;
 
-	Hero*	m_pHero;
+	BaseSprite*	m_pHero;
 	Foresight *m_pTarget;
 
 	int m_KeyPressedValue;

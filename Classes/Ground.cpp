@@ -38,7 +38,7 @@ void Ground::initPhysics(Size size, Point pos, int rotation)
 	body->setContactTestBitmask(PC_Hero | PC_Bullet);
 	body->setCollisionBitmask(PC_Hero | PC_Bullet);
 	body->setDynamic(false);
-	this->ignoreAnchorPointForPosition(false);
+	
 	this->setContentSize(size);
 	this->setAnchorPoint(Vec2(0.f, 1.f));
 	pos.y = pos.y + size.height;

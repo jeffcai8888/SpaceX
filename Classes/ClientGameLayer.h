@@ -26,8 +26,6 @@ public:
 	virtual void updateHero(float dt);
 	virtual void updateBullet(float dt);
 
-	CC_SYNTHESIZE_READONLY(Hero*, m_pHero, Hero);
-
 	CREATE_FUNC(ClientGameLayer);
 
 protected:

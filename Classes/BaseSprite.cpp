@@ -245,13 +245,3 @@ bool BaseSprite::isInMoveAction(int moveAction)
 {
     return ((m_currMoveState & moveAction) > 0);
 }
-
-BoundingBox BaseSprite::createBoundingBox(cocos2d::Point origin, cocos2d::Size size)
-{
-	BoundingBox boundingBox;
-	boundingBox.original.origin= origin;
-	boundingBox.original.size= size;
-	boundingBox.actual.origin = this->getPosition() + boundingBox.original.origin;
-	boundingBox.actual.size= size;
-	return boundingBox;
-}

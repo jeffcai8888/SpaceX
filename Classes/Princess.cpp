@@ -1,19 +1,19 @@
 #include <cocos2d.h>
 #include <Box2D/Box2D.h>
 #include "Macro.h"
-#include "Hero.h"
+#include "Princess.h"
 #include "Bullet.h"
 
 USING_NS_CC;
 
 
-Hero::Hero()
+Princess::Princess()
 {}
 
-Hero::~Hero()
+Princess::~Princess()
 {}
 
-bool Hero::init()
+bool Princess::init()
 {
 	bool ret = false;
 	do {

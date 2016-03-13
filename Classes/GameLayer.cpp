@@ -2,6 +2,8 @@
 #include "Macro.h"
 #include "GameLayer.h"
 #include "Hero.h"
+#include "Gunner.h"
+#include "Princess.h"
 #include "Bullet.h"
 #include "Ground.h"
 #include "Foresight.h"
@@ -63,12 +65,15 @@ void GameLayer::onEnter()
 	CCASSERT(NULL != objects, "'Objects' object group not found");
 
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("hero.plist");
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gunner.plist");
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("princess.plist");
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("ui.plist");
 
 	
 	auto spawnPoint = objects->getObject("SpawnPoint");
 	CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
 	Point heroInitPos = m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
-	m_pHero = Hero::create();
+	m_pHero = Gunner::create();
 	m_pHero->setScale(0.5f);
 	m_pHero->setPosition(heroInitPos);
 	m_pHero->runIdleAction();
@@ -175,6 +180,7 @@ void GameLayer::onEnter()
 	{
 		if (contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Hero && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Ground)
 		{
+			CCLOG("aaa %d", contact.getContactData()->normal.y);
 			Point posA = contact.getShapeA()->getBody()->getPosition();
 			Point posB = contact.getShapeB()->getBody()->getPosition();
 			if (posA.y >= posB.y)
@@ -205,6 +211,7 @@ void GameLayer::onEnter()
 		}
 		else if (contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Hero)
 		{
+			CCLOG("bbb %d", contact.getContactData()->normal.y);
 			Point posA = contact.getShapeA()->getBody()->getPosition();
 			Point posB = contact.getShapeB()->getBody()->getPosition();
 			if (posA.y <= posB.y)
@@ -235,6 +242,7 @@ void GameLayer::onEnter()
 		}
         else if(contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Bullet && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Ground)
         {
+			CCLOG("ccc %d", contact.getContactData()->normal.y);
             Bullet* bullet = static_cast<Bullet *>(contact.getShapeA()->getBody()->getNode());
             if(bullet)
             {
@@ -244,6 +252,7 @@ void GameLayer::onEnter()
         }
         else if(contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Bullet)
         {
+			CCLOG("ddd %d", contact.getContactData()->normal.y);
             Bullet* bullet = static_cast<Bullet *>(contact.getShapeB()->getBody()->getNode());
             if(bullet)
             {

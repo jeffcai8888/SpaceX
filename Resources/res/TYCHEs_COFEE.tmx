@@ -1,48 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="50" tilewidth="32" tileheight="32" nextobjectid="67">
- <tileset firstgid="1" name="background" tilewidth="32" tileheight="32" tilecount="170" columns="17">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="120" height="50" tilewidth="32" tileheight="32" nextobjectid="111">
+ <tileset firstgid="1" name="background" tilewidth="32" tileheight="32" tilecount="1" columns="17">
   <image source="background.png" width="572" height="325"/>
  </tileset>
- <layer name="Background" width="100" height="50" visible="0">
+ <layer name="Background" width="120" height="50" visible="0" offsetx="-2" offsety="-2">
   <data encoding="base64" compression="zlib">
-   eJztwSEBAAAAAiD9f9obBqABAAAAAAAAAAAAAAAAAAAAAAAA4MEAnEAAAg==
+   eJztwQEJAAAAAqD6fzr6oTYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANwAu4AAAg==
   </data>
  </layer>
  <objectgroup name="Objects">
-  <object id="2" name="SpawnPoint" x="1414.36" y="697.606" width="27.2727" height="30.303"/>
+  <object id="110" name="SpawnPoint" x="2024.15" y="842.697" width="27.2727" height="30.303"/>
  </objectgroup>
  <objectgroup name="Grounds">
-  <object id="11" name="Ground" x="42" y="1218.73" width="1040.73" height="30.6667"/>
-  <object id="12" name="Ground" x="1249.12" y="1217.88" width="512" height="32"/>
-  <object id="15" name="Ground" x="0" y="1590" width="3200" height="10"/>
-  <object id="23" name="Ground" x="1340" y="1440" width="320" height="32"/>
-  <object id="25" name="Ground" x="1086" y="1218" width="336.552" height="32" rotation="41"/>
-  <object id="26" name="Ground" x="1664.72" y="1442" width="336.552" height="32" rotation="-41"/>
-  <object id="27" name="Box" x="1314" y="1154" width="64" height="64"/>
-  <object id="29" name="Box" x="1630" y="1152" width="64" height="64"/>
-  <object id="30" name="Ground" x="930" y="1154" width="102" height="32" rotation="45"/>
-  <object id="31" name="Ground" x="287.635" y="1155.67" width="640" height="32"/>
-  <object id="32" name="Ground" x="217" y="1227" width="102" height="32" rotation="-45"/>
-  <object id="33" name="Ground" x="58" y="1058" width="214" height="32"/>
-  <object id="35" name="Ground" x="355" y="994" width="102" height="32" rotation="-45"/>
-  <object id="36" name="Ground" x="425" y="923" width="503" height="32"/>
-  <object id="37" name="Box" x="767" y="859" width="64" height="64"/>
-  <object id="38" name="Ground" x="450.5" y="807" width="301.877" height="16" rotation="-26"/>
-  <object id="39" name="Ground" x="725.345" y="675" width="257.36" height="16" rotation="12"/>
-  <object id="50" name="Ground" x="2081.6" y="1152.64" width="640" height="32"/>
-  <object id="51" name="Ground" x="2738.64" y="1057.15" width="214" height="32"/>
-  <object id="52" name="Ground" x="1915" y="1224.46" width="1040.73" height="30.6667"/>
-  <object id="53" name="Ground" x="2290.98" y="675" width="257.36" height="16" rotation="-192"/>
-  <object id="54" name="Ground" x="2720.64" y="1153.15" width="102" height="32" rotation="45"/>
-  <object id="55" name="Ground" x="2007.64" y="1226.15" width="102" height="32" rotation="-45"/>
-  <object id="56" name="Ground" x="2553.14" y="807" width="301.877" height="16" rotation="206"/>
-  <object id="57" name="Ground" x="2080.09" y="923" width="503" height="32"/>
-  <object id="58" name="Box" x="2178.64" y="858.152" width="64" height="64"/>
-  <object id="60" name="Ground" x="2583" y="923" width="102" height="32" rotation="45"/>
-  <object id="61" name="Ground" x="1283.06" y="930" width="133.339" height="16" rotation="-26"/>
-  <object id="62" name="Ground" x="1407.33" y="871" width="48" height="16"/>
-  <object id="63" name="Ground" x="1552" y="871" width="48" height="16"/>
-  <object id="64" name="Ground" x="1714.33" y="946" width="133.339" height="16" rotation="206"/>
-  <object id="65" name="Box" x="1474" y="1374" width="64" height="64"/>
+  <object id="12" name="Ground" x="1630.67" y="1092" width="609.333" height="10"/>
+  <object id="27" name="Box" x="1728" y="1041.67" width="50" height="50"/>
+  <object id="65" name="Box" x="1911" y="1171" width="50" height="50"/>
+  <object id="68" name="Box" x="2094" y="1041" width="50" height="50"/>
+  <object id="69" name="Ground" x="1664.33" y="1221" width="542.67" height="10"/>
+  <object id="70" name="Ground" x="1506.32" y="1092.04" width="212.935" height="10" rotation="39"/>
+  <object id="71" name="Ground" x="136.36" y="1092" width="1370.64" height="10"/>
+  <object id="72" name="Ground" x="770" y="1072" width="608.333" height="10"/>
+  <object id="73" name="Ground" x="1378.54" y="1072.66" width="37.955" height="10" rotation="39"/>
+  <object id="80" name="Ground" x="777" y="1080.33" width="37.955" height="10" rotation="141"/>
+  <object id="81" name="Box" x="1025.67" y="1022" width="50" height="50"/>
+  <object id="82" name="Ground" x="553.48" y="1007" width="214" height="10"/>
+  <object id="83" name="Ground" x="902.83" y="910.67" width="599.833" height="10"/>
+  <object id="85" name="Ground" x="907.16" y="919.73" width="77.5875" height="10" rotation="155"/>
+  <object id="86" name="Box" x="1357" y="860" width="50" height="50"/>
+  <object id="87" name="Ground" x="1301.56" y="738.75" width="355.928" height="10" rotation="161"/>
+  <object id="88" name="Ground" x="1517.23" y="774.66" width="222.951" height="10" rotation="189"/>
+  <object id="89" name="Ground" x="1728.08" y="911.67" width="86.962" height="10" rotation="-19"/>
+  <object id="90" name="Ground" x="1810.31" y="883.67" width="46.355" height="10"/>
+  <object id="95" name="Ground" x="2015.82" y="883.67" width="46.355" height="10"/>
+  <object id="96" name="Ground" x="2061.67" y="883.24" width="86.962" height="10" rotation="19"/>
+  <object id="97" name="Ground" x="2200.03" y="1226.33" width="212.935" height="10" rotation="-39"/>
+  <object id="98" name="Ground" x="2365.01" y="1092" width="1370.64" height="10"/>
+  <object id="99" name="Ground" x="2494.75" y="1072" width="608.333" height="10"/>
+  <object id="100" name="Ground" x="3103.29" y="1072.5" width="37.955" height="10" rotation="39"/>
+  <object id="101" name="Ground" x="2501.75" y="1079.5" width="37.955" height="10" rotation="141"/>
+  <object id="102" name="Ground" x="3104" y="1007" width="214" height="10"/>
+  <object id="103" name="Box" x="2797.33" y="1021.33" width="50" height="50"/>
+  <object id="104" name="Ground" x="3035.41" y="952.7" width="77.5875" height="10" rotation="-155"/>
+  <object id="105" name="Ground" x="2369.08" y="910" width="599.833" height="10"/>
+  <object id="106" name="Box" x="2464.33" y="860.33" width="50" height="50"/>
+  <object id="107" name="Ground" x="2575.09" y="739.14" width="222.951" height="10" rotation="-189"/>
+  <object id="108" name="Ground" x="2907.25" y="854.54" width="355.928" height="10" rotation="-161"/>
+  <object id="109" name="Ground" x="135.89" y="1425.39" width="3604.11" height="10"/>
  </objectgroup>
 </map>

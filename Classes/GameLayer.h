@@ -36,7 +36,7 @@ public:
 
 	void callBack(cocos2d::Ref *pSender);
 
-	CC_SYNTHESIZE_READONLY(Hero*, m_pHero, Hero);
+	CC_SYNTHESIZE_READONLY(BaseSprite*, m_pHero, Hero);
 	CC_SYNTHESIZE_READONLY(Foresight*, m_pForesight, Foresight);
 	CC_SYNTHESIZE_READONLY(cocos2d::Size, m_TiledMapSize, TiledMapSize);
 

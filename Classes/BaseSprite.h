@@ -27,12 +27,8 @@ enum {
 	ACTION_TAG_JUMP_ATTACK
 };
 
-typedef struct _BoundingBox
-{
-	cocos2d::Rect actual;
-	cocos2d::Rect original;
-}BoundingBox;
 
+class Bullet;
 class BaseSprite : public cocos2d::Sprite
 {
 public:
@@ -52,6 +48,10 @@ public:
     
     int  stopMoveAction(int moveAction, bool clear);
     bool isInMoveAction(int moveAction);
+
+	std::function<void(float)> walk;
+	std::function<void(float)> jump;
+	std::function<void(void)> stop;
 
 
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pIdleAction, IdleAction);
@@ -73,6 +73,16 @@ public:
 	CC_SYNTHESIZE(int, m_JumpStage, JumpStage);
 	CC_SYNTHESIZE(bool, m_isWalking, IsWalk);
 
+	CC_SYNTHESIZE(float, m_walkVelocity, WalkVelocity);
+	CC_SYNTHESIZE(float, m_jumpVelocity, JumpVelocity);
+	CC_SYNTHESIZE(float, m_bulletDisappearTime, BulletDisappearTime);
+	CC_SYNTHESIZE(float, m_bulletLaunchVelocity, BulletLaunchVelocity);
+	CC_SYNTHESIZE(int, m_bullletAngle, BullletAngle);
+	CC_SYNTHESIZE(int, m_bullletPower, BullletPower);
+	CC_SYNTHESIZE(float, m_bulletInterval, BulletInterval);
+	CC_SYNTHESIZE(int, m_ammoCapacity, AmmoCapacity);
+	CC_SYNTHESIZE(int, m_maxAmmoCapacity, MaxAmmoCapacity);
+
 	virtual void onDead();
 
 	virtual bool isLive();
@@ -86,9 +96,6 @@ public:
 
 protected:
 	static cocos2d::Animation* createAnimation(const char* formatStr, int frameCount, int fps);
-
-
-	BoundingBox createBoundingBox(cocos2d::Point origin, cocos2d::Size size);
 
 private:
 	bool changeState(ActionState actionState);

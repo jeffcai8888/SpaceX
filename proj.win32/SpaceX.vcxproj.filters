@@ -84,6 +84,12 @@
     <ClCompile Include="..\Classes\Foresight.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Gunner.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Princess.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -159,6 +165,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Foresight.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Gunner.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Princess.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
