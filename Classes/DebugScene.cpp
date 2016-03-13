@@ -42,6 +42,10 @@ void DebugLayer::onEnter()
 			{
 				static_cast<TextField *>(getChildByName("TextField_1_3"))->setString(Value(pair.second.asInt()).asString());
 			}
+			else if (pair.first.compare("HeroG") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_1_4"))->setString(Value(pair.second.asFloat()).asString());
+			}
 			else if (pair.first.compare("BulletPower") == 0)
 			{
 				static_cast<TextField *>(getChildByName("TextField_2_1"))->setString(Value(pair.second.asInt()).asString());
@@ -62,9 +66,9 @@ void DebugLayer::onEnter()
 			{
 				static_cast<TextField *>(getChildByName("TextField_2_5"))->setString(Value(pair.second.asFloat()).asString());
 			}
-			else if (pair.first.compare("WorldG") == 0)
+			else if (pair.first.compare("BulletG") == 0)
 			{
-				static_cast<TextField *>(getChildByName("TextField_3_1"))->setString(Value(pair.second.asFloat()).asString());
+				static_cast<TextField *>(getChildByName("TextField_2_6"))->setString(Value(pair.second.asFloat()).asString());
 			}
 			else if (pair.first.compare("ForesightSpeed") == 0)
 			{
@@ -102,6 +106,9 @@ void DebugLayer::onExit()
 	m["Attr"] = Value("AmmoCapacity");
 	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_3"))->getString());
 	listData.push_back(Value(m));
+	m["Attr"] = Value("HeroG");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_4"))->getString());
+	listData.push_back(Value(m));
 	m["Attr"] = Value("BulletPower");
 	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_2_1"))->getString());
 	listData.push_back(Value(m));
@@ -117,8 +124,8 @@ void DebugLayer::onExit()
 	m["Attr"] = Value("BulletInterval");
 	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_2_5"))->getString());
 	listData.push_back(Value(m));
-	m["Attr"] = Value("WorldG");
-	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_3_1"))->getString());
+	m["Attr"] = Value("BulletG");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_2_6"))->getString());
 	listData.push_back(Value(m));
 	m["Attr"] = Value("ForesightSpeed");
 	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_3_2"))->getString());

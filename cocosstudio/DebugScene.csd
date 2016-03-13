@@ -174,26 +174,6 @@
             <OutlineColor A="255" R="255" G="0" B="0" />
             <ShadowColor A="255" R="110" G="110" B="110" />
           </AbstractNodeData>
-          <AbstractNodeData Name="TextField_3_1" ActionTag="-1290517948" CallBackType="Event" CallBackName="TextFieldEvent" Tag="20" IconVisible="False" LeftMargin="118.0769" RightMargin="741.9231" TopMargin="410.1821" BottomMargin="209.8179" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="Text Field" MaxLengthText="10" ctype="TextFieldObjectData">
-            <Size X="100.0000" Y="20.0000" />
-            <AnchorPoint ScaleX="0.4754" ScaleY="0.5000" />
-            <Position X="165.6169" Y="219.8179" />
-            <Scale ScaleX="1.0000" ScaleY="1.0000" />
-            <CColor A="255" R="255" G="255" B="255" />
-            <PrePosition X="0.1725" Y="0.3435" />
-            <PreSize X="0.1042" Y="0.0313" />
-          </AbstractNodeData>
-          <AbstractNodeData Name="Text_3_1" ActionTag="-1349386458" Tag="21" IconVisible="False" LeftMargin="-2.5955" RightMargin="862.5955" TopMargin="411.9559" BottomMargin="208.0441" FontSize="20" LabelText="重力加速度" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-            <Size X="100.0000" Y="20.0000" />
-            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-            <Position X="47.4045" Y="218.0441" />
-            <Scale ScaleX="1.0000" ScaleY="1.0000" />
-            <CColor A="255" R="255" G="255" B="255" />
-            <PrePosition X="0.0494" Y="0.3407" />
-            <PreSize X="0.1042" Y="0.0313" />
-            <OutlineColor A="255" R="255" G="0" B="0" />
-            <ShadowColor A="255" R="110" G="110" B="110" />
-          </AbstractNodeData>
           <AbstractNodeData Name="Text_2_5" ActionTag="63424521" Tag="20" IconVisible="False" LeftMargin="14.2009" RightMargin="865.7991" TopMargin="312.5416" BottomMargin="307.4584" FontSize="20" LabelText="间隔时间" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
             <Size X="80.0000" Y="20.0000" />
             <AnchorPoint ScaleY="0.7313" />
@@ -214,27 +194,27 @@
             <PrePosition X="0.1727" Y="0.4977" />
             <PreSize X="0.1042" Y="0.0313" />
           </AbstractNodeData>
-          <AbstractNodeData Name="TextField_3_2" ActionTag="-1904500158" CallBackType="Event" CallBackName="TextFieldEvent" Tag="24" IconVisible="False" LeftMargin="119.3131" RightMargin="740.6870" TopMargin="439.9899" BottomMargin="180.0101" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="Text Field" MaxLengthText="10" ctype="TextFieldObjectData">
+          <AbstractNodeData Name="TextField_3_2" ActionTag="-1904500158" CallBackType="Event" CallBackName="TextFieldEvent" Tag="24" IconVisible="False" LeftMargin="122.3926" RightMargin="737.6074" TopMargin="406.1166" BottomMargin="213.8834" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="Text Field" MaxLengthText="10" ctype="TextFieldObjectData">
             <Size X="100.0000" Y="20.0000" />
             <AnchorPoint ScaleX="0.4754" ScaleY="0.5000" />
-            <Position X="166.8531" Y="190.0101" />
+            <Position X="169.9326" Y="223.8834" />
             <Scale ScaleX="1.0000" ScaleY="1.0000" />
             <CColor A="255" R="255" G="255" B="255" />
-            <PrePosition X="0.1738" Y="0.2969" />
+            <PrePosition X="0.1770" Y="0.3498" />
             <PreSize X="0.1042" Y="0.0313" />
           </AbstractNodeData>
-          <AbstractNodeData Name="Text_3_2" ActionTag="-1716783598" Tag="25" IconVisible="False" LeftMargin="-1.3589" RightMargin="861.3589" TopMargin="441.7636" BottomMargin="178.2364" FontSize="20" LabelText="光标灵敏度" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+          <AbstractNodeData Name="Text_3_2" ActionTag="-1716783598" Tag="25" IconVisible="False" LeftMargin="1.7206" RightMargin="858.2794" TopMargin="407.8903" BottomMargin="212.1097" FontSize="20" LabelText="光标灵敏度" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
             <Size X="100.0000" Y="20.0000" />
             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-            <Position X="48.6411" Y="188.2364" />
+            <Position X="51.7206" Y="222.1097" />
             <Scale ScaleX="1.0000" ScaleY="1.0000" />
             <CColor A="255" R="255" G="255" B="255" />
-            <PrePosition X="0.0507" Y="0.2941" />
+            <PrePosition X="0.0539" Y="0.3470" />
             <PreSize X="0.1042" Y="0.0313" />
             <OutlineColor A="255" R="255" G="0" B="0" />
             <ShadowColor A="255" R="110" G="110" B="110" />
           </AbstractNodeData>
-          <AbstractNodeData Name="Text_1_3" ActionTag="-175365881" Tag="26" IconVisible="False" LeftMargin="19.8809" RightMargin="860.1191" TopMargin="101.0679" BottomMargin="518.9321" FontSize="20" LabelText="弹夹总量" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+          <AbstractNodeData Name="Text_1_3" ActionTag="-175365881" Tag="26" IconVisible="False" LeftMargin="19.8809" RightMargin="860.1191" TopMargin="101.0680" BottomMargin="518.9320" FontSize="20" LabelText="弹夹总量" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
             <Size X="80.0000" Y="20.0000" />
             <AnchorPoint ScaleY="0.7313" />
             <Position X="19.8809" Y="533.5580" />
@@ -254,63 +234,103 @@
             <PrePosition X="0.1786" Y="0.8282" />
             <PreSize X="0.1042" Y="0.0313" />
           </AbstractNodeData>
-          <AbstractNodeData Name="TextField_3_3" ActionTag="-939629548" CallBackType="Event" CallBackName="TextFieldEvent" Tag="28" IconVisible="False" LeftMargin="119.6705" RightMargin="740.3295" TopMargin="468.9709" BottomMargin="151.0291" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="Text Field" MaxLengthText="10" ctype="TextFieldObjectData">
+          <AbstractNodeData Name="TextField_3_3" ActionTag="-939629548" CallBackType="Event" CallBackName="TextFieldEvent" Tag="28" IconVisible="False" LeftMargin="122.7501" RightMargin="737.2499" TopMargin="435.0977" BottomMargin="184.9023" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="Text Field" MaxLengthText="10" ctype="TextFieldObjectData">
             <Size X="100.0000" Y="20.0000" />
             <AnchorPoint ScaleX="0.4754" ScaleY="0.5000" />
-            <Position X="167.2105" Y="161.0291" />
+            <Position X="170.2901" Y="194.9023" />
             <Scale ScaleX="1.0000" ScaleY="1.0000" />
             <CColor A="255" R="255" G="255" B="255" />
-            <PrePosition X="0.1742" Y="0.2516" />
+            <PrePosition X="0.1774" Y="0.3045" />
             <PreSize X="0.1042" Y="0.0313" />
           </AbstractNodeData>
-          <AbstractNodeData Name="Text_3_3" ActionTag="-280071371" Tag="29" IconVisible="False" LeftMargin="3.9981" RightMargin="866.0019" TopMargin="470.7447" BottomMargin="149.2553" FontSize="20" LabelText="摇杆位置X" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+          <AbstractNodeData Name="Text_3_3" ActionTag="-280071371" Tag="29" IconVisible="False" LeftMargin="7.0775" RightMargin="862.9225" TopMargin="436.8715" BottomMargin="183.1285" FontSize="20" LabelText="摇杆位置X" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
             <Size X="90.0000" Y="20.0000" />
             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-            <Position X="48.9981" Y="159.2553" />
+            <Position X="52.0775" Y="193.1285" />
             <Scale ScaleX="1.0000" ScaleY="1.0000" />
             <CColor A="255" R="255" G="255" B="255" />
-            <PrePosition X="0.0510" Y="0.2488" />
+            <PrePosition X="0.0542" Y="0.3018" />
             <PreSize X="0.0938" Y="0.0313" />
             <OutlineColor A="255" R="255" G="0" B="0" />
             <ShadowColor A="255" R="110" G="110" B="110" />
           </AbstractNodeData>
-          <AbstractNodeData Name="TextField_3_4" ActionTag="-234294416" CallBackType="Event" CallBackName="TextFieldEvent" Tag="30" IconVisible="False" LeftMargin="120.9067" RightMargin="739.0933" TopMargin="498.7790" BottomMargin="121.2210" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="Text Field" MaxLengthText="10" ctype="TextFieldObjectData">
+          <AbstractNodeData Name="TextField_3_4" ActionTag="-234294416" CallBackType="Event" CallBackName="TextFieldEvent" Tag="30" IconVisible="False" LeftMargin="123.9863" RightMargin="736.0137" TopMargin="464.9058" BottomMargin="155.0942" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="Text Field" MaxLengthText="10" ctype="TextFieldObjectData">
             <Size X="100.0000" Y="20.0000" />
             <AnchorPoint ScaleX="0.4754" ScaleY="0.5000" />
-            <Position X="168.4467" Y="131.2210" />
+            <Position X="171.5263" Y="165.0942" />
             <Scale ScaleX="1.0000" ScaleY="1.0000" />
             <CColor A="255" R="255" G="255" B="255" />
-            <PrePosition X="0.1755" Y="0.2050" />
+            <PrePosition X="0.1787" Y="0.2580" />
             <PreSize X="0.1042" Y="0.0313" />
           </AbstractNodeData>
-          <AbstractNodeData Name="Text_3_4" ActionTag="-213487581" Tag="31" IconVisible="False" LeftMargin="5.2348" RightMargin="864.7652" TopMargin="500.5527" BottomMargin="119.4473" FontSize="20" LabelText="摇杆位置Y" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+          <AbstractNodeData Name="Text_3_4" ActionTag="-213487581" Tag="31" IconVisible="False" LeftMargin="8.3143" RightMargin="861.6857" TopMargin="466.6794" BottomMargin="153.3206" FontSize="20" LabelText="摇杆位置Y" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
             <Size X="90.0000" Y="20.0000" />
             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-            <Position X="50.2348" Y="129.4473" />
+            <Position X="53.3143" Y="163.3206" />
             <Scale ScaleX="1.0000" ScaleY="1.0000" />
             <CColor A="255" R="255" G="255" B="255" />
-            <PrePosition X="0.0523" Y="0.2023" />
+            <PrePosition X="0.0555" Y="0.2552" />
             <PreSize X="0.0938" Y="0.0313" />
             <OutlineColor A="255" R="255" G="0" B="0" />
             <ShadowColor A="255" R="110" G="110" B="110" />
           </AbstractNodeData>
-          <AbstractNodeData Name="TextField_3_5" ActionTag="1791216817" CallBackType="Event" CallBackName="TextFieldEvent" Tag="32" IconVisible="False" LeftMargin="120.7140" RightMargin="739.2860" TopMargin="527.7598" BottomMargin="92.2403" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="Text Field" MaxLengthText="10" ctype="TextFieldObjectData">
+          <AbstractNodeData Name="TextField_3_5" ActionTag="1791216817" CallBackType="Event" CallBackName="TextFieldEvent" Tag="32" IconVisible="False" LeftMargin="123.7936" RightMargin="736.2064" TopMargin="493.8864" BottomMargin="126.1137" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="Text Field" MaxLengthText="10" ctype="TextFieldObjectData">
             <Size X="100.0000" Y="20.0000" />
             <AnchorPoint ScaleX="0.4754" ScaleY="0.5000" />
-            <Position X="168.2540" Y="102.2403" />
+            <Position X="171.3336" Y="136.1137" />
             <Scale ScaleX="1.0000" ScaleY="1.0000" />
             <CColor A="255" R="255" G="255" B="255" />
-            <PrePosition X="0.1753" Y="0.1598" />
+            <PrePosition X="0.1785" Y="0.2127" />
             <PreSize X="0.1042" Y="0.0313" />
           </AbstractNodeData>
-          <AbstractNodeData Name="Text_3_5" ActionTag="-1947657244" Tag="33" IconVisible="False" LeftMargin="10.0422" RightMargin="869.9578" TopMargin="529.5336" BottomMargin="90.4664" FontSize="20" LabelText="摇杆缩放" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+          <AbstractNodeData Name="Text_3_5" ActionTag="-1947657244" Tag="33" IconVisible="False" LeftMargin="13.1217" RightMargin="866.8783" TopMargin="495.6602" BottomMargin="124.3398" FontSize="20" LabelText="摇杆缩放" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
             <Size X="80.0000" Y="20.0000" />
             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-            <Position X="50.0422" Y="100.4664" />
+            <Position X="53.1217" Y="134.3398" />
             <Scale ScaleX="1.0000" ScaleY="1.0000" />
             <CColor A="255" R="255" G="255" B="255" />
-            <PrePosition X="0.0521" Y="0.1570" />
+            <PrePosition X="0.0553" Y="0.2099" />
             <PreSize X="0.0833" Y="0.0313" />
+            <OutlineColor A="255" R="255" G="0" B="0" />
+            <ShadowColor A="255" R="110" G="110" B="110" />
+          </AbstractNodeData>
+          <AbstractNodeData Name="TextField_1_4" ActionTag="311567055" CallBackType="Event" CallBackName="TextFieldEvent" Tag="34" IconVisible="False" LeftMargin="120.4423" RightMargin="739.5577" TopMargin="124.7000" BottomMargin="495.3000" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="Text Field" MaxLengthText="10" ctype="TextFieldObjectData">
+            <Size X="100.0000" Y="20.0000" />
+            <AnchorPoint ScaleX="0.4754" ScaleY="0.5000" />
+            <Position X="167.9823" Y="505.3000" />
+            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+            <CColor A="255" R="255" G="255" B="255" />
+            <PrePosition X="0.1750" Y="0.7895" />
+            <PreSize X="0.1042" Y="0.0313" />
+          </AbstractNodeData>
+          <AbstractNodeData Name="Text_1_4" ActionTag="-578933102" Tag="35" IconVisible="False" LeftMargin="-0.2322" RightMargin="860.2322" TopMargin="126.4743" BottomMargin="493.5257" FontSize="20" LabelText="重力加速度" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+            <Size X="100.0000" Y="20.0000" />
+            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+            <Position X="49.7678" Y="503.5257" />
+            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+            <CColor A="255" R="255" G="255" B="255" />
+            <PrePosition X="0.0518" Y="0.7868" />
+            <PreSize X="0.1042" Y="0.0313" />
+            <OutlineColor A="255" R="255" G="0" B="0" />
+            <ShadowColor A="255" R="110" G="110" B="110" />
+          </AbstractNodeData>
+          <AbstractNodeData Name="TextField_2_6" ActionTag="-1086612721" CallBackType="Event" CallBackName="TextFieldEvent" Tag="36" IconVisible="False" LeftMargin="114.3801" RightMargin="745.6199" TopMargin="336.8917" BottomMargin="283.1083" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="Text Field" MaxLengthText="10" ctype="TextFieldObjectData">
+            <Size X="100.0000" Y="20.0000" />
+            <AnchorPoint ScaleX="0.4754" ScaleY="0.5000" />
+            <Position X="161.9202" Y="293.1083" />
+            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+            <CColor A="255" R="255" G="255" B="255" />
+            <PrePosition X="0.1687" Y="0.4580" />
+            <PreSize X="0.1042" Y="0.0313" />
+          </AbstractNodeData>
+          <AbstractNodeData Name="Text_2_6" ActionTag="-1003463593" Tag="37" IconVisible="False" LeftMargin="-6.2957" RightMargin="866.2957" TopMargin="338.6663" BottomMargin="281.3337" FontSize="20" LabelText="重力加速度" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+            <Size X="100.0000" Y="20.0000" />
+            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+            <Position X="43.7043" Y="291.3337" />
+            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+            <CColor A="255" R="255" G="255" B="255" />
+            <PrePosition X="0.0455" Y="0.4552" />
+            <PreSize X="0.1042" Y="0.0313" />
             <OutlineColor A="255" R="255" G="0" B="0" />
             <ShadowColor A="255" R="110" G="110" B="110" />
           </AbstractNodeData>

@@ -82,6 +82,8 @@ public:
 	CC_SYNTHESIZE(float, m_bulletInterval, BulletInterval);
 	CC_SYNTHESIZE(int, m_ammoCapacity, AmmoCapacity);
 	CC_SYNTHESIZE(int, m_maxAmmoCapacity, MaxAmmoCapacity);
+	CC_SYNTHESIZE(float, m_fGravity, Gravity);
+	CC_SYNTHESIZE(float, m_fBulletGravity, BulletGravity);
 
 	virtual void onDead();
 

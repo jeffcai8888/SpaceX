@@ -73,7 +73,7 @@ void GameLayer::onEnter()
 	auto spawnPoint = objects->getObject("SpawnPoint");
 	CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
 	Point heroInitPos = m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
-	m_pHero = Gunner::create();
+	m_pHero = Princess::create();
 	m_pHero->setScale(0.5f);
 	m_pHero->setPosition(heroInitPos);
 	m_pHero->runIdleAction();
@@ -112,6 +112,10 @@ void GameLayer::onEnter()
 			{
 				m_pHero->setJumpVelocity(pair.second.asFloat());
 			}
+			else if (pair.first.compare("HeroG") == 0)
+			{
+				m_pHero->setGravity(pair.second.asFloat());
+			}
 			else if (pair.first.compare("BulletPower") == 0)
 			{
 				m_pHero->setBullletPower(pair.second.asInt());
@@ -132,9 +136,9 @@ void GameLayer::onEnter()
 			{
 				m_pHero->setBulletInterval(pair.second.asFloat());
 			}
-			else if (pair.first.compare("WorldG") == 0)
+			else if (pair.first.compare("BulletG") == 0)
 			{
-				getScene()->getPhysicsWorld()->setGravity(Vec2(0.f, pair.second.asFloat()));
+				m_pHero->setBulletGravity(pair.second.asFloat());
 			}
 			else if (pair.first.compare("ForesightSpeed") == 0)
 			{
@@ -276,7 +280,9 @@ void GameLayer::onExit()
 	Layer::onExit();
 	removeAllEventListener();	
 	this->unscheduleUpdate();
+	this->removeAllBullets();
 	this->removeAllChildren();
+	
 }
 
 
@@ -523,4 +529,13 @@ void GameLayer::initForesight(float vel)
 	}
 
 	m_pForesight->setVelocity(vel);
+}
+
+void GameLayer::removeAllBullets()
+{
+	for (auto sp_obj : m_vecBullets)
+	{
+		sp_obj->setIsActive(false);
+		sp_obj->removeFromParent();
+	}
 }

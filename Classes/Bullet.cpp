@@ -37,7 +37,7 @@ void Bullet::update(float dt)
 	{
 		float x = this->getPhysicsBody()->getVelocity().x;
 		float y = this->getPhysicsBody()->getVelocity().y;
-		y += -100.f * dt;
+		y += this->m_owner->getBulletGravity() * dt;
 		this->getPhysicsBody()->setVelocity(Vec2(x, y));
 
 		Point curPos = this->getPosition();
