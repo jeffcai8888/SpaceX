@@ -157,10 +157,12 @@ void OperateLayer::onEnter()
             if (this->isTap(m_pJoystickBg, p))
             {
                 m_pHero->attack();
-                if(m_pHero->isFlippedX())
-                    m_pHero->setShootDirection(Vec2(-1.f,0.f));
-                else
-                    m_pHero->setShootDirection(Vec2(1.f,0.f));
+				Vec2 direction = m_pTarget->getPosition() - m_pHero->getPosition();
+				direction.normalize();
+				m_pHero->setShootDirection(direction);
+				m_firstTouchJoystickLocation = p;
+				m_preTouchJoystickLocation = p;
+				m_firstTouchJoystickID = pTouch->getID();
             }
             else if( p.x <= 200.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4 )
             {
