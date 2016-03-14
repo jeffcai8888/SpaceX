@@ -224,9 +224,6 @@ void OperateLayer::onEnter()
 			m_pTarget->setIsStatic(false);
 			direction = m_pTarget->getPosition() - m_pHero->getPosition();
 			direction.normalize();
-			//CCLOG("Forsight Position(%f, %f)", m_pTarget->getPosition().x, m_pTarget->getPosition().y);
-			//CCLOG("Hero Position(%f, %f)", m_pHero->getPosition().x, m_pHero->getPosition().y);
-			//CCLOG("Bullet direction(%f, %f)", direction.x, direction.y);
 			m_pHero->setShootDirection(direction);
 			m_preTouchJoystickLocation = p;
         }
@@ -272,7 +269,15 @@ void OperateLayer::onEnter()
 		Touch *pTouch = (Touch*)(*touchIter);
 		Point start = pTouch->getStartLocation();
 		Point p = pTouch->getLocation();
-        if (p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
+
+		if (m_firstTouchJoystickID == pTouch->getID())
+		{
+			Point pos = m_pJoystickBg->getPosition();
+			m_pJoystick->setPosition(pos);
+			m_pHero->stopAttackAction();
+			m_firstTouchJoystickID = -1;
+		}
+        else if (p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
         { 
             if(!m_pHero->isInAir())
                 m_pHero->stop();
@@ -293,13 +298,6 @@ void OperateLayer::onEnter()
         {
 			switchButtonStatus(BT_Jump, false);
 			m_mapPressType.erase(pTouch->getID());
-        }
-        else if(m_firstTouchJoystickID == pTouch->getID())
-        {
-            Point pos = m_pJoystickBg->getPosition();
-            m_pJoystick->setPosition(pos);
-            m_pHero->stopAttackAction();
-            m_firstTouchJoystickID = -1;
         }
 	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
