@@ -157,7 +157,12 @@ void OperateLayer::onEnter()
             if (this->isTap(m_pJoystickBg, p))
             {
                 m_pHero->attack();
-				Vec2 direction = m_pTarget->getPosition() - m_pHero->getPosition();
+				Vec2 pos;
+				if (m_pHero->isFlippedX())
+					pos = m_pHero->getPosition() + Vec2(-15.f, -20.f);
+				else
+					pos = m_pHero->getPosition() + Vec2(15.f, -20.f);
+				Vec2 direction = m_pTarget->getPosition() - pos;
 				direction.normalize();
 				m_pHero->setShootDirection(direction);
 				m_firstTouchJoystickLocation = p;
@@ -224,7 +229,12 @@ void OperateLayer::onEnter()
 			Vec2 v = m_pHero->getPhysicsBody()->getVelocity();
 			m_pTarget->setDirection(direction * distance * m_pTarget->getVelocity() + v);
 			m_pTarget->setIsStatic(false);
-			direction = m_pTarget->getPosition() - m_pHero->getPosition();
+			Vec2 pos;
+			if (m_pHero->isFlippedX())
+				pos = m_pHero->getPosition() + Vec2(-15.f, -20.f);
+			else
+				pos = m_pHero->getPosition() + Vec2(15.f, -20.f);
+			direction = m_pTarget->getPosition() - pos;
 			direction.normalize();
 			m_pHero->setShootDirection(direction);
 			m_preTouchJoystickLocation = p;

@@ -268,6 +268,12 @@ void GameLayer::onEnter()
 			{
 				hero->setIsOnRotateGround(false);
 			}
+
+			if ((hero->getCurrActionState() == ACTION_STATE_MOVE && hero->isInMoveAction(MOVE_STATE_WALK)) || hero->getCurrActionState() == ACTION_STATE_IDLE)
+			{
+				hero->stopMoveAction(MOVE_STATE_WALK, false);
+				m_pHero->runJumpAction(false);
+			}
 		}
 	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);

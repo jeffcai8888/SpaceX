@@ -7,11 +7,11 @@
             <key>QW_down_01.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{128,674},{120,124}}</string>
+                <string>{{390,430},{120,124}}</string>
                 <key>offset</key>
                 <string>{-17,-38}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
                 <string>{{23,76},{120,124}}</string>
                 <key>sourceSize</key>
@@ -30,140 +30,10 @@
                 <key>sourceSize</key>
                 <string>{200,200}</string>
             </dict>
-            <key>QW_down_03.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{256,628},{120,124}}</string>
-                <key>offset</key>
-                <string>{-17,-38}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{23,76},{120,124}}</string>
-                <key>sourceSize</key>
-                <string>{200,200}</string>
-            </dict>
-            <key>QW_down_04.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{266,302},{112,128}}</string>
-                <key>offset</key>
-                <string>{-20,-36}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{24,72},{112,128}}</string>
-                <key>sourceSize</key>
-                <string>{200,200}</string>
-            </dict>
-            <key>QW_down_05.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,654},{124,124}}</string>
-                <key>offset</key>
-                <string>{-19,-38}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{19,76},{124,124}}</string>
-                <key>sourceSize</key>
-                <string>{200,200}</string>
-            </dict>
-            <key>QW_down_06.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,216},{112,128}}</string>
-                <key>offset</key>
-                <string>{-20,-36}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{24,72},{112,128}}</string>
-                <key>sourceSize</key>
-                <string>{200,200}</string>
-            </dict>
-            <key>QW_down_07.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{128,674},{120,124}}</string>
-                <key>offset</key>
-                <string>{-17,-38}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{23,76},{120,124}}</string>
-                <key>sourceSize</key>
-                <string>{200,200}</string>
-            </dict>
-            <key>QW_down_08.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{136,210},{116,128}}</string>
-                <key>offset</key>
-                <string>{-22,-36}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{20,72},{116,128}}</string>
-                <key>sourceSize</key>
-                <string>{200,200}</string>
-            </dict>
-            <key>QW_down_09.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{256,628},{120,124}}</string>
-                <key>offset</key>
-                <string>{-17,-38}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{23,76},{120,124}}</string>
-                <key>sourceSize</key>
-                <string>{200,200}</string>
-            </dict>
-            <key>QW_down_10.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{266,302},{112,128}}</string>
-                <key>offset</key>
-                <string>{-20,-36}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{24,72},{112,128}}</string>
-                <key>sourceSize</key>
-                <string>{200,200}</string>
-            </dict>
-            <key>QW_down_11.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,654},{124,124}}</string>
-                <key>offset</key>
-                <string>{-19,-38}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{19,76},{124,124}}</string>
-                <key>sourceSize</key>
-                <string>{200,200}</string>
-            </dict>
-            <key>QW_down_12.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,216},{112,128}}</string>
-                <key>offset</key>
-                <string>{-20,-36}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{24,72},{112,128}}</string>
-                <key>sourceSize</key>
-                <string>{200,200}</string>
-            </dict>
             <key>QW_idle_01.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{254,750},{106,124}}</string>
+                <string>{{128,662},{106,124}}</string>
                 <key>offset</key>
                 <string>{0,-38}</string>
                 <key>rotated</key>
@@ -176,7 +46,7 @@
             <key>QW_idle_02.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{380,790},{106,122}}</string>
+                <string>{{254,732},{106,122}}</string>
                 <key>offset</key>
                 <string>{0,-39}</string>
                 <key>rotated</key>
@@ -189,7 +59,7 @@
             <key>QW_idle_03.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,888},{106,122}}</string>
+                <string>{{380,682},{106,122}}</string>
                 <key>offset</key>
                 <string>{0,-39}</string>
                 <key>rotated</key>
@@ -202,7 +72,7 @@
             <key>QW_idle_04.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{126,904},{106,120}}</string>
+                <string>{{2,778},{106,120}}</string>
                 <key>offset</key>
                 <string>{0,-40}</string>
                 <key>rotated</key>
@@ -215,11 +85,11 @@
             <key>QW_idle_05.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{252,898},{106,120}}</string>
+                <string>{{126,770},{106,120}}</string>
                 <key>offset</key>
                 <string>{0,-40}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
                 <string>{{47,80},{106,120}}</string>
                 <key>sourceSize</key>
@@ -228,7 +98,7 @@
             <key>QW_idle_06.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{128,796},{106,122}}</string>
+                <string>{{2,670},{106,122}}</string>
                 <key>offset</key>
                 <string>{0,-39}</string>
                 <key>rotated</key>
@@ -241,7 +111,7 @@
             <key>QW_idle_07.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{382,682},{106,124}}</string>
+                <string>{{254,624},{106,124}}</string>
                 <key>offset</key>
                 <string>{0,-38}</string>
                 <key>rotated</key>
@@ -254,7 +124,7 @@
             <key>QW_idle_08.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,546},{106,126}}</string>
+                <string>{{132,434},{106,126}}</string>
                 <key>offset</key>
                 <string>{0,-37}</string>
                 <key>rotated</key>
@@ -267,7 +137,7 @@
             <key>QW_idle_09.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,438},{106,128}}</string>
+                <string>{{2,328},{106,128}}</string>
                 <key>offset</key>
                 <string>{0,-36}</string>
                 <key>rotated</key>
@@ -280,7 +150,7 @@
             <key>QW_idle_10.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{132,440},{106,126}}</string>
+                <string>{{262,410},{106,126}}</string>
                 <key>offset</key>
                 <string>{0,-37}</string>
                 <key>rotated</key>
@@ -293,7 +163,7 @@
             <key>QW_idle_11.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,780},{106,124}}</string>
+                <string>{{2,562},{106,124}}</string>
                 <key>offset</key>
                 <string>{0,-38}</string>
                 <key>rotated</key>
@@ -306,7 +176,7 @@
             <key>QW_idle_12.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{254,750},{106,124}}</string>
+                <string>{{128,662},{106,124}}</string>
                 <key>offset</key>
                 <string>{0,-38}</string>
                 <key>rotated</key>
@@ -319,11 +189,11 @@
             <key>QW_jump_01.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{392,430},{118,124}}</string>
+                <string>{{128,542},{118,124}}</string>
                 <key>offset</key>
                 <string>{-10,-38}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
                 <string>{{31,76},{118,124}}</string>
                 <key>sourceSize</key>
@@ -345,7 +215,7 @@
             <key>QW_jump_03.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{130,548},{124,124}}</string>
+                <string>{{2,436},{124,124}}</string>
                 <key>offset</key>
                 <string>{-13,-38}</string>
                 <key>rotated</key>
@@ -358,11 +228,11 @@
             <key>QW_jump_04.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{392,430},{118,124}}</string>
+                <string>{{128,542},{118,124}}</string>
                 <key>offset</key>
                 <string>{-10,-38}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
                 <string>{{31,76},{118,124}}</string>
                 <key>sourceSize</key>
@@ -384,7 +254,7 @@
             <key>QW_jump_06.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{130,548},{124,124}}</string>
+                <string>{{2,436},{124,124}}</string>
                 <key>offset</key>
                 <string>{-13,-38}</string>
                 <key>rotated</key>
@@ -397,7 +267,7 @@
             <key>QW_walk_01.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{262,416},{104,128}}</string>
+                <string>{{132,328},{104,128}}</string>
                 <key>offset</key>
                 <string>{3,-36}</string>
                 <key>rotated</key>
@@ -410,7 +280,7 @@
             <key>QW_walk_02.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{260,522},{104,126}}</string>
+                <string>{{260,518},{104,126}}</string>
                 <key>offset</key>
                 <string>{3,-37}</string>
                 <key>rotated</key>
@@ -436,7 +306,7 @@
             <key>QW_walk_04.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{132,328},{110,128}}</string>
+                <string>{{2,216},{110,128}}</string>
                 <key>offset</key>
                 <string>{0,-36}</string>
                 <key>rotated</key>
@@ -527,7 +397,7 @@
             <key>QW_walk_11.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,330},{106,128}}</string>
+                <string>{{266,302},{106,128}}</string>
                 <key>offset</key>
                 <string>{2,-35}</string>
                 <key>rotated</key>
@@ -560,7 +430,7 @@
             <key>size</key>
             <string>{512,1024}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:7dfbd3c533edef94b4ea8dc8b37bdac7:1/1$</string>
+            <string>$TexturePacker:SmartUpdate:f65ab075e270c8916489958326995a20:1/1$</string>
             <key>textureFileName</key>
             <string>princess.png</string>
         </dict>
