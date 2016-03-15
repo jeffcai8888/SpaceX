@@ -246,3 +246,12 @@ bool BaseSprite::isInMoveAction(int moveAction)
 {
     return ((m_currMoveState & moveAction) > 0);
 }
+
+cocos2d::Point BaseSprite::getShootPosition()
+{
+	if (this->isFlippedX())
+		return getPosition() + Vec2(-15.f, -20.f);
+	else
+		return getPosition() + Vec2(15.f, -20.f);
+
+}

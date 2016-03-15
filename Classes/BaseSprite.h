@@ -49,6 +49,8 @@ public:
     int  stopMoveAction(int moveAction, bool clear);
     bool isInMoveAction(int moveAction);
 
+	cocos2d::Point getShootPosition();
+
 	std::function<void(float)> walk;
 	std::function<void(float)> jump;
 	std::function<void(void)> stop;
