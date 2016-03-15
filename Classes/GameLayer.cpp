@@ -36,7 +36,7 @@ bool GameLayer::init()
 		CC_BREAK_IF( !Layer::init());
 
 
-		//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(PATH_BG_MUSIC, true);
+		CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("bgm.mp3", true);
 		//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(PATH_HERO_TALK_EFFECT);
 		ret = true;
 	} while(0);
@@ -73,7 +73,7 @@ void GameLayer::onEnter()
 	auto spawnPoint = objects->getObject("SpawnPoint");
 	CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
 	Point heroInitPos = m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
-	m_pHero = Princess::create();
+	m_pHero = Hero::create();
 	m_pHero->setScale(0.5f);
 	m_pHero->setPosition(heroInitPos);
 	m_pHero->runIdleAction();

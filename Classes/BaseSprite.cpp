@@ -1,5 +1,6 @@
 #include "BaseSprite.h"
 #include "SocketManager.h"
+#include "SimpleAudioEngine.h"
 
 USING_NS_CC;
 
@@ -71,10 +72,18 @@ void BaseSprite::runJumpAction(bool isUp)
 		stopMoveAction(MOVE_STATE_UP, true);
 		stopMoveAction(MOVE_STATE_WALK, false);
 		stopMoveAction(MOVE_STATE_DOWN, true);
-		if(m_JumpStage == 1)
+		if (m_JumpStage == 1)
+		{
+			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("jump.mp3");
 			this->runAction(m_pJump2Action);
+		}
+			
 		else
+		{
+			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("jump_second.mp3");
 			this->runAction(m_pJumpAction);
+		}
+			
 		++m_JumpStage;
 		m_currMoveState |= MOVE_STATE_UP;		
 	}
