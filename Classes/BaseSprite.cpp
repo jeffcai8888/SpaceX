@@ -80,7 +80,7 @@ void BaseSprite::runJumpAction(bool isUp)
 			
 		else
 		{
-			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("jump_second.mp3");
+			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("jump.mp3");
 			this->runAction(m_pJumpAction);
 		}
 			

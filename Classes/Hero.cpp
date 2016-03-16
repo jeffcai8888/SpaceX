@@ -47,8 +47,8 @@ bool Hero::init()
 		auto shape = PhysicsShapeBox::create(Size(this->getContentSize().width / 6, this->getContentSize().height / 4), m, Vec2(0.f, -this->getContentSize().height /2.5));
 		body->addShape(shape);
 		body->setCategoryBitmask(PC_Hero);
-		body->setContactTestBitmask(PC_Ground | PC_Box);
-		body->setCollisionBitmask(PC_Ground | PC_Box);
+		body->setContactTestBitmask(PC_Ground | PC_Box | PC_Slope);
+		body->setCollisionBitmask(PC_Ground | PC_Box | PC_Slope);
 		this->setPhysicsBody(body);
 		ret = true;
 	} while(0);

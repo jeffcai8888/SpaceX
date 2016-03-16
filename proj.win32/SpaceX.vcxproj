@@ -164,6 +164,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\SceneManager.cpp" />
     <ClCompile Include="..\Classes\SelectLayer.cpp" />
     <ClCompile Include="..\Classes\ServerGameLayer.cpp" />
+    <ClCompile Include="..\Classes\Slope.cpp" />
     <ClCompile Include="..\Classes\SocketManager.cpp" />
     <ClCompile Include="..\Classes\socket\SocketBase.cpp" />
     <ClCompile Include="..\Classes\socket\SocketClient.cpp" />
@@ -194,6 +195,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\SceneManager.h" />
     <ClInclude Include="..\Classes\SelectLayer.h" />
     <ClInclude Include="..\Classes\ServerGameLayer.h" />
+    <ClInclude Include="..\Classes\Slope.h" />
     <ClInclude Include="..\Classes\SocketManager.h" />
     <ClInclude Include="..\Classes\socket\SocketBase.h" />
     <ClInclude Include="..\Classes\socket\SocketClient.h" />

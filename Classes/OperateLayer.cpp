@@ -62,19 +62,25 @@ bool OperateLayer::init()
 		this->addChild(m_pJoystick, 0);
 		this->addChild(m_pJoystickBg, 1);
 
-		m_pCloseItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(OperateLayer::exitApp, this));
+		m_pCloseItem = MenuItemImage::create("pause.png", "pause_down.png", CC_CALLBACK_1(OperateLayer::gotoDebug, this));
 		m_pCloseItem->setPosition(m_origin + Point(visibleSize) - Point(m_pCloseItem->getContentSize() / 2));
 		auto menu = Menu::create(m_pCloseItem, NULL);
 		menu->setPosition(Point::ZERO);
 		this->addChild(menu, 1);
 
-		m_pDebugItem = MenuItemImage::create("DebugNormal.png", "DebugSelected.png", CC_CALLBACK_1(OperateLayer::gotoDebug, this));
-		m_pDebugItem->setPosition(m_origin + Point(visibleSize) - Point(m_pDebugItem->getContentSize().width * 2, m_pDebugItem->getContentSize().height / 2));
-		auto menu_debug = Menu::create(m_pDebugItem, NULL);
-		menu_debug->setPosition(Point::ZERO);
-		this->addChild(menu_debug, 1);
+		auto bulletSprite = Sprite::createWithSpriteFrameName("1.PNG");
+		bulletSprite->setPosition(50.f, 600.f);
+		this -> addChild(bulletSprite);
 
-		Sprite *pBloodSprite = Sprite::create("blood.png");
+		auto sprite1 = Sprite::createWithSpriteFrameName("2.png");
+		sprite1->setPosition(500.f, 600.f);
+		//this->addChild(sprite1);
+
+		auto sprite2 = Sprite::createWithSpriteFrameName("3.png");
+		sprite2->setPosition(636.f, 600.f);
+		//this->addChild(sprite2);
+
+		/*Sprite *pBloodSprite = Sprite::create("blood.png");
 		this->m_pBlood = ProgressTimer::create(pBloodSprite);
 		this->m_pBlood->setType(ProgressTimer::Type::BAR);
 		this->m_pBlood->setMidpoint(Point(0, 0));
@@ -92,7 +98,7 @@ bool OperateLayer::init()
 		this->m_pBloodBg->setPercentage(100);
 
 		this->addChild(m_pBloodBg, 100);
-		this->addChild(m_pBlood, 100);
+		this->addChild(m_pBlood, 100);*/
 
 		
 

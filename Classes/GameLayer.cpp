@@ -7,6 +7,7 @@
 #include "Bullet.h"
 #include "Ground.h"
 #include "Box.h"
+#include "Slope.h"
 #include "Foresight.h"
 #include "OperateLayer.h"
 #include "JsonParser.h"
@@ -90,6 +91,27 @@ void GameLayer::onEnter()
 	this->addChild(m_pHero);
 	auto centerOfView = Point(visibleSize.width / 2, visibleSize.height / 2);
 	this->setPosition(centerOfView - m_pHero->getPosition());
+
+
+	spawnPoint = objects->getObject("SpawnPoint1");
+	CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
+	heroInitPos = m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
+	m_pEnemy[0] = Gunner::create();
+	m_pEnemy[0]->getPhysicsBody()->setGravityEnable(true);
+	m_pEnemy[0]->setScale(0.5f);
+	m_pEnemy[0]->setPosition(heroInitPos);
+	m_pEnemy[0]->runIdleAction();
+	m_pEnemy[0]->setLocalZOrder(visibleSize.height - m_pHero->getPositionY());
+	m_pEnemy[0]->setHP(100);
+	m_pEnemy[0]->setIsAttacking(false);
+	m_pEnemy[0]->setJumpStage(0);
+	m_pEnemy[0]->onDeadCallback = CC_CALLBACK_0(GameLayer::onHeroDead, this, m_pHero);
+	m_pEnemy[0]->attack = CC_CALLBACK_0(GameLayer::onHeroAttack, this);
+	m_pEnemy[0]->stop = CC_CALLBACK_0(GameLayer::onHeroStop, this);
+	m_pEnemy[0]->walk = CC_CALLBACK_1(GameLayer::onHeroWalk, this);
+	m_pEnemy[0]->jump = CC_CALLBACK_1(GameLayer::onHeroJump, this);
+	this->addChild(m_pEnemy[0]);
+
 
 	m_pForesight = Foresight::create();
 	this->addChild(m_pForesight);
@@ -213,23 +235,12 @@ void GameLayer::onEnter()
 					hero->stop();
 				}
 				hero->setJumpStage(0);
-				if (ground->getRotation() > 0 || ground->getRotation() < 0)
-				{
-					hero->setIsOnRotateGround(true);
-				}
 				return true;
 			}
 			else if (hero->getCurrActionState() == ACTION_STATE_MOVE && hero->isInMoveAction(MOVE_STATE_UP))
 			{
 				return false;
 			}
-			else
-			{
-				if (ground->getRotation() > 0 || ground->getRotation() < 0)
-				{
-					hero->setIsOnRotateGround(true);
-				}
-			}	
 		}
 		else if ((contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Hero && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Box)
 			|| (contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Box && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Hero))
@@ -261,23 +272,42 @@ void GameLayer::onEnter()
 					hero->stop();
 				}
 				hero->setJumpStage(0);
-				if (box->getRotation() > 0 || box->getRotation() < 0)
-				{
-					hero->setIsOnRotateGround(true);
-				}
-				return true;
 			}
-			else if (hero->getCurrActionState() == ACTION_STATE_MOVE && hero->isInMoveAction(MOVE_STATE_UP))
+			return true;
+		}
+		else if ((contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Hero && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Slope)
+			|| (contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Slope && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Hero))
+		{
+			BaseSprite* hero;
+			Slope* slope;
+			if (contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Hero)
 			{
-				return false;
+				hero = static_cast<BaseSprite *>(contact.getShapeA()->getBody()->getNode());
+				slope = static_cast<Slope *>(contact.getShapeB()->getBody()->getNode());
 			}
 			else
 			{
-				if (box->getRotation() > 0 || box->getRotation() < 0)
-				{
-					hero->setIsOnRotateGround(true);
-				}
+				hero = static_cast<BaseSprite *>(contact.getShapeB()->getBody()->getNode());
+				slope = static_cast<Slope *>(contact.getShapeA()->getBody()->getNode());
 			}
+
+			if (hero->getCurrActionState() == ACTION_STATE_MOVE && hero->isInMoveAction(MOVE_STATE_DOWN))
+			{
+				if (hero->isInMoveAction(MOVE_STATE_WALK))
+				{
+					hero->stopMoveAction(MOVE_STATE_DOWN, true);
+					Vec2 v = hero->getPhysicsBody()->getVelocity();
+					hero->walk(v.x);
+				}
+				else
+				{
+					hero->stopMoveAction(MOVE_STATE_DOWN, true);
+					hero->stop();
+				}
+				hero->setJumpStage(0);
+			}
+			hero->setIsOnRotateGround(true);
+			return true;
 		}
         else if((contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Bullet && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Ground) ||
 			(contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Bullet))
@@ -309,30 +339,43 @@ void GameLayer::onEnter()
 			}
 			return true;
 		}
+		else if ((contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Bullet && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Slope) ||
+			(contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Slope && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Bullet))
+		{
+			Bullet* bullet;
+			if (contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Bullet)
+				bullet = static_cast<Bullet *>(contact.getShapeA()->getBody()->getNode());
+			else
+				bullet = static_cast<Bullet *>(contact.getShapeB()->getBody()->getNode());
+			if (bullet)
+			{
+				bullet->setIsActive(false);
+				this->removeChild(bullet);
+			}
+			return true;
+		}
 		return true;
 	};
 
 	contactListener->onContactSeparate = [this](PhysicsContact& contact)
 	{
-		if ((contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Hero && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Ground)
-			|| (contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Hero))
+		if ((contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Hero && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Slope)
+			|| (contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Slope && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Hero))
 		{
 			BaseSprite* hero;
-			Ground* ground;
+			Slope* slope;
 			if (contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Hero)
 			{
 				hero = static_cast<BaseSprite *>(contact.getShapeA()->getBody()->getNode());
-				ground = static_cast<Ground *>(contact.getShapeB()->getBody()->getNode());
+				slope = static_cast<Slope *>(contact.getShapeB()->getBody()->getNode());
 			}
 			else
 			{
 				hero = static_cast<BaseSprite *>(contact.getShapeB()->getBody()->getNode());
-				ground = static_cast<Ground *>(contact.getShapeA()->getBody()->getNode());
+				slope = static_cast<Slope *>(contact.getShapeA()->getBody()->getNode());
 			}
-			if (ground->getRotation() > 0 || ground->getRotation() < 0)
-			{
-				hero->setIsOnRotateGround(false);
-			}
+
+			hero->setIsOnRotateGround(false);
 
 			if ((hero->getCurrActionState() == ACTION_STATE_MOVE && hero->isInMoveAction(MOVE_STATE_WALK)) || hero->getCurrActionState() == ACTION_STATE_IDLE)
 			{
@@ -586,6 +629,16 @@ void GameLayer::importGroundData(cocos2d::TMXTiledMap* data)
 					else
 						box->initPhysics(boxSize, Point(dict.at("x").asFloat(), dict.at("y").asFloat()), 0);
 					this->addChild(box);
+				}
+				else if (dict.at("name").asString() == "Slope")
+				{
+					Size boxSize(dict.at("width").asFloat(), dict.at("height").asFloat());
+					auto slope = Slope::create();
+					if (dict.find("rotation") != dict.end())
+						slope->initPhysics(boxSize, Point(dict.at("x").asFloat(), dict.at("y").asFloat()), dict.at("rotation").asInt());
+					else
+						slope->initPhysics(boxSize, Point(dict.at("x").asFloat(), dict.at("y").asFloat()), 0);
+					this->addChild(slope);
 				}
 			}
 		}
