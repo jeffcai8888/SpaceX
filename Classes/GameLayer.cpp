@@ -6,6 +6,7 @@
 #include "Princess.h"
 #include "Bullet.h"
 #include "Ground.h"
+#include "Box.h"
 #include "Foresight.h"
 #include "OperateLayer.h"
 #include "JsonParser.h"
@@ -36,7 +37,7 @@ bool GameLayer::init()
 		CC_BREAK_IF( !Layer::init());
 
 
-		CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("bgm.mp3", true);
+		//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("bgm.mp3", true);
 		//CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(PATH_HERO_TALK_EFFECT);
 		ret = true;
 	} while(0);
@@ -208,6 +209,7 @@ void GameLayer::onEnter()
 				}
 				else
 				{
+					hero->stopMoveAction(MOVE_STATE_DOWN, true);
 					hero->stop();
 				}
 				hero->setJumpStage(0);
@@ -502,7 +504,7 @@ void GameLayer::importGroundData(cocos2d::TMXTiledMap* data)
 			const ValueMap& dict = v.asValueMap();
 			if (dict.find("name") != dict.end())
 			{
-				if (dict.at("name").asString() == "Ground" || dict.at("name").asString() == "Box")
+				if (dict.at("name").asString() == "Ground")
 				{
 					Size boxSize(dict.at("width").asFloat(), dict.at("height").asFloat());
 					auto ground = Ground::create();
@@ -511,6 +513,16 @@ void GameLayer::importGroundData(cocos2d::TMXTiledMap* data)
 					else
 						ground->initPhysics(boxSize, Point(dict.at("x").asFloat(), dict.at("y").asFloat()), 0);
 					this->addChild(ground);
+				}
+				else if (dict.at("name").asString() == "Box")
+				{
+					Size boxSize(dict.at("width").asFloat(), dict.at("height").asFloat());
+					auto box = Box::create();
+					if (dict.find("rotation") != dict.end())
+						box->initPhysics(boxSize, Point(dict.at("x").asFloat(), dict.at("y").asFloat()), dict.at("rotation").asInt());
+					else
+						box->initPhysics(boxSize, Point(dict.at("x").asFloat(), dict.at("y").asFloat()), 0);
+					this->addChild(box);
 				}
 			}
 		}

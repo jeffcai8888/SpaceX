@@ -1,3 +1,4 @@
+#include "Macro.h"
 #include "Bullet.h"
 #include "BaseSprite.h"
 
@@ -22,9 +23,9 @@ bool Bullet::init()
 		auto body = PhysicsBody::create();
 		auto shape = PhysicsShapeBox::create(Size(this->getContentSize().width, this->getContentSize().height), PHYSICSSHAPE_MATERIAL_DEFAULT);
 		body->addShape(shape);
-		body->setCategoryBitmask(0x02);
-        body->setContactTestBitmask(0x4);
-		body->setCollisionBitmask(0x04);
+		body->setCategoryBitmask(PC_Bullet);
+        body->setContactTestBitmask(PC_Ground | PC_Box);
+		body->setCollisionBitmask(PC_Ground | PC_Box);
 		this->setPhysicsBody(body);
 		ret = true;
 	} while (false);

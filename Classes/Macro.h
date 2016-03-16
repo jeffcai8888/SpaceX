@@ -18,9 +18,10 @@ enum LayerTag
 
 enum PhysicsCategory
 {
-    PC_Hero = 1 << 0,
-    PC_Bullet = 1 << 1,
-    PC_Ground = 1 << 2
+	PC_Hero = 1 << 0,
+	PC_Bullet = 1 << 1,
+	PC_Ground = 1 << 2,
+	PC_Box = 1 << 3
 };
 
 #define EPSILON 0.00001f
