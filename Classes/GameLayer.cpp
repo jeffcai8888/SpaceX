@@ -231,6 +231,54 @@ void GameLayer::onEnter()
 				}
 			}	
 		}
+		else if ((contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Hero && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Box)
+			|| (contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Box && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Hero))
+		{
+			BaseSprite* hero;
+			Box* box;
+			if (contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Hero)
+			{
+				hero = static_cast<BaseSprite *>(contact.getShapeA()->getBody()->getNode());
+				box = static_cast<Box *>(contact.getShapeB()->getBody()->getNode());
+			}
+			else
+			{
+				hero = static_cast<BaseSprite *>(contact.getShapeB()->getBody()->getNode());
+				box = static_cast<Box *>(contact.getShapeA()->getBody()->getNode());
+			}
+
+			if (hero->getCurrActionState() == ACTION_STATE_MOVE && hero->isInMoveAction(MOVE_STATE_DOWN))
+			{
+				if (hero->isInMoveAction(MOVE_STATE_WALK))
+				{
+					hero->stopMoveAction(MOVE_STATE_DOWN, true);
+					Vec2 v = hero->getPhysicsBody()->getVelocity();
+					hero->walk(v.x);
+				}
+				else
+				{
+					hero->stopMoveAction(MOVE_STATE_DOWN, true);
+					hero->stop();
+				}
+				hero->setJumpStage(0);
+				if (box->getRotation() > 0 || box->getRotation() < 0)
+				{
+					hero->setIsOnRotateGround(true);
+				}
+				return true;
+			}
+			else if (hero->getCurrActionState() == ACTION_STATE_MOVE && hero->isInMoveAction(MOVE_STATE_UP))
+			{
+				return false;
+			}
+			else
+			{
+				if (box->getRotation() > 0 || box->getRotation() < 0)
+				{
+					hero->setIsOnRotateGround(true);
+				}
+			}
+		}
         else if((contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Bullet && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Ground) ||
 			(contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Bullet))
         {
@@ -246,6 +294,21 @@ void GameLayer::onEnter()
             }
 			return true;
         }
+		else if ((contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Bullet && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Box) ||
+			(contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Box && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Bullet))
+		{
+			Bullet* bullet;
+			if (contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Bullet)
+				bullet = static_cast<Bullet *>(contact.getShapeA()->getBody()->getNode());
+			else
+				bullet = static_cast<Bullet *>(contact.getShapeB()->getBody()->getNode());
+			if (bullet)
+			{
+				bullet->setIsActive(false);
+				this->removeChild(bullet);
+			}
+			return true;
+		}
 		return true;
 	};
 
