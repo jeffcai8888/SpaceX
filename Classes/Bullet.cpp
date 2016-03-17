@@ -24,7 +24,7 @@ bool Bullet::init()
 		auto shape = PhysicsShapeBox::create(Size(this->getContentSize().width, this->getContentSize().height), PHYSICSSHAPE_MATERIAL_DEFAULT);
 		body->addShape(shape);
 		body->setCategoryBitmask(PC_Bullet);
-        body->setContactTestBitmask(PC_Ground | PC_Box | PC_Slope);
+        body->setContactTestBitmask(PC_Ground | PC_Box | PC_Slope | PC_Hero);
 		body->setCollisionBitmask(PC_Ground | PC_Box | PC_Slope);
 		this->setPhysicsBody(body);
 		ret = true;
@@ -38,7 +38,7 @@ void Bullet::update(float dt)
 	{
 		float x = this->getPhysicsBody()->getVelocity().x;
 		float y = this->getPhysicsBody()->getVelocity().y;
-		y += this->m_owner->getBulletGravity() * dt;
+		y += m_gravity * dt;
 		this->getPhysicsBody()->setVelocity(Vec2(x, y));
 
 		Point curPos = this->getPosition();
@@ -58,17 +58,13 @@ void Bullet::update(float dt)
 void Bullet::launch(BaseSprite* pHero)
 {
 	this->m_isActive = true;
-	this->m_owner = pHero;
-	Point pos = pHero->getPosition();
-	if(pHero->isFlippedX())
-		this->setPosition(pos + Vec2(-15.f, -20.f));
-	else
-		this->setPosition(pos + Vec2(15.f, -20.f));
-	this->m_startPostion = pos;
+	Point pos = pHero->getShootPosition();
+	this->setPosition(pos);	
 	this->m_fVelocity = pHero->getBulletLaunchVelocity();
 	this->m_fDisappearTime = pHero->getBulletDisappearTime();
 	this->m_fDirection = pHero->getShootDirection().rotateByAngle(Vec2(0.f, 0.f), CC_DEGREES_TO_RADIANS((int)(-rand_0_1() * pHero->getBullletAngle())));
 	this->m_power = pHero->getBullletPower();
+	this->m_gravity = pHero->getBulletGravity();
 	this->getPhysicsBody()->setVelocity(Vec2(0.f, 0.f));
 	this->getPhysicsBody()->applyImpulse(m_fVelocity * m_fDirection + pHero->getPhysicsBody()->getVelocity());
 	m_launchTime = 0.f;

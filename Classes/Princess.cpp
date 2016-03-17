@@ -25,11 +25,10 @@ bool Princess::init()
 		Animation *pWalkAnim = this->createAnimation("QW_walk_%02d.png", 12, 15);
 		this->setWalkAction(RepeatForever::create(Animate::create(pWalkAnim)));
 
-		Animation *pJumpAnim = this->createAnimation("QW_jump_%02d.png", 6, 15);;
+		Animation *pJumpAnim = this->createAnimation("QW_jump_%02d.png", 6, 15);
+		Animation *pRollAnim = this->createAnimation("QW_roll_%02d.png", 8, 20);
 		this->setJumpAction(Sequence::create(Animate::create(pJumpAnim), nullptr));
-
-		Animation *pJumpRotateAnim = this->createAnimation("QW_jump_06.png", 1, 30);
-		this->setJump2Action(Sequence::create(Animate::create(pJumpRotateAnim), RepeatForever::create(Animate::create(pJumpAnim)), nullptr));
+		this->setJump2Action(Sequence::create(Animate::create(pRollAnim), nullptr));
 
 		Animation *pDown1Anim = this->createAnimation("QW_down_%02d.png", 2, 15);
 		Animation *pDown2Anim = this->createAnimation("QW_down_02.png", 1, 15);
@@ -48,7 +47,7 @@ bool Princess::init()
 		auto shape = PhysicsShapeBox::create(Size(this->getContentSize().width / 6, this->getContentSize().height / 4), m, Vec2(0.f, -this->getContentSize().height / 2.5));
 		body->addShape(shape);
 		body->setCategoryBitmask(PC_Hero);
-		body->setContactTestBitmask(PC_Ground | PC_Box | PC_Slope);
+		body->setContactTestBitmask(PC_Ground | PC_Box | PC_Slope | PC_Bullet);
 		body->setCollisionBitmask(PC_Ground | PC_Box | PC_Slope);
 		this->setPhysicsBody(body);
 		ret = true;

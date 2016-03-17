@@ -76,6 +76,7 @@ void GameLayer::onEnter()
 	CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
 	Point heroInitPos = m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
 	m_pHero = Hero::create();
+	m_pHero->setTag(0);
 	m_pHero->setScale(0.5f);
 	m_pHero->setPosition(heroInitPos);
 	m_pHero->runIdleAction();
@@ -97,6 +98,7 @@ void GameLayer::onEnter()
 	CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
 	heroInitPos = m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
 	m_pEnemy[0] = Gunner::create();
+	m_pEnemy[0]->setTag(1);
 	m_pEnemy[0]->getPhysicsBody()->setGravityEnable(true);
 	m_pEnemy[0]->setScale(0.5f);
 	m_pEnemy[0]->setPosition(heroInitPos);
@@ -178,7 +180,6 @@ void GameLayer::onEnter()
 	const PhysicsMaterial m(1.f, 0.f, 0.f);
 	Size boxSize(m_pTiledMap->getMapSize().width * m_pTiledMap->getTileSize().width, m_pTiledMap->getMapSize().height * m_pTiledMap->getTileSize().height);
 	auto body = PhysicsBody::createEdgeBox(boxSize, m, 3);
-	body->setTag(0);
 	body->setCategoryBitmask(0x04);
 	body->setContactTestBitmask(0x02);
 	body->setCollisionBitmask(0x03);
@@ -353,6 +354,33 @@ void GameLayer::onEnter()
 				this->removeChild(bullet);
 			}
 			return true;
+		}
+		else if ((contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Bullet && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Hero) ||
+			(contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Hero && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Bullet))
+		{
+			Bullet* bullet;
+			BaseSprite* hero;
+			if (contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Bullet)
+			{
+				bullet = static_cast<Bullet *>(contact.getShapeA()->getBody()->getNode());
+				hero = static_cast<BaseSprite *>(contact.getShapeB()->getBody()->getNode());
+			}				
+			else
+			{
+				bullet = static_cast<Bullet *>(contact.getShapeB()->getBody()->getNode());
+				hero = static_cast<BaseSprite *>(contact.getShapeA()->getBody()->getNode());
+			}
+				
+			if (bullet->getOwnerTag() == hero->getTag())
+			{
+				return false;
+			}
+			else
+			{
+				bullet->setIsActive(false);
+				this->removeChild(bullet);
+				return true;
+			}		
 		}
 		return true;
 	};

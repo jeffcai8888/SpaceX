@@ -33,7 +33,6 @@ void Ground::initPhysics(Size size, Point pos, int rotation)
 {
 	const PhysicsMaterial m(1.f, 0.f, 0.f);
 	auto body = PhysicsBody::createBox(size, m);
-	body->setTag(0);
 	body->setCategoryBitmask(PC_Ground);
 	body->setContactTestBitmask(PC_Hero | PC_Bullet);
 	body->setCollisionBitmask(PC_Hero | PC_Bullet);

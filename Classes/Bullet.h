@@ -22,10 +22,9 @@ public:
 	CC_SYNTHESIZE(unsigned int, m_gravity, Gravity);
 	CC_SYNTHESIZE(unsigned int, m_power, Power);
 	CC_SYNTHESIZE(bool, m_isActive, IsActive);
-	CC_SYNTHESIZE(BaseSprite*,  m_owner, Owner);
+	CC_SYNTHESIZE(int, m_OwnerTag, OwnerTag);
 	
 private:
-	cocos2d::Point m_startPostion;
 	float m_launchTime;
 };
 

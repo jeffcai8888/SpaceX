@@ -25,10 +25,10 @@ bool Hero::init()
 		Animation *pWalkAnim = this->createAnimation("SQ_walk_%02d.png", 12, 15);
 		this->setWalkAction(RepeatForever::create(Animate::create(pWalkAnim)));
 
-		Animation *pJumpAnim = this->createAnimation("SQ_jump_%02d.png", 5, 15);;
+		Animation *pJumpAnim = this->createAnimation("SQ_jump_%02d.png", 5, 15);
+		Animation *pRollAnim = this->createAnimation("SQ_roll_%02d.png", 8, 20);
 		this->setJumpAction(Sequence::create(Animate::create(pJumpAnim), nullptr));
-
-		this->setJump2Action(Sequence::create(RepeatForever::create(Animate::create(pJumpAnim)), nullptr));
+		this->setJump2Action(Sequence::create(Animate::create(pRollAnim), nullptr));
 
 		Animation *pDown1Anim = this->createAnimation("SQ_down_%02d.png", 8, 15);
 		Animation *pDown2Anim = this->createAnimation("SQ_down_09.png", 1, 15);
@@ -47,7 +47,7 @@ bool Hero::init()
 		auto shape = PhysicsShapeBox::create(Size(this->getContentSize().width / 6, this->getContentSize().height / 4), m, Vec2(0.f, -this->getContentSize().height /2.5));
 		body->addShape(shape);
 		body->setCategoryBitmask(PC_Hero);
-		body->setContactTestBitmask(PC_Ground | PC_Box | PC_Slope);
+		body->setContactTestBitmask(PC_Ground | PC_Box | PC_Slope | PC_Bullet);
 		body->setCollisionBitmask(PC_Ground | PC_Box | PC_Slope);
 		this->setPhysicsBody(body);
 		ret = true;
