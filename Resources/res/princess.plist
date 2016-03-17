@@ -7,7 +7,7 @@
             <key>QW_down_01.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{390,430},{120,124}}</string>
+                <string>{{390,478},{120,124}}</string>
                 <key>offset</key>
                 <string>{-17,-38}</string>
                 <key>rotated</key>
@@ -46,7 +46,7 @@
             <key>QW_idle_02.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{254,732},{106,122}}</string>
+                <string>{{128,770},{106,122}}</string>
                 <key>offset</key>
                 <string>{0,-39}</string>
                 <key>rotated</key>
@@ -59,7 +59,7 @@
             <key>QW_idle_03.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{380,682},{106,122}}</string>
+                <string>{{254,732},{106,122}}</string>
                 <key>offset</key>
                 <string>{0,-39}</string>
                 <key>rotated</key>
@@ -72,7 +72,7 @@
             <key>QW_idle_04.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,778},{106,120}}</string>
+                <string>{{378,838},{106,120}}</string>
                 <key>offset</key>
                 <string>{0,-40}</string>
                 <key>rotated</key>
@@ -85,7 +85,7 @@
             <key>QW_idle_05.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{126,770},{106,120}}</string>
+                <string>{{2,854},{106,120}}</string>
                 <key>offset</key>
                 <string>{0,-40}</string>
                 <key>rotated</key>
@@ -98,7 +98,7 @@
             <key>QW_idle_06.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,670},{106,122}}</string>
+                <string>{{380,730},{106,122}}</string>
                 <key>offset</key>
                 <string>{0,-39}</string>
                 <key>rotated</key>
@@ -202,7 +202,7 @@
             <key>QW_jump_02.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{388,556},{122,124}}</string>
+                <string>{{388,604},{122,124}}</string>
                 <key>offset</key>
                 <string>{-12,-38}</string>
                 <key>rotated</key>
@@ -241,7 +241,7 @@
             <key>QW_jump_05.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{388,556},{122,124}}</string>
+                <string>{{388,604},{122,124}}</string>
                 <key>offset</key>
                 <string>{-12,-38}</string>
                 <key>rotated</key>
@@ -261,6 +261,110 @@
                 <false/>
                 <key>sourceColorRect</key>
                 <string>{{25,76},{124,124}}</string>
+                <key>sourceSize</key>
+                <string>{200,200}</string>
+            </dict>
+            <key>QW_roll_01.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{414,224},{92,124}}</string>
+                <key>offset</key>
+                <string>{4,-15}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{58,53},{92,124}}</string>
+                <key>sourceSize</key>
+                <string>{200,200}</string>
+            </dict>
+            <key>QW_roll_02.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{2,762},{124,90}}</string>
+                <key>offset</key>
+                <string>{-5,-15}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{33,70},{124,90}}</string>
+                <key>sourceSize</key>
+                <string>{200,200}</string>
+            </dict>
+            <key>QW_roll_03.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{416,98},{92,124}}</string>
+                <key>offset</key>
+                <string>{-5,-6}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{49,44},{92,124}}</string>
+                <key>sourceSize</key>
+                <string>{200,200}</string>
+            </dict>
+            <key>QW_roll_04.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{2,670},{124,90}}</string>
+                <key>offset</key>
+                <string>{4,-6}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{42,61},{124,90}}</string>
+                <key>sourceSize</key>
+                <string>{200,200}</string>
+            </dict>
+            <key>QW_roll_05.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{414,224},{92,124}}</string>
+                <key>offset</key>
+                <string>{4,-15}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{58,53},{92,124}}</string>
+                <key>sourceSize</key>
+                <string>{200,200}</string>
+            </dict>
+            <key>QW_roll_06.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{2,762},{124,90}}</string>
+                <key>offset</key>
+                <string>{-5,-15}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{33,70},{124,90}}</string>
+                <key>sourceSize</key>
+                <string>{200,200}</string>
+            </dict>
+            <key>QW_roll_07.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{416,98},{92,124}}</string>
+                <key>offset</key>
+                <string>{-5,-6}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{49,44},{92,124}}</string>
+                <key>sourceSize</key>
+                <string>{200,200}</string>
+            </dict>
+            <key>QW_roll_08.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{2,670},{124,90}}</string>
+                <key>offset</key>
+                <string>{4,-6}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{42,61},{124,90}}</string>
                 <key>sourceSize</key>
                 <string>{200,200}</string>
             </dict>
@@ -293,7 +397,7 @@
             <key>QW_walk_03.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{396,302},{108,126}}</string>
+                <string>{{396,350},{108,126}}</string>
                 <key>offset</key>
                 <string>{1,-37}</string>
                 <key>rotated</key>
@@ -430,7 +534,7 @@
             <key>size</key>
             <string>{512,1024}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:f65ab075e270c8916489958326995a20:1/1$</string>
+            <string>$TexturePacker:SmartUpdate:67b9b6fd1cffd3bfb97a3ddb0adfeb04:1/1$</string>
             <key>textureFileName</key>
             <string>princess.png</string>
         </dict>
