@@ -59,6 +59,10 @@
           <Image Name="SQ_walkFire_11.png" />
           <Image Name="SQ_walkFire_12.png" />
         </Folder>
+        <Folder Name="ui">
+          <Image Name="pause.png" />
+          <Image Name="pause_down.png" />
+        </Folder>
         <Image Name="background.png" />
         <Project Name="BackgroundLayer.csd" Type="Layer" />
         <Image Name="DebugNormal.png" />
