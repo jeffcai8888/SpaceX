@@ -107,11 +107,9 @@ void BaseSprite::runJumpAction(bool isUp)
 
 void BaseSprite::runHurtAction()
 {
-	if(changeState(ACTION_STATE_HURT))
-	{
-		this->runAction(m_pHurtAction);
-
-	}
+	Blink* blinkAction = Blink::create(0.1f, 1);
+	this->setVisible(true);
+	this->runAction(blinkAction);
 }
 
 void BaseSprite::runDeadAction()

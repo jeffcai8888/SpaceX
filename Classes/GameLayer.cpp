@@ -379,6 +379,7 @@ void GameLayer::onEnter()
 			{
 				bullet->setIsActive(false);
 				this->removeChild(bullet);
+				hero->runHurtAction();
 				return true;
 			}		
 		}
