@@ -76,6 +76,7 @@ void GameLayer::onEnter()
 	CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
 	Point heroInitPos = m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
 	m_pHero = Hero::create();
+	m_pHero->setInitPos(heroInitPos);
 	m_pHero->setTag(0);
 	m_pHero->setScale(0.5f);
 	m_pHero->setPosition(heroInitPos);
@@ -84,11 +85,7 @@ void GameLayer::onEnter()
 	m_pHero->setHP(100);
 	m_pHero->setIsAttacking(false);
 	m_pHero->setJumpStage(0);
-	m_pHero->onDeadCallback = CC_CALLBACK_0(GameLayer::onHeroDead, this, m_pHero);
-	m_pHero->attack = CC_CALLBACK_0(GameLayer::onHeroAttack, this);
-	m_pHero->stop = CC_CALLBACK_0(GameLayer::onHeroStop, this);
-	m_pHero->walk = CC_CALLBACK_1(GameLayer::onHeroWalk, this);
-	m_pHero->jump = CC_CALLBACK_1(GameLayer::onHeroJump, this);
+
 	this->addChild(m_pHero);
 	auto centerOfView = Point(visibleSize.width / 2, visibleSize.height / 2);
 	this->setPosition(centerOfView - m_pHero->getPosition());
@@ -98,6 +95,7 @@ void GameLayer::onEnter()
 	CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
 	heroInitPos = m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
 	m_pEnemy[0] = Gunner::create();
+	m_pEnemy[0]->setInitPos(heroInitPos);
 	m_pEnemy[0]->setTag(1);
 	m_pEnemy[0]->getPhysicsBody()->setGravityEnable(true);
 	m_pEnemy[0]->setScale(0.5f);
@@ -107,12 +105,28 @@ void GameLayer::onEnter()
 	m_pEnemy[0]->setHP(100);
 	m_pEnemy[0]->setIsAttacking(false);
 	m_pEnemy[0]->setJumpStage(0);
-	m_pEnemy[0]->onDeadCallback = CC_CALLBACK_0(GameLayer::onHeroDead, this, m_pHero);
-	m_pEnemy[0]->attack = CC_CALLBACK_0(GameLayer::onHeroAttack, this);
-	m_pEnemy[0]->stop = CC_CALLBACK_0(GameLayer::onHeroStop, this);
-	m_pEnemy[0]->walk = CC_CALLBACK_1(GameLayer::onHeroWalk, this);
-	m_pEnemy[0]->jump = CC_CALLBACK_1(GameLayer::onHeroJump, this);
 	this->addChild(m_pEnemy[0]);
+
+	ProgressTimer* blood = ProgressTimer::create(Sprite::createWithSpriteFrameName("blood.png"));
+	blood->setName("blood");
+	blood->setType(ProgressTimer::Type::BAR);
+	blood->setMidpoint(Point(0, 0));
+	blood->setBarChangeRate(Point(1, 0));
+	blood->setAnchorPoint(Point(0, 1));
+	blood->setPosition(50, 150);
+	blood->setPercentage(100);
+	
+
+	ProgressTimer *bloodBg = ProgressTimer::create(Sprite::createWithSpriteFrameName("bloodBg.png"));
+	bloodBg->setType(ProgressTimer::Type::BAR);
+	bloodBg->setMidpoint(Point(0, 0));
+	bloodBg->setBarChangeRate(Point(1, 0));
+	bloodBg->setAnchorPoint(Point(0, 1));
+	bloodBg->setPosition(blood->getPosition());
+	bloodBg->setPercentage(100);
+
+	m_pEnemy[0]->addChild(bloodBg);
+	m_pEnemy[0]->addChild(blood);
 
 
 	m_pForesight = Foresight::create();
@@ -379,7 +393,7 @@ void GameLayer::onEnter()
 			{
 				bullet->setIsActive(false);
 				this->removeChild(bullet);
-				hero->runHurtAction();
+				hero->hurt(1);
 				return true;
 			}		
 		}
@@ -429,66 +443,6 @@ void GameLayer::onExit()
 	this->removeAllBullets();
 	this->removeAllChildren();
 	
-}
-
-
-void GameLayer::onHeroWalk(float horizontalVelocity)
-{
-	if(m_pHero->isLive())
-	{
-		bool isWalking = m_pHero->getIsWalk();
-		m_pHero->runWalkAction(!m_pHero->isInAir() && !isWalking);
-		if (!m_pHero->getIsAttacking() && horizontalVelocity != 0)
-			m_pHero->setFlippedX(horizontalVelocity < 0);
-        
-        Vec2 velocity = m_pHero->getPhysicsBody()->getVelocity();
-        velocity.x = horizontalVelocity;
-        m_pHero->getPhysicsBody()->setVelocity(velocity);
-	}
-}
-
-void GameLayer::onHeroJump(float verticalVelocity)
-{
-	if (m_pHero->isLive() && m_pHero->getJumpStage() < 2)
-	{ 
-		m_pHero->runJumpAction(true);
-		//m_pHero->setJumpStage(m_pHero->getJumpStage() + 1);
-        
-		Vec2 velocity = m_pHero->getPhysicsBody()->getVelocity();
-        velocity.y = verticalVelocity;
-		if (!m_pHero->getIsAttacking() && velocity.x != 0)
-		{
-			m_pHero->setFlippedX(velocity.x < 0);
-		}
-		m_pHero->getPhysicsBody()->setVelocity(velocity);
-		m_pHero->setPrePosition(m_pHero->getPosition());
-	}
-}
-
-void GameLayer::onHeroAttack()
-{
-	if (m_pHero->isLive())
-	{
-		m_pHero->runAttackAction();
-	}
-}
-
-void GameLayer::onHeroStop()
-{
-	if(m_pHero->isLive())
-	{
-		m_pHero->runIdleAction();
-        m_pHero->getPhysicsBody()->setVelocity(Vec2(0.f, 0.f));
-	}
-}
-
-void GameLayer::onHeroDead(BaseSprite *pTarget)
-{
-	if(m_pHero->getCurrActionState() == ACTION_STATE_DEAD)
-	{
-		pTarget->removeSprite();
-		SceneManager::getInstance()->showScene(GAME_OVER_SCENE);
-	}
 }
 
 void GameLayer::update(float dt)

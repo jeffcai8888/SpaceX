@@ -51,9 +51,13 @@ public:
 
 	cocos2d::Point getShootPosition();
 
-	std::function<void(float)> walk;
-	std::function<void(float)> jump;
-	std::function<void(void)> stop;
+	void walk(float);
+	void jump(float);
+	void stop();
+	void hurt(int);
+	void attack();
+
+	void reset();
 
 
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pIdleAction, IdleAction);
@@ -68,6 +72,7 @@ public:
 
 	CC_SYNTHESIZE(ActionState, m_currActionState, CurrActionState);
     CC_SYNTHESIZE(int, m_currMoveState, CurrMoveState);
+	CC_SYNTHESIZE(unsigned int, m_maxHp, MaxHP);
 	CC_SYNTHESIZE(unsigned int, m_hp, HP);
 	CC_SYNTHESIZE(bool, m_isAttacking, IsAttacking);
 	CC_SYNTHESIZE(cocos2d::Vec2, m_fShootDirection, ShootDirection);
@@ -87,6 +92,7 @@ public:
 	CC_SYNTHESIZE(float, m_fGravity, Gravity);
 	CC_SYNTHESIZE(float, m_fBulletGravity, BulletGravity);
 	CC_SYNTHESIZE(bool, m_isOnRotateGround, IsOnRotateGround);
+	CC_SYNTHESIZE(cocos2d::Point, m_initPos, InitPos);
 
 	virtual void onDead();
 
@@ -95,9 +101,6 @@ public:
 
 	cocos2d::CallFunc* createDeadCallbackFunc();
 	cocos2d::CallFunc* createIdleCallbackFunc();
-
-	std::function<void(void)> onDeadCallback;
-	std::function<void(void)> attack;
 
 protected:
 	static cocos2d::Animation* createAnimation(const char* formatStr, int frameCount, int fps);

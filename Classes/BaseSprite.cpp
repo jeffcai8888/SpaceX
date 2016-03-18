@@ -15,7 +15,8 @@ BaseSprite::BaseSprite() :
 	m_pWalkFireAction(NULL),
 	m_pIdleFireAction(NULL),
 	m_isWalking(false),
-	m_isOnRotateGround(false)
+	m_isOnRotateGround(false),
+	m_maxHp(100)
 {
 
 }
@@ -32,6 +33,89 @@ BaseSprite::~BaseSprite()
 	CC_SAFE_RELEASE_NULL(m_pWalkFireAction);
 	CC_SAFE_RELEASE_NULL(m_pIdleFireAction);
 }
+
+void BaseSprite::reset()
+{
+	this->setPosition(m_initPos);
+	this->runIdleAction();
+	this->setHP(100);
+	this->setIsAttacking(false);
+	this->setJumpStage(0);
+}
+
+void BaseSprite::walk(float v)
+{
+	if (this->isLive())
+	{
+		bool isWalking = this->getIsWalk();
+		this->runWalkAction(!this->isInAir() && !isWalking);
+		if (!this->getIsAttacking() && v != 0)
+			this->setFlippedX(v < 0);
+
+		Vec2 velocity = this->getPhysicsBody()->getVelocity();
+		velocity.x = v;
+		this->getPhysicsBody()->setVelocity(velocity);
+	}
+}
+
+void BaseSprite::jump(float v)
+{
+
+	if (this->isLive() && this->getJumpStage() < 2)
+	{
+		this->runJumpAction(true);
+		//m_pHero->setJumpStage(m_pHero->getJumpStage() + 1);
+
+		Vec2 velocity = this->getPhysicsBody()->getVelocity();
+		velocity.y = v;
+		if (!this->getIsAttacking() && velocity.x != 0)
+		{
+			this->setFlippedX(velocity.x < 0);
+		}
+		this->getPhysicsBody()->setVelocity(velocity);
+		this->setPrePosition(this->getPosition());
+	}
+}
+
+void BaseSprite::stop()
+{
+	if (this->isLive())
+	{
+		this->runIdleAction();
+		this->getPhysicsBody()->setVelocity(Vec2(0.f, 0.f));
+	}
+}
+
+void BaseSprite::attack()
+{
+	if (this->isLive())
+	{
+		this->runAttackAction();
+	}
+}
+
+void BaseSprite::hurt(int damage)
+{
+
+	if (this->isLive())
+	{
+		this->runHurtAction();
+		int hp = this->getHP() - damage;
+		this->setHP(hp);
+		ProgressTimer *blood = static_cast<ProgressTimer *>(this->getChildByName("blood"));
+		if (hp < 0)
+		{
+			reset();
+			blood->setPercentage(100.f);
+		}
+		else
+		{
+			blood->setPercentage(this->getHP() * 100.f / this->getMaxHP());
+		}
+	}
+}
+
+
 
 void BaseSprite::runIdleAction()
 {
@@ -195,7 +279,7 @@ CallFunc* BaseSprite::createIdleCallbackFunc()
 
 void BaseSprite::onDead()
 {
-	this->onDeadCallback();
+
 }
 
 bool BaseSprite::isLive()

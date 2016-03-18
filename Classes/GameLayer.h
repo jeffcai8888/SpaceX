@@ -21,12 +21,6 @@ public:
 	virtual void onEnter();
 	virtual void onExit();
 
-	void onHeroWalk(float velocity);
-	void onHeroJump(float velocity);
-	void onHeroAttack();
-	void onHeroStop();
-	void onHeroDead(BaseSprite *pTarget);
-
 	virtual void update(float dt);
 	virtual void updateHero(float dt);
 	virtual void updateBullet(float dt);

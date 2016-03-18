@@ -80,28 +80,6 @@ bool OperateLayer::init()
 		sprite2->setPosition(636.f, 600.f);
 		//this->addChild(sprite2);
 
-		/*Sprite *pBloodSprite = Sprite::create("blood.png");
-		this->m_pBlood = ProgressTimer::create(pBloodSprite);
-		this->m_pBlood->setType(ProgressTimer::Type::BAR);
-		this->m_pBlood->setMidpoint(Point(0, 0));
-		this->m_pBlood->setBarChangeRate(Point(1, 0));
-		this->m_pBlood->setAnchorPoint(Point(0, 1));
-		this->m_pBlood->setPosition(m_origin + Point(2, visibleSize.height - 10));
-		this->m_pBlood->setPercentage(100);
-
-		this->m_pBloodBg = ProgressTimer::create(Sprite::create("bloodBg.png"));
-		this->m_pBloodBg->setType(ProgressTimer::Type::BAR);
-		this->m_pBloodBg->setMidpoint(Point(0, 0));
-		this->m_pBloodBg->setBarChangeRate(Point(1, 0));
-		this->m_pBloodBg->setAnchorPoint(Point(0, 1));
-		this->m_pBloodBg->setPosition(this->m_pBlood->getPosition());
-		this->m_pBloodBg->setPercentage(100);
-
-		this->addChild(m_pBloodBg, 100);
-		this->addChild(m_pBlood, 100);*/
-
-		
-
 		m_KeyPressedValue = 0;
 		
 		ret = true;
@@ -224,12 +202,19 @@ void OperateLayer::onEnter()
             Vec2 direction = p - m_firstTouchJoystickLocation;
             direction.normalize();
             this->updateJoystick(direction, distance);
+
+
 			distance = m_preTouchJoystickLocation.getDistance(p);
 			direction = p - m_preTouchJoystickLocation;
 			direction.normalize();
 			Vec2 v = m_pHero->getPhysicsBody()->getVelocity();
-			m_pTarget->setDirection(direction * distance * m_pTarget->getVelocity() + v);
+			m_pTarget->setDirection(direction * distance * m_pTarget->getVelocity());
+			//float durateTime = distance * 200 / 400;
+			//MoveBy* moveBy = MoveBy::create(durateTime, direction * 200);
+			//m_pTarget->runAction(moveBy);
 			m_pTarget->setIsStatic(false);
+
+
 			direction = m_pTarget->getPosition() - m_pHero->getShootPosition();
 			direction.normalize();
 			m_pHero->setShootDirection(direction);

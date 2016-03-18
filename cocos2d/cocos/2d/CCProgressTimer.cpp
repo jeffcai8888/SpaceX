@@ -93,7 +93,7 @@ ProgressTimer::~ProgressTimer(void)
 
 void ProgressTimer::setPercentage(float percentage)
 {
-    if (_percentage != percentage)
+     if (_percentage != percentage)
     {
         _percentage = clampf(percentage, 0, 100);
         updateProgress();
