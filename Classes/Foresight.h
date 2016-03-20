@@ -17,7 +17,7 @@ public:
 
 	CC_SYNTHESIZE(float, m_fVelocity, Velocity);
 	CC_SYNTHESIZE(cocos2d::Point, m_fDirection, Direction);
-	CC_SYNTHESIZE(bool, m_isStatic, IsStatic);
+	//CC_SYNTHESIZE(bool, m_isStatic, IsStatic);
 	
 private:
 };

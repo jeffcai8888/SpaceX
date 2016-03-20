@@ -1,19 +1,19 @@
 <GameFile>
-  <PropertyGroup Name="BackgroundLayer" Type="Layer" ID="082a7d03-1497-4858-8273-68fcd634e33e" Version="3.10.0.0" />
+  <PropertyGroup Name="BackgroundLayer" Type="Layer" ID="b2066414-48ff-46d8-b8b2-08c44ba0e79f" Version="3.10.0.0" />
   <Content ctype="GameProjectContent">
     <Content>
       <Animation Duration="0" Speed="1.0000" />
-      <ObjectData Name="Layer" ctype="GameLayerObjectData">
-        <Size X="960.0000" Y="640.0000" />
+      <ObjectData Name="Layer" Tag="37" ctype="GameLayerObjectData">
+        <Size X="1136.0000" Y="640.0000" />
         <Children>
-          <AbstractNodeData Name="Image_1" ActionTag="1988012283" Tag="3" IconVisible="False" LeftMargin="-1600.1052" RightMargin="-1599.8948" TopMargin="-824.7570" BottomMargin="-775.2430" LeftEage="188" RightEage="188" TopEage="107" BottomEage="107" Scale9OriginX="188" Scale9OriginY="107" Scale9Width="196" Scale9Height="111" ctype="ImageViewObjectData">
-            <Size X="4160.0000" Y="2240.0000" />
+          <AbstractNodeData Name="Image_1" ActionTag="-1457745147" Tag="38" IconVisible="False" LeftEage="316" RightEage="316" TopEage="211" BottomEage="211" Scale9OriginX="316" Scale9OriginY="211" Scale9Width="328" Scale9Height="218" ctype="ImageViewObjectData">
+            <Size X="1136.0000" Y="640.0000" />
             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-            <Position X="479.8947" Y="344.7569" />
+            <Position X="568.0000" Y="320.0000" />
             <Scale ScaleX="1.0000" ScaleY="1.0000" />
             <CColor A="255" R="255" G="255" B="255" />
-            <PrePosition X="0.4999" Y="0.5387" />
-            <PreSize X="4.3333" Y="3.5000" />
+            <PrePosition X="0.5000" Y="0.5000" />
+            <PreSize X="1.0000" Y="1.0000" />
             <FileData Type="Normal" Path="background.png" Plist="" />
           </AbstractNodeData>
         </Children>

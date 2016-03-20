@@ -37,7 +37,6 @@ public:
 private:
 	void showJoystick(cocos2d::Point pos);
 	void updateJoystick(cocos2d::Point direction, float distance);
-	void updateTarget(cocos2d::Point pos);
 	bool isTap(cocos2d::Node*, cocos2d::Point);
 	void dealWithKeyBoard();
 	void removeAllEventListener();
@@ -47,9 +46,6 @@ private:
 	cocos2d::Sprite *m_pFront;
 	cocos2d::Sprite *m_pBack;
 	cocos2d::Sprite *m_pUp;
-	cocos2d::ProgressTimer *m_pBlood;
-	cocos2d::ProgressTimer *m_pBloodBg;
-	cocos2d::MenuItemImage *m_pCloseItem;
 	cocos2d::MenuItemImage *m_pDebugItem;
 	cocos2d::Vector<cocos2d::EventListener *> m_vecEventListener;
     cocos2d::Point m_firstTouchJoystickLocation;

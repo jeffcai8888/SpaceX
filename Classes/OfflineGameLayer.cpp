@@ -87,10 +87,10 @@ void OfflineGameLayer::updateHero(float dt)
 				m_pHero->setFlippedX(m_pHero->getShootDirection().x < 0);
 		}
 	}
-	if (m_pForesight->getIsStatic())
-	{
-		m_pForesight->setPosition(m_pForesight->getPosition() + diff);
-	}
+	//if (m_pForesight->getIsStatic())
+	//{
+	//	m_pForesight->setPosition(m_pForesight->getPosition() + diff);
+	//}
     
     /*if(m_pHero->getCurrActionState() == ACTION_STATE_MOVE)
     {

@@ -10,10 +10,7 @@ USING_NS_CC;
 using namespace std;
 
 OperateLayer::OperateLayer()
-	:m_pCloseItem(nullptr),
-	m_pBlood(nullptr),
-	m_pBloodBg(nullptr),
-	m_pDebugItem(nullptr),
+	:m_pDebugItem(nullptr),
     m_pHero(nullptr),
     m_pJoystick(nullptr),
     m_pJoystickBg(nullptr),
@@ -62,9 +59,9 @@ bool OperateLayer::init()
 		this->addChild(m_pJoystick, 0);
 		this->addChild(m_pJoystickBg, 1);
 
-		m_pCloseItem = MenuItemImage::create("pause.png", "pause_down.png", CC_CALLBACK_1(OperateLayer::gotoDebug, this));
-		m_pCloseItem->setPosition(m_origin + Point(visibleSize) - Point(m_pCloseItem->getContentSize() / 2));
-		auto menu = Menu::create(m_pCloseItem, NULL);
+		m_pDebugItem = MenuItemImage::create("pause.png", "pause_down.png", CC_CALLBACK_1(OperateLayer::gotoDebug, this));
+		m_pDebugItem->setPosition(m_origin + Point(visibleSize) - Point(m_pDebugItem->getContentSize() / 2));
+		auto menu = Menu::create(m_pDebugItem, NULL);
 		menu->setPosition(Point::ZERO);
 		this->addChild(menu, 1);
 
@@ -141,7 +138,7 @@ void OperateLayer::onEnter()
             if (this->isTap(m_pJoystickBg, p))
             {
                 m_pHero->attack();
-				Vec2 direction = m_pTarget->getPosition() - m_pHero->getShootPosition();
+				Vec2 direction = m_pTarget->getPosition() + m_pHero->getPosition() - m_pHero->getShootPosition();
 				direction.normalize();
 				m_pHero->setShootDirection(direction);
 				m_firstTouchJoystickLocation = p;
@@ -212,10 +209,10 @@ void OperateLayer::onEnter()
 			//float durateTime = distance * 200 / 400;
 			//MoveBy* moveBy = MoveBy::create(durateTime, direction * 200);
 			//m_pTarget->runAction(moveBy);
-			m_pTarget->setIsStatic(false);
+			//m_pTarget->setIsStatic(false);
 
 
-			direction = m_pTarget->getPosition() - m_pHero->getShootPosition();
+			direction = m_pTarget->getPosition() + m_pHero->getPosition() - m_pHero->getShootPosition();
 			direction.normalize();
 			m_pHero->setShootDirection(direction);
 			m_preTouchJoystickLocation = p;
@@ -396,15 +393,6 @@ void OperateLayer::dealWithKeyBoard()
 			m_pHero->stop();
 	}
 }
-
-void OperateLayer::updateTarget(Point pos)
-{
-	auto gameLayer = this->getScene()->getChildByTag(LT_Game);
-	m_pTarget->setPosition(m_pHero->getPosition() + gameLayer->getPosition() + pos * 200);
-	m_pTarget->setVisible(true);
-}
-
-
 
 void OperateLayer::exitApp(Ref* pSender)
 {

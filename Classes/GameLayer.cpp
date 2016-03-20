@@ -78,7 +78,7 @@ void GameLayer::onEnter()
 	m_pHero = Hero::create();
 	m_pHero->setInitPos(heroInitPos);
 	m_pHero->setTag(0);
-	m_pHero->setScale(0.5f);
+	//m_pHero->setScale(0.5f);
 	m_pHero->setPosition(heroInitPos);
 	m_pHero->runIdleAction();
 	m_pHero->setLocalZOrder(visibleSize.height - m_pHero->getPositionY());
@@ -98,7 +98,7 @@ void GameLayer::onEnter()
 	m_pEnemy[0]->setInitPos(heroInitPos);
 	m_pEnemy[0]->setTag(1);
 	m_pEnemy[0]->getPhysicsBody()->setGravityEnable(true);
-	m_pEnemy[0]->setScale(0.5f);
+	//m_pEnemy[0]->setScale(0.5f);
 	m_pEnemy[0]->setPosition(heroInitPos);
 	m_pEnemy[0]->runIdleAction();
 	m_pEnemy[0]->setLocalZOrder(visibleSize.height - m_pHero->getPositionY());
@@ -130,7 +130,7 @@ void GameLayer::onEnter()
 
 
 	m_pForesight = Foresight::create();
-	this->addChild(m_pForesight);
+	m_pHero->addChild(m_pForesight);
 
 	JsonParser* parser = JsonParser::createWithFile("Debug.json");
 	parser->decodeDebugData();
@@ -520,21 +520,25 @@ void GameLayer::updateForesight(float dt)
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	m_pForesight->update(dt);
-	if (m_pForesight->getPositionX() + getPositionX() > visibleSize.width)
+	CCLOG("foresight %f, %f", m_pForesight->getPositionX(), m_pForesight->getPositionY());
+	CCLOG("hero %f, %f", m_pHero->getPositionX(), m_pHero->getPositionY());
+	CCLOG("gameLayer %f, %f", getPositionX(), getPositionY());
+	CCLOG("world %f, %f", m_pForesight->getPositionX() + m_pHero->getPositionX()+getPositionX(), m_pForesight->getPositionY() + m_pHero->getPositionY() + getPositionY());
+	if (m_pForesight->getPositionX() + m_pHero->getPositionX() + getPositionX()> visibleSize.width)
 	{
-		m_pForesight->setPositionX(visibleSize.width - getPositionX());
+		m_pForesight->setPositionX(visibleSize.width - (m_pHero->getPositionX() + getPositionX()));
 	}
-	else if (m_pForesight->getPositionX() + getPositionX() < 0)
+	else if (m_pForesight->getPositionX() + m_pHero->getPositionX() + getPositionX() < 0)
 	{
-		m_pForesight->setPositionX(-getPositionX());
+		m_pForesight->setPositionX(-(m_pHero->getPositionX() + getPositionX()));
 	}
-	if (m_pForesight->getPositionY() + getPositionY() > visibleSize.height)
+	if (m_pForesight->getPositionY() + m_pHero->getPositionY() + getPositionY() > visibleSize.height)
 	{
-		m_pForesight->setPositionY(visibleSize.height - getPositionY());
+		m_pForesight->setPositionY(visibleSize.height - (m_pHero->getPositionY() + getPositionY()));
 	}
-	else if(m_pForesight->getPositionY() + getPositionY() < 0)
+	else if(m_pForesight->getPositionY() + m_pHero->getPositionY() + getPositionY() < 0)
 	{
-		m_pForesight->setPositionY(-getPositionY());
+		m_pForesight->setPositionY(-(m_pHero->getPositionY() + getPositionY()));
 	}
 }
 

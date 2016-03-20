@@ -18,14 +18,8 @@ Scene* GameScene::createScene(int networkType)
 	SocketManager::getInstance()->setNetworkType(networkType);
 	SocketManager::getInstance()->init();
 
-	//auto layer = CSLoader::createNode("BackgroundLayer.csb");
-	//scene->addChild(layer);
-
-	auto visibleSize = Director::getInstance()->getVisibleSize();
-	auto background = Sprite::create("background.png");
-	background->setPosition(visibleSize / 2);
-	background->setContentSize(visibleSize);
-	scene->addChild(background);
+	auto layer = CSLoader::createNode("BackgroundLayer.csb");
+	scene->addChild(layer);
 	
 	if (networkType == NT_Client)
 	{

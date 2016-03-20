@@ -64,10 +64,10 @@
           <Image Name="pause_down.png" />
         </Folder>
         <Image Name="background.png" />
-        <Project Name="BackgroundLayer.csd" Type="Layer" />
         <Image Name="DebugNormal.png" />
         <Project Name="DebugScene.csd" Type="Scene" />
         <Image Name="DebugSelected.png" />
+        <Project Name="BackgroundLayer.csd" Type="Layer" />
       </RootFolder>
     </Group>
   </SolutionFolder>

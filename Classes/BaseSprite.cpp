@@ -103,15 +103,18 @@ void BaseSprite::hurt(int damage)
 		int hp = this->getHP() - damage;
 		this->setHP(hp);
 		ProgressTimer *blood = static_cast<ProgressTimer *>(this->getChildByName("blood"));
-		if (hp < 0)
+		if (blood)
 		{
-			reset();
-			blood->setPercentage(100.f);
-		}
-		else
-		{
-			blood->setPercentage(this->getHP() * 100.f / this->getMaxHP());
-		}
+			if (hp < 0)
+			{
+				reset();
+				blood->setPercentage(100.f);
+			}
+			else
+			{
+				blood->setPercentage(this->getHP() * 100.f / this->getMaxHP());
+			}
+		}	
 	}
 }
 

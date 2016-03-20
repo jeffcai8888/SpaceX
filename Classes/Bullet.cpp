@@ -62,7 +62,8 @@ void Bullet::launch(BaseSprite* pHero)
 	this->setPosition(pos);	
 	this->m_fVelocity = pHero->getBulletLaunchVelocity();
 	this->m_fDisappearTime = pHero->getBulletDisappearTime();
-	this->m_fDirection = pHero->getShootDirection().rotateByAngle(Vec2(0.f, 0.f), CC_DEGREES_TO_RADIANS((int)(-rand_0_1() * pHero->getBullletAngle())));
+	int rotation = CC_DEGREES_TO_RADIANS((int)(-rand_0_1() * pHero->getBullletAngle()));
+	this->m_fDirection = pHero->getShootDirection().rotateByAngle(Vec2(0.f, 0.f), rotation);
 	this->m_power = pHero->getBullletPower();
 	this->m_gravity = pHero->getBulletGravity();
 	this->getPhysicsBody()->setVelocity(Vec2(0.f, 0.f));
