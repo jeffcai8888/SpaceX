@@ -51,17 +51,29 @@ void ServerGameLayer::update(float dt)
 	this->updateHero(dt);
 	this->updateBullet(dt);
 	this->updatePhysicsWorld(dt);
+	this->updateForesight(dt);
 }
 
 void ServerGameLayer::updateHero(float dt)
 {
 	setViewPointCenter();
 
+	float x = m_pHero->getPhysicsBody()->getVelocity().x;
+	float y = m_pHero->getPhysicsBody()->getVelocity().y;
+	if (!m_pHero->getIsOnRotateGround())
+		y += m_pHero->getGravity() * dt;
+	m_pHero->getPhysicsBody()->setVelocity(Vec2(x, y));
+
 	if (m_pHero->getCurrActionState() == ACTION_STATE_MOVE && m_pHero->isInMoveAction(MOVE_STATE_UP) && m_pHero->getPosition().y < m_pHero->getPrePosition().y)
 	{
 		m_pHero->runJumpAction(false);
 	}
 
+	Point diff = m_pHero->getPosition() - m_pHero->getPrePosition();
+	//CCLOG("aaa %f", diff.x / dt );
+	//CCLOG("bbb %f", m_pHero->getPhysicsBody()->getVelocity().x * dt);
+
+	m_pHero->setPrePosition(m_pHero->getPosition());
 	if (m_pHero->getIsAttacking())
 	{
 		m_shootTime += dt;
