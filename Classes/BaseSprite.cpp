@@ -129,7 +129,7 @@ void BaseSprite::runIdleAction()
 
 		if (SocketManager::getInstance()->getNetworkType() == NT_Server)
 		{
-			SocketManager::getInstance()->sendData(NDT_HeroStop, getPosition(), getPhysicsBody()->getVelocity());
+			SocketManager::getInstance()->sendData(NDT_HeroStop, m_currActionState, m_currMoveState, getPosition(), getPhysicsBody()->getVelocity());
 		}
 	}
 }
@@ -147,7 +147,7 @@ void BaseSprite::runWalkAction(bool isPlayAnim)
 		
 	if (SocketManager::getInstance()->getNetworkType() == NT_Server)
 	{
-		SocketManager::getInstance()->sendData(NDT_HeroWalk, getPosition(), getPhysicsBody()->getVelocity());
+		SocketManager::getInstance()->sendData(NDT_HeroWalk, m_currActionState, m_currMoveState, getPosition(), getPhysicsBody()->getVelocity());
 	}
 }
 
@@ -186,9 +186,9 @@ void BaseSprite::runJumpAction(bool isUp)
 	if (SocketManager::getInstance()->getNetworkType() == NT_Server)
 	{
 		if(isUp)
-			SocketManager::getInstance()->sendData(NDT_HeroJumpUp, getPosition(), getPhysicsBody()->getVelocity());
+			SocketManager::getInstance()->sendData(NDT_HeroJumpUp, m_currActionState, m_currMoveState, getPosition(), getPhysicsBody()->getVelocity());
 		else
-			SocketManager::getInstance()->sendData(NDT_HeroJumpDown, getPosition(), getPhysicsBody()->getVelocity());
+			SocketManager::getInstance()->sendData(NDT_HeroJumpDown, m_currActionState, m_currMoveState, getPosition(), getPhysicsBody()->getVelocity());
 	}
 }
 

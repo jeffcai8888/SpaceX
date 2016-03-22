@@ -58,6 +58,12 @@ void ClientGameLayer::update(float dt)
 void ClientGameLayer::updateHero(float dt)
 {
 	setViewPointCenter();
+	/*CCLOG("Hero %f, %f", m_pHero->getPositionX(), m_pHero->getPositionX());
+	float x = m_pHero->getPhysicsBody()->getVelocity().x;
+	float y = m_pHero->getPhysicsBody()->getVelocity().y;
+	if (!m_pHero->getIsOnRotateGround())
+		y += m_pHero->getGravity() * dt;
+	m_pHero->getPhysicsBody()->setVelocity(Vec2(x, y));*/
 }
 
 void ClientGameLayer::updateBullet(float dt)
@@ -74,19 +80,23 @@ void ClientGameLayer::onRecv(const char* data, int count)
 		{
 		case NDT_HeroWalk:
 			m_pHero->runWalkAction(!m_pHero->isInAir());
-			m_pHero->setPosition(networkData->position);
+			//m_pHero->setPosition(networkData->position);
+			m_pHero->getPhysicsBody()->setVelocity(networkData->velocity);
 			break;
 		case NDT_HeroJumpUp:
 			m_pHero->runJumpAction(true);
-			m_pHero->setPosition(networkData->position);
+			//m_pHero->setPosition(networkData->position);
+			m_pHero->getPhysicsBody()->setVelocity(networkData->velocity);
 			break;
 		case NDT_HeroJumpDown:
 			m_pHero->runJumpAction(false);
-			m_pHero->setPosition(networkData->position);
+			//m_pHero->setPosition(networkData->position);
+			m_pHero->getPhysicsBody()->setVelocity(networkData->velocity);
 			break;
 		case NDT_HeroStop:
 			m_pHero->runIdleAction();
-			m_pHero->setPosition(networkData->position);
+			//m_pHero->setPosition(networkData->position);
+			m_pHero->getPhysicsBody()->setVelocity(networkData->velocity);
 			break;
 		case NDT_HeroPos:
 			m_dequeShadow.push_back(networkData->position);

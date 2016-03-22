@@ -88,10 +88,9 @@ void ServerGameLayer::updateHero(float dt)
 		}
 	}
 
-	Point diff = m_pHero->getPosition() - m_pHero->getPrePosition();
 	if (fabs(diff.x) > EPSILON || fabs(diff.y) > EPSILON)
 	{
-		SocketManager::getInstance()->sendData(NDT_HeroPos, m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
+		SocketManager::getInstance()->sendData(NDT_HeroPos, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
 	}
 
 	m_pHero->setPrePosition(m_pHero->getPosition());

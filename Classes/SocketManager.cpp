@@ -41,10 +41,12 @@ void SocketManager::init()
 	}
 }
 
-void SocketManager::sendData(int type, cocos2d::Vec2 pos, Vec2 vel)
+void SocketManager::sendData(int type, int actionState, int moveState, cocos2d::Vec2 pos, Vec2 vel)
 {
 	NetworkData data;
 	data.dataType = type;
+	data.actionState = actionState;
+	data.moveState = moveState;
 	data.position = pos;
 	data.velocity = vel;
 	data.dataSize = sizeof(data);
