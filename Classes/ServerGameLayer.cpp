@@ -58,11 +58,11 @@ void ServerGameLayer::updateHero(float dt)
 {
 	setViewPointCenter();
 
-	float x = m_pHero->getPhysicsBody()->getVelocity().x;
+	/*float x = m_pHero->getPhysicsBody()->getVelocity().x;
 	float y = m_pHero->getPhysicsBody()->getVelocity().y;
 	if (!m_pHero->getIsOnRotateGround())
 		y += m_pHero->getGravity() * dt;
-	m_pHero->getPhysicsBody()->setVelocity(Vec2(x, y));
+	m_pHero->getPhysicsBody()->setVelocity(Vec2(x, y));*/
 
 	if (m_pHero->getCurrActionState() == ACTION_STATE_MOVE && m_pHero->isInMoveAction(MOVE_STATE_UP) && m_pHero->getPosition().y < m_pHero->getPrePosition().y)
 	{
@@ -88,10 +88,10 @@ void ServerGameLayer::updateHero(float dt)
 		}
 	}
 
-	if (fabs(diff.x) > EPSILON || fabs(diff.y) > EPSILON)
+	/*if (fabs(diff.x) > EPSILON || fabs(diff.y) > EPSILON)
 	{
 		SocketManager::getInstance()->sendData(NDT_HeroPos, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
-	}
+	}*/
 
 	m_pHero->setPrePosition(m_pHero->getPosition());
 }
