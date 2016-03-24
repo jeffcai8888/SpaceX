@@ -58,7 +58,7 @@ void BaseSprite::walk(float v)
 
 		if (SocketManager::getInstance()->getNetworkType() == NT_Server)
 		{
-			SocketManager::getInstance()->sendData(NDT_HeroWalk, m_currActionState, m_currMoveState, getPosition(), getPhysicsBody()->getVelocity());
+			SocketManager::getInstance()->sendData(NDT_HeroWalk, m_currActionState, m_currMoveState, getPhysicsBody()->getVelocity());
 		}
 	}
 }
@@ -82,7 +82,7 @@ void BaseSprite::jump(float v)
 
 		if (SocketManager::getInstance()->getNetworkType() == NT_Server)
 		{
-			SocketManager::getInstance()->sendData(NDT_HeroJumpUp, m_currActionState, m_currMoveState, getPosition(), getPhysicsBody()->getVelocity());
+			SocketManager::getInstance()->sendData(NDT_HeroJumpUp, m_currActionState, m_currMoveState, getPhysicsBody()->getVelocity());
 		}
 	}
 }
@@ -96,16 +96,31 @@ void BaseSprite::stop()
 
 		if (SocketManager::getInstance()->getNetworkType() == NT_Server)
 		{
-			SocketManager::getInstance()->sendData(NDT_HeroStop, m_currActionState, m_currMoveState, getPosition(), getPhysicsBody()->getVelocity());
+			SocketManager::getInstance()->sendData(NDT_HeroStop, m_currActionState, m_currMoveState, Vec2(0,0));
 		}
 	}
 }
 
-void BaseSprite::attack()
+void BaseSprite::attack(bool isStart)
 {
 	if (this->isLive())
 	{
-		this->runAttackAction();
+		if (isStart)
+		{
+			this->runAttackAction();
+			if (SocketManager::getInstance()->getNetworkType() == NT_Server)
+			{
+				SocketManager::getInstance()->sendData(NDT_HeroAttack, m_currActionState, m_currMoveState, getShootPosition());
+			}
+		}
+		else
+		{
+			this->stopAttackAction();
+			if (SocketManager::getInstance()->getNetworkType() == NT_Server)
+			{
+				SocketManager::getInstance()->sendData(NDT_HeroStopAttack, m_currActionState, m_currMoveState, Vec2(0,0));
+			}
+		}
 	}
 }
 

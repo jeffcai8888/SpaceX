@@ -55,7 +55,7 @@ public:
 	void jump(float);
 	void stop();
 	void hurt(int);
-	void attack();
+	void attack(bool);
 
 	void reset();
 

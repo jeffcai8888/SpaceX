@@ -23,8 +23,6 @@ public:
 	void onDisconnect();
 
 	virtual void update(float dt);
-	virtual void updateHero(float dt);
-	virtual void updateBullet(float dt);
 
 	CREATE_FUNC(ClientGameLayer);
 

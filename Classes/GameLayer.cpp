@@ -457,6 +457,12 @@ void GameLayer::updateHero(float dt)
 {
 	setViewPointCenter();
 
+	float x = m_pHero->getPhysicsBody()->getVelocity().x;
+	float y = m_pHero->getPhysicsBody()->getVelocity().y;
+	if (!m_pHero->getIsOnRotateGround())
+		y += m_pHero->getGravity() * dt;
+	m_pHero->getPhysicsBody()->setVelocity(Vec2(x, y));
+
 	if (m_pHero->getCurrActionState() == ACTION_STATE_MOVE && m_pHero->isInMoveAction(MOVE_STATE_UP) && m_pHero->getPosition().y < m_pHero->getPrePosition().y)
 	{
 		m_pHero->runJumpAction(false);
@@ -469,11 +475,6 @@ void GameLayer::updateHero(float dt)
 		m_shootTime += dt;
 		if (m_shootTime >= m_pHero->getBulletInterval())
 		{
-			//int curAmmoCapacity = m_pHero->getAmmoCapacity();
-			//if(curAmmoCapacity == 0)
-
-
-
 			Bullet* bullet = getUnusedBullet();
 			bullet->launch(m_pHero);
 			this->addChild(bullet);
@@ -485,23 +486,7 @@ void GameLayer::updateHero(float dt)
 	}
 	
     
-    /*if(m_pHero->getCurrActionState() == ACTION_STATE_MOVE)
-    {
-        CCLOG("ACTION_STATE_MOVE START");
-        if(m_pHero->isInMoveAction(MOVE_STATE_UP))
-        {
-            CCLOG("MOVE_STATE_UP %f %f", m_pHero->getPhysicsBody()->getVelocity().x, m_pHero->getPhysicsBody()->getVelocity().y);
-        }
-        if(m_pHero->isInMoveAction(MOVE_STATE_DOWN))
-        {
-            CCLOG("MOVE_STATE_DOWN %f %f", m_pHero->getPhysicsBody()->getVelocity().x, m_pHero->getPhysicsBody()->getVelocity().y);
-        }
-        if(m_pHero->isInMoveAction(MOVE_STATE_WALK))
-        {
-            CCLOG("MOVE_STATE_WALK %f %f", m_pHero->getPhysicsBody()->getVelocity().x, m_pHero->getPhysicsBody()->getVelocity().y);
-        }
-        CCLOG("ACTION_STATE_MOVE END");
-    }*/
+	CCLOG("MoveState %d %d", m_pHero->getCurrActionState(), m_pHero->getCurrMoveState());
 	//CCLOG("(%f, %f) (%f, %f)", m_pHero->getPhysicsBody()->getPosition().x, m_pHero->getPhysicsBody()->getPosition().y, m_pHero->getPosition().x, m_pHero->getPosition().y);
 }
 
@@ -520,10 +505,10 @@ void GameLayer::updateForesight(float dt)
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	m_pForesight->update(dt);
-	CCLOG("foresight %f, %f", m_pForesight->getPositionX(), m_pForesight->getPositionY());
-	CCLOG("hero %f, %f", m_pHero->getPositionX(), m_pHero->getPositionY());
-	CCLOG("gameLayer %f, %f", getPositionX(), getPositionY());
-	CCLOG("world %f, %f", m_pForesight->getPositionX() + m_pHero->getPositionX()+getPositionX(), m_pForesight->getPositionY() + m_pHero->getPositionY() + getPositionY());
+	//CCLOG("foresight %f, %f", m_pForesight->getPositionX(), m_pForesight->getPositionY());
+	//CCLOG("hero %f, %f", m_pHero->getPositionX(), m_pHero->getPositionY());
+	//CCLOG("gameLayer %f, %f", getPositionX(), getPositionY());
+	//CCLOG("world %f, %f", m_pForesight->getPositionX() + m_pHero->getPositionX()+getPositionX(), m_pForesight->getPositionY() + m_pHero->getPositionY() + getPositionY());
 	if (m_pForesight->getPositionX() * 0.5 + m_pHero->getPositionX() + getPositionX()> visibleSize.width)
 	{
 		m_pForesight->setPositionX((visibleSize.width - (m_pHero->getPositionX() + getPositionX())) * 2);

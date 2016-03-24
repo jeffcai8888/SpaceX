@@ -52,23 +52,8 @@ void ClientGameLayer::update(float dt)
 {
 	this->updateHero(dt);
 	this->updateBullet(dt);
+	this->updateForesight(dt);
 	this->updatePhysicsWorld(dt);
-}
-
-void ClientGameLayer::updateHero(float dt)
-{
-	setViewPointCenter();
-	/*CCLOG("Hero %f, %f", m_pHero->getPositionX(), m_pHero->getPositionX());
-	float x = m_pHero->getPhysicsBody()->getVelocity().x;
-	float y = m_pHero->getPhysicsBody()->getVelocity().y;
-	if (!m_pHero->getIsOnRotateGround())
-		y += m_pHero->getGravity() * dt;
-	m_pHero->getPhysicsBody()->setVelocity(Vec2(x, y));*/
-}
-
-void ClientGameLayer::updateBullet(float dt)
-{
-	
 }
 
 void ClientGameLayer::onRecv(const char* data, int count)
@@ -82,27 +67,36 @@ void ClientGameLayer::onRecv(const char* data, int count)
 			//m_pHero->runWalkAction(!m_pHero->isInAir());
 			//m_pHero->setPosition(networkData->position);
 			//m_pHero->getPhysicsBody()->setVelocity(networkData->velocity);
-			m_pHero->walk(networkData->velocity.x);
+			m_pHero->walk(networkData->vec.x);
 			break;
 		case NDT_HeroJumpUp:
-			m_pHero->runJumpAction(true);
+			//m_pHero->runJumpAction(true);
 			//m_pHero->setPosition(networkData->position);
-			m_pHero->getPhysicsBody()->setVelocity(networkData->velocity);
+			//m_pHero->getPhysicsBody()->setVelocity(networkData->velocity);
+			m_pHero->jump(m_pHero->getJumpVelocity());
 			break;
 		case NDT_HeroJumpDown:
 			m_pHero->runJumpAction(false);
 			//m_pHero->setPosition(networkData->position);
-			m_pHero->getPhysicsBody()->setVelocity(networkData->velocity);
+			m_pHero->getPhysicsBody()->setVelocity(networkData->vec);
 			break;
 		case NDT_HeroStop:
-			m_pHero->runIdleAction();
+			//m_pHero->runIdleAction();
 			//m_pHero->setPosition(networkData->position);
-			m_pHero->getPhysicsBody()->setVelocity(networkData->velocity);
+			//m_pHero->getPhysicsBody()->setVelocity(networkData->velocity);
+			m_pHero->stop();
+			m_pHero->stopMoveAction(MOVE_STATE_WALK, true);
 			break;
 		case NDT_HeroPos:
-			m_dequeShadow.push_back(networkData->position);
+			m_dequeShadow.push_back(networkData->vec);
 			break;
-
+		case NDT_HeroAttack:
+			m_pHero->setShootDirection(networkData->vec);
+			m_pHero->attack(true);
+			break;
+		case NDT_HeroStopAttack:
+			m_pHero->attack(false);
+			break;		
 		default:
 			break;
 		}

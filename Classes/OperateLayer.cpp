@@ -136,14 +136,14 @@ void OperateLayer::onEnter()
 			Touch *pTouch = (Touch*)(*touchIter);
 			Point p = pTouch->getLocation();
             if (this->isTap(m_pJoystickBg, p))
-            {
-                m_pHero->attack();
+            {            
 				Vec2 direction = m_pTarget->getPosition() + m_pHero->getPosition() - m_pHero->getShootPosition();
 				direction.normalize();
 				m_pHero->setShootDirection(direction);
 				m_firstTouchJoystickLocation = p;
 				m_preTouchJoystickLocation = p;
 				m_firstTouchJoystickID = pTouch->getID();
+				m_pHero->attack(true);
             }
             else if( p.x <= 200.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4 )
             {
@@ -194,7 +194,6 @@ void OperateLayer::onEnter()
         
         if(m_firstTouchJoystickID == pTouch->getID())
         {
-            m_pHero->attack();
             float distance = m_firstTouchJoystickLocation.getDistance(p);
             Vec2 direction = p - m_firstTouchJoystickLocation;
             direction.normalize();
@@ -216,6 +215,7 @@ void OperateLayer::onEnter()
 			direction.normalize();
 			m_pHero->setShootDirection(direction);
 			m_preTouchJoystickLocation = p;
+			m_pHero->attack(true);
         }
         else if( p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4 )
         {
@@ -264,7 +264,7 @@ void OperateLayer::onEnter()
 		{
 			Point pos = m_pJoystickBg->getPosition();
 			m_pJoystick->setPosition(pos);
-			m_pHero->stopAttackAction();
+			m_pHero->attack(false);
 			m_firstTouchJoystickID = -1;
 		}
         else if (p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
