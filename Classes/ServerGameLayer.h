@@ -3,6 +3,7 @@
 
 #include <cocos2d.h>
 #include "GameLayer.h"
+#include "socket/SocketBase.h"
 
 class BaseSprite;
 class Hero;
@@ -15,13 +16,15 @@ public:
 	ServerGameLayer();
 	virtual ~ServerGameLayer();
 
-	virtual bool init();
 	virtual void onEnter();
-	virtual void onExit();
 
-	virtual void update(float dt);
+	void onRecv(HSocket socket, const char* data, int count);
+	void onDisconnect(HSocket socket);
 
 	CREATE_FUNC(ServerGameLayer);
+
+protected:
+	std::deque<cocos2d::Point> m_dequeShadow;
 };
 
 #endif

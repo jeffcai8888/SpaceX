@@ -110,7 +110,7 @@ void BaseSprite::attack(bool isStart)
 			this->runAttackAction();
 			if (SocketManager::getInstance()->getNetworkType() == NT_Server)
 			{
-				SocketManager::getInstance()->sendData(NDT_HeroAttack, m_currActionState, m_currMoveState, getShootPosition());
+				SocketManager::getInstance()->sendData(NDT_HeroAttack, m_currActionState, m_currMoveState, getShootDirection());
 			}
 		}
 		else

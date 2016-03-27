@@ -23,6 +23,7 @@ public:
 
 	virtual void update(float dt);
 	virtual void updateHero(float dt);
+	virtual void updateEnemys(float dt);
 	virtual void updateBullet(float dt);
 	virtual void updateForesight(float dt);
 	void updatePhysicsWorld(float dt);

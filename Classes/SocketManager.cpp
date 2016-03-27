@@ -29,6 +29,7 @@ void SocketManager::init()
 	if (NT_Client == m_networkType)
 	{
 		m_pSocketClient = SocketClient::construct();
+		//if (!m_pSocketClient->connectServer("192.168.2.29", 8000))
 		if (!m_pSocketClient->connectServer("127.0.0.1", 8000))
 		{
 			CCLOG("Client connect error");

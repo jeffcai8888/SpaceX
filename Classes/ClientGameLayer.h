@@ -15,14 +15,10 @@ public:
 	ClientGameLayer();
 	virtual ~ClientGameLayer();
 
-	virtual bool init();
 	virtual void onEnter();
-	virtual void onExit();
 
 	void onRecv(const char* data, int count);
 	void onDisconnect();
-
-	virtual void update(float dt);
 
 	CREATE_FUNC(ClientGameLayer);
 
