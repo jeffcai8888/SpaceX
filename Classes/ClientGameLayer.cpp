@@ -114,38 +114,47 @@ void ClientGameLayer::onEnter()
 			{
 				float s = pair.second.asFloat();
 				m_pHero->setWalkVelocity(s);
+				m_pEnemy[0]->setWalkVelocity(s);
 			}
 			else if (pair.first.compare("HeroVSpeed") == 0)
 			{
 				m_pHero->setJumpVelocity(pair.second.asFloat());
+				m_pEnemy[0]->setJumpVelocity(pair.second.asFloat());
 			}
 			else if (pair.first.compare("HeroG") == 0)
 			{
 				m_pHero->setGravity(pair.second.asFloat());
+				m_pEnemy[0]->setGravity(pair.second.asFloat());
 			}
 			else if (pair.first.compare("BulletPower") == 0)
 			{
 				m_pHero->setBullletPower(pair.second.asInt());
+				m_pEnemy[0]->setBullletPower(pair.second.asInt());
 			}
 			else if (pair.first.compare("BulletSpeed") == 0)
 			{
 				m_pHero->setBulletLaunchVelocity(pair.second.asFloat());
+				m_pEnemy[0]->setBulletLaunchVelocity(pair.second.asFloat());
 			}
 			else if (pair.first.compare("BulletDisappearTime") == 0)
 			{
 				m_pHero->setBulletDisappearTime(pair.second.asFloat());
+				m_pEnemy[0]->setBulletDisappearTime(pair.second.asFloat());
 			}
 			else if (pair.first.compare("BulletAngle") == 0)
 			{
 				m_pHero->setBullletAngle(pair.second.asInt());
+				m_pEnemy[0]->setBullletAngle(pair.second.asInt());
 			}
 			else if (pair.first.compare("BulletInterval") == 0)
 			{
 				m_pHero->setBulletInterval(pair.second.asFloat());
+				m_pEnemy[0]->setBulletInterval(pair.second.asFloat());
 			}
 			else if (pair.first.compare("BulletG") == 0)
 			{
 				m_pHero->setBulletGravity(pair.second.asFloat());
+				m_pEnemy[0]->setBulletGravity(pair.second.asFloat());
 			}
 			else if (pair.first.compare("ForesightSpeed") == 0)
 			{

@@ -112,11 +112,13 @@ void GameLayer::onEnter()
 					hero->stopMoveAction(MOVE_STATE_DOWN, true);
 					Vec2 v = hero->getPhysicsBody()->getVelocity();
 					hero->walk(v.x);
+					SocketManager::getInstance()->sendData(NDT_HeroWalk, hero->getCurrActionState(), hero->getCurrMoveState(), hero->getPhysicsBody()->getVelocity());
 				}
 				else
 				{
 					hero->stopMoveAction(MOVE_STATE_DOWN, true);
 					hero->stop();
+					SocketManager::getInstance()->sendData(NDT_HeroStop, hero->getCurrActionState(), hero->getCurrMoveState(), Vec2(0, 0));
 				}
 				hero->setJumpStage(0);
 				return true;
@@ -149,11 +151,13 @@ void GameLayer::onEnter()
 					hero->stopMoveAction(MOVE_STATE_DOWN, true);
 					Vec2 v = hero->getPhysicsBody()->getVelocity();
 					hero->walk(v.x);
+					SocketManager::getInstance()->sendData(NDT_HeroWalk, hero->getCurrActionState(), hero->getCurrMoveState(), hero->getPhysicsBody()->getVelocity());
 				}
 				else
 				{
 					hero->stopMoveAction(MOVE_STATE_DOWN, true);
 					hero->stop();
+					SocketManager::getInstance()->sendData(NDT_HeroStop, hero->getCurrActionState(), hero->getCurrMoveState(), Vec2(0, 0));
 				}
 			}
 			hero->setJumpStage(0);
@@ -182,11 +186,13 @@ void GameLayer::onEnter()
 					hero->stopMoveAction(MOVE_STATE_DOWN, true);
 					Vec2 v = hero->getPhysicsBody()->getVelocity();
 					hero->walk(v.x);
+					SocketManager::getInstance()->sendData(NDT_HeroWalk, hero->getCurrActionState(), hero->getCurrMoveState(), hero->getPhysicsBody()->getVelocity());
 				}
 				else
 				{
 					hero->stopMoveAction(MOVE_STATE_DOWN, true);
 					hero->stop();
+					SocketManager::getInstance()->sendData(NDT_HeroStop, hero->getCurrActionState(), hero->getCurrMoveState(), Vec2(0, 0));
 				}
 				hero->setJumpStage(0);
 			}

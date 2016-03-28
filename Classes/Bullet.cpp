@@ -41,8 +41,6 @@ void Bullet::update(float dt)
 		y += m_gravity * dt;
 		this->getPhysicsBody()->setVelocity(Vec2(x, y));
 
-		Point curPos = this->getPosition();
-
 		m_launchTime += dt;
 		if (m_launchTime >= m_fDisappearTime)
 		{

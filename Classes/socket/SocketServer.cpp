@@ -109,6 +109,8 @@ bool SocketServer::initServer(unsigned short port)
 			this->onStart(ip);
 		}
 
+		Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, false);
+
 		return true;
 
 	} while (false);

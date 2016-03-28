@@ -50,5 +50,8 @@ void SocketManager::sendData(int type, int actionState, int moveState, cocos2d::
 	data.moveState = moveState;
 	data.vec = vec;
 	data.dataSize = sizeof(data);
-	m_pSocketServer->sendMessage((const char*)&data, sizeof(data));
+	if(m_networkType == NT_Server)
+		m_pSocketServer->sendMessage((const char*)&data, sizeof(data));
+	else if(m_networkType == NT_Client)
+		m_pSocketClient->sendMessage((const char*)&data, sizeof(data));
 }

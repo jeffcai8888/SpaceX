@@ -55,11 +55,6 @@ void BaseSprite::walk(float v)
 		Vec2 velocity = this->getPhysicsBody()->getVelocity();
 		velocity.x = v;
 		this->getPhysicsBody()->setVelocity(velocity);
-
-		if (SocketManager::getInstance()->getNetworkType() == NT_Server)
-		{
-			SocketManager::getInstance()->sendData(NDT_HeroWalk, m_currActionState, m_currMoveState, getPhysicsBody()->getVelocity());
-		}
 	}
 }
 
@@ -79,11 +74,6 @@ void BaseSprite::jump(float v)
 		}
 		this->getPhysicsBody()->setVelocity(velocity);
 		this->setPrePosition(this->getPosition());
-
-		if (SocketManager::getInstance()->getNetworkType() == NT_Server)
-		{
-			SocketManager::getInstance()->sendData(NDT_HeroJumpUp, m_currActionState, m_currMoveState, getPhysicsBody()->getVelocity());
-		}
 	}
 }
 
@@ -93,11 +83,6 @@ void BaseSprite::stop()
 	{
 		this->runIdleAction();
 		this->getPhysicsBody()->setVelocity(Vec2(0.f, 0.f));
-
-		if (SocketManager::getInstance()->getNetworkType() == NT_Server)
-		{
-			SocketManager::getInstance()->sendData(NDT_HeroStop, m_currActionState, m_currMoveState, Vec2(0,0));
-		}
 	}
 }
 
