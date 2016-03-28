@@ -132,7 +132,7 @@ void SocketServer::acceptFunc()
 	struct sockaddr_in sockAddr;
 	while (true)
 	{	
-		HSocket clientSock = accept(_socketServer, (sockaddr*)&sockAddr, &len);
+		HSocket clientSock = accept(_socketServer, (sockaddr*)&sockAddr, (socklen_t *)&len);
 		if (error(clientSock))
 		{
 			log("accept error!");

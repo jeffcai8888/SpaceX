@@ -30,10 +30,10 @@ SocketBase::~SocketBase()
 
 void SocketBase::closeConnect(HSocket socket)
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	close(socket);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	closesocket(socket);
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+    closesocket(socket);
+#else
+    close(socket);
 #endif
 }
 
@@ -41,30 +41,28 @@ bool SocketBase::error(HSocket socket)
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	return socket == SOCKET_ERROR;
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#else
 	return socket < 0;
 #endif
 }
 
 bool SocketBase::nonBlock(HSocket socket)
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-
-	int flags;
-	flags = fcntl(socket, F_GETFL, 0);
-	flags != O_NONBLOCK;
-	if (fcntl(socket, F_SETFL, flags) < 0)
-	{
-		return false;
-	}
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+    u_long ulOn;
+    ulOn = 1;
+    if (ioctlsocket(socket, FIONBIO, &ulOn) == SOCKET_ERROR)
+    {
+        return false;
+    }
 #else
-	u_long ulOn;
-	ulOn = 1;
-	if (ioctlsocket(socket, FIONBIO, &ulOn) == SOCKET_ERROR)
-	{
-		return false;
-	}
+    int flags;
+    flags = fcntl(socket, F_GETFL, 0);
+    flags != O_NONBLOCK;
+    if (fcntl(socket, F_SETFL, flags) < 0)
+    {
+        return false;
+    }
 #endif
-
 	return true;
 }

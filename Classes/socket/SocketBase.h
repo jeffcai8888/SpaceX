@@ -10,8 +10,8 @@ USING_NS_CC;
 #pragma comment(lib, "WS2_32.lib")
 #define HSocket SOCKET
 
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include <error.h>
+#else
+//#include <error.h>
 #include <arpa/inet.h>		// for inet_**
 #include <netdb.h>			// for gethost**
 #include <netinet/in.h>		// for sockaddr_in
@@ -21,6 +21,7 @@ USING_NS_CC;
 #include <stdio.h>		    // for printf
 #include <stdlib.h>			// for exit
 #include <string.h>			// for bzero
+#include <fcntl.h>
 #define HSocket int
 #endif 
 

@@ -69,6 +69,33 @@
 		D44C620E132DFF430009C878 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620D132DFF430009C878 /* AVFoundation.framework */; };
 		D44C6210132DFF4E0009C878 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620F132DFF4E0009C878 /* AudioToolbox.framework */; };
 		D6B0611B1803AB670077942B /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6B0611A1803AB670077942B /* CoreMotion.framework */; };
+		E91042131CA533230004E13C /* JsonParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D89168B1C7A165F00F442C9 /* JsonParser.cpp */; };
+		E91042271CA533550004E13C /* Box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91042141CA533550004E13C /* Box.cpp */; };
+		E91042281CA533550004E13C /* ClientGameLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91042161CA533550004E13C /* ClientGameLayer.cpp */; };
+		E91042291CA533550004E13C /* Foresight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91042181CA533550004E13C /* Foresight.cpp */; };
+		E910422A1CA533550004E13C /* Gunner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E910421A1CA533550004E13C /* Gunner.cpp */; };
+		E910422B1CA533550004E13C /* OfflineGameLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E910421C1CA533550004E13C /* OfflineGameLayer.cpp */; };
+		E910422C1CA533550004E13C /* Princess.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E910421E1CA533550004E13C /* Princess.cpp */; };
+		E910422D1CA533550004E13C /* SelectLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91042201CA533550004E13C /* SelectLayer.cpp */; };
+		E910422E1CA533550004E13C /* ServerGameLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91042221CA533550004E13C /* ServerGameLayer.cpp */; };
+		E910422F1CA533550004E13C /* Slope.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91042241CA533550004E13C /* Slope.cpp */; };
+		E91042331CA533660004E13C /* SocketManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91042311CA533660004E13C /* SocketManager.cpp */; };
+		E91042341CA533690004E13C /* SocketManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91042311CA533660004E13C /* SocketManager.cpp */; };
+		E91042351CA5336C0004E13C /* Box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91042141CA533550004E13C /* Box.cpp */; };
+		E91042361CA5336F0004E13C /* ClientGameLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91042161CA533550004E13C /* ClientGameLayer.cpp */; };
+		E91042371CA533720004E13C /* Foresight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91042181CA533550004E13C /* Foresight.cpp */; };
+		E91042381CA533750004E13C /* Gunner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E910421A1CA533550004E13C /* Gunner.cpp */; };
+		E91042391CA533780004E13C /* OfflineGameLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E910421C1CA533550004E13C /* OfflineGameLayer.cpp */; };
+		E910423A1CA5337B0004E13C /* Princess.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E910421E1CA533550004E13C /* Princess.cpp */; };
+		E910423B1CA5337F0004E13C /* SelectLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91042201CA533550004E13C /* SelectLayer.cpp */; };
+		E910423C1CA533820004E13C /* ServerGameLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91042221CA533550004E13C /* ServerGameLayer.cpp */; };
+		E910423D1CA533850004E13C /* Slope.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91042241CA533550004E13C /* Slope.cpp */; };
+		E91042481CA537A80004E13C /* SocketBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91042421CA537A80004E13C /* SocketBase.cpp */; };
+		E91042491CA537A80004E13C /* SocketBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91042421CA537A80004E13C /* SocketBase.cpp */; };
+		E910424A1CA537A80004E13C /* SocketClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91042441CA537A80004E13C /* SocketClient.cpp */; };
+		E910424B1CA537A80004E13C /* SocketClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91042441CA537A80004E13C /* SocketClient.cpp */; };
+		E910424C1CA537A80004E13C /* SocketServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91042461CA537A80004E13C /* SocketServer.cpp */; };
+		E910424D1CA537A80004E13C /* SocketServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91042461CA537A80004E13C /* SocketServer.cpp */; };
 		E969751F1C72F24300959DB1 /* BaseSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E969750C1C72F24300959DB1 /* BaseSprite.cpp */; };
 		E96975201C72F24300959DB1 /* Bullet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E969750E1C72F24300959DB1 /* Bullet.cpp */; };
 		E96975211C72F24300959DB1 /* GameLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E96975111C72F24300959DB1 /* GameLayer.cpp */; };
@@ -171,6 +198,32 @@
 		D44C620D132DFF430009C878 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		D44C620F132DFF4E0009C878 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		D6B0611A1803AB670077942B /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
+		E91042141CA533550004E13C /* Box.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Box.cpp; sourceTree = "<group>"; };
+		E91042151CA533550004E13C /* Box.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Box.h; sourceTree = "<group>"; };
+		E91042161CA533550004E13C /* ClientGameLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ClientGameLayer.cpp; sourceTree = "<group>"; };
+		E91042171CA533550004E13C /* ClientGameLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClientGameLayer.h; sourceTree = "<group>"; };
+		E91042181CA533550004E13C /* Foresight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Foresight.cpp; sourceTree = "<group>"; };
+		E91042191CA533550004E13C /* Foresight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Foresight.h; sourceTree = "<group>"; };
+		E910421A1CA533550004E13C /* Gunner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Gunner.cpp; sourceTree = "<group>"; };
+		E910421B1CA533550004E13C /* Gunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gunner.h; sourceTree = "<group>"; };
+		E910421C1CA533550004E13C /* OfflineGameLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OfflineGameLayer.cpp; sourceTree = "<group>"; };
+		E910421D1CA533550004E13C /* OfflineGameLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OfflineGameLayer.h; sourceTree = "<group>"; };
+		E910421E1CA533550004E13C /* Princess.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Princess.cpp; sourceTree = "<group>"; };
+		E910421F1CA533550004E13C /* Princess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Princess.h; sourceTree = "<group>"; };
+		E91042201CA533550004E13C /* SelectLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SelectLayer.cpp; sourceTree = "<group>"; };
+		E91042211CA533550004E13C /* SelectLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectLayer.h; sourceTree = "<group>"; };
+		E91042221CA533550004E13C /* ServerGameLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ServerGameLayer.cpp; sourceTree = "<group>"; };
+		E91042231CA533550004E13C /* ServerGameLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerGameLayer.h; sourceTree = "<group>"; };
+		E91042241CA533550004E13C /* Slope.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Slope.cpp; sourceTree = "<group>"; };
+		E91042251CA533550004E13C /* Slope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Slope.h; sourceTree = "<group>"; };
+		E91042311CA533660004E13C /* SocketManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SocketManager.cpp; sourceTree = "<group>"; };
+		E91042321CA533660004E13C /* SocketManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketManager.h; sourceTree = "<group>"; };
+		E91042421CA537A80004E13C /* SocketBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SocketBase.cpp; sourceTree = "<group>"; };
+		E91042431CA537A80004E13C /* SocketBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketBase.h; sourceTree = "<group>"; };
+		E91042441CA537A80004E13C /* SocketClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SocketClient.cpp; sourceTree = "<group>"; };
+		E91042451CA537A80004E13C /* SocketClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketClient.h; sourceTree = "<group>"; };
+		E91042461CA537A80004E13C /* SocketServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SocketServer.cpp; sourceTree = "<group>"; };
+		E91042471CA537A80004E13C /* SocketServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketServer.h; sourceTree = "<group>"; };
 		E969750C1C72F24300959DB1 /* BaseSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseSprite.cpp; sourceTree = "<group>"; };
 		E969750D1C72F24300959DB1 /* BaseSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseSprite.h; sourceTree = "<group>"; };
 		E969750E1C72F24300959DB1 /* Bullet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Bullet.cpp; sourceTree = "<group>"; };
@@ -322,6 +375,27 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				E91042411CA537A80004E13C /* socket */,
+				E91042311CA533660004E13C /* SocketManager.cpp */,
+				E91042321CA533660004E13C /* SocketManager.h */,
+				E91042141CA533550004E13C /* Box.cpp */,
+				E91042151CA533550004E13C /* Box.h */,
+				E91042161CA533550004E13C /* ClientGameLayer.cpp */,
+				E91042171CA533550004E13C /* ClientGameLayer.h */,
+				E91042181CA533550004E13C /* Foresight.cpp */,
+				E91042191CA533550004E13C /* Foresight.h */,
+				E910421A1CA533550004E13C /* Gunner.cpp */,
+				E910421B1CA533550004E13C /* Gunner.h */,
+				E910421C1CA533550004E13C /* OfflineGameLayer.cpp */,
+				E910421D1CA533550004E13C /* OfflineGameLayer.h */,
+				E910421E1CA533550004E13C /* Princess.cpp */,
+				E910421F1CA533550004E13C /* Princess.h */,
+				E91042201CA533550004E13C /* SelectLayer.cpp */,
+				E91042211CA533550004E13C /* SelectLayer.h */,
+				E91042221CA533550004E13C /* ServerGameLayer.cpp */,
+				E91042231CA533550004E13C /* ServerGameLayer.h */,
+				E91042241CA533550004E13C /* Slope.cpp */,
+				E91042251CA533550004E13C /* Slope.h */,
 				3D89168B1C7A165F00F442C9 /* JsonParser.cpp */,
 				3D89168C1C7A165F00F442C9 /* JsonParser.h */,
 				3D6DA7311C74E2AA0068FE19 /* DebugScene.cpp */,
@@ -399,6 +473,19 @@
 			name = Icons;
 			path = ios;
 			sourceTree = SOURCE_ROOT;
+		};
+		E91042411CA537A80004E13C /* socket */ = {
+			isa = PBXGroup;
+			children = (
+				E91042421CA537A80004E13C /* SocketBase.cpp */,
+				E91042431CA537A80004E13C /* SocketBase.h */,
+				E91042441CA537A80004E13C /* SocketClient.cpp */,
+				E91042451CA537A80004E13C /* SocketClient.h */,
+				E91042461CA537A80004E13C /* SocketServer.cpp */,
+				E91042471CA537A80004E13C /* SocketServer.h */,
+			);
+			path = socket;
+			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
@@ -534,18 +621,31 @@
 			buildActionMask = 2147483647;
 			files = (
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
+				E91042271CA533550004E13C /* Box.cpp in Sources */,
 				E96975201C72F24300959DB1 /* Bullet.cpp in Sources */,
 				E96975251C72F24300959DB1 /* Hero.cpp in Sources */,
 				E969751F1C72F24300959DB1 /* BaseSprite.cpp in Sources */,
+				E910424A1CA537A80004E13C /* SocketClient.cpp in Sources */,
+				E910422F1CA533550004E13C /* Slope.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
+				E910422B1CA533550004E13C /* OfflineGameLayer.cpp in Sources */,
+				E91042291CA533550004E13C /* Foresight.cpp in Sources */,
+				E910422D1CA533550004E13C /* SelectLayer.cpp in Sources */,
+				E910422A1CA533550004E13C /* Gunner.cpp in Sources */,
+				E910424C1CA537A80004E13C /* SocketServer.cpp in Sources */,
+				E91042281CA533550004E13C /* ClientGameLayer.cpp in Sources */,
 				3D6DA7331C74E2AA0068FE19 /* DebugScene.cpp in Sources */,
 				E96975211C72F24300959DB1 /* GameLayer.cpp in Sources */,
 				3D89168D1C7A165F00F442C9 /* JsonParser.cpp in Sources */,
 				E96975221C72F24300959DB1 /* GameOverScene.cpp in Sources */,
 				E96975231C72F24300959DB1 /* GameScene.cpp in Sources */,
 				E96975241C72F24300959DB1 /* Ground.cpp in Sources */,
+				E910422C1CA533550004E13C /* Princess.cpp in Sources */,
+				E910422E1CA533550004E13C /* ServerGameLayer.cpp in Sources */,
+				E91042331CA533660004E13C /* SocketManager.cpp in Sources */,
 				E96975261C72F24300959DB1 /* OperateLayer.cpp in Sources */,
+				E91042481CA537A80004E13C /* SocketBase.cpp in Sources */,
 				E96975271C72F24300959DB1 /* SceneManager.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 			);
@@ -556,17 +656,31 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D6DA7381C7545DE0068FE19 /* GameOverScene.cpp in Sources */,
+				E91042371CA533720004E13C /* Foresight.cpp in Sources */,
+				E91042131CA533230004E13C /* JsonParser.cpp in Sources */,
+				E910424B1CA537A80004E13C /* SocketClient.cpp in Sources */,
+				E91042491CA537A80004E13C /* SocketBase.cpp in Sources */,
 				3D6DA7361C7545D70068FE19 /* Bullet.cpp in Sources */,
+				E91042381CA533750004E13C /* Gunner.cpp in Sources */,
 				3D6DA73D1C7545EF0068FE19 /* SceneManager.cpp in Sources */,
+				E910423C1CA533820004E13C /* ServerGameLayer.cpp in Sources */,
+				E91042341CA533690004E13C /* SocketManager.cpp in Sources */,
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
+				E910423B1CA5337F0004E13C /* SelectLayer.cpp in Sources */,
+				E910423A1CA5337B0004E13C /* Princess.cpp in Sources */,
 				3D6DA7351C7545D40068FE19 /* BaseSprite.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
 				3D6DA73C1C7545EC0068FE19 /* OperateLayer.cpp in Sources */,
+				E91042351CA5336C0004E13C /* Box.cpp in Sources */,
+				E91042361CA5336F0004E13C /* ClientGameLayer.cpp in Sources */,
 				3D6DA7341C7545D00068FE19 /* DebugScene.cpp in Sources */,
 				3D6DA7391C7545E20068FE19 /* GameScene.cpp in Sources */,
+				E91042391CA533780004E13C /* OfflineGameLayer.cpp in Sources */,
 				3D6DA73A1C7545E50068FE19 /* Ground.cpp in Sources */,
+				E910423D1CA533850004E13C /* Slope.cpp in Sources */,
 				3D6DA7371C7545DB0068FE19 /* GameLayer.cpp in Sources */,
 				3D6DA73B1C7545E80068FE19 /* Hero.cpp in Sources */,
+				E910424D1CA537A80004E13C /* SocketServer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
