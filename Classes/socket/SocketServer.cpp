@@ -131,8 +131,12 @@ void SocketServer::acceptFunc()
 	int len = sizeof(sockaddr);
 	struct sockaddr_in sockAddr;
 	while (true)
-	{	
+	{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+		HSocket clientSock = accept(_socketServer, (sockaddr*)&sockAddr, (int *)&len);
+#else
 		HSocket clientSock = accept(_socketServer, (sockaddr*)&sockAddr, (socklen_t *)&len);
+#endif
 		if (error(clientSock))
 		{
 			log("accept error!");
