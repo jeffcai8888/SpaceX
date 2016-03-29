@@ -37,6 +37,7 @@ private:
 	void acceptFunc();
 	void newClientConnected(HSocket socket);
 	void recvMessage(HSocket socket);
+    std::string localIPAddresses();
 	
 private:
 	static SocketServer* s_server;

@@ -1,4 +1,9 @@
 #include "SocketServer.h"
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <ifaddrs.h>
+#include <net/if.h>
+#include <netdb.h>s
 
 SocketServer* SocketServer::s_server = nullptr;
 
@@ -99,6 +104,7 @@ bool SocketServer::initServer(unsigned short port)
 		// start 
 		char hostName[256];
 		gethostname(hostName, sizeof(hostName));
+        localIPAddresses();
 		struct hostent* hostInfo = gethostbyname(hostName);
 		char* ip = inet_ntoa(*(struct in_addr *)*hostInfo->h_addr_list);
 		this->acceptClient();
@@ -276,4 +282,39 @@ void SocketServer::update(float dt)
 
 	CC_SAFE_DELETE(msg);
 	_UIMessageQueueMutex.unlock();
+}
+
+std::string SocketServer::localIPAddresses()
+{
+    struct ifaddrs *allInterfaces;
+    
+    // Get list of all interfaces on the local machine:
+    if (getifaddrs(&allInterfaces) == 0) {
+        struct ifaddrs *interface;
+        
+        // For each interface ...
+        for (interface = allInterfaces; interface != NULL; interface = interface->ifa_next) {
+            unsigned int flags = interface->ifa_flags;
+            struct sockaddr *addr = interface->ifa_addr;
+            std::string name = std::string(interface->ifa_name);
+            
+            // Check for running IPv4, IPv6 interfaces. Skip the loopback interface.
+            if ((flags & (IFF_UP|IFF_RUNNING|IFF_LOOPBACK)) == (IFF_UP|IFF_RUNNING)) {
+                if (addr->sa_family == AF_INET || addr->sa_family == AF_INET6) {
+                    
+                    // Convert interface address to a human readable string:
+                    if(name.compare("en0") == 0)
+                    {
+                        char host[NI_MAXHOST];
+                        getnameinfo(addr, addr->sa_len, host, sizeof(host), NULL, 0, NI_NUMERICHOST);
+                        freeifaddrs(allInterfaces);
+                        return std::string(host);
+                    }
+                    
+                }
+            }
+        }
+        
+        freeifaddrs(allInterfaces);
+    }
 }
