@@ -37,7 +37,9 @@ private:
 	void acceptFunc();
 	void newClientConnected(HSocket socket);
 	void recvMessage(HSocket socket);
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     std::string localIPAddresses();
+#endif
 	
 private:
 	static SocketServer* s_server;
