@@ -4,8 +4,6 @@
     <Group ctype="ResourceGroup">
       <RootFolder Name=".">
         <Folder Name="d1">
-          <Image Name="bullet.png" />
-          <Image Name="Foresight.png" />
           <Image Name="SQ_down_01.png" />
           <Image Name="SQ_down_02.png" />
           <Image Name="SQ_down_03.png" />
@@ -64,10 +62,10 @@
           <Image Name="pause_down.png" />
         </Folder>
         <Image Name="background.png" />
+        <Project Name="BackgroundLayer.csd" Type="Layer" />
         <Image Name="DebugNormal.png" />
         <Project Name="DebugScene.csd" Type="Scene" />
         <Image Name="DebugSelected.png" />
-        <Project Name="BackgroundLayer.csd" Type="Layer" />
       </RootFolder>
     </Group>
   </SolutionFolder>

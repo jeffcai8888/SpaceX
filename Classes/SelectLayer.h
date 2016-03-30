@@ -1,5 +1,5 @@
 #ifndef _SPACEX_CLASSES_SELECTSCENE_H_
-#define _SPACEX_CLASSES_DEBUGSCENE_H_
+#define _SPACEX_CLASSES_SELECTSCENE_H_
 
 #include <cocos2d.h>
 

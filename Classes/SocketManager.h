@@ -39,10 +39,10 @@ public:
 
 	void init();
 	void sendData(int, int, int, cocos2d::Vec2);
+	std::string getIPAddress();
 
-	CC_SYNTHESIZE(SocketClient*, m_pSocketClient, SocketClient);
-	CC_SYNTHESIZE(SocketServer*, m_pSocketServer, SocketServer);
 	CC_SYNTHESIZE(int, m_networkType, NetworkType);
+	CC_SYNTHESIZE(std::string, m_ServerAddr, ServerAddr);
 
 private:
 	SocketManager();

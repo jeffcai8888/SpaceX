@@ -12,5 +12,9 @@
 {"Attr":"ForesightSpeed","Value":230.0},
 {"Attr":"JoystickX","Value":900.0},
 {"Attr":"JoystickY","Value":100.0},
-{"Attr":"JoystickScale","Value":1.5}
+{"Attr":"JoystickScale","Value":1.5},
+{"Attr":"ServerIP0","Value":127.0},
+{"Attr":"ServerIP1","Value":0.0},
+{"Attr":"ServerIP2","Value":0.0},
+{"Attr":"ServerIP3","Value":1.0}
 ]}

@@ -4,8 +4,9 @@
       <Value ctype="TabsInfo">
         <OpenedDocuments>
           <FilePathData Path="BackgroundLayer.csd" />
+          <FilePathData Path="DebugScene.csd" />
         </OpenedDocuments>
-        <ActiveDocument Path="BackgroundLayer.csd" />
+        <ActiveDocument Path="DebugScene.csd" />
       </Value>
     </Item>
     <Item Key="CocosRecentOperation">

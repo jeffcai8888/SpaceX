@@ -1,6 +1,6 @@
 #include "SocketClient.h"
 
-SocketClient* SocketClient::construct()
+SocketClient* SocketClient::getInstance()
 {
 	SocketClient* client = new SocketClient;
 	return client;

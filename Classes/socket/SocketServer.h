@@ -20,6 +20,7 @@ public:
 	void sendMessage(HSocket socket, const char* data, int count);
 	void sendMessage(const char* data, int count);
 	void update(float dt);
+	std::string localIPAddresses();
 
 	std::function<void(const char* ip)> onStart;
 	std::function<void(HSocket socket)> onNewConnection;
@@ -37,10 +38,7 @@ private:
 	void acceptFunc();
 	void newClientConnected(HSocket socket);
 	void recvMessage(HSocket socket);
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    std::string localIPAddresses();
-#endif
-	
+
 private:
 	static SocketServer* s_server;
 	HSocket _socketServer;

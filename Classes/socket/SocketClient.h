@@ -5,7 +5,7 @@
 class SocketClient : public SocketBase
 {
 public:
-	static SocketClient* construct();
+	static SocketClient* getInstance();
 	void destroy();
 
 	bool connectServer(const char* serverIP, unsigned short port);

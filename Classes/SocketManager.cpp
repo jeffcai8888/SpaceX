@@ -5,9 +5,7 @@
 SocketManager* SocketManager::instance = nullptr;
 
 SocketManager::SocketManager()
-:m_pSocketClient(nullptr)
-,m_pSocketServer(nullptr)
-,m_networkType(NT_Offline)
+:m_networkType(NT_Offline)
 {
 }
 
@@ -28,17 +26,14 @@ void SocketManager::init()
 {
 	if (NT_Client == m_networkType)
 	{
-		m_pSocketClient = SocketClient::construct();
-		//if (!m_pSocketClient->connectServer("192.168.2.29", 8000))
-		if (!m_pSocketClient->connectServer("127.0.0.1", 8000))
+		if (!SocketClient::getInstance()->connectServer(m_ServerAddr.c_str(), 8000))
 		{
 			CCLOG("Client connect error");
 		}
 	}
 	else if (NT_Server == m_networkType)
 	{
-		m_pSocketServer = SocketServer::getInstance();
-		m_pSocketServer->startServer(8000);
+		SocketServer::getInstance()->startServer(8000);
 	}
 }
 
@@ -51,7 +46,12 @@ void SocketManager::sendData(int type, int actionState, int moveState, cocos2d::
 	data.vec = vec;
 	data.dataSize = sizeof(data);
 	if(m_networkType == NT_Server)
-		m_pSocketServer->sendMessage((const char*)&data, sizeof(data));
+		SocketServer::getInstance()->sendMessage((const char*)&data, sizeof(data));
 	else if(m_networkType == NT_Client)
-		m_pSocketClient->sendMessage((const char*)&data, sizeof(data));
+		SocketClient::getInstance()->sendMessage((const char*)&data, sizeof(data));
+}
+
+std::string SocketManager::getIPAddress()
+{
+	return SocketServer::getInstance()->localIPAddresses();
 }

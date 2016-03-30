@@ -14,6 +14,8 @@ public:
 
 	CREATE_FUNC(DebugLayer);
 
+	bool m_isFirst;
+
 
 	virtual cocos2d::ui::Widget::ccWidgetTouchCallback onLocateTouchCallback(const std::string &callBackName);
 	virtual cocos2d::ui::Widget::ccWidgetClickCallback onLocateClickCallback(const std::string &callBackName);
@@ -45,7 +47,7 @@ public :
 class DebugScene
 {
 public:
-	static cocos2d::Scene* createScene();
+	static cocos2d::Scene* createScene(bool isFirst = false);
 };
 
 #endif

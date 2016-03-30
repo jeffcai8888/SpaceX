@@ -1,14 +1,17 @@
 #include "DebugScene.h"
+#include "GameScene.h"
 #include "cocostudio/CocoStudio.h"
 #include "ui/CocosGUI.h"
 #include "SceneManager.h"
 #include "JsonParser.h"
+#include "SocketManager.h"
 
 USING_NS_CC;
 using namespace cocos2d::ui;
 
 DebugLayer::DebugLayer()
 :m_pCloseItem(nullptr)
+, m_isFirst(true)
 {
 
 }
@@ -21,6 +24,7 @@ DebugLayer::~DebugLayer()
 void DebugLayer::onEnter()
 {
 	Layer::onEnter();
+
 	JsonParser* parser = JsonParser::createWithFile("Debug.json");
 	parser->decodeDebugData();
 	auto list = parser->getList();
@@ -86,9 +90,24 @@ void DebugLayer::onEnter()
 			{
 				static_cast<TextField *>(getChildByName("TextField_3_5"))->setString(Value(pair.second.asFloat()).asString());
 			}
+			else if (pair.first.compare("ServerIP0") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_4_0"))->setString(Value(pair.second.asInt()).asString());
+			}
+			else if (pair.first.compare("ServerIP1") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_4_1"))->setString(Value(pair.second.asInt()).asString());
+			}
+			else if (pair.first.compare("ServerIP2") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_4_2"))->setString(Value(pair.second.asInt()).asString());
+			}
+			else if (pair.first.compare("ServerIP3") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_4_3"))->setString(Value(pair.second.asInt()).asString());
+			}
 		}
 	}
-
 }
 
 void DebugLayer::onExit()
@@ -139,6 +158,18 @@ void DebugLayer::onExit()
 	m["Attr"] = Value("JoystickScale");
 	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_3_5"))->getString());
 	listData.push_back(Value(m));
+	m["Attr"] = Value("ServerIP0");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_0"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("ServerIP1");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_1"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("ServerIP2");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_2"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("ServerIP3");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_3"))->getString());
+	listData.push_back(Value(m));
 	auto parser = JsonParser::createWithArray(listData);
 	std::string writablePath = FileUtils::getInstance()->getWritablePath();
 	std::string fileName = writablePath + "Debug.json";
@@ -170,7 +201,13 @@ Widget::ccWidgetEventCallback DebugLayer::onLocateEventCallback(const std::strin
 
 void DebugLayer::exitDebug(Ref* pSender)
 {
-	SceneManager::getInstance()->popScene();
+	if (m_isFirst == true)
+	{
+		auto scene = GameScene::createScene(NT_Client);
+		Director::getInstance()->replaceScene(scene);
+	}
+	else
+		SceneManager::getInstance()->popScene();
 }
 
 void DebugLayer::textFieldEvent(Ref *pSender, int type)
@@ -220,11 +257,12 @@ Node* DebugLayerReader::createNodeWithFlatBuffers(const flatbuffers::Table* node
 	return node;
 }
 
-Scene* DebugScene::createScene()
+Scene* DebugScene::createScene(bool isFirst)
 {
 	auto scene = Scene::create();
 	CSLoader::getInstance()->registReaderObject("DebugLayerReader", (ObjectFactory::Instance)DebugLayerReader::getInstance);
 	auto layer = CSLoader::createNode("DebugScene.csb");
+	static_cast<DebugLayer *>(layer)->m_isFirst = isFirst;
 	scene->addChild(layer);
 	return scene;
 }

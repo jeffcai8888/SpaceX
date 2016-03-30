@@ -104,22 +104,13 @@ bool SocketServer::initServer(unsigned short port)
 			break;
 		}
 		// start 
-		char hostName[256];
-		gethostname(hostName, sizeof(hostName));
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-        std::string addr = localIPAddresses();
-        const char* ip = addr.c_str();
-        CCLOG("IP addr %s", ip);
-#else
-		struct hostent* hostInfo = gethostbyname(hostName);
-		char* ip = inet_ntoa(*(struct in_addr *)*hostInfo->h_addr_list);
-#endif
+		std::string addr = localIPAddresses();
 		this->acceptClient();
 
 		if (onStart != nullptr)
 		{
 			log("start server!");
-			this->onStart(ip);
+			this->onStart(addr.c_str());
 		}
 
 		Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, false);
@@ -291,9 +282,10 @@ void SocketServer::update(float dt)
 	_UIMessageQueueMutex.unlock();
 }
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+
 std::string SocketServer::localIPAddresses()
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     bool success;
     struct ifaddrs * addrs;
     const struct ifaddrs * cursor;
@@ -314,5 +306,11 @@ std::string SocketServer::localIPAddresses()
         freeifaddrs(addrs);
     }
     return std::string("");
-}
+#else
+	char hostName[256];
+	gethostname(hostName, sizeof(hostName));
+	struct hostent* hostInfo = gethostbyname(hostName);
+	char* ip = inet_ntoa(*(struct in_addr *)*hostInfo->h_addr_list);
+	return std::string(ip);
 #endif
+}

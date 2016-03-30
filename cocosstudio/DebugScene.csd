@@ -114,7 +114,7 @@
             <OutlineColor A="255" R="255" G="0" B="0" />
             <ShadowColor A="255" R="110" G="110" B="110" />
           </AbstractNodeData>
-          <AbstractNodeData Name="TextField_2_2" ActionTag="-426987195" Tag="14" IconVisible="False" LeftMargin="118.7537" RightMargin="917.2463" TopMargin="221.0281" BottomMargin="398.9719" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="Text Field" MaxLengthText="10" ctype="TextFieldObjectData">
+          <AbstractNodeData Name="TextField_2_2" ActionTag="-426987195" CallBackType="Event" CallBackName="TextFieldEvent" Tag="14" IconVisible="False" LeftMargin="118.7537" RightMargin="917.2463" TopMargin="221.0281" BottomMargin="398.9719" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="Text Field" MaxLengthText="10" ctype="TextFieldObjectData">
             <Size X="100.0000" Y="20.0000" />
             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
             <Position X="168.7537" Y="408.9719" />
@@ -154,7 +154,7 @@
             <OutlineColor A="255" R="255" G="0" B="0" />
             <ShadowColor A="255" R="110" G="110" B="110" />
           </AbstractNodeData>
-          <AbstractNodeData Name="TextField_2_4" ActionTag="772938810" Tag="18" IconVisible="False" LeftMargin="115.7537" RightMargin="920.2463" TopMargin="281.0281" BottomMargin="338.9719" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="Text Field" MaxLengthText="10" ctype="TextFieldObjectData">
+          <AbstractNodeData Name="TextField_2_4" ActionTag="772938810" CallBackType="Event" CallBackName="TextFieldEvent" Tag="18" IconVisible="False" LeftMargin="115.7537" RightMargin="920.2463" TopMargin="281.0281" BottomMargin="338.9719" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="Text Field" MaxLengthText="10" ctype="TextFieldObjectData">
             <Size X="100.0000" Y="20.0000" />
             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
             <Position X="165.7537" Y="348.9719" />
@@ -185,7 +185,7 @@
             <OutlineColor A="255" R="255" G="0" B="0" />
             <ShadowColor A="255" R="110" G="110" B="110" />
           </AbstractNodeData>
-          <AbstractNodeData Name="TextField_2_5" ActionTag="1600803639" Tag="21" IconVisible="False" LeftMargin="115.7990" RightMargin="920.2010" TopMargin="311.4585" BottomMargin="308.5415" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="Text Field" MaxLengthText="10" ctype="TextFieldObjectData">
+          <AbstractNodeData Name="TextField_2_5" ActionTag="1600803639" CallBackType="Event" CallBackName="TextFieldEvent" Tag="21" IconVisible="False" LeftMargin="115.7990" RightMargin="920.2010" TopMargin="311.4585" BottomMargin="308.5415" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="Text Field" MaxLengthText="10" ctype="TextFieldObjectData">
             <Size X="100.0000" Y="20.0000" />
             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
             <Position X="165.7990" Y="318.5415" />
@@ -225,7 +225,7 @@
             <OutlineColor A="255" R="255" G="0" B="0" />
             <ShadowColor A="255" R="110" G="110" B="110" />
           </AbstractNodeData>
-          <AbstractNodeData Name="TextField_1_3" ActionTag="-1082263180" Tag="27" IconVisible="False" LeftMargin="121.4790" RightMargin="914.5210" TopMargin="99.9830" BottomMargin="520.0170" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="Text Field" MaxLengthText="10" ctype="TextFieldObjectData">
+          <AbstractNodeData Name="TextField_1_3" ActionTag="-1082263180" CallBackType="Event" CallBackName="TextFieldEvent" Tag="27" IconVisible="False" LeftMargin="121.4790" RightMargin="914.5210" TopMargin="99.9830" BottomMargin="520.0170" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="Text Field" MaxLengthText="10" ctype="TextFieldObjectData">
             <Size X="100.0000" Y="20.0000" />
             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
             <Position X="171.4790" Y="530.0170" />
@@ -333,6 +333,86 @@
             <PreSize X="0.0880" Y="0.0313" />
             <OutlineColor A="255" R="255" G="0" B="0" />
             <ShadowColor A="255" R="110" G="110" B="110" />
+          </AbstractNodeData>
+          <AbstractNodeData Name="Text_4" ActionTag="-216970151" Tag="36" IconVisible="False" LeftMargin="658.0000" RightMargin="398.0000" TopMargin="20.0000" BottomMargin="600.0000" FontSize="20" LabelText="服务器IP" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+            <Size X="80.0000" Y="20.0000" />
+            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+            <Position X="698.0000" Y="610.0000" />
+            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+            <CColor A="255" R="255" G="255" B="255" />
+            <PrePosition X="0.6144" Y="0.9531" />
+            <PreSize X="0.0704" Y="0.0313" />
+            <OutlineColor A="255" R="255" G="0" B="0" />
+            <ShadowColor A="255" R="110" G="110" B="110" />
+          </AbstractNodeData>
+          <AbstractNodeData Name="TextField_4_0" ActionTag="-1768974158" CallBackType="Event" CallBackName="TextFieldEvent" Tag="37" IconVisible="False" LeftMargin="655.9996" RightMargin="380.0004" TopMargin="52.0016" BottomMargin="567.9984" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="0" MaxLengthEnable="True" MaxLengthText="3" ctype="TextFieldObjectData">
+            <Size X="100.0000" Y="20.0000" />
+            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+            <Position X="705.9996" Y="577.9984" />
+            <Scale ScaleX="0.9600" ScaleY="1.0000" />
+            <CColor A="255" R="255" G="255" B="255" />
+            <PrePosition X="0.6215" Y="0.9031" />
+            <PreSize X="0.0880" Y="0.0313" />
+          </AbstractNodeData>
+          <AbstractNodeData Name="Text_5" ActionTag="1939786447" Tag="38" IconVisible="False" LeftMargin="737.9990" RightMargin="388.0010" TopMargin="52.0002" BottomMargin="567.9998" FontSize="20" LabelText="." ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+            <Size X="10.0000" Y="20.0000" />
+            <AnchorPoint ScaleX="0.6000" ScaleY="0.5500" />
+            <Position X="743.9988" Y="579.0000" />
+            <Scale ScaleX="1.5000" ScaleY="0.9091" />
+            <CColor A="255" R="255" G="255" B="255" />
+            <PrePosition X="0.6549" Y="0.9047" />
+            <PreSize X="0.0088" Y="0.0313" />
+            <OutlineColor A="255" R="255" G="0" B="0" />
+            <ShadowColor A="255" R="110" G="110" B="110" />
+          </AbstractNodeData>
+          <AbstractNodeData Name="TextField_4_1" ActionTag="-581571677" CallBackType="Event" CallBackName="TextFieldEvent" Tag="39" IconVisible="False" LeftMargin="741.0000" RightMargin="295.0000" TopMargin="52.0001" BottomMargin="567.9999" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="0" MaxLengthEnable="True" MaxLengthText="3" ctype="TextFieldObjectData">
+            <Size X="100.0000" Y="20.0000" />
+            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+            <Position X="791.0000" Y="577.9999" />
+            <Scale ScaleX="0.8400" ScaleY="1.0000" />
+            <CColor A="255" R="255" G="255" B="255" />
+            <PrePosition X="0.6963" Y="0.9031" />
+            <PreSize X="0.0880" Y="0.0313" />
+          </AbstractNodeData>
+          <AbstractNodeData Name="Text_5_0" ActionTag="-1666146839" Tag="40" IconVisible="False" LeftMargin="837.9995" RightMargin="288.0005" TopMargin="53.0004" BottomMargin="566.9996" FontSize="20" LabelText="." ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+            <Size X="10.0000" Y="20.0000" />
+            <AnchorPoint ScaleX="0.6000" ScaleY="0.5500" />
+            <Position X="843.9993" Y="577.9998" />
+            <Scale ScaleX="1.5000" ScaleY="0.9091" />
+            <CColor A="255" R="255" G="255" B="255" />
+            <PrePosition X="0.7430" Y="0.9031" />
+            <PreSize X="0.0088" Y="0.0313" />
+            <OutlineColor A="255" R="255" G="0" B="0" />
+            <ShadowColor A="255" R="110" G="110" B="110" />
+          </AbstractNodeData>
+          <AbstractNodeData Name="TextField_4_2" ActionTag="154730209" CallBackType="Event" CallBackName="TextFieldEvent" Tag="41" IconVisible="False" LeftMargin="841.0006" RightMargin="194.9994" TopMargin="53.0038" BottomMargin="566.9962" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="0" MaxLengthEnable="True" MaxLengthText="3" ctype="TextFieldObjectData">
+            <Size X="100.0000" Y="20.0000" />
+            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+            <Position X="891.0006" Y="576.9962" />
+            <Scale ScaleX="0.9000" ScaleY="1.0000" />
+            <CColor A="255" R="255" G="255" B="255" />
+            <PrePosition X="0.7843" Y="0.9016" />
+            <PreSize X="0.0880" Y="0.0313" />
+          </AbstractNodeData>
+          <AbstractNodeData Name="Text_5_0_0" ActionTag="-153616276" Tag="42" IconVisible="False" LeftMargin="938.9984" RightMargin="187.0016" TopMargin="53.0002" BottomMargin="566.9998" FontSize="20" LabelText="." ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+            <Size X="10.0000" Y="20.0000" />
+            <AnchorPoint ScaleX="0.6000" ScaleY="0.5500" />
+            <Position X="944.9983" Y="578.0000" />
+            <Scale ScaleX="1.5000" ScaleY="0.9091" />
+            <CColor A="255" R="255" G="255" B="255" />
+            <PrePosition X="0.8319" Y="0.9031" />
+            <PreSize X="0.0088" Y="0.0313" />
+            <OutlineColor A="255" R="255" G="0" B="0" />
+            <ShadowColor A="255" R="110" G="110" B="110" />
+          </AbstractNodeData>
+          <AbstractNodeData Name="TextField_4_3" ActionTag="2007349424" CallBackType="Event" CallBackName="TextFieldEvent" Tag="43" IconVisible="False" LeftMargin="940.9998" RightMargin="95.0002" TopMargin="53.0002" BottomMargin="566.9998" TouchEnable="True" FontSize="20" IsCustomSize="True" LabelText="" PlaceHolderText="0" MaxLengthEnable="True" MaxLengthText="3" ctype="TextFieldObjectData">
+            <Size X="100.0000" Y="20.0000" />
+            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+            <Position X="990.9998" Y="576.9998" />
+            <Scale ScaleX="0.9400" ScaleY="1.0000" />
+            <CColor A="255" R="255" G="255" B="255" />
+            <PrePosition X="0.8724" Y="0.9016" />
+            <PreSize X="0.0880" Y="0.0313" />
           </AbstractNodeData>
         </Children>
       </ObjectData>
