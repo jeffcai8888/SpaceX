@@ -188,7 +188,7 @@ void ServerGameLayer::onRecv(HSocket socket, const char* data, int count)
 			//m_pHero->runJumpAction(true);
 			//m_pHero->setPosition(networkData->position);
 			//m_pHero->getPhysicsBody()->setVelocity(networkData->velocity);
-			m_pEnemy[0]->jump(m_pHero->getJumpVelocity());
+			m_pEnemy[0]->jump(m_pEnemy[0]->getJumpVelocity());
 			break;
 		case NDT_HeroJumpDown:
 			m_pEnemy[0]->runJumpAction(false);
