@@ -389,7 +389,7 @@ void GameLayer::updateEnemys(float dt)
 			if (m_shootTime >= m_pEnemy[i]->getBulletInterval())
 			{
 				Bullet* bullet = getUnusedBullet();
-				bullet->launch(m_pHero);
+				bullet->launch(m_pEnemy[i]);
 				this->addChild(bullet);
 				m_shootTime = 0.f;
 				if (m_pEnemy[i]->getShootDirection().x != 0)
