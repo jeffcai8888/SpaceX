@@ -59,10 +59,23 @@ bool OperateLayer::init()
 		m_pJoystickBg = Sprite::createWithSpriteFrameName("joystick_bg.png");
 		this->addChild(m_pJoystick, 0);
 		this->addChild(m_pJoystickBg, 1);
-
+		Menu* menu;
 		m_pDebugItem = MenuItemImage::create("pause.png", "pause_down.png", CC_CALLBACK_1(OperateLayer::gotoDebug, this));
 		m_pDebugItem->setPosition(m_origin + Point(visibleSize) - Point(m_pDebugItem->getContentSize() / 2));
-		auto menu = Menu::create(m_pDebugItem, NULL);
+
+		if (SocketManager::getInstance()->getNetworkType() == NT_Server)
+		{
+			std::string ipAddr = SocketManager::getInstance()->getIPAddress();
+			auto lblIpAddr = Label::createWithSystemFont(ipAddr, "Arial", 24.f);
+			auto menuIpAddr = MenuItemLabel::create(lblIpAddr, nullptr);
+			menuIpAddr->setPosition(Vec2(75.f, 25.f));
+			menu = Menu::create(m_pDebugItem, menuIpAddr, NULL);
+		}
+		else
+		{
+			menu = Menu::create(m_pDebugItem, NULL);
+		}
+
 		menu->setPosition(Point::ZERO);
 		this->addChild(menu, 1);
 

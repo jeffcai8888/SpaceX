@@ -42,12 +42,7 @@ void SelectLayer::initMenu()
 	auto menuOffline = MenuItemLabel::create(lblOffline, CC_CALLBACK_1(SelectLayer::menuOfflineClick, this));
 	menuOffline->setPosition(Vec2(winSize.width * 0.5f, winSize.height * 0.4f));
 
-	std::string ipAddr = SocketManager::getInstance()->getIPAddress();
-	auto lblIpAddr = Label::createWithSystemFont(ipAddr, "Arial", 24.f);
-	auto menuIpAddr = MenuItemLabel::create(lblIpAddr, nullptr);
-	menuIpAddr->setPosition(Vec2(winSize.width * 0.5f, winSize.height * 0.8f));
-
-	auto menu = Menu::create(menuServer, menuClient, menuOffline, menuIpAddr, nullptr);
+	auto menu = Menu::create(menuServer, menuClient, menuOffline, nullptr);
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu);
 
@@ -55,23 +50,21 @@ void SelectLayer::initMenu()
 
 void SelectLayer::menuClientClick(Ref* sender)
 {
-	//auto scene = GameScene::createScene(NT_Client);
-	//Director::getInstance()->replaceScene(scene);
-	auto scene = DebugScene::createScene(true);
 	SocketManager::getInstance()->setNetworkType(NT_Client);
+	auto scene = DebugScene::createScene(true);	
 	Director::getInstance()->replaceScene(scene);
 }
 
 void SelectLayer::menuServerClick(Ref* sender)
 {
-	auto scene = GameScene::createScene(NT_Server);
 	SocketManager::getInstance()->setNetworkType(NT_Server);
+	auto scene = GameScene::createScene(NT_Server);	
 	Director::getInstance()->replaceScene(scene);
 }
 
 void SelectLayer::menuOfflineClick(Ref* sender)
 {
-	auto scene = GameScene::createScene(NT_Offline);
 	SocketManager::getInstance()->setNetworkType(NT_Offline);
+	auto scene = GameScene::createScene(NT_Offline);
 	Director::getInstance()->replaceScene(scene);
 }

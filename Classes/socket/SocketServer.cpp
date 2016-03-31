@@ -307,7 +307,7 @@ std::string SocketServer::localIPAddresses()
     }
     return std::string("");
 #else
-	char hostName[256];
+	char hostName[256]; 
 	gethostname(hostName, sizeof(hostName));
 	struct hostent* hostInfo = gethostbyname(hostName);
 	char* ip = inet_ntoa(*(struct in_addr *)*hostInfo->h_addr_list);

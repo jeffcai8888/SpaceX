@@ -43,7 +43,8 @@ public:
 
 	CC_SYNTHESIZE(int, m_networkType, NetworkType);
 	CC_SYNTHESIZE(std::string, m_ServerAddr, ServerAddr);
-
+	CC_SYNTHESIZE(SocketClient*,  m_pSocketClient, SocketClient);
+	CC_SYNTHESIZE(SocketServer*, m_pSocketServer, SocketServer);
 private:
 	SocketManager();
 	virtual ~SocketManager();
