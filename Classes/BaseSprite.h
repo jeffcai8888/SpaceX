@@ -84,6 +84,7 @@ public:
 	CC_SYNTHESIZE(int, m_maxAmmoCapacity, MaxAmmoCapacity);
 	CC_SYNTHESIZE(float, m_fGravity, Gravity);
 	CC_SYNTHESIZE(float, m_fBulletGravity, BulletGravity);
+	CC_SYNTHESIZE(bool, m_isOnRotateGround, IsOnRotateGround);
 
 	virtual void onDead();
 

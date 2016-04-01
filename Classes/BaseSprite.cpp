@@ -13,7 +13,8 @@ BaseSprite::BaseSprite() :
 	m_pDownAction(NULL),
 	m_pWalkFireAction(NULL),
 	m_pIdleFireAction(NULL),
-	m_isWalking(false)
+	m_isWalking(false),
+	m_isOnRotateGround(false)
 {
 
 }

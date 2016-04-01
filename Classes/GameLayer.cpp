@@ -186,10 +186,18 @@ void GameLayer::onEnter()
 			|| (contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Hero))
 		{
 			BaseSprite* hero;
-			if(contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Hero)
+			Ground* ground;
+			if (contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Hero)
+			{
 				hero = static_cast<BaseSprite *>(contact.getShapeA()->getBody()->getNode());
-			else 
+				ground = static_cast<Ground *>(contact.getShapeB()->getBody()->getNode());
+			}
+			else
+			{
 				hero = static_cast<BaseSprite *>(contact.getShapeB()->getBody()->getNode());
+				ground = static_cast<Ground *>(contact.getShapeA()->getBody()->getNode());
+			}
+	
 			if (hero->getCurrActionState() == ACTION_STATE_MOVE && hero->isInMoveAction(MOVE_STATE_DOWN))
 			{
 				if (hero->isInMoveAction(MOVE_STATE_WALK))
@@ -201,14 +209,25 @@ void GameLayer::onEnter()
 				else
 				{
 					hero->stop();
-				}			
+				}
 				hero->setJumpStage(0);
+				if (ground->getRotation() > 0 || ground->getRotation() < 0)
+				{
+					hero->setIsOnRotateGround(true);
+				}
 				return true;
 			}
 			else if (hero->getCurrActionState() == ACTION_STATE_MOVE && hero->isInMoveAction(MOVE_STATE_UP))
 			{
 				return false;
 			}
+			else
+			{
+				if (ground->getRotation() > 0 || ground->getRotation() < 0)
+				{
+					hero->setIsOnRotateGround(true);
+				}
+			}	
 		}
         else if((contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Bullet && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Ground) ||
 			(contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Bullet))
@@ -228,6 +247,29 @@ void GameLayer::onEnter()
 		return true;
 	};
 
+	contactListener->onContactSeparate = [this](PhysicsContact& contact)
+	{
+		if ((contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Hero && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Ground)
+			|| (contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Hero))
+		{
+			BaseSprite* hero;
+			Ground* ground;
+			if (contact.getShapeA()->getBody()->getCategoryBitmask() == PC_Hero)
+			{
+				hero = static_cast<BaseSprite *>(contact.getShapeA()->getBody()->getNode());
+				ground = static_cast<Ground *>(contact.getShapeB()->getBody()->getNode());
+			}
+			else
+			{
+				hero = static_cast<BaseSprite *>(contact.getShapeB()->getBody()->getNode());
+				ground = static_cast<Ground *>(contact.getShapeA()->getBody()->getNode());
+			}
+			if (ground->getRotation() > 0 || ground->getRotation() < 0)
+			{
+				hero->setIsOnRotateGround(false);
+			}
+		}
+	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 	m_vecEventListener.pushBack(contactListener);
 

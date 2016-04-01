@@ -45,7 +45,7 @@ bool Hero::init()
 		body->setGravityEnable(false);
 		body->setRotationEnable(false);
 		const PhysicsMaterial m(1.0f, 0.f, 0.f);
-		auto shape = PhysicsShapeBox::create(Size(this->getContentSize().width / 2, this->getContentSize().height / 2), m, Vec2(0.f, -this->getContentSize().height / 4));
+		auto shape = PhysicsShapeBox::create(Size(this->getContentSize().width / 4, this->getContentSize().height / 2), m, Vec2(0.f, -this->getContentSize().height / 4));
 		body->addShape(shape);
 		body->setCategoryBitmask(PC_Hero);
 		body->setContactTestBitmask(PC_Ground);
