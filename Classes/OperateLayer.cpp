@@ -162,7 +162,7 @@ void OperateLayer::onEnter()
             else if( p.x <= 200.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4 )
             {
                 m_pHero->walk(-m_pHero->getWalkVelocity());
-				SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPhysicsBody()->getVelocity());
+				SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
 				switchButtonStatus(BT_Left, true);
 				switchButtonStatus(BT_Right, false);
 				m_mapPressType[pTouch->getID()] = Value(BT_Left);
@@ -170,7 +170,7 @@ void OperateLayer::onEnter()
             else if( p.x > 200.f && p.x <= 400.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
             {
                 m_pHero->walk(m_pHero->getWalkVelocity());
-				SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPhysicsBody()->getVelocity());
+				SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
 				switchButtonStatus(BT_Left, false);
 				switchButtonStatus(BT_Right, true);
 				m_mapPressType[pTouch->getID()] = Value(BT_Right);
@@ -178,7 +178,7 @@ void OperateLayer::onEnter()
             else if ( p.x > 1036 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
             {
                 m_pHero->jump(m_pHero->getJumpVelocity());
-				SocketManager::getInstance()->sendData(NDT_HeroJumpUp, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPhysicsBody()->getVelocity());
+				SocketManager::getInstance()->sendData(NDT_HeroJumpUp, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
 				switchButtonStatus(BT_Jump, true);
 				m_mapPressType[pTouch->getID()] = Value(BT_Jump);
             }
@@ -237,7 +237,7 @@ void OperateLayer::onEnter()
         else if( p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4 )
         {
             m_pHero->walk(-m_pHero->getWalkVelocity());
-			SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPhysicsBody()->getVelocity());
+			SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
 			if (m_mapPressType[pTouch->getID()].asInt() != BT_Left)
 			{
 				m_mapPressType[pTouch->getID()] =  Value(BT_Left);
@@ -248,7 +248,7 @@ void OperateLayer::onEnter()
         else if( p.x > winSize.width / 8 && p.x <= winSize.width / 4 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
         {
             m_pHero->walk(m_pHero->getWalkVelocity());
-			SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPhysicsBody()->getVelocity());
+			SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
 			if (m_mapPressType[pTouch->getID()].asInt() != BT_Right)
 			{
 				m_mapPressType[pTouch->getID()] =  Value(BT_Right);
@@ -260,7 +260,7 @@ void OperateLayer::onEnter()
         else if ( p.x > winSize.width * 7 / 8 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
         {
             m_pHero->jump(m_pHero->getJumpVelocity());
-			SocketManager::getInstance()->sendData(NDT_HeroJumpUp, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPhysicsBody()->getVelocity());
+			SocketManager::getInstance()->sendData(NDT_HeroJumpUp, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
 			switchButtonStatus(BT_Jump, true);
         }
 		else
@@ -292,7 +292,7 @@ void OperateLayer::onEnter()
 			if (!m_pHero->isInAir())
 			{
 				m_pHero->stop();
-				SocketManager::getInstance()->sendData(NDT_HeroStop, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), Vec2(0, 0));
+				SocketManager::getInstance()->sendData(NDT_HeroStop, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), Vec2(0, 0));
 			}               
             m_pHero->stopMoveAction(MOVE_STATE_WALK, true);
 			switchButtonStatus(BT_Left, false);
@@ -304,7 +304,7 @@ void OperateLayer::onEnter()
 			if (!m_pHero->isInAir())
 			{
 				m_pHero->stop();
-				SocketManager::getInstance()->sendData(NDT_HeroStop, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), Vec2(0, 0));
+				SocketManager::getInstance()->sendData(NDT_HeroStop, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), Vec2(0, 0));
 			}				
             m_pHero->stopMoveAction(MOVE_STATE_WALK, true);
 			switchButtonStatus(BT_Right, false);
@@ -404,24 +404,24 @@ void OperateLayer::dealWithKeyBoard()
 	if (m_KeyPressedValue & KB_Up)
 	{
 		m_pHero->jump(m_pHero->getJumpVelocity());
-		SocketManager::getInstance()->sendData(NDT_HeroJumpUp, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPhysicsBody()->getVelocity());
+		SocketManager::getInstance()->sendData(NDT_HeroJumpUp, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
 	}
 	else if (m_KeyPressedValue & KB_Front)
 	{
 		m_pHero->walk(m_pHero->getWalkVelocity());
-		SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPhysicsBody()->getVelocity());
+		SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
 	}
 	else if (m_KeyPressedValue & KB_Back)
 	{
 		m_pHero->walk(-m_pHero->getWalkVelocity());
-		SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPhysicsBody()->getVelocity());
+		SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
 	}
 	else
 	{
 		if (!m_pHero->isInAir())
 		{
 			m_pHero->stop();
-			SocketManager::getInstance()->sendData(NDT_HeroStop, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), Vec2(0, 0));
+			SocketManager::getInstance()->sendData(NDT_HeroStop, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), Vec2(0, 0));
 		}
 			
 	}

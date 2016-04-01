@@ -29,6 +29,7 @@ struct NetworkData
 	int dataType;
 	int actionState;
 	int moveState;
+	cocos2d::Vec2 position;
 	cocos2d::Vec2 vec;
 };
 
@@ -38,7 +39,7 @@ public:
 	static SocketManager* getInstance();
 
 	void init();
-	void sendData(int, int, int, cocos2d::Vec2);
+	void sendData(int, int, int, cocos2d::Vec2, cocos2d::Vec2);
 	std::string getIPAddress();
 
 	CC_SYNTHESIZE(int, m_networkType, NetworkType);

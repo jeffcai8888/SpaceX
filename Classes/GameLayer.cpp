@@ -112,13 +112,13 @@ void GameLayer::onEnter()
 					hero->stopMoveAction(MOVE_STATE_DOWN, true);
 					Vec2 v = hero->getPhysicsBody()->getVelocity();
 					hero->walk(v.x);
-					SocketManager::getInstance()->sendData(NDT_HeroWalk, hero->getCurrActionState(), hero->getCurrMoveState(), hero->getPhysicsBody()->getVelocity());
+					SocketManager::getInstance()->sendData(NDT_HeroWalk, hero->getCurrActionState(), hero->getCurrMoveState(), hero->getPosition(), hero->getPhysicsBody()->getVelocity());
 				}
 				else
 				{
 					hero->stopMoveAction(MOVE_STATE_DOWN, true);
 					hero->stop();
-					SocketManager::getInstance()->sendData(NDT_HeroStop, hero->getCurrActionState(), hero->getCurrMoveState(), Vec2(0, 0));
+					SocketManager::getInstance()->sendData(NDT_HeroStop, hero->getCurrActionState(), hero->getCurrMoveState(), hero->getPosition(), Vec2(0, 0));
 				}
 				hero->setJumpStage(0);
 				return true;
@@ -152,14 +152,14 @@ void GameLayer::onEnter()
 					Vec2 v = hero->getPhysicsBody()->getVelocity();
 					hero->walk(v.x);
 					if(hero == this->m_pHero)
-						SocketManager::getInstance()->sendData(NDT_HeroWalk, hero->getCurrActionState(), hero->getCurrMoveState(), hero->getPhysicsBody()->getVelocity());
+						SocketManager::getInstance()->sendData(NDT_HeroWalk, hero->getCurrActionState(), hero->getCurrMoveState(), hero->getPosition(), hero->getPhysicsBody()->getVelocity());
 				}
 				else
 				{
 					hero->stopMoveAction(MOVE_STATE_DOWN, true);
 					hero->stop();
 					if (hero == this->m_pHero)
-						SocketManager::getInstance()->sendData(NDT_HeroStop, hero->getCurrActionState(), hero->getCurrMoveState(), Vec2(0, 0));
+						SocketManager::getInstance()->sendData(NDT_HeroStop, hero->getCurrActionState(), hero->getCurrMoveState(), hero->getPosition(), Vec2(0, 0));
 				}
 			}
 			hero->setJumpStage(0);
@@ -189,14 +189,14 @@ void GameLayer::onEnter()
 					Vec2 v = hero->getPhysicsBody()->getVelocity();
 					hero->walk(v.x);
 					if (hero == this->m_pHero)
-						SocketManager::getInstance()->sendData(NDT_HeroWalk, hero->getCurrActionState(), hero->getCurrMoveState(), hero->getPhysicsBody()->getVelocity());
+						SocketManager::getInstance()->sendData(NDT_HeroWalk, hero->getCurrActionState(), hero->getCurrMoveState(), hero->getPosition(), hero->getPhysicsBody()->getVelocity());
 				}
 				else
 				{
 					hero->stopMoveAction(MOVE_STATE_DOWN, true);
 					hero->stop();
 					if (hero == this->m_pHero)
-						SocketManager::getInstance()->sendData(NDT_HeroStop, hero->getCurrActionState(), hero->getCurrMoveState(), Vec2(0, 0));
+						SocketManager::getInstance()->sendData(NDT_HeroStop, hero->getCurrActionState(), hero->getCurrMoveState(), hero->getPosition(), Vec2(0, 0));
 				}
 				hero->setJumpStage(0);
 			}

@@ -180,24 +180,24 @@ void ServerGameLayer::onRecv(HSocket socket, const char* data, int count)
 		{
 		case NDT_HeroWalk:
 			//m_pHero->runWalkAction(!m_pHero->isInAir());
-			//m_pHero->setPosition(networkData->position);
+			m_pEnemy[0]->setPosition(networkData->position);
 			//m_pHero->getPhysicsBody()->setVelocity(networkData->velocity);
 			m_pEnemy[0]->walk(networkData->vec.x);
 			break;
 		case NDT_HeroJumpUp:
 			//m_pHero->runJumpAction(true);
-			//m_pHero->setPosition(networkData->position);
+			m_pEnemy[0]->setPosition(networkData->position);
 			//m_pHero->getPhysicsBody()->setVelocity(networkData->velocity);
 			m_pEnemy[0]->jump(m_pEnemy[0]->getJumpVelocity());
 			break;
 		case NDT_HeroJumpDown:
 			m_pEnemy[0]->runJumpAction(false);
-			//m_pHero->setPosition(networkData->position);
+			m_pEnemy[0]->setPosition(networkData->position);
 			m_pEnemy[0]->getPhysicsBody()->setVelocity(networkData->vec);
 			break;
 		case NDT_HeroStop:
 			//m_pHero->runIdleAction();
-			//m_pHero->setPosition(networkData->position);
+			m_pEnemy[0]->setPosition(networkData->position);
 			//m_pHero->getPhysicsBody()->setVelocity(networkData->velocity);
 			m_pEnemy[0]->stop();
 			m_pEnemy[0]->stopMoveAction(MOVE_STATE_WALK, true);
@@ -206,10 +206,12 @@ void ServerGameLayer::onRecv(HSocket socket, const char* data, int count)
 			m_dequeShadow.push_back(networkData->vec);
 			break;
 		case NDT_HeroAttack:
+			m_pEnemy[0]->setPosition(networkData->position);
 			m_pEnemy[0]->setShootDirection(networkData->vec);
 			m_pEnemy[0]->attack(true);
 			break;
 		case NDT_HeroStopAttack:
+			m_pEnemy[0]->setPosition(networkData->position);
 			m_pEnemy[0]->attack(false);
 			break;
 		default:
