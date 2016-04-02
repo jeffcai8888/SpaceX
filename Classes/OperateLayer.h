@@ -13,14 +13,16 @@ public:
 		BT_None,
 		BT_Right,
 		BT_Left,
-		BT_Jump
+		BT_Jump,
+        BT_Shoot
 	};
 
 	enum KeyBoard
 	{
 		KB_Front = 1 << 0,
 		KB_Back = 1 << 1,
-		KB_Up = 1 << 2
+		KB_Up = 1 << 2,
+        KB_Shoot = 1 << 3
 	};
 
 	OperateLayer();
@@ -29,7 +31,6 @@ public:
 	virtual bool init();
 	virtual void onEnter();
 	virtual void onExit();
-	void exitApp(Ref* pSender);
 	void gotoDebug(Ref* pSender);
 
 	CREATE_FUNC(OperateLayer);
@@ -43,10 +44,10 @@ private:
 	void switchButtonStatus(int type, bool isPressed);
 	cocos2d::Sprite *m_pJoystick;
 	cocos2d::Sprite *m_pJoystickBg;
-	cocos2d::Sprite *m_pFront;
-	cocos2d::Sprite *m_pBack;
+    cocos2d::Sprite *m_pShoot;
+	//cocos2d::Sprite *m_pFront;
+	//cocos2d::Sprite *m_pBack;
 	cocos2d::Sprite *m_pUp;
-	cocos2d::MenuItemImage *m_pDebugItem;
 	cocos2d::Vector<cocos2d::EventListener *> m_vecEventListener;
     cocos2d::Point m_firstTouchJoystickLocation;
     int           m_firstTouchJoystickID;

@@ -802,6 +802,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../cocos2d/cocos/platform/mac",
 					"$(SRCROOT)/../cocos2d/external/glfw3/include/mac",
+					"$(SRCROOT)/../cocos2d/external/json",
 				);
 				INFOPLIST_FILE = mac/Info.plist;
 				LIBRARY_SEARCH_PATHS = "";
@@ -834,6 +835,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../cocos2d/cocos/platform/mac",
 					"$(SRCROOT)/../cocos2d/external/glfw3/include/mac",
+					"$(SRCROOT)/../cocos2d/external/json",
 				);
 				INFOPLIST_FILE = mac/Info.plist;
 				LIBRARY_SEARCH_PATHS = "";
