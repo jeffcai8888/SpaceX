@@ -26,17 +26,6 @@ OfflineGameLayer::~OfflineGameLayer()
 	
 }
 
-bool OfflineGameLayer::init()
-{
-	bool ret = false;
-	do {
-		CC_BREAK_IF( !GameLayer::init());
-		ret = true;
-	} while(0);
-
-	return ret;
-}
-
 void OfflineGameLayer::onEnter()
 {
 	GameLayer::onEnter();
@@ -108,7 +97,7 @@ void OfflineGameLayer::onEnter()
 	m_pEnemy[0]->addChild(bloodBg);
 	m_pEnemy[0]->addChild(blood);
 
-	m_pHero->addChild(m_pForesight);
+	//m_pHero->addChild(m_pForesight);
 
 	JsonParser* parser = JsonParser::createWithFile("Debug.json");
 	parser->decodeDebugData();
@@ -174,12 +163,4 @@ void OfflineGameLayer::onEnter()
 void OfflineGameLayer::onExit()
 {
 	GameLayer::onExit();
-}
-
-void OfflineGameLayer::update(float dt)
-{
-	this->updateHero(dt);
-	this->updateBullet(dt);
-	this->updatePhysicsWorld(dt);
-	this->updateForesight(dt);
 }

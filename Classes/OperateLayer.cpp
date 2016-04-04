@@ -229,6 +229,7 @@ void OperateLayer::onEnter()
             Vec2 direction = p - m_firstTouchJoystickLocation;
             direction.normalize();
             this->updateJoystick(direction, distance);
+            m_pHero->setShootDirection(direction);
             
             if(direction.x < 0)
             {
@@ -241,19 +242,17 @@ void OperateLayer::onEnter()
                 SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
             }
 
-			distance = m_preTouchJoystickLocation.getDistance(p);
-			direction = p - m_preTouchJoystickLocation;
-			direction.normalize();
-			Vec2 v = m_pHero->getPhysicsBody()->getVelocity();
-			m_pTarget->setDirection(direction * distance * m_pTarget->getVelocity());
+			//distance = m_preTouchJoystickLocation.getDistance(p);
+			//direction = p - m_preTouchJoystickLocation;
+			//direction.normalize();
+			//Vec2 v = m_pHero->getPhysicsBody()->getVelocity();
+			//m_pTarget->setDirection(direction * distance * m_pTarget->getVelocity());
 
 
-			direction = m_pTarget->getPosition() + m_pHero->getPosition() - m_pHero->getShootPosition();
-			direction.normalize();
-			m_pHero->setShootDirection(direction);
-			m_preTouchJoystickLocation = p;
-            
-            
+			//direction = m_pTarget->getPosition() + m_pHero->getPosition() - m_pHero->getShootPosition();
+			//direction.normalize();
+			//m_pHero->setShootDirection(direction);
+			//m_preTouchJoystickLocation = p;
         }
         else if(this->isTap(m_pShoot, p))
         {

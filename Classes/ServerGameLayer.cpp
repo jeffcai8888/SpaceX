@@ -96,7 +96,7 @@ void ServerGameLayer::onEnter()
 	m_pEnemy[0]->addChild(bloodBg);
 	m_pEnemy[0]->addChild(blood);
 
-	m_pHero->addChild(m_pForesight);
+	//m_pHero->addChild(m_pForesight);
 
 	JsonParser* parser = JsonParser::createWithFile("Debug.json");
 	parser->decodeDebugData();

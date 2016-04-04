@@ -330,7 +330,7 @@ void GameLayer::update(float dt)
 	this->updateEnemys(dt);
 	this->updateBullet(dt);
 	this->updatePhysicsWorld(dt);
-	this->updateForesight(dt);
+	//this->updateForesight(dt);
 }
 
 void GameLayer::updateHero(float dt)
