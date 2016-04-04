@@ -46,7 +46,6 @@ bool OperateLayer::init()
         m_pShoot->setPosition(Point(900.f, 100.f));
         this->addChild(m_pShoot);
         
-		m_JoyStickInitPos.setPoint(200.f, 100.f);
 		m_pJoystick = Sprite::createWithSpriteFrameName("joystick.png");
 		m_pJoystickBg = Sprite::createWithSpriteFrameName("joystick_bg.png");
 		showJoystick(m_JoyStickInitPos);
@@ -98,9 +97,13 @@ void OperateLayer::onEnter()
 	Layer::onEnter();
 	m_pHero = static_cast<GameLayer *>(this->getScene()->getChildByTag(LT_Game))->getHero();
 	m_pTarget = static_cast<GameLayer *>(this->getScene()->getChildByTag(LT_Game))->getForesight();
-	/*float joystickScale = 1.0f;
+	float joystickScale = 1.0f;
 	float joystickPosX = 0.f;
 	float joystickPosY = 0.f;
+	float joystickRange1X = 0.f;
+	float joystickRange1Y = 0.f;
+	float joystickRange2X = 0.f;
+	float joystickRange2Y = 0.f;
 
 	JsonParser* parser = JsonParser::createWithFile("Debug.json");
 	parser->decodeDebugData();
@@ -123,14 +126,39 @@ void OperateLayer::onEnter()
 			{
 				joystickPosY = pair.second.asFloat();
 			}
+			else if (pair.first.compare("JoystickRangeW1") == 0)
+			{
+				m_JoyStickRange1Width = pair.second.asFloat();
+			}
+			else if (pair.first.compare("JoystickRangeW2") == 0)
+			{
+				m_JoyStickRange2Width = pair.second.asFloat();
+			}
+			else if (pair.first.compare("JoystickRangeX1") == 0)
+			{
+				joystickRange1X = pair.second.asFloat();
+			}
+			else if (pair.first.compare("JoystickRangeY1") == 0)
+			{
+				joystickRange1Y = pair.second.asFloat();
+			}
+			else if (pair.first.compare("JoystickRangeX2") == 0)
+			{
+				joystickRange2X = pair.second.asFloat();
+			}
+			else if (pair.first.compare("JoystickRangeY2") == 0)
+			{
+				joystickRange2Y = pair.second.asFloat();
+			}
 		}
 	}
-
+	m_JoyStickInitPos.setPoint(joystickPosX, joystickPosY);
+	m_JoyStickRange1Pos.setPoint(joystickRange1X, joystickRange1Y);
+	m_JoyStickRange2Pos.setPoint(joystickRange2X, joystickRange2Y);
 	
 	//m_pJoystick->setScale(joystickScale, joystickScale);
 	//m_pJoystickBg->setScale(joystickScale, joystickScale);
-	m_pJoystick->setPosition(Point(joystickPosX, joystickPosY));
-	m_pJoystickBg->setPosition(Point(joystickPosX, joystickPosY));*/
+	showJoystick(m_JoyStickInitPos);
 	
 
 	auto listener = EventListenerTouchAllAtOnce::create();
@@ -142,7 +170,7 @@ void OperateLayer::onEnter()
 		{
 			Touch *pTouch = (Touch*)(*touchIter);
 			Point p = pTouch->getLocation();
-			if (p.x < winSize.width / 2)
+			if (isInRange(m_JoyStickRange2Pos, m_JoyStickRange2Width, p))
 			{
 				m_firstTouchJoystickID = pTouch->getID();
 				showJoystick(p);
@@ -374,6 +402,18 @@ void OperateLayer::onExit()
 
 void OperateLayer::showJoystick(Point pos)
 {
+	cocos2d::Size a = m_pJoystickBg->getContentSize();
+	float f = m_pJoystickBg->getScale();
+	if (pos.x - m_pJoystickBg->getContentSize().width / 2 < m_JoyStickRange1Pos.x - m_JoyStickRange1Width / 2)
+		pos.x = m_JoyStickRange1Pos.x - m_JoyStickRange1Width / 2 + m_pJoystickBg->getContentSize().width / 2;
+	else if(pos.x + m_pJoystickBg->getContentSize().width / 2 > m_JoyStickRange1Pos.x + m_JoyStickRange1Width / 2)
+		pos.x = m_JoyStickRange1Pos.x + m_JoyStickRange1Width / 2 - m_pJoystickBg->getContentSize().width / 2;
+
+	if (pos.y - m_pJoystickBg->getContentSize().height / 2 < m_JoyStickRange1Pos.y - m_JoyStickRange1Width / 2)
+		pos.y = m_JoyStickRange1Pos.y - m_JoyStickRange1Width / 2 + m_pJoystickBg->getContentSize().height / 2;
+	else if (pos.y + m_pJoystickBg->getContentSize().height / 2 > m_JoyStickRange1Pos.y + m_JoyStickRange1Width / 2)
+		pos.y = m_JoyStickRange1Pos.y + m_JoyStickRange1Width / 2 - m_pJoystickBg->getContentSize().height / 2;
+
 	m_pJoystick->setPosition(pos);
 	m_pJoystickBg->setPosition(pos);
 
@@ -405,6 +445,11 @@ bool OperateLayer::isTap(cocos2d::Node* pNode, cocos2d::Point point)
 		return true;
 	else
 		return false;
+}
+
+bool OperateLayer::isInRange(cocos2d::Point p1, int w, cocos2d::Point p2)
+{
+	return (p2.x >= (p1.x - w /2) && p2.x <= (p1.x + w / 2) && p2.y >= (p1.y - w / 2) && p2.y <= (p1.y + w / 2));
 }
 
 void OperateLayer::dealWithKeyBoard()

@@ -39,6 +39,7 @@ private:
 	void showJoystick(cocos2d::Point pos);
 	void updateJoystick(cocos2d::Point direction, float distance);
 	bool isTap(cocos2d::Node*, cocos2d::Point);
+	bool isInRange(cocos2d::Point, int, cocos2d::Point);
 	void dealWithKeyBoard();
 	void removeAllEventListener();
 	void switchButtonStatus(int type, bool isPressed);
@@ -48,8 +49,12 @@ private:
 	cocos2d::Sprite *m_pUp;
 	cocos2d::Vector<cocos2d::EventListener *> m_vecEventListener;
 	cocos2d::Point m_JoyStickInitPos;
-    int           m_firstTouchJoystickID;
-	int			  m_PressType;
+	cocos2d::Point m_JoyStickRange1Pos;
+	cocos2d::Point m_JoyStickRange2Pos;
+	int m_JoyStickRange1Width;
+	int	m_JoyStickRange2Width;
+    int m_firstTouchJoystickID;
+	int m_PressType;
 
 	BaseSprite*	m_pHero;
 	Foresight *m_pTarget;

@@ -90,6 +90,30 @@ void DebugLayer::onEnter()
 			{
 				static_cast<TextField *>(getChildByName("TextField_3_5"))->setString(Value(pair.second.asFloat()).asString());
 			}
+			else if (pair.first.compare("JoystickRangeW1") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_3_6"))->setString(Value(pair.second.asInt()).asString());
+			}
+			else if (pair.first.compare("JoystickRangeW2") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_3_7"))->setString(Value(pair.second.asInt()).asString());
+			}
+			else if (pair.first.compare("JoystickRangeX1") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_3_8"))->setString(Value(pair.second.asInt()).asString());
+			}
+			else if (pair.first.compare("JoystickRangeY1") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_3_9"))->setString(Value(pair.second.asInt()).asString());
+			}
+			else if (pair.first.compare("JoystickRangeX2") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_3_10"))->setString(Value(pair.second.asInt()).asString());
+			}
+			else if (pair.first.compare("JoystickRangeY2") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_3_11"))->setString(Value(pair.second.asInt()).asString());
+			}
 			else if (pair.first.compare("ServerIP0") == 0)
 			{
 				static_cast<TextField *>(getChildByName("TextField_4_0"))->setString(Value(pair.second.asInt()).asString());
@@ -157,6 +181,24 @@ void DebugLayer::onExit()
 	listData.push_back(Value(m));
 	m["Attr"] = Value("JoystickScale");
 	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_3_5"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("JoystickRangeW1");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_3_6"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("JoystickRangeW2");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_3_7"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("JoystickRangeX1");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_3_8"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("JoystickRangeY1");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_3_9"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("JoystickRangeX2");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_3_10"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("JoystickRangeY2");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_3_11"))->getString());
 	listData.push_back(Value(m));
 	m["Attr"] = Value("ServerIP0");
 	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_0"))->getString());
