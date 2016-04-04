@@ -45,13 +45,10 @@ private:
 	cocos2d::Sprite *m_pJoystick;
 	cocos2d::Sprite *m_pJoystickBg;
     cocos2d::Sprite *m_pShoot;
-	//cocos2d::Sprite *m_pFront;
-	//cocos2d::Sprite *m_pBack;
 	cocos2d::Sprite *m_pUp;
 	cocos2d::Vector<cocos2d::EventListener *> m_vecEventListener;
-    cocos2d::Point m_firstTouchJoystickLocation;
+	cocos2d::Point m_JoyStickInitPos;
     int           m_firstTouchJoystickID;
-	cocos2d::Point m_preTouchJoystickLocation;
 	int			  m_PressType;
 
 	BaseSprite*	m_pHero;

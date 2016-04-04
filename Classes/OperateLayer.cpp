@@ -15,12 +15,8 @@ OperateLayer::OperateLayer()
     m_pJoystick(nullptr),
     m_pJoystickBg(nullptr),
     m_pShoot(nullptr),
-    //m_pFront(nullptr),
-    //m_pBack(nullptr),
     m_pUp(nullptr),
-    m_firstTouchJoystickLocation(Point(0.f, 0.f)),
-    m_firstTouchJoystickID(-1),
-	m_preTouchJoystickLocation(Point(0.f, 0.f))
+    m_firstTouchJoystickID(-1)
 {
 	m_vecEventListener.clear();
 	m_mapPressType.clear();
@@ -42,29 +38,18 @@ bool OperateLayer::init()
 
 		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("ui.plist");
 
-        //m_pFront = Sprite::createWithSpriteFrameName("right.png");
-        //m_pBack = Sprite::createWithSpriteFrameName("left.png");
-        m_pUp = Sprite::createWithSpriteFrameName("jump.png");
-		//auto centerSprite = Sprite::createWithSpriteFrameName("button_bg.png");
-		//centerSprite->setPosition(m_origin + Point(200.f, 100.f));
-        
-        //m_pFront->setPosition(m_origin + Point(250, 100));
-        //m_pBack->setPosition(m_origin + Point(150, 100));
+        m_pUp = Sprite::createWithSpriteFrameName("jump.png");     
         m_pUp->setPosition(m_origin + Point(1086, 220));
-        //this->addChild(m_pFront);
-        //this->addChild(m_pBack);
         this->addChild(m_pUp);
-		//this->addChild(centerSprite);
         
         m_pShoot = Sprite::createWithSpriteFrameName("1.PNG");
         m_pShoot->setPosition(Point(900.f, 100.f));
         this->addChild(m_pShoot);
         
-        
+		m_JoyStickInitPos.setPoint(200.f, 100.f);
 		m_pJoystick = Sprite::createWithSpriteFrameName("joystick.png");
 		m_pJoystickBg = Sprite::createWithSpriteFrameName("joystick_bg.png");
-        m_pJoystick->setPosition(m_origin + Point(200.f, 100.f));
-        m_pJoystickBg->setPosition(m_origin + Point(200.f, 100.f));
+		showJoystick(m_JoyStickInitPos);
 		this->addChild(m_pJoystick, 0);
 		this->addChild(m_pJoystickBg, 1);
 		Menu* menu;
@@ -123,7 +108,7 @@ void OperateLayer::onEnter()
 	for (auto& v : list)
 	{
 		ValueMap row = v.asValueMap();
-
+		 
 		for (auto& pair : row)
 		{
 			if (pair.first.compare("JoystickScale") == 0)
@@ -157,16 +142,11 @@ void OperateLayer::onEnter()
 		{
 			Touch *pTouch = (Touch*)(*touchIter);
 			Point p = pTouch->getLocation();
-            if (this->isTap(m_pJoystickBg, p))
-            {            
-				//Vec2 direction = m_pTarget->getPosition() + m_pHero->getPosition() - m_pHero->getShootPosition();
-				//direction.normalize();
-				//m_pHero->setShootDirection(direction);
-				m_firstTouchJoystickLocation = p;
-				m_preTouchJoystickLocation = p;
+			if (p.x < winSize.width / 2)
+			{
 				m_firstTouchJoystickID = pTouch->getID();
-				//m_pHero->attack(true);
-            }
+				showJoystick(p);
+			}
             else if(this->isTap(m_pShoot, p))
             {
                 m_pHero->attack(true);
@@ -206,27 +186,12 @@ void OperateLayer::onEnter()
 		Touch *pTouch = (Touch*)(*touchIter);
 		Point start = pTouch->getStartLocation();
         Point p = pTouch->getLocation();
-		if (m_firstTouchJoystickID == -1)
-		{
-			if (this->isTap(m_pJoystickBg, start))
-			{
-				m_firstTouchJoystickLocation = start;
-				m_preTouchJoystickLocation = start;
-				m_firstTouchJoystickID = pTouch->getID();
-			}
-			else if (this->isTap(m_pJoystickBg, p))
-			{
-				m_firstTouchJoystickLocation = p;
-				m_preTouchJoystickLocation = p;
-				m_firstTouchJoystickID = pTouch->getID();
-			}
-		}
-        
-        
+		
         if(m_firstTouchJoystickID == pTouch->getID())
         {
-            float distance = m_firstTouchJoystickLocation.getDistance(p);
-            Vec2 direction = p - m_firstTouchJoystickLocation;
+			Point basePoint = m_pJoystickBg->getPosition();
+            float distance = basePoint.getDistance(p);
+            Vec2 direction = p - basePoint;
             direction.normalize();
             this->updateJoystick(direction, distance);
             m_pHero->setShootDirection(direction);
@@ -306,8 +271,9 @@ void OperateLayer::onEnter()
 
 		if (m_firstTouchJoystickID == pTouch->getID())
 		{
-			Point pos = m_pJoystickBg->getPosition();
-			m_pJoystick->setPosition(pos);
+			//Point pos = m_pJoystickBg->getPosition();
+			//m_pJoystick->setPosition(pos);
+			showJoystick(m_JoyStickInitPos);
 			m_firstTouchJoystickID = -1;
             
             if (!m_pHero->isInAir())
