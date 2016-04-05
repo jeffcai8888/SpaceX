@@ -43,10 +43,13 @@ private:
 	void dealWithKeyBoard();
 	void removeAllEventListener();
 	void switchButtonStatus(int type, bool isPressed);
+	void calJoyStickPos(cocos2d::Point& pos);
+	void dealWithJoystick(cocos2d::Point, cocos2d::Point);
 	cocos2d::Sprite *m_pJoystick;
 	cocos2d::Sprite *m_pJoystickBg;
     cocos2d::Sprite *m_pShoot;
 	cocos2d::Sprite *m_pUp;
+	cocos2d::Sprite *m_pArraw;
 	cocos2d::Vector<cocos2d::EventListener *> m_vecEventListener;
 	cocos2d::Point m_JoyStickInitPos;
 	cocos2d::Point m_JoyStickRange1Pos;

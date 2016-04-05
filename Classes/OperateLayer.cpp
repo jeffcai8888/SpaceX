@@ -48,6 +48,8 @@ bool OperateLayer::init()
         
 		m_pJoystick = Sprite::createWithSpriteFrameName("joystick.png");
 		m_pJoystickBg = Sprite::createWithSpriteFrameName("joystick_bg.png");
+
+		calJoyStickPos(m_JoyStickInitPos);
 		showJoystick(m_JoyStickInitPos);
 		this->addChild(m_pJoystick, 0);
 		this->addChild(m_pJoystickBg, 1);
@@ -83,6 +85,9 @@ bool OperateLayer::init()
 		sprite2->setPosition(636.f, 600.f);
 		//this->addChild(sprite2);
 
+		m_pArraw = Sprite::createWithSpriteFrameName("arrow.png");
+		m_pArraw->setScale(0.5f);
+		
 		m_KeyPressedValue = 0;
 		
 		ret = true;
@@ -158,6 +163,7 @@ void OperateLayer::onEnter()
 	
 	//m_pJoystick->setScale(joystickScale, joystickScale);
 	//m_pJoystickBg->setScale(joystickScale, joystickScale);
+	calJoyStickPos(m_JoyStickInitPos);
 	showJoystick(m_JoyStickInitPos);
 	
 
@@ -173,7 +179,13 @@ void OperateLayer::onEnter()
 			if (isInRange(m_JoyStickRange2Pos, m_JoyStickRange2Width, p))
 			{
 				m_firstTouchJoystickID = pTouch->getID();
+				Point touchPos = p;
+				calJoyStickPos(p);
 				showJoystick(p);
+				if (!isInRange(m_JoyStickRange1Pos, m_JoyStickRange1Width, touchPos))
+				{
+					dealWithJoystick(p, touchPos);
+				}
 			}
             else if(this->isTap(m_pShoot, p))
             {
@@ -217,35 +229,7 @@ void OperateLayer::onEnter()
 		
         if(m_firstTouchJoystickID == pTouch->getID())
         {
-			Point basePoint = m_pJoystickBg->getPosition();
-            float distance = basePoint.getDistance(p);
-            Vec2 direction = p - basePoint;
-            direction.normalize();
-            this->updateJoystick(direction, distance);
-            m_pHero->setShootDirection(direction);
-            
-            if(direction.x < 0)
-            {
-                m_pHero->walk(-m_pHero->getWalkVelocity());
-                SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
-            }
-            else
-            {
-                m_pHero->walk(m_pHero->getWalkVelocity());
-                SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
-            }
-
-			//distance = m_preTouchJoystickLocation.getDistance(p);
-			//direction = p - m_preTouchJoystickLocation;
-			//direction.normalize();
-			//Vec2 v = m_pHero->getPhysicsBody()->getVelocity();
-			//m_pTarget->setDirection(direction * distance * m_pTarget->getVelocity());
-
-
-			//direction = m_pTarget->getPosition() + m_pHero->getPosition() - m_pHero->getShootPosition();
-			//direction.normalize();
-			//m_pHero->setShootDirection(direction);
-			//m_preTouchJoystickLocation = p;
+			dealWithJoystick(m_pJoystickBg->getPosition(), p);
         }
         else if(this->isTap(m_pShoot, p))
         {
@@ -390,6 +374,10 @@ void OperateLayer::onEnter()
 		}
 		dealWithKeyBoard();
 	};
+	m_pHero->addChild(m_pArraw);
+	m_pArraw->setPosition(m_pHero->getShootPosition());
+	m_pArraw->setVisible(true);
+
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyListener, this);
 	m_vecEventListener.pushBack(keyListener);
 }
@@ -402,18 +390,6 @@ void OperateLayer::onExit()
 
 void OperateLayer::showJoystick(Point pos)
 {
-	cocos2d::Size a = m_pJoystickBg->getContentSize();
-	float f = m_pJoystickBg->getScale();
-	if (pos.x - m_pJoystickBg->getContentSize().width / 2 < m_JoyStickRange1Pos.x - m_JoyStickRange1Width / 2)
-		pos.x = m_JoyStickRange1Pos.x - m_JoyStickRange1Width / 2 + m_pJoystickBg->getContentSize().width / 2;
-	else if(pos.x + m_pJoystickBg->getContentSize().width / 2 > m_JoyStickRange1Pos.x + m_JoyStickRange1Width / 2)
-		pos.x = m_JoyStickRange1Pos.x + m_JoyStickRange1Width / 2 - m_pJoystickBg->getContentSize().width / 2;
-
-	if (pos.y - m_pJoystickBg->getContentSize().height / 2 < m_JoyStickRange1Pos.y - m_JoyStickRange1Width / 2)
-		pos.y = m_JoyStickRange1Pos.y - m_JoyStickRange1Width / 2 + m_pJoystickBg->getContentSize().height / 2;
-	else if (pos.y + m_pJoystickBg->getContentSize().height / 2 > m_JoyStickRange1Pos.y + m_JoyStickRange1Width / 2)
-		pos.y = m_JoyStickRange1Pos.y + m_JoyStickRange1Width / 2 - m_pJoystickBg->getContentSize().height / 2;
-
 	m_pJoystick->setPosition(pos);
 	m_pJoystickBg->setPosition(pos);
 
@@ -436,6 +412,38 @@ void OperateLayer::updateJoystick(Point direction, float distance)
 	}
 }
 
+void OperateLayer::dealWithJoystick(cocos2d::Point centerPoint, cocos2d::Point p)
+{
+	float distance = centerPoint.getDistance(p);
+	Vec2 direction = p - centerPoint;
+	direction.normalize();
+	this->updateJoystick(direction, distance);
+	m_pHero->setShootDirection(direction);
+	float angle = CC_RADIANS_TO_DEGREES(direction.getAngle());
+	if ((angle > -75.f &&  angle < 75.f) || angle > 105.f || angle < -105.f)
+	{
+		if (direction.x < 0)
+		{
+			m_pHero->walk(-m_pHero->getWalkVelocity());
+			SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
+		}
+		else
+		{
+			m_pHero->walk(m_pHero->getWalkVelocity());
+			SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
+		}
+	}
+	else
+	{
+		if (!m_pHero->isInAir())
+		{
+			m_pHero->stop();
+			SocketManager::getInstance()->sendData(NDT_HeroStop, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), Vec2(0, 0));
+		}
+		m_pHero->stopMoveAction(MOVE_STATE_WALK, true);
+	}
+}
+
 bool OperateLayer::isTap(cocos2d::Node* pNode, cocos2d::Point point)
 {
 	Point pos = pNode->getPosition();
@@ -450,6 +458,19 @@ bool OperateLayer::isTap(cocos2d::Node* pNode, cocos2d::Point point)
 bool OperateLayer::isInRange(cocos2d::Point p1, int w, cocos2d::Point p2)
 {
 	return (p2.x >= (p1.x - w /2) && p2.x <= (p1.x + w / 2) && p2.y >= (p1.y - w / 2) && p2.y <= (p1.y + w / 2));
+}
+
+void OperateLayer::calJoyStickPos(cocos2d::Point& pos)
+{
+	if (pos.x - m_pJoystickBg->getContentSize().width / 2 < m_JoyStickRange1Pos.x - m_JoyStickRange1Width / 2)
+		pos.x = m_JoyStickRange1Pos.x - m_JoyStickRange1Width / 2 + m_pJoystickBg->getContentSize().width / 2;
+	else if (pos.x + m_pJoystickBg->getContentSize().width / 2 > m_JoyStickRange1Pos.x + m_JoyStickRange1Width / 2)
+		pos.x = m_JoyStickRange1Pos.x + m_JoyStickRange1Width / 2 - m_pJoystickBg->getContentSize().width / 2;
+
+	if (pos.y - m_pJoystickBg->getContentSize().height / 2 < m_JoyStickRange1Pos.y - m_JoyStickRange1Width / 2)
+		pos.y = m_JoyStickRange1Pos.y - m_JoyStickRange1Width / 2 + m_pJoystickBg->getContentSize().height / 2;
+	else if (pos.y + m_pJoystickBg->getContentSize().height / 2 > m_JoyStickRange1Pos.y + m_JoyStickRange1Width / 2)
+		pos.y = m_JoyStickRange1Pos.y + m_JoyStickRange1Width / 2 - m_pJoystickBg->getContentSize().height / 2;
 }
 
 void OperateLayer::dealWithKeyBoard()
