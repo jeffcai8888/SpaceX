@@ -56,7 +56,9 @@ protected:
 	void importGroundData(cocos2d::TMXTiledMap*);
 	void removeAllEventListener();
 	void removeAllBullets();
-	void initForesight(float);
+	BaseSprite* createHero(int, cocos2d::Point);
+	BaseSprite* createEnemy(int, cocos2d::Point);
+	cocos2d::Point getNearEnemyPos();
 };
 
 #endif

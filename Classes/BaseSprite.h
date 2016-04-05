@@ -27,6 +27,12 @@ enum {
 	ACTION_TAG_JUMP_ATTACK
 };
 
+enum {
+	ROLE_HERO,
+	ROLE_GUN,
+	ROLE_PRINCESS
+};
+
 
 class Bullet;
 class BaseSprite : public cocos2d::Sprite

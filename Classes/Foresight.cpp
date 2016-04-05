@@ -4,9 +4,6 @@
 USING_NS_CC;
 
 Foresight::Foresight()
-	:m_fVelocity(0.0f)
-	,m_fDirection(Vec2(0.f, 0.f))
-	//,m_isStatic(true)
 {
 }
 

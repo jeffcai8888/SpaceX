@@ -75,8 +75,156 @@ void GameLayer::onEnter()
 
 	importGroundData(m_pTiledMap);
 
-	
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	this->m_origin = Director::getInstance()->getVisibleOrigin();
 
+	TMXObjectGroup *objects = m_pTiledMap->getObjectGroup("Objects");
+	CCASSERT(NULL != objects, "'Objects' object group not found");
+
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("hero.plist");
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gunner.plist");
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("princess.plist");
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("ui.plist");
+	auto spawnPoint = objects->getObject("SpawnPoint");
+	CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
+	Point heroInitPos = m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
+	m_pHero = createHero(ROLE_HERO, heroInitPos);
+	this->addChild(m_pHero);
+	auto centerOfView = Point(visibleSize.width / 2, visibleSize.height / 2);
+	this->setPosition(centerOfView - m_pHero->getPosition());
+
+
+	spawnPoint = objects->getObject("SpawnPoint1");
+	CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
+	heroInitPos = m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
+	m_pEnemy[0] = createEnemy(ROLE_PRINCESS, heroInitPos);
+	this->addChild(m_pEnemy[0]);
+
+
+	heroInitPos = m_origin + Point(spawnPoint["x"].asFloat() - 300.f, spawnPoint["y"].asFloat());
+	m_pEnemy[1] = createEnemy(ROLE_GUN, heroInitPos);
+	this->addChild(m_pEnemy[1]);
+
+
+	JsonParser* parser = JsonParser::createWithFile("Debug.json");
+	parser->decodeDebugData();
+	auto list = parser->getList();
+	for (auto& v : list)
+	{
+		ValueMap row = v.asValueMap();
+
+		for (auto& pair : row)
+		{
+			CCLOG("%s %s", pair.first.c_str(), pair.second.asString().c_str());
+			if (pair.first.compare("HeroHSpeed") == 0)
+			{
+				float s = pair.second.asFloat();
+				m_pHero->setWalkVelocity(s);
+				for (int i = 0; i < 3; ++i)
+				{
+					if (m_pEnemy[i])
+					{
+						m_pEnemy[i]->setWalkVelocity(s);
+					}
+				}
+			}
+			else if (pair.first.compare("HeroVSpeed") == 0)
+			{
+				m_pHero->setJumpVelocity(pair.second.asFloat());
+
+				for (int i = 0; i < 3; ++i)
+				{
+					if (m_pEnemy[i])
+					{
+						m_pEnemy[i]->setJumpVelocity(pair.second.asFloat());
+					}
+				}
+			}
+			else if (pair.first.compare("HeroG") == 0)
+			{
+				m_pHero->setGravity(pair.second.asFloat());
+				for (int i = 0; i < 3; ++i)
+				{
+					if (m_pEnemy[i])
+					{
+						m_pEnemy[i]->setGravity(pair.second.asFloat());
+					}
+				}
+			}
+			else if (pair.first.compare("BulletPower") == 0)
+			{
+				m_pHero->setBullletPower(pair.second.asInt());
+				for (int i = 0; i < 3; ++i)
+				{
+					if (m_pEnemy[i])
+					{
+						m_pEnemy[i]->setBullletPower(pair.second.asInt());
+					}
+				}
+			}
+			else if (pair.first.compare("BulletSpeed") == 0)
+			{
+				m_pHero->setBulletLaunchVelocity(pair.second.asFloat());
+				for (int i = 0; i < 3; ++i)
+				{
+					if (m_pEnemy[i])
+					{
+						m_pEnemy[i]->setBulletLaunchVelocity(pair.second.asFloat());
+					}
+				}
+			}
+			else if (pair.first.compare("BulletDisappearTime") == 0)
+			{
+				m_pHero->setBulletDisappearTime(pair.second.asFloat());
+				for (int i = 0; i < 3; ++i)
+				{
+					if (m_pEnemy[i])
+					{
+						m_pEnemy[i]->setBulletDisappearTime(pair.second.asFloat());
+					}
+				}
+			}
+			else if (pair.first.compare("BulletAngle") == 0)
+			{
+				m_pHero->setBullletAngle(pair.second.asInt());
+				for (int i = 0; i < 3; ++i)
+				{
+					if (m_pEnemy[i])
+					{
+						m_pEnemy[i]->setBullletAngle(pair.second.asInt());
+					}
+				}
+			}
+			else if (pair.first.compare("BulletInterval") == 0)
+			{
+				m_pHero->setBulletInterval(pair.second.asFloat());
+				for (int i = 0; i < 3; ++i)
+				{
+					if (m_pEnemy[i])
+					{
+						m_pEnemy[i]->setBulletInterval(pair.second.asFloat());
+					}
+				}
+			}
+			else if (pair.first.compare("BulletG") == 0)
+			{
+				m_pHero->setBulletGravity(pair.second.asFloat());
+				for (int i = 0; i < 3; ++i)
+				{
+					if (m_pEnemy[i])
+					{
+						m_pEnemy[i]->setBulletGravity(pair.second.asFloat());
+					}
+				}
+			}
+			else if (pair.first.compare("AmmoCapacity") == 0)
+			{
+				m_pHero->setMaxAmmoCapacity(pair.second.asInt());
+				m_pHero->setAmmoCapacity(pair.second.asInt());
+			}
+		}
+	}
+	m_shootTime = m_pHero->getBulletInterval();
 
 	auto listener = EventListenerCustom::create("bullet_disappear", [this](EventCustom* event) {
 		Bullet* bullet = static_cast<Bullet *>(event->getUserData());
@@ -367,6 +515,7 @@ void GameLayer::updateHero(float dt)
 		}
 	}
 	
+	Point target = getNearEnemyPos();
     
 	//CCLOG("MoveState %d %d", m_pHero->getCurrActionState(), m_pHero->getCurrMoveState());
 	//CCLOG("(%f, %f) (%f, %f)", m_pHero->getPhysicsBody()->getPosition().x, m_pHero->getPhysicsBody()->getPosition().y, m_pHero->getPosition().x, m_pHero->getPosition().y);
@@ -421,11 +570,9 @@ void GameLayer::updateBullet(float dt)
 
 void GameLayer::updateForesight(float dt)
 {
-	m_pForesight->setPosition(m_pHero->getPosition());
+	m_pForesight->setPosition(m_pHero->getPosition() + Point(0.f, -20.f));
 	float angle = CC_RADIANS_TO_DEGREES(m_pHero->getShootDirection().getAngle());
-	//CCLOG("updateForesight (%f, %f) %f", m_pHero->getShootDirection().x, m_pHero->getShootDirection().y, angle);
 	m_pForesight->setRotation(-angle);
-
 }
 
 void GameLayer::updatePhysicsWorld(float dt)
@@ -527,20 +674,6 @@ void GameLayer::removeAllEventListener()
 	m_vecEventListener.clear();
 }
 
-void GameLayer::initForesight(float vel)
-{
-	if (m_pHero->isFlippedX())
-	{
-		m_pForesight->setPosition(m_pHero->getPosition() + Point(-150.f, 50.f));
-	}
-	else
-	{
-		m_pForesight->setPosition(m_pHero->getPosition() + Point(150.f, 50.f));
-	}
-
-	m_pForesight->setVelocity(vel);
-}
-
 void GameLayer::removeAllBullets()
 {
 	for (auto sp_obj : m_vecBullets)
@@ -548,4 +681,68 @@ void GameLayer::removeAllBullets()
 		sp_obj->setIsActive(false);
 		sp_obj->removeFromParent();
 	}
+}
+
+BaseSprite* GameLayer::createHero(int role, cocos2d::Point pos)
+{
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	BaseSprite* sprite;
+	if(role == ROLE_HERO)
+		sprite = Hero::create();
+	else if(role == ROLE_GUN)
+		sprite = Gunner::create();
+	else
+		sprite = Princess::create();
+	sprite->setInitPos(pos);
+	sprite->setScale(0.5f);
+	sprite->setPosition(pos);
+	sprite->runIdleAction();
+	sprite->setLocalZOrder(visibleSize.height - sprite->getPositionY());
+	sprite->setHP(100);
+	sprite->setIsAttacking(false);
+	sprite->setJumpStage(0);
+	return sprite;
+}
+
+BaseSprite*  GameLayer::createEnemy(int role, cocos2d::Point pos)
+{
+	auto sprite = createHero(role, pos);
+	ProgressTimer* blood = ProgressTimer::create(Sprite::createWithSpriteFrameName("blood.png"));
+	blood->setName("blood");
+	blood->setType(ProgressTimer::Type::BAR);
+	blood->setMidpoint(Point(0, 0));
+	blood->setBarChangeRate(Point(1, 0));
+	blood->setAnchorPoint(Point(0, 1));
+	blood->setPosition(50, 150);
+	blood->setPercentage(100);
+
+
+	ProgressTimer *bloodBg = ProgressTimer::create(Sprite::createWithSpriteFrameName("bloodBg.png"));
+	bloodBg->setType(ProgressTimer::Type::BAR);
+	bloodBg->setMidpoint(Point(0, 0));
+	bloodBg->setBarChangeRate(Point(1, 0));
+	bloodBg->setAnchorPoint(Point(0, 1));
+	bloodBg->setPosition(blood->getPosition());
+	bloodBg->setPercentage(100);
+
+	sprite->addChild(bloodBg);
+	sprite->addChild(blood);
+
+	return sprite;
+}
+
+cocos2d::Point GameLayer::getNearEnemyPos()
+{
+	float distance = m_pHero->getPosition().getDistanceSq(m_pEnemy[0]->getPosition());
+	Point pos = m_pEnemy[0]->getPosition();
+	for (int i = 1; i < 3; ++i)
+	{
+		float d = m_pHero->getPosition().getDistanceSq(m_pEnemy[i]->getPosition());
+		if (d < distance)
+		{
+			distance = d;
+			pos = m_pEnemy[i]->getPosition();
+		}
+	}
+	return pos;
 }

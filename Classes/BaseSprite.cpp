@@ -16,7 +16,8 @@ BaseSprite::BaseSprite() :
 	m_pIdleFireAction(NULL),
 	m_isWalking(false),
 	m_isOnRotateGround(false),
-	m_maxHp(100)
+	m_maxHp(100),
+	m_fShootDirection(Vec2(1.f, 0.f))
 {
 
 }

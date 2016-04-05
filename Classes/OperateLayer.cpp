@@ -43,13 +43,12 @@ bool OperateLayer::init()
         
         m_pShoot = Sprite::createWithSpriteFrameName("1.PNG");
         m_pShoot->setPosition(Point(900.f, 100.f));
+		m_pShoot->setScale(2.f);
         this->addChild(m_pShoot);
         
 		m_pJoystick = Sprite::createWithSpriteFrameName("joystick.png");
 		m_pJoystickBg = Sprite::createWithSpriteFrameName("joystick_bg.png");
 
-		calJoyStickPos(m_JoyStickInitPos);
-		showJoystick(m_JoyStickInitPos);
 		this->addChild(m_pJoystick, 0);
 		this->addChild(m_pJoystickBg, 1);
 		Menu* menu;
@@ -97,7 +96,6 @@ void OperateLayer::onEnter()
 {
 	Layer::onEnter();
 	m_pHero = static_cast<GameLayer *>(this->getScene()->getChildByTag(LT_Game))->getHero();
-	m_pTarget = static_cast<GameLayer *>(this->getScene()->getChildByTag(LT_Game))->getForesight();
 	float joystickScale = 1.0f;
 	float joystickPosX = 0.f;
 	float joystickPosY = 0.f;
@@ -256,11 +254,9 @@ void OperateLayer::onEnter()
 
 		if (m_mapPressType[pTouch->getID()].asInt() == BT_Joystick)
 		{
-			//Point pos = m_pJoystickBg->getPosition();
-			//m_pJoystick->setPosition(pos);
 			showJoystick(m_JoyStickInitPos);
 			m_mapPressType.erase(pTouch->getID());
-            
+			resetHero();
             if (!m_pHero->isInAir())
             {
                 m_pHero->stop();
@@ -509,4 +505,10 @@ void OperateLayer::switchButtonStatus(int type, bool isPressed)
 			m_pUp->setSpriteFrame("jump.png");
 		}
 	}
+}
+
+void OperateLayer::resetHero()
+{
+	m_pHero->setFlippedX(false);
+	m_pHero->setShootDirection(Vec2(1.f, 0.f));
 }

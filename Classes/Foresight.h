@@ -13,11 +13,6 @@ public:
 	virtual bool init();
 
 	CREATE_FUNC(Foresight);
-
-	CC_SYNTHESIZE(float, m_fVelocity, Velocity);
-	CC_SYNTHESIZE(cocos2d::Point, m_fDirection, Direction);
-	//CC_SYNTHESIZE(bool, m_isStatic, IsStatic);
-	
 private:
 };
 
