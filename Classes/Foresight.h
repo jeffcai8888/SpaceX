@@ -11,7 +11,6 @@ public:
 	virtual ~Foresight();
 
 	virtual bool init();
-	void update(float dt);
 
 	CREATE_FUNC(Foresight);
 

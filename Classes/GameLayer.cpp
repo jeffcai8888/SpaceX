@@ -55,6 +55,8 @@ void GameLayer::onEnter()
 	Layer::onEnter();
 
 	m_pForesight = Foresight::create();
+	m_pForesight->setScale(0.2f);
+	this->addChild(m_pForesight);
 
 	m_pTiledMap = TMXTiledMap::create("TYCHEs_COFEE.tmx");
 	m_TiledMapSize.setSize(m_pTiledMap->getMapSize().width * m_pTiledMap->getTileSize().width, m_pTiledMap->getMapSize().height * m_pTiledMap->getTileSize().height);
@@ -330,7 +332,7 @@ void GameLayer::update(float dt)
 	this->updateEnemys(dt);
 	this->updateBullet(dt);
 	this->updatePhysicsWorld(dt);
-	//this->updateForesight(dt);
+	this->updateForesight(dt);
 }
 
 void GameLayer::updateHero(float dt)
@@ -419,28 +421,11 @@ void GameLayer::updateBullet(float dt)
 
 void GameLayer::updateForesight(float dt)
 {
-	auto visibleSize = Director::getInstance()->getVisibleSize();
-	m_pForesight->update(dt);
-	//CCLOG("foresight %f, %f", m_pForesight->getPositionX(), m_pForesight->getPositionY());
-	//CCLOG("hero %f, %f", m_pHero->getPositionX(), m_pHero->getPositionY());
-	//CCLOG("gameLayer %f, %f", getPositionX(), getPositionY());
-	//CCLOG("world %f, %f", m_pForesight->getPositionX() + m_pHero->getPositionX()+getPositionX(), m_pForesight->getPositionY() + m_pHero->getPositionY() + getPositionY());
-	if (m_pForesight->getPositionX() * 0.5 + m_pHero->getPositionX() + getPositionX()> visibleSize.width)
-	{
-		m_pForesight->setPositionX((visibleSize.width - (m_pHero->getPositionX() + getPositionX())) * 2);
-	}
-	else if (m_pForesight->getPositionX() * 0.5 + m_pHero->getPositionX() + getPositionX() < 0)
-	{
-		m_pForesight->setPositionX(-(m_pHero->getPositionX() + getPositionX()) * 2);
-	}
-	if (m_pForesight->getPositionY() * 0.5 + m_pHero->getPositionY() + getPositionY() > visibleSize.height)
-	{
-		m_pForesight->setPositionY((visibleSize.height - (m_pHero->getPositionY() + getPositionY())) * 2);
-	}
-	else if(m_pForesight->getPositionY()* 0.5 + m_pHero->getPositionY() + getPositionY() < 0)
-	{
-		m_pForesight->setPositionY(-(m_pHero->getPositionY() + getPositionY()) * 2);
-	}
+	m_pForesight->setPosition(m_pHero->getPosition());
+	float angle = CC_RADIANS_TO_DEGREES(m_pHero->getShootDirection().getAngle());
+	//CCLOG("updateForesight (%f, %f) %f", m_pHero->getShootDirection().x, m_pHero->getShootDirection().y, angle);
+	m_pForesight->setRotation(-angle);
+
 }
 
 void GameLayer::updatePhysicsWorld(float dt)
@@ -546,11 +531,11 @@ void GameLayer::initForesight(float vel)
 {
 	if (m_pHero->isFlippedX())
 	{
-		m_pForesight->setPosition(m_pHero->getPosition()  + Point(-1.f, 0.f) * 200);
+		m_pForesight->setPosition(m_pHero->getPosition() + Point(-150.f, 50.f));
 	}
 	else
 	{
-		m_pForesight->setPosition(m_pHero->getPosition()  + Point(1.f, 0.f) * 200);
+		m_pForesight->setPosition(m_pHero->getPosition() + Point(150.f, 50.f));
 	}
 
 	m_pForesight->setVelocity(vel);

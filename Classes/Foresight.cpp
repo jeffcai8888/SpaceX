@@ -21,20 +21,9 @@ bool Foresight::init()
 	do 
 	{
 		CC_BREAK_IF(!Sprite::init());
-		this->initWithSpriteFrameName("Foresight.png");
+		this->initWithSpriteFrameName("arrow.png");
+		this->setAnchorPoint(Vec2(0.f, 0.5f));
 		ret = true;
 	} while (false);
 	return ret;
-}
-
-void Foresight::update(float dt)
-{
-	Sprite::update(dt);
-	//if(!m_isStatic)
-	{
-		this->setPosition(this->getPosition() + this->m_fDirection * dt);
-		this->m_fDirection = Vec2(0.f, 0.f);
-		//m_isStatic = true;
-	}
-	
 }

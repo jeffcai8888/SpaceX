@@ -76,6 +76,8 @@ void OfflineGameLayer::onEnter()
 	m_pEnemy[0]->getPhysicsBody()->setGravityEnable(true);
 	this->addChild(m_pEnemy[0]);
 
+	//m_pHero->addChild(m_pForesight);
+
 	ProgressTimer* blood = ProgressTimer::create(Sprite::createWithSpriteFrameName("blood.png"));
 	blood->setName("blood");
 	blood->setType(ProgressTimer::Type::BAR);

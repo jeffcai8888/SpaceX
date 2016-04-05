@@ -11,8 +11,7 @@ public:
 	enum ButtonType
 	{
 		BT_None,
-		BT_Right,
-		BT_Left,
+		BT_Joystick,
 		BT_Jump,
         BT_Shoot
 	};
@@ -49,14 +48,13 @@ private:
 	cocos2d::Sprite *m_pJoystickBg;
     cocos2d::Sprite *m_pShoot;
 	cocos2d::Sprite *m_pUp;
-	cocos2d::Sprite *m_pArraw;
+	
 	cocos2d::Vector<cocos2d::EventListener *> m_vecEventListener;
 	cocos2d::Point m_JoyStickInitPos;
 	cocos2d::Point m_JoyStickRange1Pos;
 	cocos2d::Point m_JoyStickRange2Pos;
 	int m_JoyStickRange1Width;
 	int	m_JoyStickRange2Width;
-    int m_firstTouchJoystickID;
 	int m_PressType;
 
 	BaseSprite*	m_pHero;

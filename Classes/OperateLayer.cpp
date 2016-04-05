@@ -15,8 +15,7 @@ OperateLayer::OperateLayer()
     m_pJoystick(nullptr),
     m_pJoystickBg(nullptr),
     m_pShoot(nullptr),
-    m_pUp(nullptr),
-    m_firstTouchJoystickID(-1)
+    m_pUp(nullptr)
 {
 	m_vecEventListener.clear();
 	m_mapPressType.clear();
@@ -84,9 +83,6 @@ bool OperateLayer::init()
 		auto sprite2 = Sprite::createWithSpriteFrameName("3.png");
 		sprite2->setPosition(636.f, 600.f);
 		//this->addChild(sprite2);
-
-		m_pArraw = Sprite::createWithSpriteFrameName("arrow.png");
-		m_pArraw->setScale(0.5f);
 		
 		m_KeyPressedValue = 0;
 		
@@ -178,7 +174,7 @@ void OperateLayer::onEnter()
 			Point p = pTouch->getLocation();
 			if (isInRange(m_JoyStickRange2Pos, m_JoyStickRange2Width, p))
 			{
-				m_firstTouchJoystickID = pTouch->getID();
+				m_mapPressType[pTouch->getID()] = Value(BT_Joystick);
 				Point touchPos = p;
 				calJoyStickPos(p);
 				showJoystick(p);
@@ -193,22 +189,6 @@ void OperateLayer::onEnter()
                 SocketManager::getInstance()->sendData(NDT_HeroAttack, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getShootDirection());
                 m_mapPressType[pTouch->getID()] = Value(BT_Shoot);
             }
-            /*else if( p.x <= 200.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4 )
-            {
-                m_pHero->walk(-m_pHero->getWalkVelocity());
-				SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
-				switchButtonStatus(BT_Left, true);
-				switchButtonStatus(BT_Right, false);
-				m_mapPressType[pTouch->getID()] = Value(BT_Left);
-            }
-            else if( p.x > 200.f && p.x <= 400.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
-            {
-                m_pHero->walk(m_pHero->getWalkVelocity());
-				SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
-				switchButtonStatus(BT_Left, false);
-				switchButtonStatus(BT_Right, true);
-				m_mapPressType[pTouch->getID()] = Value(BT_Right);
-            }*/
             else if ( p.x > 1036 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
             {
                 m_pHero->jump(m_pHero->getJumpVelocity());
@@ -227,51 +207,44 @@ void OperateLayer::onEnter()
 		Point start = pTouch->getStartLocation();
         Point p = pTouch->getLocation();
 		
-        if(m_firstTouchJoystickID == pTouch->getID())
+        if(m_mapPressType[pTouch->getID()].asInt() == BT_Joystick)
         {
 			dealWithJoystick(m_pJoystickBg->getPosition(), p);
         }
-        else if(this->isTap(m_pShoot, p))
-        {
-            m_pHero->attack(true);
-        }
-        /*else if( p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4 )
-        {
-            m_pHero->walk(-m_pHero->getWalkVelocity());
-			SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
-			if (m_mapPressType[pTouch->getID()].asInt() != BT_Left)
-			{
-				m_mapPressType[pTouch->getID()] =  Value(BT_Left);
-				switchButtonStatus(BT_Left, true);
-				switchButtonStatus(BT_Right, false);
-			}		
-        }
-        else if( p.x > winSize.width / 8 && p.x <= winSize.width / 4 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
-        {
-            m_pHero->walk(m_pHero->getWalkVelocity());
-			SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
-			if (m_mapPressType[pTouch->getID()].asInt() != BT_Right)
-			{
-				m_mapPressType[pTouch->getID()] =  Value(BT_Right);
-				switchButtonStatus(BT_Left, false);
-				switchButtonStatus(BT_Right, true);
-			}
-			
-        }*/
-        else if ( p.x > winSize.width * 7 / 8 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
-        {
-            m_pHero->jump(m_pHero->getJumpVelocity());
-			SocketManager::getInstance()->sendData(NDT_HeroJumpUp, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
-			switchButtonStatus(BT_Jump, true);
-        }
 		else
 		{
-			if (m_mapPressType[pTouch->getID()].asInt() == BT_Jump)
+			if (this->isTap(m_pShoot, p))
 			{
-				m_mapPressType.erase(pTouch->getID());
-				switchButtonStatus(BT_Jump, false);
+				m_pHero->attack(true);
+				SocketManager::getInstance()->sendData(NDT_HeroAttack, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getShootDirection());
+				m_mapPressType[pTouch->getID()] = Value(BT_Shoot);
+			}
+			else
+			{
+				if (m_mapPressType[pTouch->getID()].asInt() == BT_Shoot)
+				{
+					m_mapPressType.erase(pTouch->getID());
+					m_pHero->attack(false);
+					SocketManager::getInstance()->sendData(NDT_HeroStop, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), Vec2(0, 0));
+				}
+			}
+
+			if (p.x > winSize.width * 7 / 8 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
+			{
+				m_pHero->jump(m_pHero->getJumpVelocity());
+				SocketManager::getInstance()->sendData(NDT_HeroJumpUp, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
+				switchButtonStatus(BT_Jump, true);
+			}
+			else
+			{
+				if (m_mapPressType[pTouch->getID()].asInt() == BT_Jump)
+				{
+					m_mapPressType.erase(pTouch->getID());
+					switchButtonStatus(BT_Jump, false);
+				}
 			}
 		}
+        
 	};
 	listener->onTouchesEnded = [this](const vector<Touch*>& touches, Event *event)
 	{
@@ -281,12 +254,12 @@ void OperateLayer::onEnter()
 		Point start = pTouch->getStartLocation();
 		Point p = pTouch->getLocation();
 
-		if (m_firstTouchJoystickID == pTouch->getID())
+		if (m_mapPressType[pTouch->getID()].asInt() == BT_Joystick)
 		{
 			//Point pos = m_pJoystickBg->getPosition();
 			//m_pJoystick->setPosition(pos);
 			showJoystick(m_JoyStickInitPos);
-			m_firstTouchJoystickID = -1;
+			m_mapPressType.erase(pTouch->getID());
             
             if (!m_pHero->isInAir())
             {
@@ -298,30 +271,8 @@ void OperateLayer::onEnter()
         else if(this->isTap(m_pShoot, p))
         {
             m_pHero->attack(false);
-        }
-        /*else if (p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
-        { 
-			if (!m_pHero->isInAir())
-			{
-				m_pHero->stop();
-				SocketManager::getInstance()->sendData(NDT_HeroStop, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), Vec2(0, 0));
-			}               
-            m_pHero->stopMoveAction(MOVE_STATE_WALK, true);
-			switchButtonStatus(BT_Left, false);
 			m_mapPressType.erase(pTouch->getID());
-
         }
-        else if (p.x > winSize.width / 8 && p.x <= winSize.width / 4 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
-        {
-			if (!m_pHero->isInAir())
-			{
-				m_pHero->stop();
-				SocketManager::getInstance()->sendData(NDT_HeroStop, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), Vec2(0, 0));
-			}				
-            m_pHero->stopMoveAction(MOVE_STATE_WALK, true);
-			switchButtonStatus(BT_Right, false);
-			m_mapPressType.erase(pTouch->getID());
-        }*/
         else if (p.x > winSize.width * 7 / 8 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
         {
 			switchButtonStatus(BT_Jump, false);
@@ -374,9 +325,6 @@ void OperateLayer::onEnter()
 		}
 		dealWithKeyBoard();
 	};
-	m_pHero->addChild(m_pArraw);
-	m_pArraw->setPosition(m_pHero->getShootPosition());
-	m_pArraw->setVisible(true);
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyListener, this);
 	m_vecEventListener.pushBack(keyListener);
