@@ -21,8 +21,7 @@ public:
 	{
 		KB_Front = 1 << 0,
 		KB_Back = 1 << 1,
-		KB_Up = 1 << 2,
-        KB_Shoot = 1 << 3
+		KB_Up = 1 << 2
 	};
 
 	OperateLayer();
@@ -45,7 +44,6 @@ private:
 	void switchButtonStatus(int type, bool isPressed);
 	void calJoyStickPos(cocos2d::Point& pos);
 	void dealWithJoystick(cocos2d::Point, cocos2d::Point);
-	void resetHero();
 	cocos2d::Sprite *m_pJoystick;
 	cocos2d::Sprite *m_pJoystickBg;
 	cocos2d::Sprite *m_pFront;
@@ -53,14 +51,11 @@ private:
 	cocos2d::Sprite *m_pUp;
 	
 	cocos2d::Vector<cocos2d::EventListener *> m_vecEventListener;
-	cocos2d::Point m_JoyStickInitPos;
-	cocos2d::Point m_JoyStickRange1Pos;
-	cocos2d::Point m_JoyStickRange2Pos;
-	int m_JoyStickRange1Width;
-	int	m_JoyStickRange2Width;
 	int m_PressType;
 
 	BaseSprite*	m_pHero;
+    Foresight* m_pForesight;
+    cocos2d::Sprite* m_pRange;
 
 	int m_KeyPressedValue;
 

@@ -44,11 +44,19 @@ bool Hero::init()
 		body->setGravityEnable(false);
 		body->setRotationEnable(false);
 		const PhysicsMaterial m(1.0f, 0.f, 0.f);
-		auto shape = PhysicsShapeBox::create(Size(this->getContentSize().width / 6, this->getContentSize().height / 4), m, Vec2(0.f, -this->getContentSize().height /2.5));
-		body->addShape(shape);
-		body->setCategoryBitmask(PC_Hero);
-		body->setContactTestBitmask(PC_Ground | PC_Box | PC_Slope | PC_Bullet);
-		body->setCollisionBitmask(PC_Ground | PC_Box | PC_Slope);
+		auto shape0 = PhysicsShapeBox::create(Size(this->getContentSize().width / 5, this->getContentSize().height / 4), m, Vec2(0.f, -this->getContentSize().height /2.5));
+        shape0->setTag(0);
+        shape0->setCategoryBitmask(PC_Hero);
+        shape0->setContactTestBitmask(PC_Ground | PC_Box | PC_Slope);
+        shape0->setCollisionBitmask(PC_Ground | PC_Box | PC_Slope);
+        body->addShape(shape0);
+        auto shape1 = PhysicsShapeBox::create(Size(this->getContentSize().width / 5, this->getContentSize().height / 2), m, Vec2(0.f, -this->getContentSize().height / 4));
+        shape1->setTag(1);
+        shape1->setCategoryBitmask(PC_Damage);
+        shape1->setContactTestBitmask(PC_Bullet);
+        shape1->setCollisionBitmask(PC_Bullet);
+		body->addShape(shape1);
+		
 		this->setPhysicsBody(body);
 		ret = true;
 	} while(0);

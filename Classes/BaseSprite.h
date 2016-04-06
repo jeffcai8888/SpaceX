@@ -99,7 +99,8 @@ public:
 	CC_SYNTHESIZE(float, m_fBulletGravity, BulletGravity);
 	CC_SYNTHESIZE(bool, m_isOnRotateGround, IsOnRotateGround);
 	CC_SYNTHESIZE(cocos2d::Point, m_initPos, InitPos);
-
+    CC_SYNTHESIZE(bool, m_isLocked, IsLocked);
+    
 	virtual void onDead();
 
 	virtual bool isLive();

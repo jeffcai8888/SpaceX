@@ -16,6 +16,7 @@ public:
 	OfflineGameLayer();
 	virtual ~OfflineGameLayer();
 
+    virtual void onEnter();
 	virtual void onExit();
 
 	CREATE_FUNC(OfflineGameLayer);

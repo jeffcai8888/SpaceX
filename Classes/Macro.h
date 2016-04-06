@@ -22,7 +22,8 @@ enum PhysicsCategory
 	PC_Bullet = 1 << 1,
 	PC_Ground = 1 << 2,
 	PC_Box = 1 << 3,
-	PC_Slope = 1 << 4
+	PC_Slope = 1 << 4,
+    PC_Damage = 1 << 5
 };
 
 #define EPSILON 0.00001f

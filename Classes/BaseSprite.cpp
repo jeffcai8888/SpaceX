@@ -17,7 +17,8 @@ BaseSprite::BaseSprite() :
 	m_isWalking(false),
 	m_isOnRotateGround(false),
 	m_maxHp(100),
-	m_fShootDirection(Vec2(1.f, 0.f))
+	m_fShootDirection(Vec2(1.f, 0.f)),
+    m_isLocked(false)
 {
 
 }

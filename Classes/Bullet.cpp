@@ -24,7 +24,7 @@ bool Bullet::init()
 		auto shape = PhysicsShapeBox::create(Size(this->getContentSize().width, this->getContentSize().height), PHYSICSSHAPE_MATERIAL_DEFAULT);
 		body->addShape(shape);
 		body->setCategoryBitmask(PC_Bullet);
-        body->setContactTestBitmask(PC_Ground | PC_Box | PC_Slope | PC_Hero);
+        body->setContactTestBitmask(PC_Ground | PC_Box | PC_Slope | PC_Damage);
 		body->setCollisionBitmask(PC_Ground | PC_Box | PC_Slope);
 		this->setPhysicsBody(body);
 		ret = true;
