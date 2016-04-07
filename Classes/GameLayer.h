@@ -50,6 +50,7 @@ protected:
 	cocos2d::Vector<cocos2d::EventListener *> m_vecEventListener;
 
 	BaseSprite* m_pEnemy[3];
+    BaseSprite* m_pTarget;
 
 
 	Bullet* getUnusedBullet();

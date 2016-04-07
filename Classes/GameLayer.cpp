@@ -23,6 +23,7 @@ GameLayer::GameLayer()
 	,m_pHero(nullptr)
     ,m_pForesight(nullptr)
     ,m_pRange(nullptr)
+    ,m_pTarget(nullptr)
 {
 	m_vecBullets.clear();
 	m_vecEventListener.clear();
@@ -362,14 +363,22 @@ void GameLayer::updateHero(float dt)
 		}
 	}
     
-    if(m_pHero->getIsLocked())
+    if(m_pHero->getIsLocked() && m_pTarget == nullptr)
     {
-        BaseSprite* target = getNearestEnemy();
-        Vec2 direction = target->getPosition() - m_pHero->getPosition();
+        m_pTarget = getNearestEnemy();
+        
+    }
+    else if(!m_pHero->getIsLocked() && m_pTarget != nullptr)
+    {
+        m_pTarget = nullptr;
+    }
+	
+    if(m_pTarget != nullptr)
+    {
+        Vec2 direction = m_pTarget->getPosition() - m_pHero->getPosition();
         direction.normalize();
         m_pHero->setShootDirection(direction);
     }
-	
     
 	//CCLOG("MoveState %d %d", m_pHero->getCurrActionState(), m_pHero->getCurrMoveState());
 	//CCLOG("(%f, %f) (%f, %f)", m_pHero->getPhysicsBody()->getPosition().x, m_pHero->getPhysicsBody()->getPosition().y, m_pHero->getPosition().x, m_pHero->getPosition().y);
@@ -587,18 +596,23 @@ BaseSprite*  GameLayer::createEnemy(int role, cocos2d::Point pos)
 
 BaseSprite* GameLayer::getNearestEnemy()
 {
-	float distance = m_pHero->getPosition().getDistanceSq(m_pEnemy[0]->getPosition());
-    int index = 0;
-	for (int i = 1; i < 3; ++i)
+    BaseSprite* target = nullptr;    
+    
+    float distance = 100000.f;
+	for (int i = 0; i < 3; ++i)
 	{
         if(m_pEnemy[i] == nullptr)
             continue;
+        
+        if(fabsf(m_pHero->getPosition().x - m_pEnemy[i]->getPosition().x) > 450.f ||  fabsf(m_pHero->getPosition().y - m_pEnemy[i]->getPosition().y) > 320.f)
+            continue;
+        
 		float d = m_pHero->getPosition().getDistanceSq(m_pEnemy[i]->getPosition());
 		if (d < distance)
 		{
 			distance = d;
-            index = i;
+            target = m_pEnemy[i];
         }
 	}
-	return m_pEnemy[index];
+	return target;
 }
