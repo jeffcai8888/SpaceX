@@ -564,12 +564,7 @@ BaseSprite* GameLayer::createHero(int role, cocos2d::Point pos)
 	sprite->setHP(100);
 	sprite->setIsAttacking(false);
 	sprite->setJumpStage(0);
-	return sprite;
-}
 
-BaseSprite*  GameLayer::createEnemy(int role, cocos2d::Point pos)
-{
-	auto sprite = createHero(role, pos);
 	ProgressTimer* blood = ProgressTimer::create(Sprite::create("blood.png"));
 	blood->setName("blood");
 	blood->setType(ProgressTimer::Type::BAR);

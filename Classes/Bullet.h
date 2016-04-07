@@ -22,7 +22,7 @@ public:
 	CC_SYNTHESIZE(unsigned int, m_gravity, Gravity);
 	CC_SYNTHESIZE(unsigned int, m_power, Power);
 	CC_SYNTHESIZE(bool, m_isActive, IsActive);
-	CC_SYNTHESIZE(int, m_OwnerTag, OwnerTag);
+	CC_SYNTHESIZE(int, m_ownerTag, OwnerTag);
 	
 private:
 	float m_launchTime;

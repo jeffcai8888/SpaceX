@@ -142,7 +142,7 @@ void OperateLayer::onEnter()
 		{
 			Touch *pTouch = (Touch*)(*touchIter);
 			Point p = pTouch->getLocation();
-            if(isTap(m_pJoystickBg, p))
+			if(isInRange(m_pJoystickBg->getPosition(), m_pJoystickBg->getContentSize().width * 1.5, p))
 			{
 				m_mapPressType[pTouch->getID()] = Value(BT_Joystick);
                 m_pHero->attack(true);
@@ -188,7 +188,7 @@ void OperateLayer::onEnter()
 		
         if(m_mapPressType.find(pTouch->getID()) != m_mapPressType.end() && m_mapPressType[pTouch->getID()].asInt() == BT_Joystick)
         {
-			if (isTap(m_pJoystickBg, p))
+			if (isInRange(m_pJoystickBg->getPosition(), m_pJoystickBg->getContentSize().width * 1.5, p))
 				dealWithJoystick(m_pJoystickBg->getPosition(), p);
 			else
 			{
@@ -201,7 +201,7 @@ void OperateLayer::onEnter()
 			}
             m_pHero->setIsLocked(false);
         }
-		else if(isTap(m_pJoystickBg, p))
+		else if(isInRange(m_pJoystickBg->getPosition(), m_pJoystickBg->getContentSize().width * 1.5, p))
 		{
 			m_mapPressType[pTouch->getID()] = Value(BT_Joystick);
 			dealWithJoystick(m_pJoystickBg->getPosition(), p);
