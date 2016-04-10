@@ -53,10 +53,13 @@ bool OperateLayer::init()
  
         
 		m_pJoystick = Sprite::createWithSpriteFrameName("joystick.png");
+		m_pJoystick->setScale(1.5f);
 		m_pJoystickBg = Sprite::createWithSpriteFrameName("joystick_bg.png");
-		auto bg = Sprite::createWithSpriteFrameName("joystick_bg1.png");
+		m_pJoystickBg->setScale(1.5f);
+		m_pJoystickBg1 = Sprite::createWithSpriteFrameName("joystick_bg1.png");
+		m_pJoystickBg1->setScale(1.5f);
 		this->addChild(m_pJoystick, 0);
-		this->addChild(bg, 1);
+		this->addChild(m_pJoystickBg1, 1);
 		this->addChild(m_pJoystickBg, 2);
 
 		Menu* menu;
@@ -387,9 +390,11 @@ void OperateLayer::showJoystick(Point pos)
 {
 	m_pJoystick->setPosition(pos);
 	m_pJoystickBg->setPosition(pos);
+	m_pJoystickBg1->setPosition(pos);
 
 	m_pJoystick->setVisible(true);
 	m_pJoystickBg->setVisible(true);
+	m_pJoystickBg1->setVisible(true);
 }
 
 void OperateLayer::updateJoystick(Point direction, float distance)
