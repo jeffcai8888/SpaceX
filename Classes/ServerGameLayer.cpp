@@ -53,7 +53,6 @@ void ServerGameLayer::onEnter()
     m_pHero->addChild(m_pRange);
     
     m_pForesight = Foresight::create();
-    m_pForesight->setScale(0.2f);
     m_pForesight->setVisible(false);
     this->addChild(m_pForesight);
     

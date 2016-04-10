@@ -39,6 +39,7 @@ void Bullet::update(float dt)
 		float x = this->getPhysicsBody()->getVelocity().x;
 		float y = this->getPhysicsBody()->getVelocity().y;
 		y += m_gravity * dt;
+		CCLOG("this->m_gravity = %f y = %f", this->m_gravity, y);
 		this->getPhysicsBody()->setVelocity(Vec2(x, y));
 
 		m_launchTime += dt;
@@ -64,6 +65,7 @@ void Bullet::launch(BaseSprite* pHero)
 	this->m_fDirection = pHero->getShootDirection().rotateByAngle(Vec2(0.f, 0.f), rotation);
 	this->m_power = pHero->getBullletPower();
 	this->m_gravity = pHero->getBulletGravity();
+	CCLOG("this->m_gravity = %f", this->m_gravity);
 	this->m_ownerTag = pHero->getTag();
 	this->getPhysicsBody()->setVelocity(Vec2(0.f, 0.f));
 	this->getPhysicsBody()->applyImpulse(m_fVelocity * m_fDirection + pHero->getPhysicsBody()->getVelocity());

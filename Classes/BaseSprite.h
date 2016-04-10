@@ -100,6 +100,7 @@ public:
 	CC_SYNTHESIZE(bool, m_isOnRotateGround, IsOnRotateGround);
 	CC_SYNTHESIZE(cocos2d::Point, m_initPos, InitPos);
     CC_SYNTHESIZE(bool, m_isLocked, IsLocked);
+	CC_SYNTHESIZE(cocos2d::Sprite*, m_pLockMark, LockMark);
     
 	virtual void onDead();
 

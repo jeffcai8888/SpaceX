@@ -54,8 +54,10 @@ bool OperateLayer::init()
         
 		m_pJoystick = Sprite::createWithSpriteFrameName("joystick.png");
 		m_pJoystickBg = Sprite::createWithSpriteFrameName("joystick_bg.png");
+		auto bg = Sprite::createWithSpriteFrameName("joystick_bg1.png");
 		this->addChild(m_pJoystick, 0);
-		this->addChild(m_pJoystickBg, 1);
+		this->addChild(bg, 1);
+		this->addChild(m_pJoystickBg, 2);
 
 		Menu* menu;
 		auto debugItem = MenuItemImage::create("pause.png", "pause_down.png", CC_CALLBACK_1(OperateLayer::gotoDebug, this));
@@ -150,6 +152,7 @@ void OperateLayer::onEnter()
                 m_pHero->setIsLocked(true);
                 m_pForesight->setVisible(true);
                 m_pRange->setVisible(true);
+				switchButtonStatus(BT_Joystick, true);
 			}
 			else if (p.x <= 200.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
 			{
@@ -197,6 +200,7 @@ void OperateLayer::onEnter()
                 m_pForesight->setVisible(false);
                 m_pRange->setVisible(false);
                 m_pHero->attack(false);
+				switchButtonStatus(BT_Joystick, false);
                 SocketManager::getInstance()->sendData(NDT_HeroStopAttack, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getShootDirection());
 			}
             m_pHero->setIsLocked(false);
@@ -208,6 +212,7 @@ void OperateLayer::onEnter()
             m_pForesight->setVisible(false);
             m_pRange->setVisible(false);
             m_pHero->setIsLocked(true);
+			switchButtonStatus(BT_Joystick, true);
 		}
 
 		bool isChange = false;
@@ -297,6 +302,7 @@ void OperateLayer::onEnter()
             m_pHero->setIsLocked(false);
             m_pForesight->setVisible(false);
             m_pRange->setVisible(false);
+			switchButtonStatus(BT_Joystick, false);
 			SocketManager::getInstance()->sendData(NDT_HeroStopAttack, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getShootDirection());
         }
 		else if (p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
@@ -502,6 +508,17 @@ void OperateLayer::switchButtonStatus(int type, bool isPressed)
 		else
 		{
 			m_pUp->setSpriteFrame("jump.png");
+		}
+	}
+	if (type == BT_Joystick)
+	{
+		if (isPressed)
+		{
+			m_pJoystick->setSpriteFrame("joystick_down.png");
+		}
+		else
+		{
+			m_pJoystick->setSpriteFrame("joystick.png");
 		}
 	}
 }

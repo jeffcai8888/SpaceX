@@ -50,7 +50,7 @@ void OfflineGameLayer::onEnter()
     
     m_pRange = Sprite::createWithSpriteFrameName("range.png");
     m_pRange->setVisible(false);
-    m_pRange->setPosition(Point(140.f, 25.f));
+    m_pRange->setPosition(Point(110.f, 25.f));
     m_pHero->addChild(m_pRange);
     
     m_pForesight = Foresight::create();
@@ -63,12 +63,20 @@ void OfflineGameLayer::onEnter()
     CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
     heroInitPos = m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
     m_pEnemy[0] = createHero(ROLE_PRINCESS, heroInitPos);
+	m_pEnemy[0]->setLockMark(Sprite::createWithSpriteFrameName("lock.png"));
+	m_pEnemy[0]->addChild(m_pEnemy[0]->getLockMark());
+	m_pEnemy[0]->getLockMark()->setPosition(m_pEnemy[0]->getContentSize().width / 2, 50.f);
+	m_pEnemy[0]->getLockMark()->setVisible(false);
 	m_pEnemy[0]->setTag(1);
     this->addChild(m_pEnemy[0]);
     
     
     heroInitPos = m_origin + Point(spawnPoint["x"].asFloat() - 300.f, spawnPoint["y"].asFloat());
     m_pEnemy[1] = createHero(ROLE_GUN, heroInitPos);
+	m_pEnemy[1]->setLockMark(Sprite::createWithSpriteFrameName("lock.png"));
+	m_pEnemy[1]->addChild(m_pEnemy[1]->getLockMark());
+	m_pEnemy[1]->getLockMark()->setPosition(m_pEnemy[0]->getContentSize().width / 2, 50.f);
+	m_pEnemy[1]->getLockMark()->setVisible(false);
 	m_pEnemy[1]->setTag(2);
     this->addChild(m_pEnemy[1]);
     
