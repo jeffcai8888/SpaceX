@@ -190,11 +190,11 @@ void OperateLayer::onEnter()
 						hero->setSkillActivePos(hero->getPosition());
 						if (hero->isFlippedX())
 						{
-							hero->getPhysicsBody()->applyForce(Vec2(-10000.f, 0.f));
+							hero->getPhysicsBody()->setVelocity(Vec2(-2200.f, 0.f));
 						}
 						else
 						{
-							hero->getPhysicsBody()->applyForce(Vec2(10000.f, 0.f));
+							hero->getPhysicsBody()->setVelocity(Vec2(2200.f, 0.f));
 						}
 						hero->setCurSkillState(1);
 					}
@@ -202,11 +202,11 @@ void OperateLayer::onEnter()
 					{
 						if (hero->isFlippedX())
 						{
-							hero->getPhysicsBody()->applyForce(Vec2(-10000.f, 0.f));
+							hero->getPhysicsBody()->setVelocity(Vec2(-2200.f, 0.f));
 						}
 						else
 						{
-							hero->getPhysicsBody()->applyForce(Vec2(10000.f, 0.f));
+							hero->getPhysicsBody()->setVelocity(Vec2(2200.f, 0.f));
 						}
 						hero->setCurSkillState(2);
 					}
@@ -233,7 +233,7 @@ void OperateLayer::onEnter()
 		
         if(m_mapPressType.find(pTouch->getID()) != m_mapPressType.end() && m_mapPressType[pTouch->getID()].asInt() == BT_Joystick)
         {
-			if (isInRange(m_pJoystickBg->getPosition(), m_pJoystickBg->getContentSize().width * 3, p))
+			if (isInRange(m_pJoystickBg->getPosition(), m_pJoystickBg->getContentSize().width * 3, m_pJoystickBg->getContentSize().height * 3, p))
 				dealWithJoystick(m_pJoystickBg->getPosition(), p);
 			else
 			{
@@ -458,9 +458,9 @@ bool OperateLayer::isTap(cocos2d::Node* pNode, cocos2d::Point point)
 		return false;
 }
 
-bool OperateLayer::isInRange(cocos2d::Point p1, int w, cocos2d::Point p2)
+bool OperateLayer::isInRange(cocos2d::Point p1, int w, int h, cocos2d::Point p2)
 {
-	return (p2.x >= (p1.x - w /2) && p2.x <= (p1.x + w / 2) && p2.y >= (p1.y - w / 2) && p2.y <= (p1.y + w / 2));
+	return (p2.x >= (p1.x - w /2) && p2.x <= (p1.x + w / 2) && p2.y >= (p1.y - h / 2) && p2.y <= (p1.y + h / 2));
 }
 
 void OperateLayer::dealWithKeyBoard()

@@ -19,7 +19,7 @@ public:
 	CC_SYNTHESIZE(float, m_fVelocity, Velocity);
 	CC_SYNTHESIZE(cocos2d::Point, m_fDirection, Direction);
 	CC_SYNTHESIZE(float, m_fDisappearTime, DisappearTime);
-	CC_SYNTHESIZE(unsigned int, m_gravity, Gravity);
+	CC_SYNTHESIZE(float, m_gravity, Gravity);
 	CC_SYNTHESIZE(unsigned int, m_power, Power);
 	CC_SYNTHESIZE(bool, m_isActive, IsActive);
 	CC_SYNTHESIZE(int, m_ownerTag, OwnerTag);
