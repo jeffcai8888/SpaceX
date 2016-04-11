@@ -23,7 +23,8 @@ enum PhysicsCategory
 	PC_Ground = 1 << 2,
 	PC_Box = 1 << 3,
 	PC_Slope = 1 << 4,
-    PC_Damage = 1 << 5
+	PC_Damage = 1 << 5,
+	PC_Bomb = 1 << 6
 };
 
 #define EPSILON 0.00001f

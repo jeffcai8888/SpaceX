@@ -146,6 +146,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\BaseSprite.cpp" />
+    <ClCompile Include="..\Classes\Bomb.cpp" />
     <ClCompile Include="..\Classes\Box.cpp" />
     <ClCompile Include="..\Classes\Bullet.cpp" />
     <ClCompile Include="..\Classes\ClientGameLayer.cpp" />
@@ -170,11 +171,13 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\socket\SocketClient.cpp" />
     <ClCompile Include="..\Classes\socket\SocketServer.cpp" />
     <ClCompile Include="..\Classes\Foresight.cpp" />
+    <ClCompile Include="..\Classes\StartScene.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\BaseSprite.h" />
+    <ClInclude Include="..\Classes\Bomb.h" />
     <ClInclude Include="..\Classes\Box.h" />
     <ClInclude Include="..\Classes\Bullet.h" />
     <ClInclude Include="..\Classes\ClientGameLayer.h" />
@@ -201,6 +204,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\socket\SocketClient.h" />
     <ClInclude Include="..\Classes\socket\SocketServer.h" />
     <ClInclude Include="..\Classes\Foresight.h" />
+    <ClInclude Include="..\Classes\StartScene.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>

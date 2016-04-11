@@ -1,20 +1,19 @@
 #include "Macro.h"
-#include "Bullet.h"
+#include "Bomb.h"
 #include "BaseSprite.h"
 
 USING_NS_CC;
 
-Bullet::Bullet()
-	:m_launchTime(0.f)
+Bomb::Bomb()
 {
 }
 
 
-Bullet::~Bullet()
+Bomb::~Bomb()
 {
 }
 
-bool Bullet::init()
+bool Bomb::init()
 {
 	bool ret = false;
 	do 
@@ -23,8 +22,8 @@ bool Bullet::init()
 		auto body = PhysicsBody::create();
 		auto shape = PhysicsShapeBox::create(Size(this->getContentSize().width, this->getContentSize().height), PHYSICSSHAPE_MATERIAL_DEFAULT);
 		body->addShape(shape);
-		body->setCategoryBitmask(PC_Bullet);
-        body->setContactTestBitmask(PC_Ground | PC_Box | PC_Slope | PC_Damage);
+		body->setCategoryBitmask(PC_Bomb);
+        body->setContactTestBitmask(PC_Ground | PC_Box | PC_Slope);
 		body->setCollisionBitmask(PC_Ground | PC_Box | PC_Slope);
 		this->setPhysicsBody(body);
 		ret = true;
@@ -32,7 +31,7 @@ bool Bullet::init()
 	return ret;
 }
 
-void Bullet::update(float dt)
+void Bomb::update(float dt)
 {
 	if (this->m_isActive)
 	{
@@ -54,14 +53,12 @@ void Bullet::update(float dt)
 	}
 }
 
-void Bullet::launch(BaseSprite* pHero)
+void Bomb::launch(BaseSprite* pHero)
 {
 	this->m_isActive = true;
 	Point pos = pHero->getShootPosition();
 	this->setPosition(pos);	
 	this->m_fVelocity = pHero->getBulletLaunchVelocity();
-	this->m_fDisappearTime = pHero->getBulletDisappearTime();
-	float rotation = CC_DEGREES_TO_RADIANS(-rand_0_1() * pHero->getBullletAngle());
 	this->m_fDirection = pHero->getShootDirection().rotateByAngle(Vec2(0.f, 0.f), rotation);
 	this->m_power = pHero->getBullletPower();
 	this->m_gravity = pHero->getBulletGravity();

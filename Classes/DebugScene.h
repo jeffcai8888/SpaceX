@@ -14,18 +14,12 @@ public:
 
 	CREATE_FUNC(DebugLayer);
 
-	bool m_isFirst;
 
-
-	virtual cocos2d::ui::Widget::ccWidgetTouchCallback onLocateTouchCallback(const std::string &callBackName);
 	virtual cocos2d::ui::Widget::ccWidgetClickCallback onLocateClickCallback(const std::string &callBackName);
-	virtual cocos2d::ui::Widget::ccWidgetEventCallback onLocateEventCallback(const std::string &callBackName);
 	virtual void onEnter();
 	virtual void onExit();
 
-	//bool init();
 	void exitDebug(cocos2d::Ref* pSender);
-	void textFieldEvent(cocos2d::Ref *pSender, int type);
 
 private:
 	cocos2d::MenuItemImage *m_pCloseItem;
@@ -47,7 +41,7 @@ public :
 class DebugScene
 {
 public:
-	static cocos2d::Scene* createScene(bool isFirst = false);
+	static cocos2d::Scene* createScene();
 };
 
 #endif

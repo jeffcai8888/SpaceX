@@ -3,8 +3,8 @@
     <Item Key="TabsParamsKey">
       <Value ctype="TabsInfo">
         <OpenedDocuments>
-          <FilePathData Path="BackgroundLayer.csd" />
           <FilePathData Path="DebugScene.csd" />
+          <FilePathData Path="StartScene.csd" />
         </OpenedDocuments>
         <ActiveDocument Path="DebugScene.csd" />
       </Value>

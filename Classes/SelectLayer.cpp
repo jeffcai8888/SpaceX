@@ -1,7 +1,7 @@
 #include "Macro.h"
 #include "SelectLayer.h"
 #include "GameScene.h"
-#include "DebugScene.h"
+#include "StartScene.h"
 #include "SocketManager.h"
 
 USING_NS_CC;
@@ -51,20 +51,20 @@ void SelectLayer::initMenu()
 void SelectLayer::menuClientClick(Ref* sender)
 {
 	SocketManager::getInstance()->setNetworkType(NT_Client);
-	auto scene = DebugScene::createScene(true);	
+	auto scene = StartScene::createScene();
 	Director::getInstance()->replaceScene(scene);
 }
 
 void SelectLayer::menuServerClick(Ref* sender)
 {
 	SocketManager::getInstance()->setNetworkType(NT_Server);
-	auto scene = GameScene::createScene(NT_Server);	
+	auto scene = StartScene::createScene();
 	Director::getInstance()->replaceScene(scene);
 }
 
 void SelectLayer::menuOfflineClick(Ref* sender)
 {
 	SocketManager::getInstance()->setNetworkType(NT_Offline);
-	auto scene = GameScene::createScene(NT_Offline);
+	auto scene = StartScene::createScene();
 	Director::getInstance()->replaceScene(scene);
 }

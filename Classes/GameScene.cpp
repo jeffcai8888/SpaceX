@@ -10,14 +10,11 @@
 
 USING_NS_CC;
 
-Scene* GameScene::createScene(int networkType)
+Scene* GameScene::createScene()
 {
 	auto scene = Scene::createWithPhysics();
 	scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
-	//scene->getPhysicsWorld()->setSpeed(2.f);
-
-	
-	
+	int networkType = SocketManager::getInstance()->getNetworkType();
 
 	auto layer = CSLoader::createNode("BackgroundLayer.csb");
 	scene->addChild(layer);
@@ -25,7 +22,7 @@ Scene* GameScene::createScene(int networkType)
 	if (networkType == NT_Client)
 	{
 		std::string addr0, addr1, addr2, addr3;
-		JsonParser* parser = JsonParser::createWithFile("Debug.json");
+		JsonParser* parser = JsonParser::createWithFile("Config.json");
 		parser->decodeDebugData();
 		auto list = parser->getList();
 		for (auto& v : list)

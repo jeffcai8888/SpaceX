@@ -3,6 +3,10 @@
 {"Attr":"HeroVSpeed","Value":300.0},
 {"Attr":"AmmoCapacity","Value":100.0},
 {"Attr":"HeroG","Value":-600.0},
+{"Attr":"HeroSkill1V","Value":2200.0},
+{"Attr":"HeroSkill2V","Value":2200.0},
+{"Attr":"HeroSkill1CD","Value":5.0},
+{"Attr":"HeroSkill2CD","Value":5.0},
 {"Attr":"BulletPower","Value":5.0},
 {"Attr":"BulletSpeed","Value":750.0},
 {"Attr":"BulletDisappearTime","Value":0.5},
@@ -12,9 +16,5 @@
 {"Attr":"ForesightSpeed","Value":230.0},
 {"Attr":"JoystickX","Value":900.0},
 {"Attr":"JoystickY","Value":100.0},
-{"Attr":"JoystickScale","Value":1.5},
-{"Attr":"ServerIP0","Value":127.0},
-{"Attr":"ServerIP1","Value":0.0},
-{"Attr":"ServerIP2","Value":0.0},
-{"Attr":"ServerIP3","Value":1.0}
+{"Attr":"JoystickScale","Value":1.5}
 ]}

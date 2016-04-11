@@ -24,10 +24,7 @@ void SceneManager::showScene(SceneType sceneType, bool isReplace)
 	switch(sceneType)
 	{
 	case GAME_SCENE:
-	{
-		int networkType = SocketManager::getInstance()->getNetworkType();
-		pScene = GameScene::createScene(networkType);
-	}
+		pScene = GameScene::createScene();
 		break;
 	case GAME_OVER_SCENE:
 		pScene = GameOverScene::createScene();

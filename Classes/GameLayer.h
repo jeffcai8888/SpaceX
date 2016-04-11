@@ -34,6 +34,7 @@ public:
 	CC_SYNTHESIZE_READONLY(BaseSprite*, m_pHero, Hero);
 	CC_SYNTHESIZE_READONLY(Foresight*, m_pForesight, Foresight);
     CC_SYNTHESIZE_READONLY(cocos2d::Sprite*, m_pRange, Range);
+	CC_SYNTHESIZE_READONLY(cocos2d::Sprite*, m_pSkillStartPos, SkillStartPos);
 	CC_SYNTHESIZE_READONLY(cocos2d::Size, m_TiledMapSize, TiledMapSize);
 
 	CREATE_FUNC(GameLayer);

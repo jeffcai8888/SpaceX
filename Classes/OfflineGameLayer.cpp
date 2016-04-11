@@ -51,7 +51,7 @@ void OfflineGameLayer::onEnter()
     m_pRange = Sprite::createWithSpriteFrameName("range.png");
     m_pRange->setVisible(false);
     m_pRange->setPosition(Point(110.f, 25.f));
-	m_pRange->setScale(3.5f);
+	m_pRange->setScale(2.0f);
     m_pHero->addChild(m_pRange);
     
     m_pForesight = Foresight::create();
@@ -126,6 +126,38 @@ void OfflineGameLayer::onEnter()
                     }
                 }
             }
+			else if (pair.first.compare("HeroSkill1V") == 0)
+			{
+				Hero* hero = dynamic_cast<Hero*>(m_pHero);
+				if (hero)
+				{
+					hero->setSkillState1Speed(pair.second.asFloat());
+				}
+			}
+			else if (pair.first.compare("HeroSkill2V") == 0)
+			{
+				Hero* hero = dynamic_cast<Hero*>(m_pHero);
+				if (hero)
+				{
+					hero->setSkillState2Speed(pair.second.asFloat());
+				}
+			}
+			else if (pair.first.compare("HeroSkill1CD") == 0)
+			{
+				Hero* hero = dynamic_cast<Hero*>(m_pHero);
+				if (hero)
+				{
+					hero->setSkillState1CDTime(pair.second.asFloat());
+				}
+			}
+			else if (pair.first.compare("HeroSkill2CD") == 0)
+			{
+				Hero* hero = dynamic_cast<Hero*>(m_pHero);
+				if (hero)
+				{
+					hero->setSkillState2CDTime(pair.second.asFloat());
+				}
+			}
             else if (pair.first.compare("BulletPower") == 0)
             {
                 m_pHero->setBullletPower(pair.second.asInt());

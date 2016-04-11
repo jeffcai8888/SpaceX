@@ -17,7 +17,8 @@ OperateLayer::OperateLayer()
 	m_pFront(nullptr),
 	m_pBack(nullptr),
     m_pUp(nullptr),
-	m_pSkill(nullptr)
+	m_pSkill(nullptr),
+	m_pSkill1(nullptr)
 {
 	m_vecEventListener.clear();
 }
@@ -60,9 +61,15 @@ bool OperateLayer::init()
 		this->addChild(m_pJoystickBg1, 1);
 		this->addChild(m_pJoystickBg, 2);
 
-		m_pSkill = Sprite::createWithSpriteFrameName("1.PNG");
+		m_pSkill = Sprite::createWithSpriteFrameName("skill_flash1.png");
+		m_pSkill->setScale(0.4f);
 		this->addChild(m_pSkill);
 		m_pSkill->setPosition(m_origin + Point(950, 250));
+
+		m_pSkill1 = Sprite::createWithSpriteFrameName("skill_bomb.png");
+		m_pSkill1->setScale(0.4f);
+		this->addChild(m_pSkill1);
+		m_pSkill1->setPosition(m_origin + Point(760, 150));
 
 		Menu* menu;
 		auto debugItem = MenuItemImage::create("pause.png", "pause_down.png", CC_CALLBACK_1(OperateLayer::gotoDebug, this));
@@ -108,9 +115,10 @@ bool OperateLayer::init()
 void OperateLayer::onEnter()
 {
 	Layer::onEnter();
-	m_pHero = static_cast<GameLayer *>(this->getScene()->getChildByTag(LT_Game))->getHero();
-    m_pForesight = static_cast<GameLayer *>(this->getScene()->getChildByTag(LT_Game))->getForesight();
-    m_pRange = static_cast<GameLayer *>(this->getScene()->getChildByTag(LT_Game))->getRange();
+	GameLayer *layer = static_cast<GameLayer *>(this->getScene()->getChildByTag(LT_Game));
+	m_pHero = layer->getHero();
+    m_pForesight = layer->getForesight();
+    m_pRange = layer->getRange();
 	float joystickScale = 1.0f;
 	float joystickPosX = 0.f;
 	float joystickPosY = 0.f;
@@ -185,35 +193,45 @@ void OperateLayer::onEnter()
 				Hero* hero = dynamic_cast<Hero*>(m_pHero);
 				if (hero)
 				{
+					GameLayer *layer = static_cast<GameLayer *>(this->getScene()->getChildByTag(LT_Game));
+					auto positionSprite = layer->getSkillStartPos();
 					if (hero->getCurSkillState() == 0)
 					{
 						hero->setSkillActivePos(hero->getPosition());
 						if (hero->isFlippedX())
 						{
-							hero->getPhysicsBody()->setVelocity(Vec2(-2200.f, 0.f));
+							hero->getPhysicsBody()->setVelocity(Vec2(-hero->getSkillState1Speed(), 0.f));
 						}
 						else
 						{
-							hero->getPhysicsBody()->setVelocity(Vec2(2200.f, 0.f));
+							hero->getPhysicsBody()->setVelocity(Vec2(hero->getSkillState1Speed(), 0.f));
 						}
+						m_pSkill->setSpriteFrame("skill_flash2.png");
 						hero->setCurSkillState(1);
+						hero->setCurSkillCDTime(hero->getSkillState1CDTime());
+						positionSprite->setVisible(true);
+						positionSprite->setPosition(hero->getPosition() + Vec2(0, -10.f));
 					}
 					else if (hero->getCurSkillState() == 1)
 					{
 						if (hero->isFlippedX())
 						{
-							hero->getPhysicsBody()->setVelocity(Vec2(-2200.f, 0.f));
+							hero->getPhysicsBody()->setVelocity(Vec2(-hero->getSkillState1Speed(), 0.f));
 						}
 						else
 						{
-							hero->getPhysicsBody()->setVelocity(Vec2(2200.f, 0.f));
+							hero->getPhysicsBody()->setVelocity(Vec2(hero->getSkillState1Speed(), 0.f));
 						}
+						m_pSkill->setSpriteFrame("skill_flash3.png");
 						hero->setCurSkillState(2);
+						hero->setCurSkillCDTime(hero->getSkillState2CDTime());
 					}
 					else if (hero->getCurSkillState() == 2)
 					{
 						hero->setPosition(hero->getSkillActivePos());
 						hero->setCurSkillState(0);
+						m_pSkill->setSpriteFrame("skill_flash1.png");
+						positionSprite->setVisible(false);
 					}					
 				}
 			}
@@ -402,6 +420,20 @@ void OperateLayer::onEnter()
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyListener, this);
 	m_vecEventListener.pushBack(keyListener);
+
+
+	auto listener1 = EventListenerCustom::create("heroSkillTimeOut", [this](EventCustom* event) {
+		Hero* hero = dynamic_cast<Hero*>(m_pHero);
+		if (hero)
+		{
+			GameLayer *layer = static_cast<GameLayer *>(this->getScene()->getChildByTag(LT_Game));
+			auto positionSprite = layer->getSkillStartPos();
+			positionSprite->setVisible(false);
+			m_pSkill->setSpriteFrame("skill_flash1.png");
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(listener1, 1);
+	m_vecEventListener.pushBack(listener1);
 }
 
 void OperateLayer::onExit()
@@ -450,17 +482,22 @@ void OperateLayer::dealWithJoystick(cocos2d::Point centerPoint, cocos2d::Point p
 bool OperateLayer::isTap(cocos2d::Node* pNode, cocos2d::Point point)
 {
 	Point pos = pNode->getPosition();
-	float distance = pos.distanceSquared(point);
 	Size size = pNode->getContentSize();
-	if (distance < (size.width / 2) * (size.width / 2))
+	return isInRange(pos, size.width / 2, point);
+}
+
+bool OperateLayer::isInRange(cocos2d::Point p1, float w, float h, cocos2d::Point p2)
+{
+	return (p2.x >= (p1.x - w /2) && p2.x <= (p1.x + w / 2) && p2.y >= (p1.y - h / 2) && p2.y <= (p1.y + h / 2));
+}
+
+bool OperateLayer::isInRange(cocos2d::Point p1, float r, cocos2d::Point p2)
+{
+	float distance = p1.distanceSquared(p2);
+	if (distance < r * r)
 		return true;
 	else
 		return false;
-}
-
-bool OperateLayer::isInRange(cocos2d::Point p1, int w, int h, cocos2d::Point p2)
-{
-	return (p2.x >= (p1.x - w /2) && p2.x <= (p1.x + w / 2) && p2.y >= (p1.y - h / 2) && p2.y <= (p1.y + h / 2));
 }
 
 void OperateLayer::dealWithKeyBoard()

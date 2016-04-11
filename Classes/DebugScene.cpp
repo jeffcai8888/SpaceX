@@ -11,7 +11,6 @@ using namespace cocos2d::ui;
 
 DebugLayer::DebugLayer()
 :m_pCloseItem(nullptr)
-, m_isFirst(true)
 {
 
 }
@@ -49,6 +48,22 @@ void DebugLayer::onEnter()
 			else if (pair.first.compare("HeroG") == 0)
 			{
 				static_cast<TextField *>(getChildByName("TextField_1_4"))->setString(Value(pair.second.asFloat()).asString());
+			}
+			else if (pair.first.compare("HeroSkill1V") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_1_5"))->setString(Value(pair.second.asFloat()).asString());
+			}
+			else if (pair.first.compare("HeroSkill2V") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_1_6"))->setString(Value(pair.second.asFloat()).asString());
+			}
+			else if (pair.first.compare("HeroSkill1CD") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_1_7"))->setString(Value(pair.second.asFloat()).asString());
+			}
+			else if (pair.first.compare("HeroSkill2CD") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_1_8"))->setString(Value(pair.second.asFloat()).asString());
 			}
 			else if (pair.first.compare("BulletPower") == 0)
 			{
@@ -90,22 +105,6 @@ void DebugLayer::onEnter()
 			{
 				static_cast<TextField *>(getChildByName("TextField_3_5"))->setString(Value(pair.second.asFloat()).asString());
 			}
-			else if (pair.first.compare("ServerIP0") == 0)
-			{
-				static_cast<TextField *>(getChildByName("TextField_4_0"))->setString(Value(pair.second.asInt()).asString());
-			}
-			else if (pair.first.compare("ServerIP1") == 0)
-			{
-				static_cast<TextField *>(getChildByName("TextField_4_1"))->setString(Value(pair.second.asInt()).asString());
-			}
-			else if (pair.first.compare("ServerIP2") == 0)
-			{
-				static_cast<TextField *>(getChildByName("TextField_4_2"))->setString(Value(pair.second.asInt()).asString());
-			}
-			else if (pair.first.compare("ServerIP3") == 0)
-			{
-				static_cast<TextField *>(getChildByName("TextField_4_3"))->setString(Value(pair.second.asInt()).asString());
-			}
 		}
 	}
 }
@@ -127,6 +126,18 @@ void DebugLayer::onExit()
 	listData.push_back(Value(m));
 	m["Attr"] = Value("HeroG");
 	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_4"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("HeroSkill1V");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_5"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("HeroSkill2V");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_6"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("HeroSkill1CD");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_7"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("HeroSkill2CD");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_8"))->getString());
 	listData.push_back(Value(m));
 	m["Attr"] = Value("BulletPower");
 	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_2_1"))->getString());
@@ -158,27 +169,10 @@ void DebugLayer::onExit()
 	m["Attr"] = Value("JoystickScale");
 	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_3_5"))->getString());
 	listData.push_back(Value(m));
-	m["Attr"] = Value("ServerIP0");
-	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_0"))->getString());
-	listData.push_back(Value(m));
-	m["Attr"] = Value("ServerIP1");
-	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_1"))->getString());
-	listData.push_back(Value(m));
-	m["Attr"] = Value("ServerIP2");
-	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_2"))->getString());
-	listData.push_back(Value(m));
-	m["Attr"] = Value("ServerIP3");
-	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_3"))->getString());
-	listData.push_back(Value(m));
 	auto parser = JsonParser::createWithArray(listData);
 	std::string writablePath = FileUtils::getInstance()->getWritablePath();
 	std::string fileName = writablePath + "Debug.json";
 	parser->encodeDebugData(fileName.c_str());
-}
-
-Widget::ccWidgetTouchCallback DebugLayer::onLocateTouchCallback(const std::string &callBackName)
-{
-	return nullptr;
 }
 
 Widget::ccWidgetClickCallback DebugLayer::onLocateClickCallback(const std::string &callBackName)
@@ -190,49 +184,10 @@ Widget::ccWidgetClickCallback DebugLayer::onLocateClickCallback(const std::strin
 	return nullptr;
 }
 
-Widget::ccWidgetEventCallback DebugLayer::onLocateEventCallback(const std::string &callBackName)
-{
-	if (callBackName == "TextFieldEvent")
-	{
-		return CC_CALLBACK_2(DebugLayer::textFieldEvent, this);
-	}
-	return nullptr;
-}
 
 void DebugLayer::exitDebug(Ref* pSender)
 {
-	if (m_isFirst == true)
-	{
-		auto scene = GameScene::createScene(NT_Client);
-		Director::getInstance()->replaceScene(scene);
-	}
-	else
-		SceneManager::getInstance()->popScene();
-}
-
-void DebugLayer::textFieldEvent(Ref *pSender, int type)
-{
-	switch ((TextField::EventType)type)
-	{
-	case TextField::EventType::ATTACH_WITH_IME:
-		CCLOG("attach with IME");
-		break;
-
-	case TextField::EventType::DETACH_WITH_IME:
-		CCLOG("detach with IME");
-		break;
-
-	case TextField::EventType::INSERT_TEXT:
-		CCLOG("insert words");
-		break;
-
-	case TextField::EventType::DELETE_BACKWARD:
-		CCLOG("delete words");
-		break;
-
-	default:
-		break;
-	}
+	SceneManager::getInstance()->popScene();		
 }
 
 static DebugLayerReader* _instanceDebugLayerReader = nullptr;
@@ -257,12 +212,11 @@ Node* DebugLayerReader::createNodeWithFlatBuffers(const flatbuffers::Table* node
 	return node;
 }
 
-Scene* DebugScene::createScene(bool isFirst)
+Scene* DebugScene::createScene()
 {
 	auto scene = Scene::create();
 	CSLoader::getInstance()->registReaderObject("DebugLayerReader", (ObjectFactory::Instance)DebugLayerReader::getInstance);
 	auto layer = CSLoader::createNode("DebugScene.csb");
-	static_cast<DebugLayer *>(layer)->m_isFirst = isFirst;
 	scene->addChild(layer);
 	return scene;
 }

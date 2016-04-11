@@ -72,6 +72,11 @@ void GameLayer::onEnter()
 	edgeNode->setPhysicsBody(body);
 	this->addChild(edgeNode);
 
+	m_pSkillStartPos = Sprite::createWithSpriteFrameName("skill_flash.png");
+	m_pSkillStartPos->setScale(0.4f);
+	m_pSkillStartPos->setVisible(false);
+	this->addChild(m_pSkillStartPos);
+
 	importGroundData(m_pTiledMap);
 
 	auto listener = EventListenerCustom::create("bullet_disappear", [this](EventCustom* event) {
@@ -79,10 +84,8 @@ void GameLayer::onEnter()
 		if (bullet)
 			this->removeChild(bullet);
 	});
-
 	_eventDispatcher->addEventListenerWithFixedPriority(listener, 1);
 	m_vecEventListener.pushBack(listener);
-
 
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = [this](PhysicsContact& contact)->bool
@@ -381,6 +384,12 @@ void GameLayer::updateHero(float dt)
         direction.normalize();
         m_pHero->setShootDirection(direction);		
     }
+
+	Hero* hero = dynamic_cast<Hero*>(m_pHero);
+	if (hero)
+	{
+		hero->update(dt);
+	}
     
 	//CCLOG("MoveState %d %d", m_pHero->getCurrActionState(), m_pHero->getCurrMoveState());
 	//CCLOG("(%f, %f) (%f, %f)", m_pHero->getPhysicsBody()->getPosition().x, m_pHero->getPhysicsBody()->getPosition().y, m_pHero->getPosition().x, m_pHero->getPosition().y);
@@ -461,6 +470,7 @@ Bullet* GameLayer::getUnusedBullet()
 	}
 
 	auto bullet = Bullet::create();
+	bullet->getPhysicsBody()->setGravityEnable(false);
 	m_vecBullets.pushBack(bullet);
 	return bullet;
 }

@@ -65,5 +65,20 @@ bool Hero::init()
 	return ret;
 }
 
+void Hero::update(float dt)
+{
+	if (m_curSkillState > 0)
+	{
+		m_curSkillCDTime -= dt;
+		if (m_curSkillCDTime < 0)
+		{
+			EventCustom event("heroSkillTimeOut");
+			_eventDispatcher->dispatchEvent(&event);
+			m_curSkillState = 0;
+		}
+			
+	}
+}
+
 
 
