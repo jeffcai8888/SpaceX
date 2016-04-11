@@ -366,10 +366,12 @@ void GameLayer::updateHero(float dt)
     if(m_pHero->getIsLocked() && m_pTarget == nullptr)
     {
         m_pTarget = getNearestEnemy();
-        
+		if(m_pTarget)
+			m_pTarget->getLockMark()->setVisible(true);
     }
     else if(!m_pHero->getIsLocked() && m_pTarget != nullptr)
     {
+		m_pTarget->getLockMark()->setVisible(false);
         m_pTarget = nullptr;
     }
 	
@@ -377,7 +379,7 @@ void GameLayer::updateHero(float dt)
     {
         Vec2 direction = m_pTarget->getPosition() - m_pHero->getPosition();
         direction.normalize();
-        m_pHero->setShootDirection(direction);
+        m_pHero->setShootDirection(direction);		
     }
     
 	//CCLOG("MoveState %d %d", m_pHero->getCurrActionState(), m_pHero->getCurrMoveState());
@@ -564,12 +566,7 @@ BaseSprite* GameLayer::createHero(int role, cocos2d::Point pos)
 	sprite->setHP(100);
 	sprite->setIsAttacking(false);
 	sprite->setJumpStage(0);
-	return sprite;
-}
 
-BaseSprite*  GameLayer::createEnemy(int role, cocos2d::Point pos)
-{
-	auto sprite = createHero(role, pos);
 	ProgressTimer* blood = ProgressTimer::create(Sprite::create("blood.png"));
 	blood->setName("blood");
 	blood->setType(ProgressTimer::Type::BAR);

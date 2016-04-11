@@ -46,6 +46,7 @@ private:
 	void dealWithJoystick(cocos2d::Point, cocos2d::Point);
 	cocos2d::Sprite *m_pJoystick;
 	cocos2d::Sprite *m_pJoystickBg;
+	cocos2d::Sprite *m_pJoystickBg1;
 	cocos2d::Sprite *m_pFront;
 	cocos2d::Sprite *m_pBack;
 	cocos2d::Sprite *m_pUp;

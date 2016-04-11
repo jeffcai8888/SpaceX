@@ -53,9 +53,14 @@ bool OperateLayer::init()
  
         
 		m_pJoystick = Sprite::createWithSpriteFrameName("joystick.png");
+		m_pJoystick->setScale(1.5f);
 		m_pJoystickBg = Sprite::createWithSpriteFrameName("joystick_bg.png");
+		m_pJoystickBg->setScale(1.5f);
+		m_pJoystickBg1 = Sprite::createWithSpriteFrameName("joystick_bg1.png");
+		m_pJoystickBg1->setScale(1.5f);
 		this->addChild(m_pJoystick, 0);
-		this->addChild(m_pJoystickBg, 1);
+		this->addChild(m_pJoystickBg1, 1);
+		this->addChild(m_pJoystickBg, 2);
 
 		Menu* menu;
 		auto debugItem = MenuItemImage::create("pause.png", "pause_down.png", CC_CALLBACK_1(OperateLayer::gotoDebug, this));
@@ -142,7 +147,7 @@ void OperateLayer::onEnter()
 		{
 			Touch *pTouch = (Touch*)(*touchIter);
 			Point p = pTouch->getLocation();
-            if(isTap(m_pJoystickBg, p))
+			if(isInRange(m_pJoystickBg->getPosition(), m_pJoystickBg->getContentSize().width * 1.5, p))
 			{
 				m_mapPressType[pTouch->getID()] = Value(BT_Joystick);
                 m_pHero->attack(true);
@@ -150,6 +155,7 @@ void OperateLayer::onEnter()
                 m_pHero->setIsLocked(true);
                 m_pForesight->setVisible(true);
                 m_pRange->setVisible(true);
+				switchButtonStatus(BT_Joystick, true);
 			}
 			else if (p.x <= 200.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
 			{
@@ -188,7 +194,7 @@ void OperateLayer::onEnter()
 		
         if(m_mapPressType.find(pTouch->getID()) != m_mapPressType.end() && m_mapPressType[pTouch->getID()].asInt() == BT_Joystick)
         {
-			if (isTap(m_pJoystickBg, p))
+			if (isInRange(m_pJoystickBg->getPosition(), m_pJoystickBg->getContentSize().width * 1.5, p))
 				dealWithJoystick(m_pJoystickBg->getPosition(), p);
 			else
 			{
@@ -197,17 +203,19 @@ void OperateLayer::onEnter()
                 m_pForesight->setVisible(false);
                 m_pRange->setVisible(false);
                 m_pHero->attack(false);
+				switchButtonStatus(BT_Joystick, false);
                 SocketManager::getInstance()->sendData(NDT_HeroStopAttack, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getShootDirection());
 			}
             m_pHero->setIsLocked(false);
         }
-		else if(isTap(m_pJoystickBg, p))
+		else if(isInRange(m_pJoystickBg->getPosition(), m_pJoystickBg->getContentSize().width * 1.5, p))
 		{
 			m_mapPressType[pTouch->getID()] = Value(BT_Joystick);
 			dealWithJoystick(m_pJoystickBg->getPosition(), p);
             m_pForesight->setVisible(false);
             m_pRange->setVisible(false);
             m_pHero->setIsLocked(true);
+			switchButtonStatus(BT_Joystick, true);
 		}
 
 		bool isChange = false;
@@ -297,6 +305,7 @@ void OperateLayer::onEnter()
             m_pHero->setIsLocked(false);
             m_pForesight->setVisible(false);
             m_pRange->setVisible(false);
+			switchButtonStatus(BT_Joystick, false);
 			SocketManager::getInstance()->sendData(NDT_HeroStopAttack, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getShootDirection());
         }
 		else if (p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
@@ -381,9 +390,11 @@ void OperateLayer::showJoystick(Point pos)
 {
 	m_pJoystick->setPosition(pos);
 	m_pJoystickBg->setPosition(pos);
+	m_pJoystickBg1->setPosition(pos);
 
 	m_pJoystick->setVisible(true);
 	m_pJoystickBg->setVisible(true);
+	m_pJoystickBg1->setVisible(true);
 }
 
 void OperateLayer::updateJoystick(Point direction, float distance)
@@ -502,6 +513,17 @@ void OperateLayer::switchButtonStatus(int type, bool isPressed)
 		else
 		{
 			m_pUp->setSpriteFrame("jump.png");
+		}
+	}
+	if (type == BT_Joystick)
+	{
+		if (isPressed)
+		{
+			m_pJoystick->setSpriteFrame("joystick_down.png");
+		}
+		else
+		{
+			m_pJoystick->setSpriteFrame("joystick.png");
 		}
 	}
 }

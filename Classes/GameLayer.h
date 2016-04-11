@@ -59,7 +59,6 @@ protected:
 	void removeAllEventListener();
 	void removeAllBullets();
 	BaseSprite* createHero(int, cocos2d::Point);
-	BaseSprite* createEnemy(int, cocos2d::Point);
     BaseSprite* getNearestEnemy();
 };
 

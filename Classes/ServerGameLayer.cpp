@@ -42,6 +42,7 @@ void ServerGameLayer::onEnter()
     CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
     Point heroInitPos = m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
     m_pHero = createHero(ROLE_HERO, heroInitPos);
+	m_pHero->setTag(0);
     this->addChild(m_pHero);
     auto centerOfView = Point(visibleSize.width / 2, visibleSize.height / 2);
     this->setPosition(centerOfView - m_pHero->getPosition());
@@ -52,7 +53,6 @@ void ServerGameLayer::onEnter()
     m_pHero->addChild(m_pRange);
     
     m_pForesight = Foresight::create();
-    m_pForesight->setScale(0.2f);
     m_pForesight->setVisible(false);
     this->addChild(m_pForesight);
     
@@ -60,7 +60,8 @@ void ServerGameLayer::onEnter()
     spawnPoint = objects->getObject("SpawnPoint1");
     CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
     heroInitPos = m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
-    m_pEnemy[0] = createEnemy(ROLE_PRINCESS, heroInitPos);
+    m_pEnemy[0] = createHero(ROLE_PRINCESS, heroInitPos);
+	m_pEnemy[0]->setTag(1);
     this->addChild(m_pEnemy[0]);
     
     JsonParser* parser = JsonParser::createWithFile("Debug.json");
