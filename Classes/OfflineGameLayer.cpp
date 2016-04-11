@@ -51,10 +51,11 @@ void OfflineGameLayer::onEnter()
     m_pRange = Sprite::createWithSpriteFrameName("range.png");
     m_pRange->setVisible(false);
     m_pRange->setPosition(Point(110.f, 25.f));
+	m_pRange->setScale(3.5f);
     m_pHero->addChild(m_pRange);
     
     m_pForesight = Foresight::create();
-    m_pForesight->setScale(0.2f);
+    m_pForesight->setScale(0.75f);
     m_pForesight->setVisible(false);
     this->addChild(m_pForesight);
     

@@ -53,11 +53,8 @@ bool OperateLayer::init()
  
         
 		m_pJoystick = Sprite::createWithSpriteFrameName("joystick.png");
-		m_pJoystick->setScale(1.5f);
 		m_pJoystickBg = Sprite::createWithSpriteFrameName("joystick_bg.png");
-		m_pJoystickBg->setScale(1.5f);
 		m_pJoystickBg1 = Sprite::createWithSpriteFrameName("joystick_bg1.png");
-		m_pJoystickBg1->setScale(1.5f);
 		this->addChild(m_pJoystick, 0);
 		this->addChild(m_pJoystickBg1, 1);
 		this->addChild(m_pJoystickBg, 2);
@@ -194,7 +191,7 @@ void OperateLayer::onEnter()
 		
         if(m_mapPressType.find(pTouch->getID()) != m_mapPressType.end() && m_mapPressType[pTouch->getID()].asInt() == BT_Joystick)
         {
-			if (isInRange(m_pJoystickBg->getPosition(), m_pJoystickBg->getContentSize().width * 1.5, p))
+			if (isInRange(m_pJoystickBg->getPosition(), m_pJoystickBg->getContentSize().width * 3, p))
 				dealWithJoystick(m_pJoystickBg->getPosition(), p);
 			else
 			{
@@ -208,16 +205,7 @@ void OperateLayer::onEnter()
 			}
             m_pHero->setIsLocked(false);
         }
-		else if(isInRange(m_pJoystickBg->getPosition(), m_pJoystickBg->getContentSize().width * 1.5, p))
-		{
-			m_mapPressType[pTouch->getID()] = Value(BT_Joystick);
-			dealWithJoystick(m_pJoystickBg->getPosition(), p);
-            m_pForesight->setVisible(false);
-            m_pRange->setVisible(false);
-            m_pHero->setIsLocked(true);
-			switchButtonStatus(BT_Joystick, true);
-		}
-
+		
 		bool isChange = false;
 		if (m_mapPressType.find(pTouch->getID()) != m_mapPressType.end() && m_mapPressType[pTouch->getID()].asInt() == BT_Left)
 		{
@@ -282,12 +270,6 @@ void OperateLayer::onEnter()
 				switchButtonStatus(BT_Jump, false);
 			}
 		}
-		else if (p.x > winSize.width * 7 / 8 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
-		{
-			m_pHero->jump(m_pHero->getJumpVelocity());
-			SocketManager::getInstance()->sendData(NDT_HeroJumpUp, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
-			switchButtonStatus(BT_Jump, true);
-		}    
 	};
 	listener->onTouchesEnded = [this](const vector<Touch*>& touches, Event *event)
 	{
