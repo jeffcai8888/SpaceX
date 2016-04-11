@@ -12,6 +12,9 @@ public:
 	bool init();
 
 	CREATE_FUNC(Hero);
+
+	CC_SYNTHESIZE(int, m_curSkillState, CurSkillState);
+	CC_SYNTHESIZE(cocos2d::Point, m_skillActivePos, SkillActivePos);
 };
 
 

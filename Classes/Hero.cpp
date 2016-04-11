@@ -8,6 +8,7 @@ USING_NS_CC;
 
 
 Hero::Hero()
+:m_curSkillState(0)
 {}
 
 Hero::~Hero()

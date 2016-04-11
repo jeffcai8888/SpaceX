@@ -33,6 +33,12 @@ enum {
 	ROLE_PRINCESS
 };
 
+enum {
+	SKILL_1,
+	SKILL_2,
+	SKILL_3
+};
+
 
 class Bullet;
 class BaseSprite : public cocos2d::Sprite
@@ -101,6 +107,8 @@ public:
 	CC_SYNTHESIZE(cocos2d::Point, m_initPos, InitPos);
     CC_SYNTHESIZE(bool, m_isLocked, IsLocked);
 	CC_SYNTHESIZE(cocos2d::Sprite*, m_pLockMark, LockMark);
+
+	CC_SYNTHESIZE(int, m_curSkill, CurSkill);
     
 	virtual void onDead();
 

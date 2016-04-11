@@ -50,6 +50,7 @@ private:
 	cocos2d::Sprite *m_pFront;
 	cocos2d::Sprite *m_pBack;
 	cocos2d::Sprite *m_pUp;
+	cocos2d::Sprite *m_pSkill;
 	
 	cocos2d::Vector<cocos2d::EventListener *> m_vecEventListener;
 	int m_PressType;

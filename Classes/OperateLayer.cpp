@@ -16,7 +16,8 @@ OperateLayer::OperateLayer()
     m_pJoystickBg(nullptr),
 	m_pFront(nullptr),
 	m_pBack(nullptr),
-    m_pUp(nullptr)
+    m_pUp(nullptr),
+	m_pSkill(nullptr)
 {
 	m_vecEventListener.clear();
 }
@@ -58,6 +59,10 @@ bool OperateLayer::init()
 		this->addChild(m_pJoystick, 0);
 		this->addChild(m_pJoystickBg1, 1);
 		this->addChild(m_pJoystickBg, 2);
+
+		m_pSkill = Sprite::createWithSpriteFrameName("1.PNG");
+		this->addChild(m_pSkill);
+		m_pSkill->setPosition(m_origin + Point(950, 250));
 
 		Menu* menu;
 		auto debugItem = MenuItemImage::create("pause.png", "pause_down.png", CC_CALLBACK_1(OperateLayer::gotoDebug, this));
@@ -144,7 +149,7 @@ void OperateLayer::onEnter()
 		{
 			Touch *pTouch = (Touch*)(*touchIter);
 			Point p = pTouch->getLocation();
-			if(isInRange(m_pJoystickBg->getPosition(), m_pJoystickBg->getContentSize().width * 1.5, p))
+			if(isTap(m_pJoystickBg, p))
 			{
 				m_mapPressType[pTouch->getID()] = Value(BT_Joystick);
                 m_pHero->attack(true);
@@ -168,13 +173,50 @@ void OperateLayer::onEnter()
 				switchButtonStatus(BT_Right, true);
 				m_mapPressType[pTouch->getID()] = Value(BT_Right);
 			}
-            else if ( p.x > 1036 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
+			else if (isTap(m_pUp, p))
             {
                 m_pHero->jump(m_pHero->getJumpVelocity());
 				SocketManager::getInstance()->sendData(NDT_HeroJumpUp, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
 				switchButtonStatus(BT_Jump, true);
 				m_mapPressType[pTouch->getID()] = Value(BT_Jump);
             }
+			else if (isTap(m_pSkill, p))
+			{
+				Hero* hero = dynamic_cast<Hero*>(m_pHero);
+				if (hero)
+				{
+					if (hero->getCurSkillState() == 0)
+					{
+						hero->setSkillActivePos(hero->getPosition());
+						if (hero->isFlippedX())
+						{
+							hero->getPhysicsBody()->applyForce(Vec2(-10000.f, 0.f));
+						}
+						else
+						{
+							hero->getPhysicsBody()->applyForce(Vec2(10000.f, 0.f));
+						}
+						hero->setCurSkillState(1);
+					}
+					else if (hero->getCurSkillState() == 1)
+					{
+						if (hero->isFlippedX())
+						{
+							hero->getPhysicsBody()->applyForce(Vec2(-10000.f, 0.f));
+						}
+						else
+						{
+							hero->getPhysicsBody()->applyForce(Vec2(10000.f, 0.f));
+						}
+						hero->setCurSkillState(2);
+					}
+					else if (hero->getCurSkillState() == 2)
+					{
+						hero->setPosition(hero->getSkillActivePos());
+						hero->setCurSkillState(0);
+					}					
+				}
+			}
 			++touchIter;
 		}
 	};
@@ -264,7 +306,7 @@ void OperateLayer::onEnter()
 
 		if (m_mapPressType.find(pTouch->getID()) != m_mapPressType.end() && m_mapPressType[pTouch->getID()].asInt() == BT_Jump)
 		{
-			if (!(p.x > winSize.width * 7 / 8 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4))
+			if (!(isTap(m_pUp, p)))
 			{
 				m_mapPressType.erase(pTouch->getID());
 				switchButtonStatus(BT_Jump, false);
