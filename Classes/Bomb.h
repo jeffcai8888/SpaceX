@@ -3,7 +3,7 @@
 
 #include <cocos2d.h>
 
-class BaseSprite;
+class Hero;
 class Bomb : public cocos2d::Sprite
 {
 public:
@@ -12,7 +12,8 @@ public:
 
 	virtual bool init();
 	void update(float dt);
-	void launch(BaseSprite *);
+	void launch(Hero *);
+	void start();
 
 	CREATE_FUNC(Bomb);
 
@@ -20,7 +21,15 @@ public:
 	CC_SYNTHESIZE(cocos2d::Point, m_fDirection, Direction);
 	CC_SYNTHESIZE(float, m_gravity, Gravity);
 	CC_SYNTHESIZE(unsigned int, m_power, Power);
-	CC_SYNTHESIZE(int, m_ownerTag, OwnerTag);
+	CC_SYNTHESIZE(float, m_range, Range);
+	CC_SYNTHESIZE(bool, m_isActive, IsActive);
+	CC_SYNTHESIZE(bool, m_isStart, IsStart);
+	CC_SYNTHESIZE(Hero*, m_owner, Owner);
+	CC_SYNTHESIZE(float, m_startTime, StartTime);
+
+private:
+	void reset();
+	void explode();
 };
 
 #endif

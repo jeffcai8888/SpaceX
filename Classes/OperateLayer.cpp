@@ -235,6 +235,14 @@ void OperateLayer::onEnter()
 					}					
 				}
 			}
+			else if (isTap(m_pSkill1, p))
+			{
+				Hero* hero = dynamic_cast<Hero*>(m_pHero);
+				if (hero)
+				{
+					hero->setIsThrowBomb(true);
+				}
+			}
 			++touchIter;
 		}
 	};

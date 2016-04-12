@@ -9,6 +9,8 @@ USING_NS_CC;
 
 Hero::Hero()
 :m_curSkillState(0)
+,m_isThrowBomb(false)
+,m_isBombExplore(false)
 {}
 
 Hero::~Hero()

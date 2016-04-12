@@ -34,8 +34,8 @@ void Slope::initPhysics(Size size, Point pos, int rotation)
 	const PhysicsMaterial m(1.f, 0.f, 0.f);
 	auto body = PhysicsBody::createBox(size, m);
 	body->setCategoryBitmask(PC_Slope);
-	body->setContactTestBitmask(PC_Hero | PC_Bullet);
-	body->setCollisionBitmask(PC_Hero | PC_Bullet);
+	body->setContactTestBitmask(PC_Hero | PC_Bullet | PC_Bomb);
+	body->setCollisionBitmask(PC_Hero | PC_Bullet | PC_Bomb);
 	body->setDynamic(false);
 	
 	this->setContentSize(size);

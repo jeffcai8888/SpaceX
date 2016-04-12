@@ -105,6 +105,30 @@ void DebugLayer::onEnter()
 			{
 				static_cast<TextField *>(getChildByName("TextField_3_5"))->setString(Value(pair.second.asFloat()).asString());
 			}
+			else if (pair.first.compare("BombSpeed") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_4_1"))->setString(Value(pair.second.asFloat()).asString());
+			}
+			else if (pair.first.compare("BombRange") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_4_2"))->setString(Value(pair.second.asFloat()).asString());
+			}
+			else if (pair.first.compare("BombStartTime") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_4_3"))->setString(Value(pair.second.asFloat()).asString());
+			}
+			else if (pair.first.compare("BombCDTime") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_4_4"))->setString(Value(pair.second.asFloat()).asString());
+			}
+			else if (pair.first.compare("BombPower") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_4_5"))->setString(Value(pair.second.asInt()).asString());
+			}
+			else if (pair.first.compare("BombG") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_4_6"))->setString(Value(pair.second.asInt()).asString());
+			}
 		}
 	}
 }
@@ -168,6 +192,24 @@ void DebugLayer::onExit()
 	listData.push_back(Value(m));
 	m["Attr"] = Value("JoystickScale");
 	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_3_5"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("BombSpeed");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_1"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("BombRange");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_2"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("BombStartTime");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_3"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("BombCDTime");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_4"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("BombPower");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_5"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("BombG");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_6"))->getString());
 	listData.push_back(Value(m));
 	auto parser = JsonParser::createWithArray(listData);
 	std::string writablePath = FileUtils::getInstance()->getWritablePath();

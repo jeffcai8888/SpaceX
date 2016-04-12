@@ -229,6 +229,54 @@ void OfflineGameLayer::onEnter()
                 m_pHero->setMaxAmmoCapacity(pair.second.asInt());
                 m_pHero->setAmmoCapacity(pair.second.asInt());
             }
+			else if (pair.first.compare("BombSpeed") == 0)
+			{
+				Hero* hero = dynamic_cast<Hero*>(m_pHero);
+				if (hero)
+				{
+					hero->setBombSpeed(pair.second.asFloat());
+				}
+			}
+			else if (pair.first.compare("BombRange") == 0)
+			{
+				Hero* hero = dynamic_cast<Hero*>(m_pHero);
+				if (hero)
+				{
+					hero->setBombRange(pair.second.asFloat());
+				}
+			}
+			else if (pair.first.compare("BombStartTime") == 0)
+			{
+				Hero* hero = dynamic_cast<Hero*>(m_pHero);
+				if (hero)
+				{
+					hero->setBombStartTime(pair.second.asFloat());
+				}
+			}
+			else if (pair.first.compare("BombCDTime") == 0)
+			{
+				Hero* hero = dynamic_cast<Hero*>(m_pHero);
+				if (hero)
+				{
+					hero->setBombCDTime(pair.second.asFloat());
+				}
+			}
+			else if (pair.first.compare("BombPower") == 0)
+			{
+				Hero* hero = dynamic_cast<Hero*>(m_pHero);
+				if (hero)
+				{
+					hero->setBombPower(pair.second.asInt());
+				}
+			}
+			else if (pair.first.compare("BombG") == 0)
+			{
+				Hero* hero = dynamic_cast<Hero*>(m_pHero);
+				if (hero)
+				{
+					hero->setBombGravity(pair.second.asFloat());
+				}
+			}
         }
     }
     m_shootTime = m_pHero->getBulletInterval();

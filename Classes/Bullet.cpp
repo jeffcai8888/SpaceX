@@ -26,6 +26,7 @@ bool Bullet::init()
 		body->setCategoryBitmask(PC_Bullet);
         body->setContactTestBitmask(PC_Ground | PC_Box | PC_Slope | PC_Damage);
 		body->setCollisionBitmask(PC_Ground | PC_Box | PC_Slope);
+		body->setRotationEnable(false);
 		this->setPhysicsBody(body);
 		ret = true;
 	} while (false);
@@ -39,7 +40,6 @@ void Bullet::update(float dt)
 		float x = this->getPhysicsBody()->getVelocity().x;
 		float y = this->getPhysicsBody()->getVelocity().y;
 		y += m_gravity * dt;
-		CCLOG("m_gravity = %f y = %f", this->m_gravity, y);
 		this->getPhysicsBody()->setVelocity(Vec2(x, y));
 
 		m_launchTime += dt;

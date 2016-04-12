@@ -5,13 +5,13 @@
 #include "Gunner.h"
 #include "Princess.h"
 #include "Bullet.h"
+#include "Bomb.h"
 #include "Ground.h"
 #include "Box.h"
 #include "Slope.h"
 #include "Foresight.h"
 #include "OperateLayer.h"
 #include "JsonParser.h"
-
 #include "SceneManager.h"
 #include "SimpleAudioEngine.h"
 #include "SocketManager.h"
@@ -24,6 +24,7 @@ GameLayer::GameLayer()
     ,m_pForesight(nullptr)
     ,m_pRange(nullptr)
     ,m_pTarget(nullptr)
+	,m_pBomb(nullptr)
 {
 	m_vecBullets.clear();
 	m_vecEventListener.clear();
@@ -77,6 +78,14 @@ void GameLayer::onEnter()
 	m_pSkillStartPos->setVisible(false);
 	this->addChild(m_pSkillStartPos);
 
+	m_pBombRange = Sprite::createWithSpriteFrameName("bombRange.png");
+	m_pBombRange->setVisible(false);
+	this->addChild(m_pBombRange);
+
+	m_pBomb = Bomb::create();
+	this->addChild(m_pBomb);
+	this->setPosition(10000.f, 10000.f);
+
 	importGroundData(m_pTiledMap);
 
 	auto listener = EventListenerCustom::create("bullet_disappear", [this](EventCustom* event) {
@@ -90,22 +99,23 @@ void GameLayer::onEnter()
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = [this](PhysicsContact& contact)->bool
 	{
-		if ((contact.getShapeA()->getCategoryBitmask() == PC_Hero && contact.getShapeB()->getCategoryBitmask() == PC_Ground)
-			|| (contact.getShapeA()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getBody()->getCategoryBitmask() == PC_Hero))
+		if ((contact.getShapeA()->getCategoryBitmask() == PC_Hero && contact.getShapeB()->getCategoryBitmask() == PC_Ground) ||
+			(contact.getShapeA()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getCategoryBitmask() == PC_Hero) || 
+			(contact.getShapeA()->getCategoryBitmask() == PC_Hero && contact.getShapeB()->getCategoryBitmask() == PC_Box)    ||
+			(contact.getShapeA()->getCategoryBitmask() == PC_Box && contact.getShapeB()->getCategoryBitmask() == PC_Hero)    ||
+			(contact.getShapeA()->getCategoryBitmask() == PC_Hero && contact.getShapeB()->getCategoryBitmask() == PC_Slope)  ||
+			(contact.getShapeA()->getCategoryBitmask() == PC_Slope && contact.getShapeB()->getCategoryBitmask() == PC_Hero)
+		)
 		{
 			BaseSprite* hero;
-			Ground* ground;
 			if (contact.getShapeA()->getCategoryBitmask() == PC_Hero)
 			{
 				hero = static_cast<BaseSprite *>(contact.getShapeA()->getBody()->getNode());
-				ground = static_cast<Ground *>(contact.getShapeB()->getBody()->getNode());
 			}
 			else
 			{
 				hero = static_cast<BaseSprite *>(contact.getShapeB()->getBody()->getNode());
-				ground = static_cast<Ground *>(contact.getShapeA()->getBody()->getNode());
 			}
-	
 			if (hero->getCurrActionState() == ACTION_STATE_MOVE && hero->isInMoveAction(MOVE_STATE_DOWN))
 			{
 				if (hero->isInMoveAction(MOVE_STATE_WALK))
@@ -129,83 +139,13 @@ void GameLayer::onEnter()
 				return false;
 			}
 		}
-		else if ((contact.getShapeA()->getCategoryBitmask() == PC_Hero && contact.getShapeB()->getCategoryBitmask() == PC_Box)
-			|| (contact.getShapeA()->getCategoryBitmask() == PC_Box && contact.getShapeB()->getCategoryBitmask() == PC_Hero))
-		{
-			BaseSprite* hero;
-			Box* box;
-			if (contact.getShapeA()->getCategoryBitmask() == PC_Hero)
-			{
-				hero = static_cast<BaseSprite *>(contact.getShapeA()->getBody()->getNode());
-				box = static_cast<Box *>(contact.getShapeB()->getBody()->getNode());
-			}
-			else
-			{
-				hero = static_cast<BaseSprite *>(contact.getShapeB()->getBody()->getNode());
-				box = static_cast<Box *>(contact.getShapeA()->getBody()->getNode());
-			}
-
-			if (hero->getCurrActionState() == ACTION_STATE_MOVE && hero->isInMoveAction(MOVE_STATE_DOWN))
-			{
-				if (hero->isInMoveAction(MOVE_STATE_WALK))
-				{
-					hero->stopMoveAction(MOVE_STATE_DOWN, true);
-					Vec2 v = hero->getPhysicsBody()->getVelocity();
-					hero->walk(v.x);
-					if(hero == this->m_pHero)
-						SocketManager::getInstance()->sendData(NDT_HeroWalk, hero->getCurrActionState(), hero->getCurrMoveState(), hero->getPosition(), hero->getPhysicsBody()->getVelocity());
-				}
-				else
-				{
-					hero->stopMoveAction(MOVE_STATE_DOWN, true);
-					hero->stop();
-					if (hero == this->m_pHero)
-						SocketManager::getInstance()->sendData(NDT_HeroStop, hero->getCurrActionState(), hero->getCurrMoveState(), hero->getPosition(), Vec2(0, 0));
-				}
-			}
-			hero->setJumpStage(0);
-			return true;
-		}
-		else if ((contact.getShapeA()->getCategoryBitmask() == PC_Hero && contact.getShapeB()->getCategoryBitmask() == PC_Slope)
-			|| (contact.getShapeA()->getCategoryBitmask() == PC_Slope && contact.getShapeB()->getCategoryBitmask() == PC_Hero))
-		{
-			BaseSprite* hero;
-			Slope* slope;
-			if (contact.getShapeA()->getCategoryBitmask() == PC_Hero)
-			{
-				hero = static_cast<BaseSprite *>(contact.getShapeA()->getBody()->getNode());
-				slope = static_cast<Slope *>(contact.getShapeB()->getBody()->getNode());
-			}
-			else
-			{
-				hero = static_cast<BaseSprite *>(contact.getShapeB()->getBody()->getNode());
-				slope = static_cast<Slope *>(contact.getShapeA()->getBody()->getNode());
-			}
-
-			if (hero->getCurrActionState() == ACTION_STATE_MOVE && hero->isInMoveAction(MOVE_STATE_DOWN))
-			{
-				if (hero->isInMoveAction(MOVE_STATE_WALK))
-				{
-					hero->stopMoveAction(MOVE_STATE_DOWN, true);
-					Vec2 v = hero->getPhysicsBody()->getVelocity();
-					hero->walk(v.x);
-					if (hero == this->m_pHero)
-						SocketManager::getInstance()->sendData(NDT_HeroWalk, hero->getCurrActionState(), hero->getCurrMoveState(), hero->getPosition(), hero->getPhysicsBody()->getVelocity());
-				}
-				else
-				{
-					hero->stopMoveAction(MOVE_STATE_DOWN, true);
-					hero->stop();
-					if (hero == this->m_pHero)
-						SocketManager::getInstance()->sendData(NDT_HeroStop, hero->getCurrActionState(), hero->getCurrMoveState(), hero->getPosition(), Vec2(0, 0));
-				}
-				hero->setJumpStage(0);
-			}
-			hero->setIsOnRotateGround(true);
-			return true;
-		}
         else if((contact.getShapeA()->getCategoryBitmask() == PC_Bullet && contact.getShapeB()->getCategoryBitmask() == PC_Ground) ||
-			(contact.getShapeA()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getCategoryBitmask() == PC_Bullet))
+				(contact.getShapeA()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getCategoryBitmask() == PC_Bullet) ||
+				(contact.getShapeA()->getCategoryBitmask() == PC_Bullet && contact.getShapeB()->getCategoryBitmask() == PC_Box)	   ||
+				(contact.getShapeA()->getCategoryBitmask() == PC_Box && contact.getShapeB()->getCategoryBitmask() == PC_Bullet)    ||
+				(contact.getShapeA()->getCategoryBitmask() == PC_Bullet && contact.getShapeB()->getCategoryBitmask() == PC_Slope)  ||
+				(contact.getShapeA()->getCategoryBitmask() == PC_Slope && contact.getShapeB()->getCategoryBitmask() == PC_Bullet)
+		)
         {
 			Bullet* bullet;
 			if(contact.getShapeA()->getCategoryBitmask() == PC_Bullet)
@@ -219,36 +159,6 @@ void GameLayer::onEnter()
             }
 			return true;
         }
-		else if ((contact.getShapeA()->getCategoryBitmask() == PC_Bullet && contact.getShapeB()->getCategoryBitmask() == PC_Box) ||
-			(contact.getShapeA()->getCategoryBitmask() == PC_Box && contact.getShapeB()->getCategoryBitmask() == PC_Bullet))
-		{
-			Bullet* bullet;
-			if (contact.getShapeA()->getCategoryBitmask() == PC_Bullet)
-				bullet = static_cast<Bullet *>(contact.getShapeA()->getBody()->getNode());
-			else
-				bullet = static_cast<Bullet *>(contact.getShapeB()->getBody()->getNode());
-			if (bullet)
-			{
-				bullet->setIsActive(false);
-				this->removeChild(bullet);
-			}
-			return true;
-		}
-		else if ((contact.getShapeA()->getCategoryBitmask() == PC_Bullet && contact.getShapeB()->getCategoryBitmask() == PC_Slope) ||
-			(contact.getShapeA()->getCategoryBitmask() == PC_Slope && contact.getShapeB()->getCategoryBitmask() == PC_Bullet))
-		{
-			Bullet* bullet;
-			if (contact.getShapeA()->getCategoryBitmask() == PC_Bullet)
-				bullet = static_cast<Bullet *>(contact.getShapeA()->getBody()->getNode());
-			else
-				bullet = static_cast<Bullet *>(contact.getShapeB()->getBody()->getNode());
-			if (bullet)
-			{
-				bullet->setIsActive(false);
-				this->removeChild(bullet);
-			}
-			return true;
-		}
 		else if ((contact.getShapeA()->getCategoryBitmask() == PC_Bullet && contact.getShapeB()->getCategoryBitmask() == PC_Damage) ||
 			(contact.getShapeA()->getCategoryBitmask() == PC_Damage && contact.getShapeB()->getCategoryBitmask() == PC_Bullet))
 		{
@@ -276,6 +186,27 @@ void GameLayer::onEnter()
 				hero->hurt(hero->getBullletPower());
 				return true;
 			}		
+		}
+		else if (	(contact.getShapeA()->getCategoryBitmask() == PC_Bomb && contact.getShapeB()->getCategoryBitmask() == PC_Ground)	||
+					(contact.getShapeA()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getCategoryBitmask() == PC_Bomb)	||
+					(contact.getShapeA()->getCategoryBitmask() == PC_Bomb && contact.getShapeB()->getCategoryBitmask() == PC_Box)		||
+					(contact.getShapeA()->getCategoryBitmask() == PC_Box && contact.getShapeB()->getCategoryBitmask() == PC_Bomb)		||
+					(contact.getShapeA()->getCategoryBitmask() == PC_Bomb && contact.getShapeB()->getCategoryBitmask() == PC_Slope)		||
+					(contact.getShapeA()->getCategoryBitmask() == PC_Slope && contact.getShapeB()->getCategoryBitmask() == PC_Bomb)
+		)
+		{
+			Bomb* bomb;
+			if (contact.getShapeA()->getCategoryBitmask() == PC_Bomb)
+				bomb = static_cast<Bomb *>(contact.getShapeA()->getBody()->getNode());
+			else
+				bomb = static_cast<Bomb *>(contact.getShapeB()->getBody()->getNode());
+			if (bomb)
+			{
+				bomb->start();
+				m_pBombRange->setVisible(true);
+				m_pBombRange->setPosition(bomb->getPosition());
+			}
+			return true;
 		}
 		return true;
 	};
@@ -330,6 +261,7 @@ void GameLayer::update(float dt)
 	this->updateHero(dt);
 	this->updateEnemys(dt);
 	this->updateBullet(dt);
+	this->updateBomb(dt);
 	this->updatePhysicsWorld(dt);
 	this->updateForesight(dt);
 }
@@ -389,6 +321,18 @@ void GameLayer::updateHero(float dt)
 	if (hero)
 	{
 		hero->update(dt);
+		if (hero->getIsThrowBomb())
+		{
+			hero->setIsThrowBomb(false);
+			m_pBomb->launch(hero);
+		}
+		else if (hero->getIsBombExplore())
+		{
+			hero->setIsBombExplore(false);
+			exploreEnemy();
+			m_pBomb->setPosition(10000.f, 10000.f);
+			m_pBombRange->setVisible(false);
+		}
 	}
     
 	//CCLOG("MoveState %d %d", m_pHero->getCurrActionState(), m_pHero->getCurrMoveState());
@@ -457,6 +401,12 @@ void GameLayer::updatePhysicsWorld(float dt)
 		getScene()->getPhysicsWorld()->step(1 / 180.0f);
 
 	}
+}
+
+void GameLayer::updateBomb(float dt)
+{
+	if (m_pBomb->getIsActive())
+		m_pBomb->update(dt);
 }
 
 Bullet* GameLayer::getUnusedBullet()
@@ -623,3 +573,23 @@ BaseSprite* GameLayer::getNearestEnemy()
 	}
 	return target;
 }
+
+void GameLayer::exploreEnemy()
+{
+	Hero* hero = dynamic_cast<Hero*>(m_pHero);
+	if (hero)
+	{
+		for (int i = 0; i < 3; ++i)
+		{
+			if (m_pEnemy[i] == nullptr)
+				continue;
+
+			float d = m_pBomb->getPosition().getDistanceSq(m_pEnemy[i]->getPosition());
+			if (d < hero->getBombRange() * hero->getBombRange())
+			{
+				m_pEnemy[i]->hurt(hero->getBombPower());
+			}
+		}
+	}
+}
+

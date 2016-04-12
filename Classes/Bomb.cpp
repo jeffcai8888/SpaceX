@@ -1,10 +1,13 @@
 #include "Macro.h"
 #include "Bomb.h"
-#include "BaseSprite.h"
+#include "Hero.h"
 
 USING_NS_CC;
 
 Bomb::Bomb()
+:m_gravity(0.f)
+,m_isActive(false)
+,m_isStart(false)
 {
 }
 
@@ -25,44 +28,67 @@ bool Bomb::init()
 		body->setCategoryBitmask(PC_Bomb);
         body->setContactTestBitmask(PC_Ground | PC_Box | PC_Slope);
 		body->setCollisionBitmask(PC_Ground | PC_Box | PC_Slope);
+		body->setRotationEnable(false);
 		this->setPhysicsBody(body);
 		ret = true;
 	} while (false);
 	return ret;
 }
 
+void Bomb::reset()
+{
+	m_isActive = false;
+	m_isStart = false;
+}
+
 void Bomb::update(float dt)
 {
-	if (this->m_isActive)
+	if (m_isActive)
 	{
 		float x = this->getPhysicsBody()->getVelocity().x;
 		float y = this->getPhysicsBody()->getVelocity().y;
 		y += m_gravity * dt;
-		CCLOG("m_gravity = %f y = %f", this->m_gravity, y);
 		this->getPhysicsBody()->setVelocity(Vec2(x, y));
-
-		m_launchTime += dt;
-		if (m_launchTime >= m_fDisappearTime)
+		if (m_isStart)
 		{
-			m_launchTime = 0.f;
-			this->m_isActive = false;
-			EventCustom event("bullet_disappear");
-			event.setUserData(this);
-			_eventDispatcher->dispatchEvent(&event);
+			m_startTime -= dt;
+			if (m_startTime < 0)
+			{
+				m_isStart = false;
+				explode();
+			}
 		}
 	}
 }
 
-void Bomb::launch(BaseSprite* pHero)
+void Bomb::launch(Hero* pHero)
 {
 	this->m_isActive = true;
+	this->m_isStart = false;
 	Point pos = pHero->getShootPosition();
 	this->setPosition(pos);	
-	this->m_fVelocity = pHero->getBulletLaunchVelocity();
-	this->m_fDirection = pHero->getShootDirection().rotateByAngle(Vec2(0.f, 0.f), rotation);
-	this->m_power = pHero->getBullletPower();
-	this->m_gravity = pHero->getBulletGravity();
-	this->m_ownerTag = pHero->getTag();
+	this->m_fVelocity = pHero->getBombSpeed();
+	if (pHero->isFlippedX())
+		this->m_fDirection = Vec2(-1.f, 0.f);
+	else
+		this->m_fDirection = Vec2(1.f, 0.f);
+	this->m_power = pHero->getBombPower();
+	this->m_gravity = pHero->getBombGravity();
+	this->m_owner = pHero;
 	this->getPhysicsBody()->setVelocity(m_fVelocity * m_fDirection);
-	m_launchTime = 0.f;
+}
+
+void Bomb::start()
+{
+	m_startTime = m_owner->getBombStartTime();
+	Blink* blinkAction = Blink::create(m_owner->getBombStartTime(), 10);
+	this->runAction(blinkAction);
+	m_isStart = true;
+	getPhysicsBody()->setVelocity(Vec2(0.f, 0.f));
+}
+
+void Bomb::explode()
+{
+	m_owner->setIsBombExplore(true);
+	reset();
 }
