@@ -9,6 +9,8 @@ USING_NS_CC;
 
 Hero::Hero()
 :m_curSkillState(0)
+,m_curSkillCDTime(-1.f)
+,m_curSkillLastTime(-1.f)
 ,m_isThrowBomb(false)
 ,m_isBombExplore(false)
 {}
@@ -71,13 +73,40 @@ void Hero::update(float dt)
 {
 	if (m_curSkillState > 0)
 	{
-		m_curSkillCDTime -= dt;
-		if (m_curSkillCDTime < 0)
+		if (m_curSkillCDTime > 0.f)
 		{
-			EventCustom event("heroSkillTimeOut");
-			_eventDispatcher->dispatchEvent(&event);
-			m_curSkillState = 0;
+			m_curSkillCDTime -= dt;
+			if (m_curSkillCDTime < 0)
+			{
+				EventCustom event("heroSkillTimeOut");
+				_eventDispatcher->dispatchEvent(&event);
+				m_curSkillState = 0;
+				m_curSkillCDTime = -1.f;
+			}
 		}
+		
+
+
+		if (m_curSkillLastTime > 0.f)
+		{
+			m_curSkillLastTime -= dt;
+			if (m_curSkillLastTime <= 0.f)
+			{
+				Vec2 v = getPhysicsBody()->getVelocity();
+				v.x = 0.f;
+				getPhysicsBody()->setVelocity(v);
+				m_curSkillLastTime = -1.f;
+				if (m_curSkillState == 1)
+				{
+					m_curSkillCDTime = m_skillState1CDTime;
+				}
+				else if (m_curSkillState == 2)
+				{
+					m_curSkillCDTime = m_skillState2CDTime;
+				}
+			}
+		}
+		
 			
 	}
 }

@@ -209,6 +209,7 @@ void OperateLayer::onEnter()
 						m_pSkill->setSpriteFrame("skill_flash2.png");
 						hero->setCurSkillState(1);
 						hero->setCurSkillCDTime(hero->getSkillState1CDTime());
+						hero->setCurSkillLastTime(hero->getSkillState1LastTime());
 						positionSprite->setVisible(true);
 						positionSprite->setPosition(hero->getPosition() + Vec2(0, -10.f));
 					}
@@ -225,6 +226,7 @@ void OperateLayer::onEnter()
 						m_pSkill->setSpriteFrame("skill_flash3.png");
 						hero->setCurSkillState(2);
 						hero->setCurSkillCDTime(hero->getSkillState2CDTime());
+						hero->setCurSkillLastTime(hero->getSkillState2LastTime());
 					}
 					else if (hero->getCurSkillState() == 2)
 					{

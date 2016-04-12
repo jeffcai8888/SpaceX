@@ -65,6 +65,14 @@ void DebugLayer::onEnter()
 			{
 				static_cast<TextField *>(getChildByName("TextField_1_8"))->setString(Value(pair.second.asFloat()).asString());
 			}
+			else if (pair.first.compare("HeroSkill1Time") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_1_9"))->setString(Value(pair.second.asFloat()).asString());
+			}
+			else if (pair.first.compare("HeroSkill2Time") == 0)
+			{
+				static_cast<TextField *>(getChildByName("TextField_1_10"))->setString(Value(pair.second.asFloat()).asString());
+			}
 			else if (pair.first.compare("BulletPower") == 0)
 			{
 				static_cast<TextField *>(getChildByName("TextField_2_1"))->setString(Value(pair.second.asInt()).asString());
@@ -162,6 +170,12 @@ void DebugLayer::onExit()
 	listData.push_back(Value(m));
 	m["Attr"] = Value("HeroSkill2CD");
 	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_8"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("HeroSkill1Time");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_9"))->getString());
+	listData.push_back(Value(m));
+	m["Attr"] = Value("HeroSkill2Time");
+	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_10"))->getString());
 	listData.push_back(Value(m));
 	m["Attr"] = Value("BulletPower");
 	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_2_1"))->getString());

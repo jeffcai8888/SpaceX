@@ -158,6 +158,22 @@ void OfflineGameLayer::onEnter()
 					hero->setSkillState2CDTime(pair.second.asFloat());
 				}
 			}
+			else if (pair.first.compare("HeroSkill1Time") == 0)
+			{
+				Hero* hero = dynamic_cast<Hero*>(m_pHero);
+				if (hero)
+				{
+					hero->setSkillState1LastTime(pair.second.asFloat());
+				}
+			}
+			else if (pair.first.compare("HeroSkill2Time") == 0)
+			{
+				Hero* hero = dynamic_cast<Hero*>(m_pHero);
+				if (hero)
+				{
+					hero->setSkillState2LastTime(pair.second.asFloat());
+				}
+			}
             else if (pair.first.compare("BulletPower") == 0)
             {
                 m_pHero->setBullletPower(pair.second.asInt());
