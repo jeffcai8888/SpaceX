@@ -96,6 +96,10 @@
 		E910424B1CA537A80004E13C /* SocketClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91042441CA537A80004E13C /* SocketClient.cpp */; };
 		E910424C1CA537A80004E13C /* SocketServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91042461CA537A80004E13C /* SocketServer.cpp */; };
 		E910424D1CA537A80004E13C /* SocketServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91042461CA537A80004E13C /* SocketServer.cpp */; };
+		E9230A9F1CBD016E00A14213 /* Bomb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9230A9B1CBD016E00A14213 /* Bomb.cpp */; };
+		E9230AA01CBD016E00A14213 /* Bomb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9230A9B1CBD016E00A14213 /* Bomb.cpp */; };
+		E9230AA11CBD016E00A14213 /* StartScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9230A9D1CBD016E00A14213 /* StartScene.cpp */; };
+		E9230AA21CBD016E00A14213 /* StartScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9230A9D1CBD016E00A14213 /* StartScene.cpp */; };
 		E969751F1C72F24300959DB1 /* BaseSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E969750C1C72F24300959DB1 /* BaseSprite.cpp */; };
 		E96975201C72F24300959DB1 /* Bullet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E969750E1C72F24300959DB1 /* Bullet.cpp */; };
 		E96975211C72F24300959DB1 /* GameLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E96975111C72F24300959DB1 /* GameLayer.cpp */; };
@@ -224,6 +228,10 @@
 		E91042451CA537A80004E13C /* SocketClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketClient.h; sourceTree = "<group>"; };
 		E91042461CA537A80004E13C /* SocketServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SocketServer.cpp; sourceTree = "<group>"; };
 		E91042471CA537A80004E13C /* SocketServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketServer.h; sourceTree = "<group>"; };
+		E9230A9B1CBD016E00A14213 /* Bomb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Bomb.cpp; sourceTree = "<group>"; };
+		E9230A9C1CBD016E00A14213 /* Bomb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bomb.h; sourceTree = "<group>"; };
+		E9230A9D1CBD016E00A14213 /* StartScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StartScene.cpp; sourceTree = "<group>"; };
+		E9230A9E1CBD016E00A14213 /* StartScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartScene.h; sourceTree = "<group>"; };
 		E969750C1C72F24300959DB1 /* BaseSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseSprite.cpp; sourceTree = "<group>"; };
 		E969750D1C72F24300959DB1 /* BaseSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseSprite.h; sourceTree = "<group>"; };
 		E969750E1C72F24300959DB1 /* Bullet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Bullet.cpp; sourceTree = "<group>"; };
@@ -375,6 +383,10 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				E9230A9B1CBD016E00A14213 /* Bomb.cpp */,
+				E9230A9C1CBD016E00A14213 /* Bomb.h */,
+				E9230A9D1CBD016E00A14213 /* StartScene.cpp */,
+				E9230A9E1CBD016E00A14213 /* StartScene.h */,
 				E91042411CA537A80004E13C /* socket */,
 				E91042311CA533660004E13C /* SocketManager.cpp */,
 				E91042321CA533660004E13C /* SocketManager.h */,
@@ -623,6 +635,7 @@
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				E91042271CA533550004E13C /* Box.cpp in Sources */,
 				E96975201C72F24300959DB1 /* Bullet.cpp in Sources */,
+				E9230AA11CBD016E00A14213 /* StartScene.cpp in Sources */,
 				E96975251C72F24300959DB1 /* Hero.cpp in Sources */,
 				E969751F1C72F24300959DB1 /* BaseSprite.cpp in Sources */,
 				E910424A1CA537A80004E13C /* SocketClient.cpp in Sources */,
@@ -640,6 +653,7 @@
 				3D89168D1C7A165F00F442C9 /* JsonParser.cpp in Sources */,
 				E96975221C72F24300959DB1 /* GameOverScene.cpp in Sources */,
 				E96975231C72F24300959DB1 /* GameScene.cpp in Sources */,
+				E9230A9F1CBD016E00A14213 /* Bomb.cpp in Sources */,
 				E96975241C72F24300959DB1 /* Ground.cpp in Sources */,
 				E910422C1CA533550004E13C /* Princess.cpp in Sources */,
 				E910422E1CA533550004E13C /* ServerGameLayer.cpp in Sources */,
@@ -655,12 +669,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E9230AA01CBD016E00A14213 /* Bomb.cpp in Sources */,
 				3D6DA7381C7545DE0068FE19 /* GameOverScene.cpp in Sources */,
 				E91042371CA533720004E13C /* Foresight.cpp in Sources */,
 				E91042131CA533230004E13C /* JsonParser.cpp in Sources */,
 				E910424B1CA537A80004E13C /* SocketClient.cpp in Sources */,
 				E91042491CA537A80004E13C /* SocketBase.cpp in Sources */,
 				3D6DA7361C7545D70068FE19 /* Bullet.cpp in Sources */,
+				E9230AA21CBD016E00A14213 /* StartScene.cpp in Sources */,
 				E91042381CA533750004E13C /* Gunner.cpp in Sources */,
 				3D6DA73D1C7545EF0068FE19 /* SceneManager.cpp in Sources */,
 				E910423C1CA533820004E13C /* ServerGameLayer.cpp in Sources */,
