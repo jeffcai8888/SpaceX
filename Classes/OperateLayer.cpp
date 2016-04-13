@@ -47,7 +47,7 @@ bool OperateLayer::init()
 
 		m_pFront->setPosition(m_origin + Point(250, 100));
 		m_pBack->setPosition(m_origin + Point(150, 100));
-		m_pUp->setPosition(m_origin + Point(1086, 220));
+		m_pUp->setPosition(m_origin + Point(1038, 264));
 		this->addChild(m_pFront);
 		this->addChild(m_pBack);
 		this->addChild(m_pUp);
@@ -64,12 +64,12 @@ bool OperateLayer::init()
 		m_pSkill = Sprite::createWithSpriteFrameName("skill_flash1.png");
 		m_pSkill->setScale(0.4f);
 		this->addChild(m_pSkill);
-		m_pSkill->setPosition(m_origin + Point(950, 250));
+		m_pSkill->setPosition(m_origin + Point(880, 78));
 
 		m_pSkill1 = Sprite::createWithSpriteFrameName("skill_bomb.png");
 		m_pSkill1->setScale(0.4f);
 		this->addChild(m_pSkill1);
-		m_pSkill1->setPosition(m_origin + Point(760, 150));
+		m_pSkill1->setPosition(m_origin + Point(918, 198));
 
 		Menu* menu;
 		auto debugItem = MenuItemImage::create("pause.png", "pause_down.png", CC_CALLBACK_1(OperateLayer::gotoDebug, this));
@@ -146,7 +146,7 @@ void OperateLayer::onEnter()
 			}
 		}
 	}
-    showJoystick(Point(joystickPosX, joystickPosY));
+    showJoystick(Point(1039, 103));
 	
 	auto listener = EventListenerTouchAllAtOnce::create();
 	listener->onTouchesBegan = [this](const vector<Touch*>& touches, Event *event)
