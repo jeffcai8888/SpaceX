@@ -1,6 +1,8 @@
 #include "BaseSprite.h"
 #include "SocketManager.h"
 #include "SimpleAudioEngine.h"
+#include "ConfigCenter.h"
+#include "BulletConfigModel.h"
 
 USING_NS_CC;
 
@@ -339,4 +341,38 @@ cocos2d::Point BaseSprite::getShootPosition()
 	else
 		return getPosition() + Vec2(15.f, -20.f);
 
+}
+
+void BaseSprite::update(float dt)
+{
+	float x = getPhysicsBody()->getVelocity().x;
+	float y = getPhysicsBody()->getVelocity().y;
+	if (!getIsOnRotateGround())
+		y += getGravity() * dt;
+	getPhysicsBody()->setVelocity(Vec2(x, y));
+
+	if (getCurrActionState() == ACTION_STATE_MOVE && isInMoveAction(MOVE_STATE_UP) && getPosition().y < getPrePosition().y)
+	{
+		runJumpAction(false);
+	}
+
+	setPrePosition(getPosition());
+
+
+	if (getIsAttacking())
+	{
+		m_shootTime -= dt;
+		if (m_shootTime < 0)
+		{
+			EventCustom event("shoot_bullet");
+			event.setUserData(this);
+			_eventDispatcher->dispatchEvent(&event);
+
+			BulletConfigMap bulletConfigMap = ConfigCenter::getInstance()->getBulletConfigModel()->GetBulletConfigMap();
+			BulletConfig config = bulletConfigMap[getBulletType()];
+			m_shootTime = config.m_fInterval;
+			if (getShootDirection().x != 0)
+				setFlippedX(getShootDirection().x < 0);
+		}
+	}
 }

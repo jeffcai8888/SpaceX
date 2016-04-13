@@ -71,6 +71,8 @@ public:
 
 	void reset();
 
+	virtual void update(float dt);
+
 
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pIdleAction, IdleAction);
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pWalkAction, WalkAction);
@@ -94,20 +96,14 @@ public:
 
 	CC_SYNTHESIZE(float, m_walkVelocity, WalkVelocity);
 	CC_SYNTHESIZE(float, m_jumpVelocity, JumpVelocity);
-	CC_SYNTHESIZE(float, m_bulletDisappearTime, BulletDisappearTime);
-	CC_SYNTHESIZE(float, m_bulletLaunchVelocity, BulletLaunchVelocity);
-	CC_SYNTHESIZE(int, m_bullletAngle, BullletAngle);
-	CC_SYNTHESIZE(int, m_bullletPower, BullletPower);
-	CC_SYNTHESIZE(float, m_bulletInterval, BulletInterval);
 	CC_SYNTHESIZE(int, m_ammoCapacity, AmmoCapacity);
-	CC_SYNTHESIZE(int, m_maxAmmoCapacity, MaxAmmoCapacity);
 	CC_SYNTHESIZE(float, m_fGravity, Gravity);
-	CC_SYNTHESIZE(float, m_fBulletGravity, BulletGravity);
 	CC_SYNTHESIZE(bool, m_isOnRotateGround, IsOnRotateGround);
 	CC_SYNTHESIZE(cocos2d::Point, m_initPos, InitPos);
     CC_SYNTHESIZE(bool, m_isLocked, IsLocked);
 	CC_SYNTHESIZE(cocos2d::Sprite*, m_pLockMark, LockMark);
-
+	CC_SYNTHESIZE(std::string, m_bulletType, BulletType);
+	
 	CC_SYNTHESIZE(int, m_curSkill, CurSkill);
     
 	virtual void onDead();
@@ -123,6 +119,7 @@ protected:
 
 private:
 	bool changeState(ActionState actionState);
+	float m_shootTime;
 };
 
 #endif

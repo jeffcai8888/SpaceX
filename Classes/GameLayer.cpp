@@ -96,6 +96,22 @@ void GameLayer::onEnter()
 	_eventDispatcher->addEventListenerWithFixedPriority(listener, 1);
 	m_vecEventListener.pushBack(listener);
 
+	auto listener1 = EventListenerCustom::create("shoot_bullet", [this](EventCustom* event) {
+		BaseSprite* player = static_cast<BaseSprite *>(event->getUserData());
+		Bullet* bullet = getUnusedBullet();
+		bullet->launch(player);
+		this->addChild(bullet);
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(listener1, 1);
+	m_vecEventListener.pushBack(listener1);
+
+	auto listener2 = EventListenerCustom::create("throw_bomb", [this](EventCustom* event) {
+		Hero* hero = static_cast<Hero *>(event->getUserData());
+		m_pBomb->launch(hero);
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(listener2, 1);
+	m_vecEventListener.pushBack(listener2);
+
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = [this](PhysicsContact& contact)->bool
 	{
@@ -183,7 +199,7 @@ void GameLayer::onEnter()
 			{
 				bullet->setIsActive(false);
 				this->removeChild(bullet);
-				hero->hurt(hero->getBullletPower());
+				hero->hurt(bullet->getPower());
 				return true;
 			}		
 		}
@@ -270,33 +286,7 @@ void GameLayer::updateHero(float dt)
 {
 	setViewPointCenter();
 
-	float x = m_pHero->getPhysicsBody()->getVelocity().x;
-	float y = m_pHero->getPhysicsBody()->getVelocity().y;
-	if (!m_pHero->getIsOnRotateGround())
-		y += m_pHero->getGravity() * dt;
-	m_pHero->getPhysicsBody()->setVelocity(Vec2(x, y));
-
-	if (m_pHero->getCurrActionState() == ACTION_STATE_MOVE && m_pHero->isInMoveAction(MOVE_STATE_UP) && m_pHero->getPosition().y < m_pHero->getPrePosition().y)
-	{
-		m_pHero->runJumpAction(false);
-	}
-
-	m_pHero->setPrePosition(m_pHero->getPosition());
-
-	if (m_pHero->getIsAttacking())
-	{
-		m_shootTime += dt;
-		if (m_shootTime >= m_pHero->getBulletInterval())
-		{
-			Bullet* bullet = getUnusedBullet();
-			bullet->launch(m_pHero);
-			this->addChild(bullet);
-			m_shootTime = 0.f;
-			if (m_pHero->getShootDirection().x != 0)
-				m_pHero->setFlippedX(m_pHero->getShootDirection().x < 0);
-			
-		}
-	}
+	m_pHero->update(dt);
     
     if(m_pHero->getIsLocked() && m_pTarget == nullptr)
     {
@@ -585,9 +575,9 @@ void GameLayer::exploreEnemy()
 				continue;
 
 			float d = m_pBomb->getPosition().getDistanceSq(m_pEnemy[i]->getPosition());
-			if (d < hero->getBombRange() * hero->getBombRange())
+			if (d < m_pBomb->getRange() * m_pBomb->getRange())
 			{
-				m_pEnemy[i]->hurt(hero->getBombPower());
+				m_pEnemy[i]->hurt(m_pBomb->getPower());
 			}
 		}
 	}

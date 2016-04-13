@@ -147,9 +147,12 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\BaseSprite.cpp" />
     <ClCompile Include="..\Classes\Bomb.cpp" />
+    <ClCompile Include="..\Classes\BombConfigModel.cpp" />
     <ClCompile Include="..\Classes\Box.cpp" />
     <ClCompile Include="..\Classes\Bullet.cpp" />
+    <ClCompile Include="..\Classes\BulletConfigModel.cpp" />
     <ClCompile Include="..\Classes\ClientGameLayer.cpp" />
+    <ClCompile Include="..\Classes\ConfigCenter.cpp" />
     <ClCompile Include="..\Classes\DebugScene.cpp" />
     <ClCompile Include="..\Classes\GameData.cpp" />
     <ClCompile Include="..\Classes\GameLayer.cpp" />
@@ -178,10 +181,13 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\BaseSprite.h" />
     <ClInclude Include="..\Classes\Bomb.h" />
+    <ClInclude Include="..\Classes\BombConfigModel.h" />
     <ClInclude Include="..\Classes\Box.h" />
     <ClInclude Include="..\Classes\Bullet.h" />
+    <ClInclude Include="..\Classes\BulletConfigModel.h" />
     <ClInclude Include="..\Classes\ClientGameLayer.h" />
     <ClInclude Include="..\Classes\commons.h" />
+    <ClInclude Include="..\Classes\ConfigCenter.h" />
     <ClInclude Include="..\Classes\DebugScene.h" />
     <ClInclude Include="..\Classes\GameData.h" />
     <ClInclude Include="..\Classes\GameLayer.h" />

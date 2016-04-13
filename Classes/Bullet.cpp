@@ -1,6 +1,8 @@
 #include "Macro.h"
 #include "Bullet.h"
 #include "BaseSprite.h"
+#include "ConfigCenter.h"
+#include "BulletConfigModel.h"
 
 USING_NS_CC;
 
@@ -56,15 +58,17 @@ void Bullet::update(float dt)
 
 void Bullet::launch(BaseSprite* pHero)
 {
+	BulletConfigMap bulletConfigMap = ConfigCenter::getInstance()->getBulletConfigModel()->GetBulletConfigMap();
+	BulletConfig config = bulletConfigMap[pHero->getBulletType()];
 	this->m_isActive = true;
 	Point pos = pHero->getShootPosition();
 	this->setPosition(pos);	
-	this->m_fVelocity = pHero->getBulletLaunchVelocity();
-	this->m_fDisappearTime = pHero->getBulletDisappearTime();
-	float rotation = CC_DEGREES_TO_RADIANS(-rand_0_1() * pHero->getBullletAngle());
+	this->m_fVelocity = config.m_fLaunchVelocity;
+	this->m_fDisappearTime = config.m_fDisappearTime;
+	float rotation = CC_DEGREES_TO_RADIANS(-rand_0_1() *config.m_iAngle);
 	this->m_fDirection = pHero->getShootDirection().rotateByAngle(Vec2(0.f, 0.f), rotation);
-	this->m_power = pHero->getBullletPower();
-	this->m_gravity = pHero->getBulletGravity();
+	this->m_power = config.m_iPower;
+	this->m_gravity = config.m_fGravity;
 	this->m_ownerTag = pHero->getTag();
 	this->getPhysicsBody()->setVelocity(m_fVelocity * m_fDirection);
 	m_launchTime = 0.f;

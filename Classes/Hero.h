@@ -23,16 +23,13 @@ public:
 	CC_SYNTHESIZE(float, m_skillState2CDTime, SkillState2CDTime);
 	CC_SYNTHESIZE(float, m_skillState1LastTime, SkillState1LastTime);
 	CC_SYNTHESIZE(float, m_skillState2LastTime, SkillState2LastTime);
-	CC_SYNTHESIZE(float, m_bombSpeed, BombSpeed);
-	CC_SYNTHESIZE(float, m_bombRange, BombRange);
-	CC_SYNTHESIZE(float, m_bombStartTime, BombStartTime);
-	CC_SYNTHESIZE(float, m_bombCDTime, BombCDTime);
-	CC_SYNTHESIZE(int,	 m_bombPower, BombPower);
-	CC_SYNTHESIZE(float, m_fBombGravity, BombGravity);
+	
 	CC_SYNTHESIZE(float, m_curSkillLastTime, CurSkillLastTime);
 	CC_SYNTHESIZE(float, m_curSkillCDTime,	CurSkillCDTime);
 	CC_SYNTHESIZE(bool,  m_isThrowBomb, IsThrowBomb);
 	CC_SYNTHESIZE(bool,  m_isBombExplore, IsBombExplore);
+
+	CC_SYNTHESIZE(std::string, m_bombType, BombType);
 };
 
 

@@ -105,9 +105,23 @@ void Hero::update(float dt)
 					m_curSkillCDTime = m_skillState2CDTime;
 				}
 			}
-		}
-		
-			
+		}		
+	}
+
+	if (getIsThrowBomb())
+	{
+		setIsThrowBomb(false);
+
+		EventCustom event("throw_bomb");
+		event.setUserData(this);
+		_eventDispatcher->dispatchEvent(&event);
+	}
+	else if (getIsBombExplore())
+	{
+		setIsBombExplore(false);
+		exploreEnemy();
+		m_pBomb->setPosition(10000.f, 10000.f);
+		m_pBombRange->setVisible(false);
 	}
 }
 

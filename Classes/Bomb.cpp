@@ -1,6 +1,8 @@
 #include "Macro.h"
 #include "Bomb.h"
 #include "Hero.h"
+#include "ConfigCenter.h"
+#include "BombConfigModel.h"
 
 USING_NS_CC;
 
@@ -63,25 +65,29 @@ void Bomb::update(float dt)
 
 void Bomb::launch(Hero* pHero)
 {
+	BombConfigMap bombConfigMap = ConfigCenter::getInstance()->getBombConfigModel()->GetBombConfigMap();
+	BombConfig config = bombConfigMap[pHero->getBombType()];
 	this->m_isActive = true;
 	this->m_isStart = false;
 	Point pos = pHero->getShootPosition();
 	this->setPosition(pos);	
-	this->m_fVelocity = pHero->getBombSpeed();
+	this->m_fVelocity = config.m_fVelocity;
 	if (pHero->isFlippedX())
 		this->m_fDirection = Vec2(-1.f, 0.f);
 	else
 		this->m_fDirection = Vec2(1.f, 0.f);
-	this->m_power = pHero->getBombPower();
-	this->m_gravity = pHero->getBombGravity();
+	this->m_power = config.m_iPower;
+	this->m_gravity = config.m_fGravity;
 	this->m_owner = pHero;
 	this->getPhysicsBody()->setVelocity(m_fVelocity * m_fDirection);
 }
 
 void Bomb::start()
 {
-	m_startTime = m_owner->getBombStartTime();
-	Blink* blinkAction = Blink::create(m_owner->getBombStartTime(), 10);
+	BombConfigMap bombConfigMap = ConfigCenter::getInstance()->getBombConfigModel()->GetBombConfigMap();
+	BombConfig config = bombConfigMap[this->m_owner->getBombType()];
+	m_startTime = config.m_fStartTime;
+	Blink* blinkAction = Blink::create(m_startTime, 10);
 	this->runAction(blinkAction);
 	m_isStart = true;
 	getPhysicsBody()->setVelocity(Vec2(0.f, 0.f));
