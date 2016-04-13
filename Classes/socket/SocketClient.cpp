@@ -45,7 +45,7 @@ bool SocketClient::initClient()
 	this->clear();
 
 	_socektClient = socket(AF_INET, SOCK_STREAM, 0);
-	if (error(_socketServer))
+	if (error(_socektClient))
 	{
 		log("init client error!");
 		_socektClient = 0;

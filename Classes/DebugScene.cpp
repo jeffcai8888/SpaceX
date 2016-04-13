@@ -41,10 +41,6 @@ void DebugLayer::onEnter()
 			{
 				static_cast<TextField *>(getChildByName("TextField_1_2"))->setString(Value(pair.second.asFloat()).asString());
 			}
-			else if (pair.first.compare("AmmoCapacity") == 0)
-			{
-				static_cast<TextField *>(getChildByName("TextField_1_3"))->setString(Value(pair.second.asInt()).asString());
-			}
 			else if (pair.first.compare("HeroG") == 0)
 			{
 				static_cast<TextField *>(getChildByName("TextField_1_4"))->setString(Value(pair.second.asFloat()).asString());

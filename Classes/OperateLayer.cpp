@@ -48,6 +48,7 @@ bool OperateLayer::init()
 		m_pFront->setPosition(m_origin + Point(250, 100));
 		m_pBack->setPosition(m_origin + Point(150, 100));
 		m_pUp->setPosition(m_origin + Point(1038, 264));
+        m_pUp->setScale(1.25f);
 		this->addChild(m_pFront);
 		this->addChild(m_pBack);
 		this->addChild(m_pUp);
@@ -62,12 +63,12 @@ bool OperateLayer::init()
 		this->addChild(m_pJoystickBg, 2);
 
 		m_pSkill = Sprite::createWithSpriteFrameName("skill_flash1.png");
-		m_pSkill->setScale(0.4f);
+		m_pSkill->setScale(0.5f);
 		this->addChild(m_pSkill);
 		m_pSkill->setPosition(m_origin + Point(880, 78));
 
 		m_pSkill1 = Sprite::createWithSpriteFrameName("skill_bomb.png");
-		m_pSkill1->setScale(0.4f);
+		m_pSkill1->setScale(0.5f);
 		this->addChild(m_pSkill1);
 		m_pSkill1->setPosition(m_origin + Point(918, 198));
 
@@ -286,7 +287,7 @@ void OperateLayer::onEnter()
 				isChange = true;
 			}
 		}
-		else if (p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
+		else if (p.x <= 200.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
 		{
 			m_mapPressType[pTouch->getID()] = Value(BT_Left);
 			switchButtonStatus(BT_Left, true);
@@ -302,7 +303,7 @@ void OperateLayer::onEnter()
 				isChange = true;
 			}
 		}
-		else if (p.x > winSize.width / 8 && p.x <= winSize.width / 4 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
+		else if (p.x > 200.f && p.x <= 400.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
 		{
 			m_mapPressType[pTouch->getID()] = Value(BT_Right);
 			switchButtonStatus(BT_Right, true);
@@ -360,7 +361,7 @@ void OperateLayer::onEnter()
 			switchButtonStatus(BT_Joystick, false);
 			SocketManager::getInstance()->sendData(NDT_HeroStopAttack, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getShootDirection());
         }
-		else if (p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
+		else if (p.x <= 200.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
 		{
 			if (!m_pHero->isInAir())
 			{
@@ -372,7 +373,7 @@ void OperateLayer::onEnter()
 			m_mapPressType.erase(pTouch->getID());
 
 		}
-		else if (p.x > winSize.width / 8 && p.x <= winSize.width / 4 && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
+		else if (p.x > 200.f && p.x <= 400.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
 		{
 			if (!m_pHero->isInAir())
 			{
@@ -459,8 +460,8 @@ void OperateLayer::showJoystick(Point pos)
 	m_pJoystickBg1->setPosition(pos);
 
 	m_pJoystick->setVisible(true);
-	m_pJoystickBg->setVisible(true);
-	m_pJoystickBg1->setVisible(true);
+	m_pJoystickBg->setVisible(false);
+	m_pJoystickBg1->setVisible(false);
 }
 
 void OperateLayer::updateJoystick(Point direction, float distance)

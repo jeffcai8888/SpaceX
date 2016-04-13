@@ -356,8 +356,6 @@ void BaseSprite::update(float dt)
 		runJumpAction(false);
 	}
 
-	setPrePosition(getPosition());
-
 
 	if (getIsAttacking())
 	{

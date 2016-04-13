@@ -292,9 +292,9 @@ void GameLayer::update(float dt)
 
 void GameLayer::updateHero(float dt)
 {
-	setViewPointCenter();
-
 	m_pHero->update(dt);
+    setViewPointCenter();
+    m_pHero->setPrePosition(m_pHero->getPosition());
     
     if(m_pHero->getIsLocked() && m_pTarget == nullptr)
     {
@@ -394,6 +394,7 @@ void GameLayer::setViewPointCenter() {
     auto diff = heroPosInScreen - centerOfView;
     if(fabs(diff.y) > 25.f)
     {
+        
 		auto heroPrePosY = m_pHero->getPrePosition().y;
 		this->setPositionY(heroPrePosY + layerPos.y - heroPos.y);
     }

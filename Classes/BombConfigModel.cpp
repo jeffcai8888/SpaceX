@@ -55,7 +55,7 @@ void BombConfigModel::init(const std::string& fileName)
 			{
 				config.m_fCDTime = pair.second.asInt();
 			}
-			else if (pair.first.compare("BulletG") == 0)
+			else if (pair.first.compare("Gravity") == 0)
 			{
 				config.m_fGravity = pair.second.asFloat();
 			}

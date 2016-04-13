@@ -26,7 +26,6 @@ private:
 	void clear();
 
 private:
-	HSocket _socketServer;
 	HSocket _socektClient;
 	std::list<SocketMessage*> _UIMessageQueue;
 	std::mutex   _UIMessageQueueMutex;

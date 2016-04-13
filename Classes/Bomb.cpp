@@ -78,6 +78,7 @@ void Bomb::launch(Hero* pHero)
 		this->m_fDirection = Vec2(1.f, 0.f);
 	this->m_power = config.m_iPower;
 	this->m_gravity = config.m_fGravity;
+    this->m_range = config.m_fRange;
 	this->m_owner = pHero;
 	this->getPhysicsBody()->setVelocity(m_fVelocity * m_fDirection);
 }
