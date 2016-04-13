@@ -165,6 +165,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\OfflineGameLayer.cpp" />
     <ClCompile Include="..\Classes\OperateLayer.cpp" />
     <ClCompile Include="..\Classes\Princess.cpp" />
+    <ClCompile Include="..\Classes\RoleConfigModel.h.cpp" />
     <ClCompile Include="..\Classes\SceneManager.cpp" />
     <ClCompile Include="..\Classes\SelectLayer.cpp" />
     <ClCompile Include="..\Classes\ServerGameLayer.cpp" />
@@ -201,6 +202,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\OfflineGameLayer.h" />
     <ClInclude Include="..\Classes\OperateLayer.h" />
     <ClInclude Include="..\Classes\Princess.h" />
+    <ClInclude Include="..\Classes\RoleConfigModel.h" />
     <ClInclude Include="..\Classes\SceneManager.h" />
     <ClInclude Include="..\Classes\SelectLayer.h" />
     <ClInclude Include="..\Classes\ServerGameLayer.h" />

@@ -85,8 +85,6 @@ void Hero::update(float dt)
 			}
 		}
 		
-
-
 		if (m_curSkillLastTime > 0.f)
 		{
 			m_curSkillLastTime -= dt;

@@ -61,6 +61,7 @@ bool OperateLayer::init()
 		this->addChild(m_pJoystick, 0);
 		this->addChild(m_pJoystickBg1, 1);
 		this->addChild(m_pJoystickBg, 2);
+		showJoystick(Point(1039, 103));
 
 		m_pSkill = Sprite::createWithSpriteFrameName("skill_flash1.png");
 		m_pSkill->setScale(0.5f);
@@ -120,35 +121,7 @@ void OperateLayer::onEnter()
 	m_pHero = layer->getHero();
     m_pForesight = layer->getForesight();
     m_pRange = layer->getRange();
-	float joystickScale = 1.0f;
-	float joystickPosX = 0.f;
-	float joystickPosY = 0.f;
 
-	JsonParser* parser = JsonParser::createWithFile("Debug.json");
-	parser->decodeDebugData();
-	auto list = parser->getList();
-	for (auto& v : list)
-	{
-		ValueMap row = v.asValueMap();
-		 
-		for (auto& pair : row)
-		{
-			if (pair.first.compare("JoystickScale") == 0)
-			{
-				joystickScale = pair.second.asFloat();
-			}
-			else if (pair.first.compare("JoystickX") == 0)
-			{
-				joystickPosX = pair.second.asFloat();
-			}
-			else if (pair.first.compare("JoystickY") == 0)
-			{
-				joystickPosY = pair.second.asFloat();
-			}
-		}
-	}
-    showJoystick(Point(1039, 103));
-	
 	auto listener = EventListenerTouchAllAtOnce::create();
 	listener->onTouchesBegan = [this](const vector<Touch*>& touches, Event *event)
 	{

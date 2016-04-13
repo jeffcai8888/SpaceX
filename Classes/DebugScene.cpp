@@ -68,23 +68,7 @@ void DebugLayer::onEnter()
 			else if (pair.first.compare("HeroSkill2Time") == 0)
 			{
 				static_cast<TextField *>(getChildByName("TextField_1_10"))->setString(Value(pair.second.asFloat()).asString());
-			}
-			else if (pair.first.compare("ForesightSpeed") == 0)
-			{
-				static_cast<TextField *>(getChildByName("TextField_3_2"))->setString(Value(pair.second.asFloat()).asString());
-			}
-			else if (pair.first.compare("JoystickX") == 0)
-			{
-				static_cast<TextField *>(getChildByName("TextField_3_3"))->setString(Value(pair.second.asFloat()).asString());
-			}
-			else if (pair.first.compare("JoystickY") == 0)
-			{
-				static_cast<TextField *>(getChildByName("TextField_3_4"))->setString(Value(pair.second.asFloat()).asString());
-			}
-			else if (pair.first.compare("JoystickScale") == 0)
-			{
-				static_cast<TextField *>(getChildByName("TextField_3_5"))->setString(Value(pair.second.asFloat()).asString());
-			}
+			}		
 		}
 	}
     
@@ -201,18 +185,6 @@ void DebugLayer::onExit()
 	m["Attr"] = Value("HeroSkill2Time");
 	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_10"))->getString());
 	listData.push_back(Value(m));
-    m["Attr"] = Value("ForesightSpeed");
-    m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_3_2"))->getString());
-    listData.push_back(Value(m));
-    m["Attr"] = Value("JoystickX");
-    m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_3_3"))->getString());
-    listData.push_back(Value(m));
-    m["Attr"] = Value("JoystickY");
-    m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_3_4"))->getString());
-    listData.push_back(Value(m));
-    m["Attr"] = Value("JoystickScale");
-    m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_3_5"))->getString());
-    listData.push_back(Value(m));
     auto parser1 = JsonParser::createWithArray(listData);
     std::string fileName = writablePath + "Debug.json";
     parser1->encodeDebugData(fileName.c_str());

@@ -156,12 +156,8 @@ void GameLayer::onEnter()
 					SocketManager::getInstance()->sendData(NDT_HeroStop, hero->getCurrActionState(), hero->getCurrMoveState(), hero->getPosition(), Vec2(0, 0));
 				}
 				hero->setJumpStage(0);
-				return true;
 			}
-			else if (hero->getCurrActionState() == ACTION_STATE_MOVE && hero->isInMoveAction(MOVE_STATE_UP))
-			{
-				return false;
-			}
+			return true;
 		}
         else if((contact.getShapeA()->getCategoryBitmask() == PC_Bullet && contact.getShapeB()->getCategoryBitmask() == PC_Ground) ||
 				(contact.getShapeA()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getCategoryBitmask() == PC_Bullet) ||

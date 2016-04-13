@@ -111,6 +111,9 @@
     <ClCompile Include="..\Classes\BombConfigModel.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\RoleConfigModel.h.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -213,6 +216,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\BombConfigModel.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\RoleConfigModel.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

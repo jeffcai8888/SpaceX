@@ -5,6 +5,7 @@
 
 class BulletConfigModel;
 class BombConfigModel;
+class RoleConfigModel;
 
 class ConfigCenter
 {
@@ -13,7 +14,7 @@ public:
 
 	BulletConfigModel* getBulletConfigModel() { return m_pBulletConfigModel; }
 	BombConfigModel* getBombConfigModel() { return m_pBombConfigModel;  }
-
+	RoleConfigModel* getRoleConfigModel() { return m_pRoleConfigModel; }
 private:
 	ConfigCenter();
 	virtual ~ConfigCenter();
@@ -22,6 +23,7 @@ private:
 
 	BulletConfigModel* m_pBulletConfigModel;
 	BombConfigModel* m_pBombConfigModel;
+	RoleConfigModel* m_pRoleConfigModel;
 };
 
 #endif
