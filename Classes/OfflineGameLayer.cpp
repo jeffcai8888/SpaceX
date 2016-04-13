@@ -44,6 +44,8 @@ void OfflineGameLayer::onEnter()
     Point heroInitPos = m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
     m_pHero = createHero(ROLE_HERO, heroInitPos);
 	m_pHero->setTag(0);
+    m_pHero->setBulletType("Bullet1Config");
+    m_pHero->setBombType("Bomb1Config");
     this->addChild(m_pHero);
     auto centerOfView = Point(visibleSize.width / 2, visibleSize.height / 2);
     this->setPosition(centerOfView - m_pHero->getPosition());
@@ -176,7 +178,6 @@ void OfflineGameLayer::onEnter()
 			}
         }
     }
-    m_shootTime = m_pHero->getBulletInterval();
 }
 
 void OfflineGameLayer::onExit()

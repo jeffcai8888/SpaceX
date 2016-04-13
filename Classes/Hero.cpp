@@ -12,7 +12,6 @@ Hero::Hero()
 ,m_curSkillCDTime(-1.f)
 ,m_curSkillLastTime(-1.f)
 ,m_isThrowBomb(false)
-,m_isBombExplore(false)
 {}
 
 Hero::~Hero()
@@ -71,6 +70,7 @@ bool Hero::init()
 
 void Hero::update(float dt)
 {
+    BaseSprite::update(dt);
 	if (m_curSkillState > 0)
 	{
 		if (m_curSkillCDTime > 0.f)
@@ -115,13 +115,6 @@ void Hero::update(float dt)
 		EventCustom event("throw_bomb");
 		event.setUserData(this);
 		_eventDispatcher->dispatchEvent(&event);
-	}
-	else if (getIsBombExplore())
-	{
-		setIsBombExplore(false);
-		exploreEnemy();
-		m_pBomb->setPosition(10000.f, 10000.f);
-		m_pBombRange->setVisible(false);
 	}
 }
 

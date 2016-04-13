@@ -111,7 +111,6 @@ void ServerGameLayer::onEnter()
             }        
         }
     }
-    m_shootTime = m_pHero->getBulletInterval();
     
     
     SocketManager::getInstance()->getSocketServer()->onRecv = CC_CALLBACK_3(ServerGameLayer::onRecv, this);

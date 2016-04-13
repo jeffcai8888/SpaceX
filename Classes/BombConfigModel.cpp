@@ -3,7 +3,7 @@
 
 USING_NS_CC;
 
-std::string bombConfigName[] =
+std::string bombConfigName[1] =
 {
 	"Bomb1Config",
 };
@@ -11,9 +11,11 @@ std::string bombConfigName[] =
 
 BombConfigModel::BombConfigModel()
 {
-	for (unsigned int i = 0; i < bombConfigName->size(); ++i)
+	for (unsigned int i = 0; i < 1; ++i)
 	{
-		init(bombConfigName[i]);
+        std::string configName = bombConfigName[i];
+		init(configName);
+        CCLOG("%f", m_mapBombConfig["Bomb1Config"].m_fVelocity);
 	}
 }
 

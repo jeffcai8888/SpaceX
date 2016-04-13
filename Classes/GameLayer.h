@@ -45,8 +45,7 @@ public:
 protected:
 	cocos2d::TMXTiledMap *m_pTiledMap;
 	cocos2d::TMXLayer*	m_pMetaLayer;
-
-	float m_shootTime;
+    
 	cocos2d::Point m_origin;
 
 	cocos2d::Vector<Bullet *> m_vecBullets;
@@ -65,7 +64,7 @@ protected:
 	void removeAllBullets();
 	BaseSprite* createHero(int, cocos2d::Point);
     BaseSprite* getNearestEnemy();
-	void exploreEnemy();
+	void explodeEnemy();
 };
 
 #endif

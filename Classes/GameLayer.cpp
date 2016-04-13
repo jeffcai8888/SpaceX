@@ -111,8 +111,16 @@ void GameLayer::onEnter()
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(listener2, 1);
 	m_vecEventListener.pushBack(listener2);
-
-	auto contactListener = EventListenerPhysicsContact::create();
+    
+    auto listener3 = EventListenerCustom::create("bomb_explode", [this](EventCustom* event) {
+        explodeEnemy();
+        m_pBomb->setPosition(10000.f, 10000.f);
+        m_pBombRange->setVisible(false);
+    });
+    _eventDispatcher->addEventListenerWithFixedPriority(listener3, 1);
+    m_vecEventListener.pushBack(listener3);
+    
+    auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = [this](PhysicsContact& contact)->bool
 	{
 		if ((contact.getShapeA()->getCategoryBitmask() == PC_Hero && contact.getShapeB()->getCategoryBitmask() == PC_Ground) ||
@@ -306,24 +314,6 @@ void GameLayer::updateHero(float dt)
         direction.normalize();
         m_pHero->setShootDirection(direction);		
     }
-
-	Hero* hero = dynamic_cast<Hero*>(m_pHero);
-	if (hero)
-	{
-		hero->update(dt);
-		if (hero->getIsThrowBomb())
-		{
-			hero->setIsThrowBomb(false);
-			m_pBomb->launch(hero);
-		}
-		else if (hero->getIsBombExplore())
-		{
-			hero->setIsBombExplore(false);
-			exploreEnemy();
-			m_pBomb->setPosition(10000.f, 10000.f);
-			m_pBombRange->setVisible(false);
-		}
-	}
     
 	//CCLOG("MoveState %d %d", m_pHero->getCurrActionState(), m_pHero->getCurrMoveState());
 	//CCLOG("(%f, %f) (%f, %f)", m_pHero->getPhysicsBody()->getPosition().x, m_pHero->getPhysicsBody()->getPosition().y, m_pHero->getPosition().x, m_pHero->getPosition().y);
@@ -333,33 +323,9 @@ void GameLayer::updateEnemys(float dt)
 {
 	for (int i = 0; i < 3; ++i)
 	{
-		if(m_pEnemy[i] == nullptr)
-			continue;
-		float x = m_pEnemy[i]->getPhysicsBody()->getVelocity().x;
-		float y = m_pEnemy[i]->getPhysicsBody()->getVelocity().y;
-		if (!m_pEnemy[i]->getIsOnRotateGround())
-			y += m_pEnemy[i]->getGravity() * dt;
-		m_pEnemy[i]->getPhysicsBody()->setVelocity(Vec2(x, y));
-
-		if (m_pEnemy[i]->getCurrActionState() == ACTION_STATE_MOVE && m_pEnemy[i]->isInMoveAction(MOVE_STATE_UP) && m_pEnemy[i]->getPosition().y < m_pEnemy[i]->getPrePosition().y)
-		{
-			m_pEnemy[i]->runJumpAction(false);
-		}
-
-		if (m_pEnemy[i]->getIsAttacking())
-		{
-			m_shootTime += dt;
-			if (m_shootTime >= m_pEnemy[i]->getBulletInterval())
-			{
-				Bullet* bullet = getUnusedBullet();
-				bullet->launch(m_pEnemy[i]);
-				this->addChild(bullet);
-				m_shootTime = 0.f;
-				if (m_pEnemy[i]->getShootDirection().x != 0)
-					m_pEnemy[i]->setFlippedX(m_pEnemy[i]->getShootDirection().x < 0);
-
-			}
-		}
+		if(m_pEnemy[i])
+            m_pEnemy[i]->update(dt);
+		
 		//CCLOG("enemy[%d]:%f, %f", i, m_pEnemy[i]->getPositionX(), m_pEnemy[i]->getPositionY());
 	}
 	
@@ -564,7 +530,7 @@ BaseSprite* GameLayer::getNearestEnemy()
 	return target;
 }
 
-void GameLayer::exploreEnemy()
+void GameLayer::explodeEnemy()
 {
 	Hero* hero = dynamic_cast<Hero*>(m_pHero);
 	if (hero)

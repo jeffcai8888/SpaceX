@@ -95,6 +95,8 @@ void Bomb::start()
 
 void Bomb::explode()
 {
-	m_owner->setIsBombExplore(true);
 	reset();
+    EventCustom event("bomb_explode");
+    event.setUserData(this);
+    _eventDispatcher->dispatchEvent(&event);
 }

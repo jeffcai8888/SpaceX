@@ -24,6 +24,12 @@
 		3D6DA73C1C7545EC0068FE19 /* OperateLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E969751B1C72F24300959DB1 /* OperateLayer.cpp */; };
 		3D6DA73D1C7545EF0068FE19 /* SceneManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E969751D1C72F24300959DB1 /* SceneManager.cpp */; };
 		3D89168D1C7A165F00F442C9 /* JsonParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D89168B1C7A165F00F442C9 /* JsonParser.cpp */; };
+		3DBBA6F01CBE583700E2D383 /* BombConfigModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DBBA6EA1CBE583700E2D383 /* BombConfigModel.cpp */; };
+		3DBBA6F11CBE583700E2D383 /* BulletConfigModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DBBA6EC1CBE583700E2D383 /* BulletConfigModel.cpp */; };
+		3DBBA6F21CBE583700E2D383 /* ConfigCenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DBBA6EE1CBE583700E2D383 /* ConfigCenter.cpp */; };
+		3DBBA6F31CBE584000E2D383 /* BombConfigModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DBBA6EA1CBE583700E2D383 /* BombConfigModel.cpp */; };
+		3DBBA6F41CBE584300E2D383 /* BulletConfigModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DBBA6EC1CBE583700E2D383 /* BulletConfigModel.cpp */; };
+		3DBBA6F51CBE584600E2D383 /* ConfigCenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DBBA6EE1CBE583700E2D383 /* ConfigCenter.cpp */; };
 		3EACC98F19EE6D4300EB3C5E /* res in Resources */ = {isa = PBXBuildFile; fileRef = 3EACC98E19EE6D4300EB3C5E /* res */; };
 		3EACC99019EE6D4300EB3C5E /* res in Resources */ = {isa = PBXBuildFile; fileRef = 3EACC98E19EE6D4300EB3C5E /* res */; };
 		46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8419C43A87006E1F66 /* AppDelegate.cpp */; };
@@ -155,6 +161,12 @@
 		3D6DA7321C74E2AA0068FE19 /* DebugScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugScene.h; sourceTree = "<group>"; };
 		3D89168B1C7A165F00F442C9 /* JsonParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JsonParser.cpp; sourceTree = "<group>"; };
 		3D89168C1C7A165F00F442C9 /* JsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JsonParser.h; sourceTree = "<group>"; };
+		3DBBA6EA1CBE583700E2D383 /* BombConfigModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BombConfigModel.cpp; sourceTree = "<group>"; };
+		3DBBA6EB1CBE583700E2D383 /* BombConfigModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BombConfigModel.h; sourceTree = "<group>"; };
+		3DBBA6EC1CBE583700E2D383 /* BulletConfigModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BulletConfigModel.cpp; sourceTree = "<group>"; };
+		3DBBA6ED1CBE583700E2D383 /* BulletConfigModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletConfigModel.h; sourceTree = "<group>"; };
+		3DBBA6EE1CBE583700E2D383 /* ConfigCenter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConfigCenter.cpp; sourceTree = "<group>"; };
+		3DBBA6EF1CBE583700E2D383 /* ConfigCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigCenter.h; sourceTree = "<group>"; };
 		3DD433F71C761EED009CA3A2 /* Macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macro.h; sourceTree = "<group>"; };
 		3EACC98E19EE6D4300EB3C5E /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
 		46880B8419C43A87006E1F66 /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppDelegate.cpp; sourceTree = "<group>"; };
@@ -383,6 +395,12 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				3DBBA6EA1CBE583700E2D383 /* BombConfigModel.cpp */,
+				3DBBA6EB1CBE583700E2D383 /* BombConfigModel.h */,
+				3DBBA6EC1CBE583700E2D383 /* BulletConfigModel.cpp */,
+				3DBBA6ED1CBE583700E2D383 /* BulletConfigModel.h */,
+				3DBBA6EE1CBE583700E2D383 /* ConfigCenter.cpp */,
+				3DBBA6EF1CBE583700E2D383 /* ConfigCenter.h */,
 				E9230A9B1CBD016E00A14213 /* Bomb.cpp */,
 				E9230A9C1CBD016E00A14213 /* Bomb.h */,
 				E9230A9D1CBD016E00A14213 /* StartScene.cpp */,
@@ -544,7 +562,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0730;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "SpaceX" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -646,6 +664,7 @@
 				E91042291CA533550004E13C /* Foresight.cpp in Sources */,
 				E910422D1CA533550004E13C /* SelectLayer.cpp in Sources */,
 				E910422A1CA533550004E13C /* Gunner.cpp in Sources */,
+				3DBBA6F21CBE583700E2D383 /* ConfigCenter.cpp in Sources */,
 				E910424C1CA537A80004E13C /* SocketServer.cpp in Sources */,
 				E91042281CA533550004E13C /* ClientGameLayer.cpp in Sources */,
 				3D6DA7331C74E2AA0068FE19 /* DebugScene.cpp in Sources */,
@@ -653,8 +672,10 @@
 				3D89168D1C7A165F00F442C9 /* JsonParser.cpp in Sources */,
 				E96975221C72F24300959DB1 /* GameOverScene.cpp in Sources */,
 				E96975231C72F24300959DB1 /* GameScene.cpp in Sources */,
+				3DBBA6F11CBE583700E2D383 /* BulletConfigModel.cpp in Sources */,
 				E9230A9F1CBD016E00A14213 /* Bomb.cpp in Sources */,
 				E96975241C72F24300959DB1 /* Ground.cpp in Sources */,
+				3DBBA6F01CBE583700E2D383 /* BombConfigModel.cpp in Sources */,
 				E910422C1CA533550004E13C /* Princess.cpp in Sources */,
 				E910422E1CA533550004E13C /* ServerGameLayer.cpp in Sources */,
 				E91042331CA533660004E13C /* SocketManager.cpp in Sources */,
@@ -671,6 +692,7 @@
 			files = (
 				E9230AA01CBD016E00A14213 /* Bomb.cpp in Sources */,
 				3D6DA7381C7545DE0068FE19 /* GameOverScene.cpp in Sources */,
+				3DBBA6F51CBE584600E2D383 /* ConfigCenter.cpp in Sources */,
 				E91042371CA533720004E13C /* Foresight.cpp in Sources */,
 				E91042131CA533230004E13C /* JsonParser.cpp in Sources */,
 				E910424B1CA537A80004E13C /* SocketClient.cpp in Sources */,
@@ -680,6 +702,7 @@
 				E91042381CA533750004E13C /* Gunner.cpp in Sources */,
 				3D6DA73D1C7545EF0068FE19 /* SceneManager.cpp in Sources */,
 				E910423C1CA533820004E13C /* ServerGameLayer.cpp in Sources */,
+				3DBBA6F41CBE584300E2D383 /* BulletConfigModel.cpp in Sources */,
 				E91042341CA533690004E13C /* SocketManager.cpp in Sources */,
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				E910423B1CA5337F0004E13C /* SelectLayer.cpp in Sources */,
@@ -687,6 +710,7 @@
 				3D6DA7351C7545D40068FE19 /* BaseSprite.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
 				3D6DA73C1C7545EC0068FE19 /* OperateLayer.cpp in Sources */,
+				3DBBA6F31CBE584000E2D383 /* BombConfigModel.cpp in Sources */,
 				E91042351CA5336C0004E13C /* Box.cpp in Sources */,
 				E91042361CA5336F0004E13C /* ClientGameLayer.cpp in Sources */,
 				3D6DA7341C7545D00068FE19 /* DebugScene.cpp in Sources */,
@@ -749,6 +773,7 @@
 					"$(_COCOS_LIB_IOS_BEGIN)",
 					"$(_COCOS_LIB_IOS_END)",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocos2dx.SpaceX;
 				PROVISIONING_PROFILE = "2bd5c406-a1f5-4107-861c-c875287db5a8";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -788,6 +813,7 @@
 					"$(_COCOS_LIB_IOS_BEGIN)",
 					"$(_COCOS_LIB_IOS_END)",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocos2dx.SpaceX;
 				PROVISIONING_PROFILE = "2bd5c406-a1f5-4107-861c-c875287db5a8";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -800,9 +826,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				COMBINE_HIDPI_IMAGES = YES;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -826,6 +852,7 @@
 					"$(_COCOS_LIB_MAC_BEGIN)",
 					"$(_COCOS_LIB_MAC_END)",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocos2dx.SpaceX;
 				PROVISIONING_PROFILE = "";
 				USER_HEADER_SEARCH_PATHS = "$(_COCOS_HEADER_MAC_BEGIN) $(_COCOS_HEADER_MAC_END)";
 			};
@@ -835,9 +862,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				COMBINE_HIDPI_IMAGES = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = mac/Prefix.pch;
@@ -859,6 +886,7 @@
 					"$(_COCOS_LIB_MAC_BEGIN)",
 					"$(_COCOS_LIB_MAC_END)",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocos2dx.SpaceX;
 				PROVISIONING_PROFILE = "";
 				USER_HEADER_SEARCH_PATHS = "$(_COCOS_HEADER_MAC_BEGIN) $(_COCOS_HEADER_MAC_END)";
 			};
@@ -870,6 +898,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;

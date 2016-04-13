@@ -103,6 +103,7 @@ public:
     CC_SYNTHESIZE(bool, m_isLocked, IsLocked);
 	CC_SYNTHESIZE(cocos2d::Sprite*, m_pLockMark, LockMark);
 	CC_SYNTHESIZE(std::string, m_bulletType, BulletType);
+    CC_SYNTHESIZE(std::string, m_bombType, BombType);
 	
 	CC_SYNTHESIZE(int, m_curSkill, CurSkill);
     
