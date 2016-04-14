@@ -66,12 +66,12 @@ bool OperateLayer::init()
 		m_pSkill = Sprite::createWithSpriteFrameName("skill_flash1.png");
 		m_pSkill->setScale(0.5f);
 		this->addChild(m_pSkill);
-		m_pSkill->setPosition(m_origin + Point(880, 78));
+		m_pSkill->setPosition(m_origin + Point(918, 198));
 
 		m_pSkill1 = Sprite::createWithSpriteFrameName("skill_bomb.png");
 		m_pSkill1->setScale(0.5f);
 		this->addChild(m_pSkill1);
-		m_pSkill1->setPosition(m_origin + Point(918, 198));
+		m_pSkill1->setPosition(m_origin + Point(880, 78));
 
 		Menu* menu;
 		auto debugItem = MenuItemImage::create("pause.png", "pause_down.png", CC_CALLBACK_1(OperateLayer::gotoDebug, this));
