@@ -12,6 +12,7 @@ Hero::Hero()
 ,m_curSkillCDTime(-1.f)
 ,m_curSkillLastTime(-1.f)
 ,m_isThrowBomb(false)
+,m_bIsInSplash(false)
 {}
 
 Hero::~Hero()
@@ -92,7 +93,7 @@ void Hero::update(float dt)
 			{
 				Vec2 v = getPhysicsBody()->getVelocity();
 				v.x = 0.f;
-				getPhysicsBody()->setVelocity(v);
+				getPhysicsBody()->setVelocity(Vec2(0.f,0.f));
 				m_curSkillLastTime = -1.f;
 				if (m_curSkillState == 1)
 				{
@@ -102,6 +103,8 @@ void Hero::update(float dt)
 				{
 					m_curSkillCDTime = m_skillState2CDTime;
 				}
+				m_bIsInSplash = false;
+				CCLOG("Splash off");
 			}
 		}		
 	}

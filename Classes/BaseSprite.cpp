@@ -20,7 +20,8 @@ BaseSprite::BaseSprite() :
 	m_isOnRotateGround(false),
 	m_maxHp(100),
 	m_fShootDirection(Vec2(1.f, 0.f)),
-    m_isLocked(false)
+    m_isLocked(false),
+	m_isAutoShoot(false)
 {
 
 }
@@ -347,8 +348,10 @@ void BaseSprite::update(float dt)
 {
 	float x = getPhysicsBody()->getVelocity().x;
 	float y = getPhysicsBody()->getVelocity().y;
-	if (!getIsOnRotateGround())
+	if (!getIsOnRotateGround() && !isInSplash())
+	{
 		y += getGravity() * dt;
+	}	
 	getPhysicsBody()->setVelocity(Vec2(x, y));
 
 	if (getCurrActionState() == ACTION_STATE_MOVE && isInMoveAction(MOVE_STATE_UP) && getPosition().y < getPrePosition().y)

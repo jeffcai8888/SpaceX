@@ -61,6 +61,8 @@ public:
     int  stopMoveAction(int moveAction, bool clear);
     bool isInMoveAction(int moveAction);
 
+	virtual bool isInSplash() = 0;
+
 	cocos2d::Point getShootPosition();
 
 	void walk(float);
@@ -104,6 +106,7 @@ public:
 	CC_SYNTHESIZE(cocos2d::Sprite*, m_pLockMark, LockMark);
 	CC_SYNTHESIZE(std::string, m_bulletType, BulletType);
     CC_SYNTHESIZE(std::string, m_bombType, BombType);
+	CC_SYNTHESIZE(bool, m_isAutoShoot, IsAutoShoot);
 	
 	CC_SYNTHESIZE(int, m_curSkill, CurSkill);
     

@@ -134,12 +134,12 @@ void OperateLayer::onEnter()
 			if(isTap(m_pJoystickBg, p))
 			{
 				m_mapPressType[pTouch->getID()] = Value(BT_Joystick);
-                m_pHero->attack(true);
-                SocketManager::getInstance()->sendData(NDT_HeroAttack, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getShootDirection());
+                m_pHero->attack(true);            
                 m_pHero->setIsLocked(true);
                 m_pForesight->setVisible(true);
                 m_pRange->setVisible(true);
 				switchButtonStatus(BT_Joystick, true);
+				SocketManager::getInstance()->sendData(NDT_HeroAttack, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getShootDirection());
 			}
 			else if (p.x <= 200.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
 			{
@@ -184,6 +184,7 @@ void OperateLayer::onEnter()
 						hero->setCurSkillState(1);
 						hero->setCurSkillCDTime(hero->getSkillState1CDTime());
 						hero->setCurSkillLastTime(hero->getSkillState1LastTime());
+						hero->setIsInSplash(true);
 						positionSprite->setVisible(true);
 						positionSprite->setPosition(hero->getPosition() + Vec2(0, -10.f));
 					}
@@ -199,6 +200,8 @@ void OperateLayer::onEnter()
 						}
 						m_pSkill->setSpriteFrame("skill_flash3.png");
 						hero->setCurSkillState(2);
+						hero->setIsInSplash(true);
+						CCLOG("Splash on");
 						hero->setCurSkillCDTime(hero->getSkillState2CDTime());
 						hero->setCurSkillLastTime(hero->getSkillState2LastTime());
 					}
@@ -253,7 +256,7 @@ void OperateLayer::onEnter()
 		bool isChange = false;
 		if (m_mapPressType.find(pTouch->getID()) != m_mapPressType.end() && m_mapPressType[pTouch->getID()].asInt() == BT_Left)
 		{
-			if (!(p.x <= winSize.width / 8 && p.y >= 0.f && p.y <= winSize.height * 3 / 4))
+			if (!(p.x <= 200.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4))
 			{
 				switchButtonStatus(BT_Left, false);
 				m_mapPressType.erase(pTouch->getID());
@@ -269,7 +272,7 @@ void OperateLayer::onEnter()
 
 		if (m_mapPressType.find(pTouch->getID()) != m_mapPressType.end() && m_mapPressType[pTouch->getID()].asInt() == BT_Right)
 		{
-			if (!(p.x > winSize.width / 8 && p.x <= winSize.width / 4 && p.y >= 0.f && p.y <= winSize.height * 3 / 4))
+			if (!(p.x > 200.f && p.x <= 400.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4))
 			{
 				switchButtonStatus(BT_Right, false);
 				m_mapPressType.erase(pTouch->getID());
