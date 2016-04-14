@@ -63,6 +63,8 @@ private:
 
 	int m_KeyPressedValue;
 
+	bool m_isAutoShootPressed;
+
 	cocos2d::ValueMapIntKey m_mapPressType;
 };
 

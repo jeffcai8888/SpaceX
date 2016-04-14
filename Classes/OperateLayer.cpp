@@ -18,7 +18,8 @@ OperateLayer::OperateLayer()
 	m_pBack(nullptr),
     m_pUp(nullptr),
 	m_pSkill(nullptr),
-	m_pSkill1(nullptr)
+	m_pSkill1(nullptr),
+	m_isAutoShootPressed(false)
 {
 	m_vecEventListener.clear();
 }
@@ -134,10 +135,14 @@ void OperateLayer::onEnter()
 			if(isTap(m_pJoystickBg, p))
 			{
 				m_mapPressType[pTouch->getID()] = Value(BT_Joystick);
-                m_pHero->attack(true);            
+#if 0
+				m_pHero->attack(true);
                 m_pHero->setIsLocked(true);
                 m_pForesight->setVisible(true);
                 m_pRange->setVisible(true);
+#else
+				m_isAutoShootPressed = true;
+#endif
 				switchButtonStatus(BT_Joystick, true);
 				SocketManager::getInstance()->sendData(NDT_HeroAttack, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getShootDirection());
 			}
@@ -201,7 +206,6 @@ void OperateLayer::onEnter()
 						m_pSkill->setSpriteFrame("skill_flash3.png");
 						hero->setCurSkillState(2);
 						hero->setIsInSplash(true);
-						CCLOG("Splash on");
 						hero->setCurSkillCDTime(hero->getSkillState2CDTime());
 						hero->setCurSkillLastTime(hero->getSkillState2LastTime());
 					}
@@ -233,10 +237,11 @@ void OperateLayer::onEnter()
 		Point start = pTouch->getStartLocation();
         Point p = pTouch->getLocation();
         float diff = start.getDistanceSq(p);
-        if(diff < 400.f)
-            return;
+		if (diff < 400.f)
+			return;
 		
-        if(m_mapPressType.find(pTouch->getID()) != m_mapPressType.end() && m_mapPressType[pTouch->getID()].asInt() == BT_Joystick)
+		
+        if(m_mapPressType.find(pTouch->getID()) != m_mapPressType.end() && m_mapPressType[pTouch->getID()].asInt() == BT_Joystick && !m_pHero->getIsAutoShoot())
         {
 			if (isInRange(m_pJoystickBg->getPosition(), m_pJoystickBg->getContentSize().width * 3, m_pJoystickBg->getContentSize().height * 3, p))
 				dealWithJoystick(m_pJoystickBg->getPosition(), p);
@@ -250,7 +255,11 @@ void OperateLayer::onEnter()
 				switchButtonStatus(BT_Joystick, false);
                 SocketManager::getInstance()->sendData(NDT_HeroStopAttack, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getShootDirection());
 			}
+#if 0
             m_pHero->setIsLocked(false);
+#else
+			m_isAutoShootPressed = false;
+#endif
         }
 		
 		bool isChange = false;
@@ -330,10 +339,33 @@ void OperateLayer::onEnter()
         {
 			m_mapPressType.erase(pTouch->getID());
             showJoystick(m_pJoystickBg->getPosition());
+#if 0
 			m_pHero->attack(false);
             m_pHero->setIsLocked(false);
             m_pForesight->setVisible(false);
             m_pRange->setVisible(false);
+#else
+			if (!m_isAutoShootPressed)
+			{
+				m_pHero->attack(false);
+				m_pHero->setIsLocked(false);
+				m_pForesight->setVisible(false);
+				m_pRange->setVisible(false);
+			}
+			else
+			{
+				m_isAutoShootPressed = false;
+				m_pHero->setIsAutoShoot(!m_pHero->getIsAutoShoot());
+				if (m_pHero->getIsAutoShoot())
+				{
+					m_pRange->setVisible(true);
+				}
+				else
+				{
+					m_pRange->setVisible(false);
+				}
+			}
+#endif
 			switchButtonStatus(BT_Joystick, false);
 			SocketManager::getInstance()->sendData(NDT_HeroStopAttack, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getShootDirection());
         }
@@ -421,6 +453,20 @@ void OperateLayer::onEnter()
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(listener1, 1);
 	m_vecEventListener.pushBack(listener1);
+
+	auto listener2 = EventListenerCustom::create("auto_shoot", [this](EventCustom* event) {
+		m_pHero->attack(true);
+		m_pForesight->setVisible(true);
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(listener2, 1);
+	m_vecEventListener.pushBack(listener2);
+
+	auto listener3 = EventListenerCustom::create("auto_shoot_finish", [this](EventCustom* event) {
+		m_pHero->attack(false);
+		m_pForesight->setVisible(false);
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(listener3, 1);
+	m_vecEventListener.pushBack(listener3);
 }
 
 void OperateLayer::onExit()

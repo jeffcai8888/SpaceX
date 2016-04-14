@@ -291,7 +291,8 @@ void GameLayer::updateHero(float dt)
 	m_pHero->update(dt);
     setViewPointCenter();
     m_pHero->setPrePosition(m_pHero->getPosition());
-    
+
+#if 0  
     if(m_pHero->getIsLocked() && m_pTarget == nullptr)
     {
         m_pTarget = getNearestEnemy();
@@ -310,7 +311,51 @@ void GameLayer::updateHero(float dt)
         direction.normalize();
         m_pHero->setShootDirection(direction);		
     }
-    
+#else
+	if (m_pHero->getIsAutoShoot())
+	{
+		auto target = getNearestEnemy();
+		if (m_pTarget != nullptr && target == nullptr)
+		{
+			m_pTarget->getLockMark()->setVisible(false);
+			m_pTarget = nullptr;
+		}
+		else if (m_pTarget == nullptr)
+		{
+			m_pTarget = target;
+		}
+
+		if (m_pTarget)
+		{
+			m_pTarget->getLockMark()->setVisible(true);
+		}			
+	}
+	else
+	{
+		if (m_pTarget != nullptr)
+		{
+			m_pTarget->getLockMark()->setVisible(false);
+			m_pTarget = nullptr;
+		}		
+	}
+
+	if (m_pTarget != nullptr)
+	{
+		Vec2 direction = m_pTarget->getPosition() - m_pHero->getPosition();
+		direction.normalize();
+		m_pHero->setShootDirection(direction);
+		EventCustom event("auto_shoot");
+		event.setUserData(this);
+		_eventDispatcher->dispatchEvent(&event);
+	}
+	else
+	{
+		EventCustom event("auto_shoot_finish");
+		event.setUserData(this);
+		_eventDispatcher->dispatchEvent(&event);
+	}
+
+#endif
 	//CCLOG("MoveState %d %d", m_pHero->getCurrActionState(), m_pHero->getCurrMoveState());
 	//CCLOG("(%f, %f) (%f, %f)", m_pHero->getPhysicsBody()->getPosition().x, m_pHero->getPhysicsBody()->getPosition().y, m_pHero->getPosition().x, m_pHero->getPosition().y);
 }
