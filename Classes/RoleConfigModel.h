@@ -9,7 +9,8 @@ public:
 	float m_fWalkVelocity;
 	float m_fJumpVelocity;
 	float m_fGravity;
-	int	  m_iSkill;
+	int	  m_iSkill1;
+	int	  m_iSkill2;
 };
 
 typedef std::map<std::string, RoleConfig>						RoleConfigMap;

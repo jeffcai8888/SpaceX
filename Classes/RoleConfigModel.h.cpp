@@ -6,13 +6,14 @@ USING_NS_CC;
 std::string roleConfigName[3] =
 {
 	"Hero",
-	"Gun",
+	"Gunner",
 	"Pricess"
 };
 
 
 RoleConfigModel::RoleConfigModel()
 {
+	CCLOG("%s", roleConfigName);
 	int size = roleConfigName->size();
 	for (int i = 0; i < size; ++i)
 	{
@@ -49,9 +50,13 @@ void RoleConfigModel::init(const std::string& fileName)
 			{
 				config.m_fGravity = pair.second.asFloat();
 			}
-			else if (pair.first.compare("Skill") == 0)
+			else if (pair.first.compare("Skill1") == 0)
 			{
-				config.m_iSkill = pair.second.asInt();
+				config.m_iSkill1 = pair.second.asInt();
+			}
+			else if (pair.first.compare("Skill2") == 0)
+			{
+				config.m_iSkill2 = pair.second.asInt();
 			}
 		}
 	}
