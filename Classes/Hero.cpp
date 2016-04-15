@@ -91,9 +91,16 @@ void Hero::update(float dt)
 			m_curSkillLastTime -= dt;
 			if (m_curSkillLastTime <= 0.f)
 			{
-				Vec2 v = getPhysicsBody()->getVelocity();
-				v.x = 0.f;
-				getPhysicsBody()->setVelocity(Vec2(0.f,0.f));
+				if (getCurrActionState() == ACTION_STATE_MOVE && isInMoveAction(MOVE_STATE_WALK))
+				{
+					if(isFlippedX())
+						getPhysicsBody()->setVelocity(-Vec2(getWalkVelocity(), 0.f));
+					else
+						getPhysicsBody()->setVelocity(Vec2(getWalkVelocity(), 0.f));
+				}				
+				else
+					getPhysicsBody()->setVelocity(Vec2(0.f, 0.f));
+				
 				m_curSkillLastTime = -1.f;
 				if (m_curSkillState == 1)
 				{
@@ -104,7 +111,6 @@ void Hero::update(float dt)
 					m_curSkillCDTime = m_skillState2CDTime;
 				}
 				m_bIsInSplash = false;
-				CCLOG("Splash off");
 			}
 		}		
 	}

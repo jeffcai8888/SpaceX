@@ -20,7 +20,7 @@ ConfigCenter::ConfigCenter()
 {
 	m_pBulletConfigModel = new BulletConfigModel();
 	m_pBombConfigModel = new BombConfigModel();
-	m_pRoleConfigModel = new RoleConfigModel();
+	//m_pRoleConfigModel = new RoleConfigModel();
 }
 
 ConfigCenter::~ConfigCenter()
