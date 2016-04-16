@@ -139,7 +139,7 @@ void ClientGameLayer::onRecv(const char* data, int count)
 			m_pEnemy[0]->jump(m_pEnemy[0]->getJumpVelocity());
 			break;
 		case NDT_HeroJumpDown:
-			m_pEnemy[0]->runJumpAction(false);
+			m_pEnemy[0]->runJumpDownAction();
 			m_pEnemy[0]->setPosition(networkData->position);
 			m_pEnemy[0]->getPhysicsBody()->setVelocity(networkData->vec);
 			break;
@@ -148,7 +148,6 @@ void ClientGameLayer::onRecv(const char* data, int count)
 			m_pEnemy[0]->setPosition(networkData->position);
 			//m_pHero->getPhysicsBody()->setVelocity(networkData->velocity);
 			m_pEnemy[0]->stop();
-			m_pEnemy[0]->stopMoveAction(MOVE_STATE_WALK, true);
 			break;
 		case NDT_HeroPos:
 			m_dequeShadow.push_back(networkData->vec);

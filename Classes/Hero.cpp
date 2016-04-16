@@ -91,7 +91,7 @@ void Hero::update(float dt)
 			m_curSkillLastTime -= dt;
 			if (m_curSkillLastTime <= 0.f)
 			{
-				if (getCurrActionState() == ACTION_STATE_MOVE && isInMoveAction(MOVE_STATE_WALK))
+				if (getCurrActionState() == ACTION_STATE_WALK)
 				{
 					if(isFlippedX())
 						getPhysicsBody()->setVelocity(-Vec2(getWalkVelocity(), 0.f));

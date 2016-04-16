@@ -52,14 +52,15 @@ void BaseSprite::walk(float v)
 {
 	if (this->isLive())
 	{
-		bool isWalking = this->getIsWalk();
-		this->runWalkAction(!this->isInAir() && !isWalking);
+		if(!this->isInAir())
+			this->runWalkAction();
 		if (!this->getIsAttacking() && v != 0)
 			this->setFlippedX(v < 0);
 
 		Vec2 velocity = this->getPhysicsBody()->getVelocity();
 		velocity.x = v;
 		this->getPhysicsBody()->setVelocity(velocity);
+		CCLOG("walk %f,%f", this->getPhysicsBody()->getVelocity().x, this->getPhysicsBody()->getVelocity().y);
 	}
 }
 
@@ -68,9 +69,7 @@ void BaseSprite::jump(float v)
 
 	if (this->isLive() && this->getJumpStage() < 2)
 	{
-		this->runJumpAction(true);
-		//m_pHero->setJumpStage(m_pHero->getJumpStage() + 1);
-
+		this->runJumpUpAction();
 		Vec2 velocity = this->getPhysicsBody()->getVelocity();
 		velocity.y = v;
 		if (!this->getIsAttacking() && velocity.x != 0)
@@ -78,6 +77,7 @@ void BaseSprite::jump(float v)
 			this->setFlippedX(velocity.x < 0);
 		}
 		this->getPhysicsBody()->setVelocity(velocity);
+		CCLOG("jump %f,%f", this->getPhysicsBody()->getVelocity().x, this->getPhysicsBody()->getVelocity().y);
 		this->setPrePosition(this->getPosition());
 	}
 }
@@ -88,6 +88,7 @@ void BaseSprite::stop()
 	{
 		this->runIdleAction();
 		this->getPhysicsBody()->setVelocity(Vec2(0.f, 0.f));
+		CCLOG("stop %f,%f", this->getPhysicsBody()->getVelocity().x, this->getPhysicsBody()->getVelocity().y);
 	}
 }
 
@@ -137,53 +138,43 @@ void BaseSprite::runIdleAction()
 	if(changeState(ACTION_STATE_IDLE))
 	{
 		this->runAction(m_pIdleAction);
-        this->m_currMoveState = 0;
 	}
 }
 	
-void BaseSprite::runWalkAction(bool isPlayAnim)
+void BaseSprite::runWalkAction()
 {
-	changeState(ACTION_STATE_MOVE);
-	m_currMoveState |= MOVE_STATE_WALK;
-
-	if (isPlayAnim)
+	if (changeState(ACTION_STATE_WALK))
 	{
 		this->runAction(m_pWalkAction);
 		m_isWalking = true;
 	}
 }
 
-void BaseSprite::runJumpAction(bool isUp)
+void BaseSprite::runJumpUpAction()
 {
-	changeState(ACTION_STATE_MOVE);
-	if (isUp)
+	if (changeState(ACTION_STATE_JUMP_UP))
 	{
-		stopMoveAction(MOVE_STATE_UP, true);
-		stopMoveAction(MOVE_STATE_WALK, false);
-		stopMoveAction(MOVE_STATE_DOWN, true);
 		if (m_JumpStage == 1)
 		{
 			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("jump.mp3");
 			this->runAction(m_pJump2Action);
 		}
-			
 		else
 		{
 			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("jump.mp3");
 			this->runAction(m_pJumpAction);
 		}
-			
+
 		++m_JumpStage;
-		m_currMoveState |= MOVE_STATE_UP;		
 	}
-	else
+}
+
+void BaseSprite::runJumpDownAction()
+{
+	if (changeState(ACTION_STATE_JUMP_DOWN))
 	{
-		stopMoveAction(MOVE_STATE_DOWN, true);
-		stopMoveAction(MOVE_STATE_WALK, false);
-		stopMoveAction(MOVE_STATE_UP, true);
-		m_currMoveState |= MOVE_STATE_DOWN;
 		this->runAction(m_pDownAction);
-	}
+	}	
 }
 
 void BaseSprite::runHurtAction()
@@ -199,7 +190,6 @@ void BaseSprite::runDeadAction()
 	{
 		this->m_hp = 0;
 		this->runAction(m_pDeadAction);
-        this->m_currMoveState = 0;
 	}
 }
 
@@ -213,7 +203,7 @@ void BaseSprite::runAttackAction()
 			this->stopAction(m_pIdleAction);
 			this->runAction(m_pIdleFireAction);
 		}
-		else if (this->getCurrActionState() == ACTION_STATE_MOVE && this->getCurrMoveState() == MOVE_STATE_WALK)
+		else if (this->getCurrActionState() == ACTION_STATE_WALK)
 		{
 			this->stopAction(m_pWalkAction);
 			this->m_isWalking = false;
@@ -234,7 +224,7 @@ void BaseSprite::stopAttackAction()
 			this->runAction(m_pIdleAction);
 			
 		}
-		else if (this->getCurrActionState() == ACTION_STATE_MOVE && this->getCurrMoveState() == MOVE_STATE_WALK)
+		else if (this->getCurrActionState() == ACTION_STATE_WALK)
 		{
 			this->stopAction(m_pWalkFireAction);
 			if (this->m_isWalking == false)
@@ -249,7 +239,6 @@ void BaseSprite::stopAttackAction()
 void BaseSprite::removeSprite()
 {
 	changeState(ACTION_STATE_REMOVE);
-    this->m_currMoveState = 0;
 }
 
 Animation* BaseSprite::createAnimation(const char* formatStr, int frameCount, int fps)
@@ -291,7 +280,7 @@ bool BaseSprite::isLive()
 
 bool BaseSprite::isInAir()
 {
-    return (this->m_currActionState == ACTION_STATE_MOVE) && this->isInMoveAction(MOVE_STATE_UP | MOVE_STATE_DOWN);
+    return (m_currActionState == ACTION_STATE_JUMP_UP || m_currActionState == ACTION_STATE_JUMP_DOWN);
 }
 
 bool BaseSprite::changeState(ActionState actionState)
@@ -307,32 +296,6 @@ bool BaseSprite::changeState(ActionState actionState)
 		return false;
 	else
 		return true;
-}
-
-int BaseSprite::stopMoveAction(int moveAction, bool clear)
-{
-	if(clear)
-		m_currMoveState &= ~moveAction;
-
-	if (moveAction == MOVE_STATE_WALK)
-	{
-		this->m_isWalking = false;
-		this->stopAction(m_pWalkAction);
-	}		
-	else if (moveAction == MOVE_STATE_DOWN)
-		this->stopAction(m_pDownAction);
-	else if (moveAction == MOVE_STATE_UP)
-	{
-		this->stopAction(m_pJumpAction);
-		this->stopAction(m_pJump2Action);
-	}
-		
-    return m_currMoveState;
-}
-
-bool BaseSprite::isInMoveAction(int moveAction)
-{
-    return ((m_currMoveState & moveAction) > 0);
 }
 
 cocos2d::Point BaseSprite::getShootPosition()
@@ -353,10 +316,11 @@ void BaseSprite::update(float dt)
 		y += getGravity() * dt;
 	}	
 	getPhysicsBody()->setVelocity(Vec2(x, y));
+	//CCLOG("update %f,%f", this->getPhysicsBody()->getVelocity().x, this->getPhysicsBody()->getVelocity().y);
 
-	if (getCurrActionState() == ACTION_STATE_MOVE && isInMoveAction(MOVE_STATE_UP) && getPosition().y < getPrePosition().y)
+	if (getCurrActionState() == ACTION_STATE_JUMP_UP && getPosition().y < getPrePosition().y)
 	{
-		runJumpAction(false);
+		runJumpDownAction();
 	}
 
 

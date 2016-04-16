@@ -111,7 +111,7 @@
     <ClCompile Include="..\Classes\BombConfigModel.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\RoleConfigModel.h.cpp">
+    <ClCompile Include="..\Classes\RoleConfigModel.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
