@@ -24,8 +24,10 @@ public:
 	void onClick2(cocos2d::Ref* pSender);
 	void onClick3(cocos2d::Ref* pSender);
 
+	void onNewConnection(const char* data);
 private:
-	int m_selectRole;
+	std::string m_pServerAddr;
+	void startGame();
 };
 
 class StartLayerReader : public cocostudio::NodeReader

@@ -113,8 +113,8 @@ void ServerGameLayer::onEnter()
     }
     
     
-    SocketManager::getInstance()->getSocketServer()->onRecv = CC_CALLBACK_3(ServerGameLayer::onRecv, this);
-	SocketManager::getInstance()->getSocketServer()->onDisconnect = CC_CALLBACK_1(ServerGameLayer::onDisconnect, this);
+	SocketServer::getInstance()->onRecv = CC_CALLBACK_3(ServerGameLayer::onRecv, this);
+	SocketServer::getInstance()->onDisconnect = CC_CALLBACK_1(ServerGameLayer::onDisconnect, this);
 }
 
 void ServerGameLayer::onRecv(HSocket socket, const char* data, int count)

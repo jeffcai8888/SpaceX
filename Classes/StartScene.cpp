@@ -6,6 +6,7 @@
 #include "SocketManager.h"
 #include "JsonParser.h"
 #include "BaseSprite.h"
+#include "GameData.h"
 
 USING_NS_CC;
 using namespace cocos2d::ui;
@@ -38,7 +39,7 @@ void StartLayer::onEnter()
 		static_cast<TextField *>(getChildByName("TextField_3"))->setVisible(true);
 		static_cast<TextField *>(getChildByName("TextField_4"))->setVisible(true);
 
-		for (auto& v : list)
+		/*for (auto& v : list)
 		{
 			ValueMap row = v.asValueMap();
 			for (auto& pair : row)
@@ -59,12 +60,8 @@ void StartLayer::onEnter()
 				{
 					static_cast<TextField *>(getChildByName("TextField_4"))->setString(Value(pair.second.asInt()).asString());
 				}
-				else if (pair.first.compare("Role") == 0)
-				{
-					m_selectRole = pair.second.asInt();
-				}
 			}
-		}
+		}*/
 	}
 	else
 	{
@@ -76,41 +73,32 @@ void StartLayer::onEnter()
 		static_cast<TextField *>(getChildByName("TextField_2"))->setVisible(false);
 		static_cast<TextField *>(getChildByName("TextField_3"))->setVisible(false);
 		static_cast<TextField *>(getChildByName("TextField_4"))->setVisible(false);
-		for (auto& v : list)
-		{
-			ValueMap row = v.asValueMap();
-			for (auto& pair : row)
-			{
-				if (pair.first.compare("Role") == 0)
-				{
-					m_selectRole = pair.second.asInt();
-				}
-			}
-		}
-	}	
+	}
+
+	//SocketManager::getInstance()->getSocketClient()->onNewConnection = CC_CALLBACK_1(StartLayer::onNewConnection, this);
 }
 
 void StartLayer::onExit()
 {
 	Layer::onExit();
 	ValueVector listData;
-	//listData.push_back(Value(createValueMap("HeroHSpeed", 213.3f)));
 	ValueMap m;
 	m["Attr"] = Value("ServerIP0");
 	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1"))->getString());
 	listData.push_back(Value(m));
+	
 	m["Attr"] = Value("ServerIP1");
 	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_2"))->getString());
 	listData.push_back(Value(m));
+
 	m["Attr"] = Value("ServerIP2");
 	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_3"))->getString());
 	listData.push_back(Value(m));
+
 	m["Attr"] = Value("ServerIP3");
 	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4"))->getString());
 	listData.push_back(Value(m));
-	m["Attr"] = Value("Role");
-	m["Value"] = Value(m_selectRole);
-	listData.push_back(Value(m));
+
 	auto parser = JsonParser::createWithArray(listData);
 	std::string writablePath = FileUtils::getInstance()->getWritablePath();
 	std::string fileName = writablePath + "Config.json";
@@ -136,23 +124,61 @@ Widget::ccWidgetClickCallback StartLayer::onLocateClickCallback(const std::strin
 
 void StartLayer::onClick1(Ref *pSender)
 {
-	m_selectRole = ROLE_HERO;
+	GameData::getInstance()->setRole(ROLE_HERO);
+
+	//startGame();
+	//JsonParser* parser = JsonParser::createWithString(std::string(data));
+	//parser->decodeLoginProtocol();
 	auto scene = GameScene::createScene();
 	Director::getInstance()->replaceScene(scene);
+	
 }
 
 void StartLayer::onClick2(Ref *pSender)
 {
-	m_selectRole = ROLE_GUN;
-	auto scene = GameScene::createScene();
-	Director::getInstance()->replaceScene(scene);
+	GameData::getInstance()->setRole(ROLE_GUN);
+	startGame();
 }
 
 void StartLayer::onClick3(Ref *pSender)
 {
-	m_selectRole = ROLE_PRINCESS;
+	GameData::getInstance()->setRole(ROLE_PRINCESS);
+	startGame();
+}
+
+void StartLayer::onNewConnection(const char* data)
+{
+	CCLOG("onRecv %s", data);
+	JsonParser* parser = JsonParser::createWithString(std::string(data));
+	parser->decodeLoginProtocol();
 	auto scene = GameScene::createScene();
 	Director::getInstance()->replaceScene(scene);
+}
+
+void StartLayer::startGame()
+{	
+	if (SocketManager::getInstance()->getNetworkType() == NT_Client)
+	{
+		/*std::string addr0, addr1, addr2, addr3;
+		addr0 = static_cast<TextField *>(getChildByName("TextField_1"))->getString();
+		addr1 = static_cast<TextField *>(getChildByName("TextField_2"))->getString();
+		addr2 = static_cast<TextField *>(getChildByName("TextField_3"))->getString();
+		addr3 = static_cast<TextField *>(getChildByName("TextField_4"))->getString();
+		SocketManager::getInstance()->setServerAddr(addr0 + "." + addr1 + "." + addr2 + "." + addr3);*/
+		SocketManager::getInstance()->start();
+	}
+	else if(SocketManager::getInstance()->getNetworkType() == NT_Server)
+	{
+		SocketManager::getInstance()->start();
+		auto scene = GameScene::createScene();
+		Director::getInstance()->replaceScene(scene);
+	}
+	else
+	{
+		auto scene = GameScene::createScene();
+		Director::getInstance()->replaceScene(scene);
+	}
+	
 }
 
 static StartLayerReader* _instanceStartLayerReader = nullptr;
