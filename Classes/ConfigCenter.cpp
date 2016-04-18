@@ -37,3 +37,12 @@ ConfigCenter::~ConfigCenter()
 	}
 }
 
+void ConfigCenter::reload()
+{
+	if (m_pBulletConfigModel)
+		m_pBulletConfigModel->load();
+
+	if (m_pBombConfigModel)
+		m_pBombConfigModel->load();
+}
+

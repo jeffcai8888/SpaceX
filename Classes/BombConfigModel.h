@@ -25,11 +25,10 @@ public:
 
 
 	const BombConfigMap&			GetBombConfigMap(void) { return m_mapBombConfig; }
+	void load();
 private:
 	BombConfigMap m_mapBombConfig;
-
-	void init(const std::string& fileName);
-
+	void load(const std::string& fileName);
 };
 
 #endif

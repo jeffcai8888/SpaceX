@@ -58,6 +58,8 @@ void GameLayer::onEnter()
 {
 	Layer::onEnter();
 
+	ConfigCenter::getInstance()->reload();
+
 	m_pTiledMap = TMXTiledMap::create("TYCHEs_COFEE.tmx");
 	m_TiledMapSize.setSize(m_pTiledMap->getMapSize().width * m_pTiledMap->getTileSize().width, m_pTiledMap->getMapSize().height * m_pTiledMap->getTileSize().height);
 	this->addChild(m_pTiledMap);
