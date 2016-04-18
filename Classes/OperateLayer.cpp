@@ -144,29 +144,28 @@ void OperateLayer::onEnter()
 				m_isAutoShootPressed = true;
 #endif
 				switchButtonStatus(BT_Joystick, true);
-				SocketManager::getInstance()->sendData(NDT_HeroAttack, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getShootDirection());
+				SocketManager::getInstance()->sendData(NDT_HeroAttack, m_pHero->getCurrActionState(), m_pHero->getPosition(), m_pHero->getShootDirection());
 			}
 			else if (p.x <= 200.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
 			{
-				m_pHero->walk(-m_pHero->getWalkVelocity());
-				SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
 				switchButtonStatus(BT_Left, true);
 				m_mapPressType[pTouch->getID()] = Value(BT_Left);
+				m_KeyPressedValue |= KB_Back;			
 			}
 			else if (p.x > 200.f && p.x <= 400.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
 			{
-				m_pHero->walk(m_pHero->getWalkVelocity());
-				SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
 				switchButtonStatus(BT_Right, true);
 				m_mapPressType[pTouch->getID()] = Value(BT_Right);
+				m_KeyPressedValue |= KB_Front;
 			}
 			else if (isTap(m_pUp, p))
             {
                 m_pHero->jump(m_pHero->getJumpVelocity());
-				SocketManager::getInstance()->sendData(NDT_HeroJumpUp, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
-				switchButtonStatus(BT_Jump, true);
+				SocketManager::getInstance()->sendData(NDT_HeroJumpUp, m_pHero->getCurrActionState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
+				
 				m_mapPressType[pTouch->getID()] = Value(BT_Jump);
-            }
+				switchButtonStatus(BT_Jump, true);
+			}
 			else if (isTap(m_pSkill, p))
 			{
 				Hero* hero = dynamic_cast<Hero*>(m_pHero);
@@ -228,6 +227,7 @@ void OperateLayer::onEnter()
 			}
 			++touchIter;
 		}
+		dealWithKeyBoard();
 	};
 	listener->onTouchesMoved = [this](const vector<Touch*>& touches, Event *event)
 	{
@@ -253,7 +253,7 @@ void OperateLayer::onEnter()
                 m_pRange->setVisible(false);
                 m_pHero->attack(false);
 				switchButtonStatus(BT_Joystick, false);
-                SocketManager::getInstance()->sendData(NDT_HeroStopAttack, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getShootDirection());
+                SocketManager::getInstance()->sendData(NDT_HeroStopAttack, m_pHero->getCurrActionState(), m_pHero->getPosition(), m_pHero->getShootDirection());
 			}
 #if 0
             m_pHero->setIsLocked(false);
@@ -261,22 +261,27 @@ void OperateLayer::onEnter()
 			m_isAutoShootPressed = false;
 #endif
         }
+
 		
-		bool isChange = false;
 		if (m_mapPressType.find(pTouch->getID()) != m_mapPressType.end() && m_mapPressType[pTouch->getID()].asInt() == BT_Left)
 		{
 			if (!(p.x <= 200.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4))
 			{
 				switchButtonStatus(BT_Left, false);
 				m_mapPressType.erase(pTouch->getID());
-				isChange = true;
+				m_KeyPressedValue &= ~KB_Back;
 			}
 		}
 		else if (p.x <= 200.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
 		{
+			if (m_mapPressType.find(pTouch->getID()) != m_mapPressType.end() && m_mapPressType[pTouch->getID()].asInt() == BT_Right)
+			{
+				m_KeyPressedValue &= ~KB_Front;
+			}
 			m_mapPressType[pTouch->getID()] = Value(BT_Left);
 			switchButtonStatus(BT_Left, true);
-			isChange = true;
+			m_KeyPressedValue |= KB_Back;
+			CCLOG("press KB_Back");
 		}
 
 		if (m_mapPressType.find(pTouch->getID()) != m_mapPressType.end() && m_mapPressType[pTouch->getID()].asInt() == BT_Right)
@@ -285,37 +290,20 @@ void OperateLayer::onEnter()
 			{
 				switchButtonStatus(BT_Right, false);
 				m_mapPressType.erase(pTouch->getID());
-				isChange = true;
+				m_KeyPressedValue &= ~KB_Front;
+				CCLOG("release KB_Front");
 			}
 		}
 		else if (p.x > 200.f && p.x <= 400.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
 		{
-			m_mapPressType[pTouch->getID()] = Value(BT_Right);
-			switchButtonStatus(BT_Right, true);
-			isChange = true;
-		}
-
-		if (isChange)
-		{
 			if (m_mapPressType.find(pTouch->getID()) != m_mapPressType.end() && m_mapPressType[pTouch->getID()].asInt() == BT_Left)
 			{
-				m_pHero->walk(-m_pHero->getWalkVelocity());
-				SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
+				m_KeyPressedValue &= ~KB_Back;
 			}
-			else if (m_mapPressType.find(pTouch->getID()) != m_mapPressType.end() && m_mapPressType[pTouch->getID()].asInt() == BT_Right)
-			{
-				m_pHero->walk(m_pHero->getWalkVelocity());
-				SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
-			}
-            else
-            {
-                if (!m_pHero->isInAir())
-                {
-                    m_pHero->stop();
-                    SocketManager::getInstance()->sendData(NDT_HeroStop, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), Vec2(0, 0));
-                }
-                m_pHero->stopMoveAction(MOVE_STATE_WALK, true);
-            }
+			m_mapPressType[pTouch->getID()] = Value(BT_Right);
+			switchButtonStatus(BT_Right, true);
+			m_KeyPressedValue |= KB_Front;
+			CCLOG("press KB_Front");
 		}
 
 		if (m_mapPressType.find(pTouch->getID()) != m_mapPressType.end() && m_mapPressType[pTouch->getID()].asInt() == BT_Jump)
@@ -326,6 +314,7 @@ void OperateLayer::onEnter()
 				switchButtonStatus(BT_Jump, false);
 			}
 		}
+		dealWithKeyBoard();
 	};
 	listener->onTouchesEnded = [this](const vector<Touch*>& touches, Event *event)
 	{
@@ -367,36 +356,39 @@ void OperateLayer::onEnter()
 			}
 #endif
 			switchButtonStatus(BT_Joystick, false);
-			SocketManager::getInstance()->sendData(NDT_HeroStopAttack, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getShootDirection());
+			SocketManager::getInstance()->sendData(NDT_HeroStopAttack, m_pHero->getCurrActionState(),  m_pHero->getPosition(), m_pHero->getShootDirection());
         }
 		else if (p.x <= 200.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
 		{
-			if (!m_pHero->isInAir())
+			/*if (!m_pHero->isInAir())
 			{
 				m_pHero->stop();
 				SocketManager::getInstance()->sendData(NDT_HeroStop, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), Vec2(0, 0));
 			}
-			m_pHero->stopMoveAction(MOVE_STATE_WALK, true);
+			m_pHero->stopMoveAction(MOVE_STATE_WALK, true);*/
 			switchButtonStatus(BT_Left, false);
 			m_mapPressType.erase(pTouch->getID());
+			m_KeyPressedValue &= ~KB_Back;
 
 		}
 		else if (p.x > 200.f && p.x <= 400.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
 		{
-			if (!m_pHero->isInAir())
+			/*if (!m_pHero->isInAir())
 			{
 				m_pHero->stop();
 				SocketManager::getInstance()->sendData(NDT_HeroStop, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), Vec2(0, 0));
 			}
-			m_pHero->stopMoveAction(MOVE_STATE_WALK, true);
+			m_pHero->stopMoveAction(MOVE_STATE_WALK, true);*/
 			switchButtonStatus(BT_Right, false);
 			m_mapPressType.erase(pTouch->getID());
+			m_KeyPressedValue &= ~KB_Front;
 		}
-        else if (p.x > winSize.width * 7 / 8 && p.x <= winSize.width && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
-        {
-			switchButtonStatus(BT_Jump, false);
+		if (isTap(m_pUp, p))
+		{
 			m_mapPressType.erase(pTouch->getID());
-        }
+			switchButtonStatus(BT_Jump, false);
+		}
+		dealWithKeyBoard();
 	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 	m_vecEventListener.pushBack(listener);
@@ -414,7 +406,9 @@ void OperateLayer::onEnter()
 		}
 		else if (keyCode == EventKeyboard::KeyCode::KEY_W)
 		{
-			m_KeyPressedValue |= KB_Up;
+			switchButtonStatus(BT_Jump, true);
+			m_pHero->jump(m_pHero->getJumpVelocity());
+			SocketManager::getInstance()->sendData(NDT_HeroJumpUp, m_pHero->getCurrActionState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
 		}
 		dealWithKeyBoard();
 	};
@@ -423,16 +417,14 @@ void OperateLayer::onEnter()
 		if (keyCode == EventKeyboard::KeyCode::KEY_D)
 		{
 			m_KeyPressedValue &= ~KB_Front;
-			m_pHero->stopMoveAction(MOVE_STATE_WALK, true);
 		}
 		else if (keyCode == EventKeyboard::KeyCode::KEY_A)
 		{
 			m_KeyPressedValue &= ~KB_Back;
-			m_pHero->stopMoveAction(MOVE_STATE_WALK, true);
 		}
 		else if (keyCode == EventKeyboard::KeyCode::KEY_W)
 		{
-			m_KeyPressedValue &= ~KB_Up;
+			switchButtonStatus(BT_Jump, false);
 		}
 		dealWithKeyBoard();
 	};
@@ -467,6 +459,16 @@ void OperateLayer::onEnter()
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(listener3, 1);
 	m_vecEventListener.pushBack(listener3);
+
+	auto listener4 = EventListenerCustom::create("collision", [this](EventCustom* event) {
+		BaseSprite* player = static_cast<BaseSprite *>(event->getUserData());
+		if (player == m_pHero)
+		{
+			dealWithKeyBoard();
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(listener4, 1);
+	m_vecEventListener.pushBack(listener4);
 }
 
 void OperateLayer::onExit()
@@ -509,7 +511,7 @@ void OperateLayer::dealWithJoystick(cocos2d::Point centerPoint, cocos2d::Point p
 	this->updateJoystick(direction, distance);
 	m_pHero->setShootDirection(direction);
 	m_pHero->attack(true);
-	SocketManager::getInstance()->sendData(NDT_HeroAttack, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getShootDirection());
+	SocketManager::getInstance()->sendData(NDT_HeroAttack, m_pHero->getCurrActionState(), m_pHero->getPosition(), m_pHero->getShootDirection());
 }
 
 bool OperateLayer::isTap(cocos2d::Node* pNode, cocos2d::Point point)
@@ -535,27 +537,25 @@ bool OperateLayer::isInRange(cocos2d::Point p1, float r, cocos2d::Point p2)
 
 void OperateLayer::dealWithKeyBoard()
 {
-	if (m_KeyPressedValue & KB_Up)
+	CCLOG("m_KeyPressedValue = %d", m_KeyPressedValue);
+
+	if (m_KeyPressedValue & KB_Back)
 	{
-		m_pHero->jump(m_pHero->getJumpVelocity());
-		SocketManager::getInstance()->sendData(NDT_HeroJumpUp, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
+		m_pHero->walk(-m_pHero->getWalkVelocity());
+		SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
 	}
 	else if (m_KeyPressedValue & KB_Front)
 	{
 		m_pHero->walk(m_pHero->getWalkVelocity());
-		SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
+		SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
 	}
-	else if (m_KeyPressedValue & KB_Back)
-	{
-		m_pHero->walk(-m_pHero->getWalkVelocity());
-		SocketManager::getInstance()->sendData(NDT_HeroWalk, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), m_pHero->getPhysicsBody()->getVelocity());
-	}
+	
 	else
 	{
 		if (!m_pHero->isInAir())
 		{
 			m_pHero->stop();
-			SocketManager::getInstance()->sendData(NDT_HeroStop, m_pHero->getCurrActionState(), m_pHero->getCurrMoveState(), m_pHero->getPosition(), Vec2(0, 0));
+			SocketManager::getInstance()->sendData(NDT_HeroStop, m_pHero->getCurrActionState(), m_pHero->getPosition(), Vec2(0, 0));
 		}
 	}
 }

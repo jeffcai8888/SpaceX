@@ -12,6 +12,7 @@
 #include "SceneManager.h"
 #include "SimpleAudioEngine.h"
 #include "SocketManager.h"
+#include "GameData.h"
 
 USING_NS_CC;
 
@@ -115,9 +116,9 @@ void ClientGameLayer::onEnter()
             }
         }
     }
-    
-    SocketManager::getInstance()->getSocketClient()->onRecv = CC_CALLBACK_2(ClientGameLayer::onRecv, this);
-	SocketManager::getInstance()->getSocketClient()->onDisconnect = CC_CALLBACK_0(ClientGameLayer::onDisconnect, this);
+
+   SocketClient::getInstance()->onRecv = CC_CALLBACK_2(ClientGameLayer::onRecv, this);
+   SocketClient::getInstance()->onDisconnect = CC_CALLBACK_0(ClientGameLayer::onDisconnect, this);
 }
 
 void ClientGameLayer::onRecv(const char* data, int count)
@@ -139,7 +140,7 @@ void ClientGameLayer::onRecv(const char* data, int count)
 			m_pEnemy[0]->jump(m_pEnemy[0]->getJumpVelocity());
 			break;
 		case NDT_HeroJumpDown:
-			m_pEnemy[0]->runJumpAction(false);
+			m_pEnemy[0]->runJumpDownAction();
 			m_pEnemy[0]->setPosition(networkData->position);
 			m_pEnemy[0]->getPhysicsBody()->setVelocity(networkData->vec);
 			break;
@@ -148,7 +149,6 @@ void ClientGameLayer::onRecv(const char* data, int count)
 			m_pEnemy[0]->setPosition(networkData->position);
 			//m_pHero->getPhysicsBody()->setVelocity(networkData->velocity);
 			m_pEnemy[0]->stop();
-			m_pEnemy[0]->stopMoveAction(MOVE_STATE_WALK, true);
 			break;
 		case NDT_HeroPos:
 			m_dequeShadow.push_back(networkData->vec);
@@ -161,7 +161,7 @@ void ClientGameLayer::onRecv(const char* data, int count)
 		case NDT_HeroStopAttack:
 			m_pEnemy[0]->attack(false);
 			m_pEnemy[0]->setPosition(networkData->position);
-			break;		
+			break;
 		default:
 			break;
 		}

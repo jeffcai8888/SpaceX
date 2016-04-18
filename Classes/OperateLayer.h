@@ -21,7 +21,7 @@ public:
 	{
 		KB_Front = 1 << 0,
 		KB_Back = 1 << 1,
-		KB_Up = 1 << 2
+		//KB_Up = 1 << 2
 	};
 
 	OperateLayer();

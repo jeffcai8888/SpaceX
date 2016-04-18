@@ -1,4 +1,5 @@
 #include "SocketClient.h"
+#include "GameData.h"
 
 SocketClient* SocketClient::getInstance()
 {
@@ -13,7 +14,8 @@ void SocketClient::destroy()
 
 SocketClient::SocketClient(void) :
 	onRecv(nullptr),
-	_socektClient(0)
+	_socektClient(0),
+	_hasRecvLoginProtocol(false)
 {
 }
 
@@ -78,8 +80,11 @@ bool SocketClient::connectServer(const char* serverIP, unsigned short port)
 		return false;
 	}
 
-	std::thread recvThread(&SocketClient::recvMessage, this);
-	recvThread.detach();
+	//std::string loginData = std::string("{\"role_id\":\"") + Value(GameData::getInstance()->getRole()).asString() + std::string("\"}");
+	//sendMessage(loginData.c_str(), loginData.length());
+
+	//std::thread recvThread(&SocketClient::recvMessage, this);
+	//recvThread.detach();
 
 	return true;
 }
@@ -91,6 +96,7 @@ void SocketClient::recvMessage()
 	while (true)
 	{
 		ret = recv(_socektClient, recvBuf, sizeof(recvBuf), 0);
+		CCLOG("recvMessage");
 		if (ret < 0)
 		{
 			log("recv error!");
@@ -99,7 +105,16 @@ void SocketClient::recvMessage()
 		if (ret > 0 && onRecv != nullptr)
 		{
 			std::lock_guard<std::mutex> lk(_UIMessageQueueMutex);
-			SocketMessage * msg = new SocketMessage(RECEIVE, (unsigned char*)recvBuf, ret);
+			SocketMessage * msg;
+			
+			
+			if (_hasRecvLoginProtocol)
+			{
+				msg = new SocketMessage(NEW_CONNECTION, (unsigned char*)recvBuf, ret);
+				_hasRecvLoginProtocol = true;
+			}					
+			else
+				msg = new SocketMessage(RECEIVE, (unsigned char*)recvBuf, ret);
 			_UIMessageQueue.push_back(msg);
 		}
 	}
@@ -157,6 +172,12 @@ void SocketClient::update(float dt)
 		if (onRecv)
 		{
 			this->onRecv((const char*)msg->getMsgData()->getBytes(), msg->getMsgData()->getSize());
+		}
+		break;
+	case NEW_CONNECTION:
+		if (onNewConnection)
+		{
+			this->onNewConnection((const char*)msg->getMsgData()->getBytes());
 		}
 		break;
 	default:

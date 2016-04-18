@@ -21,43 +21,13 @@ Scene* GameScene::createScene()
 	
 	if (networkType == NT_Client)
 	{
-		std::string addr0, addr1, addr2, addr3;
-		JsonParser* parser = JsonParser::createWithFile("Config.json");
-		parser->decodeDebugData();
-		auto list = parser->getList();
-		for (auto& v : list)
-		{
-			ValueMap row = v.asValueMap();
-
-			for (auto& pair : row)
-			{
-				if (pair.first.compare("ServerIP0") == 0)
-				{
-					addr0 = Value(pair.second.asInt()).asString();
-				}
-				if (pair.first.compare("ServerIP1") == 0)
-				{
-					addr1 = Value(pair.second.asInt()).asString();
-				}
-				if (pair.first.compare("ServerIP2") == 0)
-				{
-					addr2 = Value(pair.second.asInt()).asString();
-				}
-				if (pair.first.compare("ServerIP3") == 0)
-				{
-					addr3 = Value(pair.second.asInt()).asString();
-				}
-			}
-		}
-
-		SocketManager::getInstance()->setServerAddr(addr0 + "." + addr1 + "." + addr2 + "." + addr3);
-		SocketManager::getInstance()->init();
+		SocketManager::getInstance()->start();
 		auto gameLayer = ClientGameLayer::create();
 		scene->addChild(gameLayer, 0, LT_Game);
 	}
 	else if (networkType == NT_Server)
 	{
-		SocketManager::getInstance()->init();
+		SocketManager::getInstance()->start();
 		auto gameLayer = ServerGameLayer::create();
 		scene->addChild(gameLayer, 0, LT_Game);
 	}
@@ -69,9 +39,6 @@ Scene* GameScene::createScene()
 	
 	auto operateLayer = OperateLayer::create();
 	scene->addChild(operateLayer, 1, LT_Operate);
-
-	
-
 	return scene;
 }
 

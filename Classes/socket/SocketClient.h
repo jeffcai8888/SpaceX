@@ -12,6 +12,7 @@ public:
 	void sendMessage(const char* data, int count);
 
 	std::function<void(const char* data, int count)> onRecv;
+	std::function<void(const char* data)> onNewConnection;
 	std::function<void()> onDisconnect;
 
 	void update(float dt);
@@ -29,6 +30,7 @@ private:
 	HSocket _socektClient;
 	std::list<SocketMessage*> _UIMessageQueue;
 	std::mutex   _UIMessageQueueMutex;
+	bool _hasRecvLoginProtocol;
 };
 
 #endif

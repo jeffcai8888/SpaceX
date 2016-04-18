@@ -142,23 +142,15 @@ void GameLayer::onEnter()
 			{
 				hero = static_cast<BaseSprite *>(contact.getShapeB()->getBody()->getNode());
 			}
-			if (hero->getCurrActionState() == ACTION_STATE_MOVE && hero->isInMoveAction(MOVE_STATE_DOWN))
+			if (hero->getCurrActionState() == ACTION_STATE_JUMP_DOWN)
 			{
-				if (hero->isInMoveAction(MOVE_STATE_WALK))
-				{
-					hero->stopMoveAction(MOVE_STATE_DOWN, true);
-					Vec2 v = hero->getPhysicsBody()->getVelocity();
-					hero->walk(v.x);
-					SocketManager::getInstance()->sendData(NDT_HeroWalk, hero->getCurrActionState(), hero->getCurrMoveState(), hero->getPosition(), hero->getPhysicsBody()->getVelocity());
-				}
-				else
-				{
-					hero->stopMoveAction(MOVE_STATE_DOWN, true);
-					hero->stop();
-					SocketManager::getInstance()->sendData(NDT_HeroStop, hero->getCurrActionState(), hero->getCurrMoveState(), hero->getPosition(), Vec2(0, 0));
-				}
+				hero->stop();
+				EventCustom event("collision");
+				event.setUserData(hero);
+				_eventDispatcher->dispatchEvent(&event);
 				hero->setJumpStage(0);
 			}
+			CCLOG("collision %f, %f", hero->getPhysicsBody()->getVelocity().x, hero->getPhysicsBody()->getVelocity().y);
 			return true;
 		}
         else if((contact.getShapeA()->getCategoryBitmask() == PC_Bullet && contact.getShapeB()->getCategoryBitmask() == PC_Ground) ||
@@ -253,11 +245,29 @@ void GameLayer::onEnter()
 
 			hero->setIsOnRotateGround(false);
 
-			if ((hero->getCurrActionState() == ACTION_STATE_MOVE && hero->isInMoveAction(MOVE_STATE_WALK)) || hero->getCurrActionState() == ACTION_STATE_IDLE)
+			if (hero->getCurrActionState() == ACTION_STATE_WALK || hero->getCurrActionState() == ACTION_STATE_IDLE)
 			{
-				hero->stopMoveAction(MOVE_STATE_WALK, false);
-				hero->runJumpAction(false);
+				hero->runJumpDownAction();
 			}
+		}
+		else if ((contact.getShapeA()->getCategoryBitmask() == PC_Hero && contact.getShapeB()->getCategoryBitmask() == PC_Ground) ||
+			(contact.getShapeA()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getCategoryBitmask() == PC_Hero) ||
+			(contact.getShapeA()->getCategoryBitmask() == PC_Hero && contact.getShapeB()->getCategoryBitmask() == PC_Box) ||
+			(contact.getShapeA()->getCategoryBitmask() == PC_Box && contact.getShapeB()->getCategoryBitmask() == PC_Hero)
+			)
+		{
+			BaseSprite* hero;
+			if (contact.getShapeA()->getCategoryBitmask() == PC_Hero)
+			{
+				hero = static_cast<BaseSprite *>(contact.getShapeA()->getBody()->getNode());
+			}
+			else
+			{
+				hero = static_cast<BaseSprite *>(contact.getShapeB()->getBody()->getNode());
+			}
+			EventCustom event("collision");
+			event.setUserData(hero);
+			_eventDispatcher->dispatchEvent(&event);
 		}
 	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);

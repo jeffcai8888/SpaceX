@@ -8,7 +8,6 @@ class GameScene
 {
 public:
 	static Scene* createScene();
-
 };
 
 
