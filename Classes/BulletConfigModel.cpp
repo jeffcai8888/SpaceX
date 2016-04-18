@@ -69,6 +69,6 @@ void BulletConfigModel::load(const std::string& fileName)
 			}
 		}
 	}
-	m_mapBulletConfig[configName] = config;
+	m_mapBulletConfig[fileName] = config;
 }
 

@@ -15,6 +15,7 @@
 #include "SceneManager.h"
 #include "SimpleAudioEngine.h"
 #include "SocketManager.h"
+#include "ConfigCenter.h"
 
 USING_NS_CC;
 
