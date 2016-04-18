@@ -2,7 +2,7 @@
 
 USING_NS_CC;
 
-JsonParser *JsonParser::createWithString(std::string& data)
+JsonParser *JsonParser::createWithString(const char* data)
 {
 	JsonParser *pRet = new JsonParser();
 	if (pRet->initWithString(data))
@@ -13,7 +13,7 @@ JsonParser *JsonParser::createWithString(std::string& data)
 	CC_SAFE_DELETE(pRet);
 	return nullptr;
 }
-bool JsonParser::initWithString(std::string& data)
+bool JsonParser::initWithString(const char* data)
 {
 	content = data;
 	return true;

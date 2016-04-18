@@ -149,7 +149,7 @@ void StartLayer::onClick3(Ref *pSender)
 void StartLayer::onNewConnection(const char* data)
 {
 	CCLOG("onRecv %s", data);
-	JsonParser* parser = JsonParser::createWithString(std::string(data));
+	JsonParser* parser = JsonParser::createWithString(data);
 	parser->decodeLoginProtocol();
 	auto scene = GameScene::createScene();
 	Director::getInstance()->replaceScene(scene);

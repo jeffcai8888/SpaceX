@@ -11,8 +11,8 @@
 class JsonParser : public cocos2d::Ref
 {
 public:
-	static JsonParser *createWithString(std::string&);
-	bool initWithString(std::string&);
+	static JsonParser *createWithString(const char*);
+	bool initWithString(const char*);
 
 	static JsonParser *createWithFile(const char *);
 	bool initWithFile(const char *);
