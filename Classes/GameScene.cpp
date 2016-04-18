@@ -21,13 +21,11 @@ Scene* GameScene::createScene()
 	
 	if (networkType == NT_Client)
 	{
-		SocketManager::getInstance()->start();
 		auto gameLayer = ClientGameLayer::create();
 		scene->addChild(gameLayer, 0, LT_Game);
 	}
 	else if (networkType == NT_Server)
 	{
-		SocketManager::getInstance()->start();
 		auto gameLayer = ServerGameLayer::create();
 		scene->addChild(gameLayer, 0, LT_Game);
 	}

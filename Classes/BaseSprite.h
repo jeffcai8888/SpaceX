@@ -15,6 +15,7 @@ typedef enum {
 }ActionState;
 
 enum {
+	ROLE_NONE = -1,
 	ROLE_HERO,
 	ROLE_GUN,
 	ROLE_PRINCESS
@@ -64,6 +65,8 @@ public:
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pIdleFireAction, IdleFireAction);
 
 	CC_SYNTHESIZE(ActionState, m_currActionState, CurrActionState);
+	CC_SYNTHESIZE(bool, m_isMe, IsMe);
+
 	CC_SYNTHESIZE(unsigned int, m_maxHp, MaxHP);
 	CC_SYNTHESIZE(unsigned int, m_hp, HP);
 	CC_SYNTHESIZE(bool, m_isAttacking, IsAttacking);

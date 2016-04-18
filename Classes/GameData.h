@@ -3,20 +3,25 @@
 
 #include <cocos2d.h>
 
+class BaseSprite;
 class GameData
 {
 public:
 	static GameData* getInstance();
 
-	CC_SYNTHESIZE(int, m_Role, Role);
+	int			m_playerTypes[4];
+	BaseSprite* m_pPlayers[4];
+
+	BaseSprite* getMySelf();
+
+	CC_SYNTHESIZE(int, m_RoleType, RoleType);
+	CC_SYNTHESIZE(int, m_RoleIndex, RoleIndex);
 
 private:
 	GameData();
 	virtual ~GameData();
 
 	static GameData* instance;
-
-	
 };
 
 #endif // __SPACEX_GAMEDATA_H__

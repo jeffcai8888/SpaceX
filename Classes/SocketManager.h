@@ -27,6 +27,7 @@ struct NetworkData
 {
 	int dataSize;
 	int dataType;
+	int index;
 	int actionState;
 	cocos2d::Vec2 position;
 	cocos2d::Vec2 vec;

@@ -21,7 +21,8 @@ BaseSprite::BaseSprite() :
 	m_maxHp(100),
 	m_fShootDirection(Vec2(1.f, 0.f)),
     m_isLocked(false),
-	m_isAutoShoot(false)
+	m_isAutoShoot(false),
+	m_isMe(false)
 {
 
 }

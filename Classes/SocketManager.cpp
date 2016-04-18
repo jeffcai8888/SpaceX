@@ -32,7 +32,7 @@ void SocketManager::start()
 {
 	if (NT_Client == m_networkType)
 	{
-		if (!SocketClient::getInstance()->connectServer("127.0.0.1", 8000))
+		if (!SocketClient::getInstance()->connectServer("10.8.29.128", 8000))
 		{
 			CCLOG("Client connect error");
 		}
@@ -54,9 +54,7 @@ void SocketManager::sendData(int type, int actionState, cocos2d::Vec2 position, 
 	if(m_networkType == NT_Server)
 		SocketServer::getInstance()->sendMessage((const char*)&data, sizeof(data));
 	else if (m_networkType == NT_Client)
-	{
 		SocketClient::getInstance()->sendMessage((const char*)&data, sizeof(data));
-	}
 		
 }
 

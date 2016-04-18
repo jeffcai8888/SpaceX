@@ -124,25 +124,19 @@ Widget::ccWidgetClickCallback StartLayer::onLocateClickCallback(const std::strin
 
 void StartLayer::onClick1(Ref *pSender)
 {
-	GameData::getInstance()->setRole(ROLE_HERO);
-
-	//startGame();
-	//JsonParser* parser = JsonParser::createWithString(std::string(data));
-	//parser->decodeLoginProtocol();
-	auto scene = GameScene::createScene();
-	Director::getInstance()->replaceScene(scene);
-	
+	GameData::getInstance()->setRoleType(ROLE_HERO);
+	startGame();
 }
 
 void StartLayer::onClick2(Ref *pSender)
 {
-	GameData::getInstance()->setRole(ROLE_GUN);
+	GameData::getInstance()->setRoleType(ROLE_GUN);
 	startGame();
 }
 
 void StartLayer::onClick3(Ref *pSender)
 {
-	GameData::getInstance()->setRole(ROLE_PRINCESS);
+	GameData::getInstance()->setRoleType(ROLE_PRINCESS);
 	startGame();
 }
 
@@ -151,20 +145,59 @@ void StartLayer::onNewConnection(const char* data)
 	CCLOG("onRecv %s", data);
 	JsonParser* parser = JsonParser::createWithString(data);
 	parser->decodeLoginProtocol();
+	importStartGameData(parser);
 	auto scene = GameScene::createScene();
 	Director::getInstance()->replaceScene(scene);
+}
+
+void StartLayer::importStartGameData(JsonParser* parser)
+{
+	auto list = parser->getList();
+	for (auto& v : list)
+	{
+		ValueMap row = v.asValueMap();
+		for (auto& pair : row)
+		{
+			if (pair.first.compare("0") == 0)
+			{
+				GameData::getInstance()->m_playerTypes[0] = pair.second.asInt();
+			}
+			else if (pair.first.compare("1") == 0)
+			{
+				GameData::getInstance()->m_playerTypes[1] = pair.second.asInt();
+			}
+			else if (pair.first.compare("2") == 0)
+			{
+				GameData::getInstance()->m_playerTypes[2] = pair.second.asInt();
+			}
+			else if (pair.first.compare("3") == 0)
+			{
+				GameData::getInstance()->m_playerTypes[3] = pair.second.asInt();
+			}
+		}
+	}
+
+	for (int i = 0; i < 4; ++i)
+	{
+		if (GameData::getInstance()->m_playerTypes[i] == ROLE_NONE)
+		{
+			GameData::getInstance()->m_playerTypes[i] = GameData::getInstance()->getRoleType();
+			GameData::getInstance()->setRoleIndex(i);
+			break;
+		}
+	}
 }
 
 void StartLayer::startGame()
 {	
 	if (SocketManager::getInstance()->getNetworkType() == NT_Client)
 	{
-		/*std::string addr0, addr1, addr2, addr3;
+		std::string addr0, addr1, addr2, addr3;
 		addr0 = static_cast<TextField *>(getChildByName("TextField_1"))->getString();
 		addr1 = static_cast<TextField *>(getChildByName("TextField_2"))->getString();
 		addr2 = static_cast<TextField *>(getChildByName("TextField_3"))->getString();
 		addr3 = static_cast<TextField *>(getChildByName("TextField_4"))->getString();
-		SocketManager::getInstance()->setServerAddr(addr0 + "." + addr1 + "." + addr2 + "." + addr3);*/
+		SocketManager::getInstance()->setServerAddr(addr0 + "." + addr1 + "." + addr2 + "." + addr3);
 		SocketManager::getInstance()->start();
 	}
 	else if(SocketManager::getInstance()->getNetworkType() == NT_Server)
@@ -175,10 +208,12 @@ void StartLayer::startGame()
 	}
 	else
 	{
+		JsonParser* parser = JsonParser::createWithFile("start.json");
+		parser->decodeLoginProtocol();
+		importStartGameData(parser);
 		auto scene = GameScene::createScene();
 		Director::getInstance()->replaceScene(scene);
-	}
-	
+	}	
 }
 
 static StartLayerReader* _instanceStartLayerReader = nullptr;
