@@ -150,13 +150,15 @@ void OperateLayer::onEnter()
 			{
 				switchButtonStatus(BT_Left, true);
 				m_mapPressType[pTouch->getID()] = Value(BT_Left);
-				m_KeyPressedValue |= KB_Back;			
+				m_KeyPressedValue |= KB_Back;
+				dealWithKeyBoard();
 			}
 			else if (p.x > 200.f && p.x <= 400.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
 			{
 				switchButtonStatus(BT_Right, true);
 				m_mapPressType[pTouch->getID()] = Value(BT_Right);
 				m_KeyPressedValue |= KB_Front;
+				dealWithKeyBoard();
 			}
 			else if (isTap(m_pUp, p))
             {
@@ -190,6 +192,8 @@ void OperateLayer::onEnter()
 						hero->setCurSkillState(1);
 						hero->setCurSkillCDTime(hero->getSkillState1CDTime());
 						hero->setCurSkillLastTime(hero->getSkillState1LastTime());
+
+						CCLOG("skill speed = %f, skill last time = %f", hero->getPhysicsBody()->getVelocity().x, hero->getCurSkillLastTime());
 						hero->setIsInSplash(true);
 						positionSprite->setVisible(true);
 						positionSprite->setPosition(hero->getPosition() + Vec2(0, -10.f));
@@ -230,7 +234,6 @@ void OperateLayer::onEnter()
 			}
 			++touchIter;
 		}
-		dealWithKeyBoard();
 	};
 	listener->onTouchesMoved = [this](const vector<Touch*>& touches, Event *event)
 	{
@@ -273,6 +276,7 @@ void OperateLayer::onEnter()
 				switchButtonStatus(BT_Left, false);
 				m_mapPressType.erase(pTouch->getID());
 				m_KeyPressedValue &= ~KB_Back;
+				dealWithKeyBoard();
 			}
 		}
 		else if (p.x <= 200.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
@@ -284,7 +288,7 @@ void OperateLayer::onEnter()
 			m_mapPressType[pTouch->getID()] = Value(BT_Left);
 			switchButtonStatus(BT_Left, true);
 			m_KeyPressedValue |= KB_Back;
-			CCLOG("press KB_Back");
+			dealWithKeyBoard();
 		}
 
 		if (m_mapPressType.find(pTouch->getID()) != m_mapPressType.end() && m_mapPressType[pTouch->getID()].asInt() == BT_Right)
@@ -294,7 +298,7 @@ void OperateLayer::onEnter()
 				switchButtonStatus(BT_Right, false);
 				m_mapPressType.erase(pTouch->getID());
 				m_KeyPressedValue &= ~KB_Front;
-				CCLOG("release KB_Front");
+				dealWithKeyBoard();
 			}
 		}
 		else if (p.x > 200.f && p.x <= 400.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
@@ -306,7 +310,7 @@ void OperateLayer::onEnter()
 			m_mapPressType[pTouch->getID()] = Value(BT_Right);
 			switchButtonStatus(BT_Right, true);
 			m_KeyPressedValue |= KB_Front;
-			CCLOG("press KB_Front");
+			dealWithKeyBoard();
 		}
 
 		if (m_mapPressType.find(pTouch->getID()) != m_mapPressType.end() && m_mapPressType[pTouch->getID()].asInt() == BT_Jump)
@@ -317,7 +321,6 @@ void OperateLayer::onEnter()
 				switchButtonStatus(BT_Jump, false);
 			}
 		}
-		dealWithKeyBoard();
 	};
 	listener->onTouchesEnded = [this](const vector<Touch*>& touches, Event *event)
 	{
@@ -373,6 +376,7 @@ void OperateLayer::onEnter()
 			switchButtonStatus(BT_Left, false);
 			m_mapPressType.erase(pTouch->getID());
 			m_KeyPressedValue &= ~KB_Back;
+			dealWithKeyBoard();
 
 		}
 		else if (p.x > 200.f && p.x <= 400.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
@@ -386,6 +390,7 @@ void OperateLayer::onEnter()
 			switchButtonStatus(BT_Right, false);
 			m_mapPressType.erase(pTouch->getID());
 			m_KeyPressedValue &= ~KB_Front;
+			dealWithKeyBoard();
 		}
 		if (isTap(m_pUp, p))
 		{
