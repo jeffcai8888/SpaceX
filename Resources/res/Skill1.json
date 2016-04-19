@@ -1,0 +1,8 @@
+{"Data":[
+{"Attr":"State1Speed","Value":1000.0},
+{"Attr":"State2Speed","Value":1000.0},
+{"Attr":"State1CDTime","Value":10.0},
+{"Attr":"State2CDTime","Value":5.0},
+{"Attr":"State1LastTime","Value":0.3},
+{"Attr":"State2LastTime","Value":0.3}
+]}
