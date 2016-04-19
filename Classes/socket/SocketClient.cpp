@@ -80,11 +80,12 @@ bool SocketClient::connectServer(const char* serverIP, unsigned short port)
 		return false;
 	}
 
-	//std::string loginData = std::string("{\"role_id\":\"") + Value(GameData::getInstance()->getRole()).asString() + std::string("\"}");
-	//sendMessage(loginData.c_str(), loginData.length());
+	std::string loginData = std::string("{\"role_id\":\"") + Value(GameData::getInstance()->getRoleType()).asString() + std::string("\"}");
+	sendMessage(loginData.c_str(), loginData.length());
 
-	//std::thread recvThread(&SocketClient::recvMessage, this);
-	//recvThread.detach();
+	std::thread recvThread(&SocketClient::recvMessage, this);
+	CCLOG("thread %f start", recvThread);
+	recvThread.detach();
 
 	return true;
 }
