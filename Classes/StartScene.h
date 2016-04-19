@@ -5,7 +5,7 @@
 #include "cocostudio/WidgetCallBackHandlerProtocol.h"
 #include "cocostudio/WidgetReader/NodeReader/NodeReader.h"
 #include "ui/CocosGUI.h"
-
+class JsonParser;
 class StartLayer : public cocos2d::Layer, public cocostudio::WidgetCallBackHandlerProtocol
 {
 public:
@@ -24,8 +24,11 @@ public:
 	void onClick2(cocos2d::Ref* pSender);
 	void onClick3(cocos2d::Ref* pSender);
 
+	void onNewConnection(const char* data);
 private:
-	int m_selectRole;
+	std::string m_pServerAddr;
+	void startGame();
+	void importStartGameData(JsonParser*);
 };
 
 class StartLayerReader : public cocostudio::NodeReader

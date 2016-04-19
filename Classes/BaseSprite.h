@@ -6,37 +6,19 @@
 typedef enum {
 	ACTION_STATE_NONE = 0,
 	ACTION_STATE_IDLE,
-	ACTION_STATE_MOVE,
+	ACTION_STATE_WALK,
+	ACTION_STATE_JUMP_UP,
+	ACTION_STATE_JUMP_DOWN,
 	ACTION_STATE_HURT,
 	ACTION_STATE_DEAD,
 	ACTION_STATE_REMOVE,
 }ActionState;
 
 enum {
-    MOVE_STATE_WALK = 1 << 0,
-    MOVE_STATE_UP = 1 << 1,
-    MOVE_STATE_DOWN = 1 << 2
-};
-
-enum {
-	ACTION_TAG_IDEL = 0,
-	ACTION_TAG_WALK,
-	ACTION_TAG_UP,
-	ACTION_TAG_DOWN,
-	ACTION_TAG_WALK_ATTACK,
-	ACTION_TAG_JUMP_ATTACK
-};
-
-enum {
+	ROLE_NONE = -1,
 	ROLE_HERO,
 	ROLE_GUN,
 	ROLE_PRINCESS
-};
-
-enum {
-	SKILL_1,
-	SKILL_2,
-	SKILL_3
 };
 
 
@@ -48,18 +30,16 @@ public:
 	~BaseSprite();
 
 	void runIdleAction();
-	void runWalkAction(bool isPlayAnim);
-	void runJumpAction(bool isUp);
+	void runWalkAction();
+	void runJumpUpAction();
+	void runJumpDownAction();
 	void runHurtAction();
 	void removeSprite();
 	void runDeadAction();
 	void runAttackAction();
 	void stopAttackAction();
-	void runWalkFireAction();
-	void runIdleFireAction();
-    
-    int  stopMoveAction(int moveAction, bool clear);
-    bool isInMoveAction(int moveAction);
+
+	virtual bool isInSplash() = 0;
 
 	cocos2d::Point getShootPosition();
 
@@ -85,7 +65,8 @@ public:
 	CC_SYNTHESIZE_RETAIN(cocos2d::Action*, m_pIdleFireAction, IdleFireAction);
 
 	CC_SYNTHESIZE(ActionState, m_currActionState, CurrActionState);
-    CC_SYNTHESIZE(int, m_currMoveState, CurrMoveState);
+	CC_SYNTHESIZE(bool, m_isMe, IsMe);
+
 	CC_SYNTHESIZE(unsigned int, m_maxHp, MaxHP);
 	CC_SYNTHESIZE(unsigned int, m_hp, HP);
 	CC_SYNTHESIZE(bool, m_isAttacking, IsAttacking);
@@ -104,6 +85,7 @@ public:
 	CC_SYNTHESIZE(cocos2d::Sprite*, m_pLockMark, LockMark);
 	CC_SYNTHESIZE(std::string, m_bulletType, BulletType);
     CC_SYNTHESIZE(std::string, m_bombType, BombType);
+	CC_SYNTHESIZE(bool, m_isAutoShoot, IsAutoShoot);
 	
 	CC_SYNTHESIZE(int, m_curSkill, CurSkill);
     

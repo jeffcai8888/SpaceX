@@ -15,12 +15,13 @@
 #include "SceneManager.h"
 #include "SimpleAudioEngine.h"
 #include "SocketManager.h"
+#include "ConfigCenter.h"
+#include "GameData.h"
 
 USING_NS_CC;
 
 GameLayer::GameLayer()
 	:m_pTiledMap(nullptr)
-	,m_pHero(nullptr)
     ,m_pForesight(nullptr)
     ,m_pRange(nullptr)
     ,m_pTarget(nullptr)
@@ -28,10 +29,6 @@ GameLayer::GameLayer()
 {
 	m_vecBullets.clear();
 	m_vecEventListener.clear();
-	for (int i = 0; i < 3; ++i)
-	{
-		m_pEnemy[i] = nullptr;
-	}
 }
 
 GameLayer::~GameLayer()
@@ -57,6 +54,13 @@ bool GameLayer::init()
 void GameLayer::onEnter()
 {
 	Layer::onEnter();
+
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("hero.plist");
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gunner.plist");
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("princess.plist");
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("ui.plist");
+
+	ConfigCenter::getInstance()->reload();
 
 	m_pTiledMap = TMXTiledMap::create("TYCHEs_COFEE.tmx");
 	m_TiledMapSize.setSize(m_pTiledMap->getMapSize().width * m_pTiledMap->getTileSize().width, m_pTiledMap->getMapSize().height * m_pTiledMap->getTileSize().height);
@@ -85,6 +89,164 @@ void GameLayer::onEnter()
 	m_pBomb = Bomb::create();
 	this->addChild(m_pBomb);
 	this->setPosition(10000.f, 10000.f);
+
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	this->m_origin = Director::getInstance()->getVisibleOrigin();
+
+	TMXObjectGroup *objects = m_pTiledMap->getObjectGroup("Objects");
+	CCASSERT(NULL != objects, "'Objects' object group not found");
+
+	for (int i = 0; i < 4; ++i)
+	{
+		auto spawnPoint = objects->getObject("SpawnPoint" + Value(i).asString());
+		CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
+		Point heroInitPos = m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
+		int roleType = GameData::getInstance()->m_playerTypes[i];
+		auto player = createHero(roleType, heroInitPos);
+		if (GameData::getInstance()->getRoleIndex() == i)
+			player->setIsMe(true);
+		this->addChild(player);
+		if (player->getIsMe())
+		{
+			player->setBulletType("Bullet1Config");
+			player->setBombType("Bomb1Config");
+			auto centerOfView = Point(visibleSize.width / 2, visibleSize.height / 2);
+			this->setPosition(centerOfView - player->getPosition());
+
+		}
+		else
+		{
+			auto lockMark = Sprite::createWithSpriteFrameName("lock.png");
+			lockMark->setPosition(player->getContentSize().width / 2, 50.f);
+			lockMark->setVisible(false);
+			player->setLockMark(lockMark);
+			player->addChild(lockMark);
+		}
+		GameData::getInstance()->m_pPlayers[i] = player;
+	}
+
+
+	m_pRange = Sprite::createWithSpriteFrameName("range.png");
+	m_pRange->setVisible(false);
+	m_pRange->setPosition(Point(140.f, 25.f));
+	GameData::getInstance()->getMySelf()->addChild(m_pRange);
+
+	m_pForesight = Foresight::create();
+	m_pForesight->setScale(0.2f);
+	m_pForesight->setVisible(false);
+	this->addChild(m_pForesight);
+
+	JsonParser* parser = JsonParser::createWithFile("Debug.json");
+	parser->decodeDebugData();
+	auto list = parser->getList();
+	for (auto& v : list)
+	{
+		ValueMap row = v.asValueMap();
+
+		for (auto& pair : row)
+		{
+			CCLOG("%s %s", pair.first.c_str(), pair.second.asString().c_str());
+			if (pair.first.compare("HeroHSpeed") == 0)
+			{
+				float s = pair.second.asFloat();
+				for (int i = 0; i < 4; ++i)
+				{
+					if (GameData::getInstance()->m_pPlayers[i])
+					{
+						GameData::getInstance()->m_pPlayers[i]->setWalkVelocity(s);
+					}
+				}
+			}
+			else if (pair.first.compare("HeroVSpeed") == 0)
+			{
+				for (int i = 0; i < 4; ++i)
+				{
+					if (GameData::getInstance()->m_pPlayers[i])
+					{
+						GameData::getInstance()->m_pPlayers[i]->setJumpVelocity(pair.second.asFloat());
+					}
+				}
+			}
+			else if (pair.first.compare("HeroG") == 0)
+			{
+				for (int i = 0; i < 4; ++i)
+				{
+					if (GameData::getInstance()->m_pPlayers[i])
+					{
+						GameData::getInstance()->m_pPlayers[i]->setGravity(pair.second.asFloat());
+					}
+				}
+			}
+			else if (pair.first.compare("HeroSkill1V") == 0)
+			{
+				for (int i = 0; i < 4; ++i)
+				{
+					Hero* hero = dynamic_cast<Hero*>(GameData::getInstance()->m_pPlayers[i]);
+					if (hero)
+					{
+						hero->setSkillState1Speed(pair.second.asFloat());
+					}
+				}
+				
+			}
+			else if (pair.first.compare("HeroSkill2V") == 0)
+			{
+				for (int i = 0; i < 4; ++i)
+				{
+					Hero* hero = dynamic_cast<Hero*>(GameData::getInstance()->m_pPlayers[i]);
+					if (hero)
+					{
+						hero->setSkillState2Speed(pair.second.asFloat());
+					}
+				}
+			}
+			else if (pair.first.compare("HeroSkill1CD") == 0)
+			{
+				for (int i = 0; i < 4; ++i)
+				{
+					Hero* hero = dynamic_cast<Hero*>(GameData::getInstance()->m_pPlayers[i]);
+					if (hero)
+					{
+						hero->setSkillState1CDTime(pair.second.asFloat());
+					}
+				}		
+			}
+			else if (pair.first.compare("HeroSkill2CD") == 0)
+			{
+				for (int i = 0; i < 4; ++i)
+				{
+					Hero* hero = dynamic_cast<Hero*>(GameData::getInstance()->m_pPlayers[i]);
+					if (hero)
+					{
+						hero->setSkillState2CDTime(pair.second.asFloat());
+					}
+				}
+				
+			}
+			else if (pair.first.compare("HeroSkill1Time") == 0)
+			{
+				for (int i = 0; i < 4; ++i)
+				{
+					Hero* hero = dynamic_cast<Hero*>(GameData::getInstance()->m_pPlayers[i]);
+					if (hero)
+					{
+						hero->setSkillState1LastTime(pair.second.asFloat());
+					}
+				}
+			}
+			else if (pair.first.compare("HeroSkill2Time") == 0)
+			{
+				for (int i = 0; i < 4; ++i)
+				{
+					Hero* hero = dynamic_cast<Hero*>(GameData::getInstance()->m_pPlayers[i]);
+					if (hero)
+					{
+						hero->setSkillState2LastTime(pair.second.asFloat());
+					}
+				}
+			}
+		}
+	}
 
 	importGroundData(m_pTiledMap);
 
@@ -140,23 +302,15 @@ void GameLayer::onEnter()
 			{
 				hero = static_cast<BaseSprite *>(contact.getShapeB()->getBody()->getNode());
 			}
-			if (hero->getCurrActionState() == ACTION_STATE_MOVE && hero->isInMoveAction(MOVE_STATE_DOWN))
+			if (hero->getCurrActionState() == ACTION_STATE_JUMP_DOWN)
 			{
-				if (hero->isInMoveAction(MOVE_STATE_WALK))
-				{
-					hero->stopMoveAction(MOVE_STATE_DOWN, true);
-					Vec2 v = hero->getPhysicsBody()->getVelocity();
-					hero->walk(v.x);
-					SocketManager::getInstance()->sendData(NDT_HeroWalk, hero->getCurrActionState(), hero->getCurrMoveState(), hero->getPosition(), hero->getPhysicsBody()->getVelocity());
-				}
-				else
-				{
-					hero->stopMoveAction(MOVE_STATE_DOWN, true);
-					hero->stop();
-					SocketManager::getInstance()->sendData(NDT_HeroStop, hero->getCurrActionState(), hero->getCurrMoveState(), hero->getPosition(), Vec2(0, 0));
-				}
+				hero->stop();
+				EventCustom event("collision");
+				event.setUserData(hero);
+				_eventDispatcher->dispatchEvent(&event);
 				hero->setJumpStage(0);
 			}
+			CCLOG("collision %f, %f", hero->getPhysicsBody()->getVelocity().x, hero->getPhysicsBody()->getVelocity().y);
 			return true;
 		}
         else if((contact.getShapeA()->getCategoryBitmask() == PC_Bullet && contact.getShapeB()->getCategoryBitmask() == PC_Ground) ||
@@ -251,11 +405,29 @@ void GameLayer::onEnter()
 
 			hero->setIsOnRotateGround(false);
 
-			if ((hero->getCurrActionState() == ACTION_STATE_MOVE && hero->isInMoveAction(MOVE_STATE_WALK)) || hero->getCurrActionState() == ACTION_STATE_IDLE)
+			if (hero->getCurrActionState() == ACTION_STATE_WALK || hero->getCurrActionState() == ACTION_STATE_IDLE)
 			{
-				hero->stopMoveAction(MOVE_STATE_WALK, false);
-				hero->runJumpAction(false);
+				hero->runJumpDownAction();
 			}
+		}
+		else if ((contact.getShapeA()->getCategoryBitmask() == PC_Hero && contact.getShapeB()->getCategoryBitmask() == PC_Ground) ||
+			(contact.getShapeA()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getCategoryBitmask() == PC_Hero) ||
+			(contact.getShapeA()->getCategoryBitmask() == PC_Hero && contact.getShapeB()->getCategoryBitmask() == PC_Box) ||
+			(contact.getShapeA()->getCategoryBitmask() == PC_Box && contact.getShapeB()->getCategoryBitmask() == PC_Hero)
+			)
+		{
+			BaseSprite* hero;
+			if (contact.getShapeA()->getCategoryBitmask() == PC_Hero)
+			{
+				hero = static_cast<BaseSprite *>(contact.getShapeA()->getBody()->getNode());
+			}
+			else
+			{
+				hero = static_cast<BaseSprite *>(contact.getShapeB()->getBody()->getNode());
+			}
+			EventCustom event("collision");
+			event.setUserData(hero);
+			_eventDispatcher->dispatchEvent(&event);
 		}
 	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
@@ -278,53 +450,93 @@ void GameLayer::onExit()
 
 void GameLayer::update(float dt)
 {
-	this->updateHero(dt);
-	this->updateEnemys(dt);
+	this->updatePlayer(dt);
 	this->updateBullet(dt);
 	this->updateBomb(dt);
 	this->updatePhysicsWorld(dt);
 	this->updateForesight(dt);
 }
 
-void GameLayer::updateHero(float dt)
+void GameLayer::updatePlayer(float dt)
 {
-	m_pHero->update(dt);
-    setViewPointCenter();
-    m_pHero->setPrePosition(m_pHero->getPosition());
-    
-    if(m_pHero->getIsLocked() && m_pTarget == nullptr)
-    {
-        m_pTarget = getNearestEnemy();
-		if(m_pTarget)
-			m_pTarget->getLockMark()->setVisible(true);
-    }
-    else if(!m_pHero->getIsLocked() && m_pTarget != nullptr)
-    {
-		m_pTarget->getLockMark()->setVisible(false);
-        m_pTarget = nullptr;
-    }
-	
-    if(m_pTarget != nullptr)
-    {
-        Vec2 direction = m_pTarget->getPosition() - m_pHero->getPosition();
-        direction.normalize();
-        m_pHero->setShootDirection(direction);		
-    }
-    
-	//CCLOG("MoveState %d %d", m_pHero->getCurrActionState(), m_pHero->getCurrMoveState());
-	//CCLOG("(%f, %f) (%f, %f)", m_pHero->getPhysicsBody()->getPosition().x, m_pHero->getPhysicsBody()->getPosition().y, m_pHero->getPosition().x, m_pHero->getPosition().y);
-}
-
-void GameLayer::updateEnemys(float dt)
-{
-	for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < 4; ++i)
 	{
-		if(m_pEnemy[i])
-            m_pEnemy[i]->update(dt);
-		
-		//CCLOG("enemy[%d]:%f, %f", i, m_pEnemy[i]->getPositionX(), m_pEnemy[i]->getPositionY());
+		BaseSprite* player = GameData::getInstance()->m_pPlayers[i];
+		if (player)
+		{
+			player->update(dt);
+			if (player->getIsMe())
+			{
+				setViewPointCenter();
+				player->setPrePosition(player->getPosition());
+
+#if 0  
+				if (player->getIsLocked() && m_pTarget == nullptr)
+				{
+					m_pTarget = getNearestEnemy();
+					if (m_pTarget)
+						m_pTarget->getLockMark()->setVisible(true);
+				}
+				else if (!player->getIsLocked() && m_pTarget != nullptr)
+				{
+					m_pTarget->getLockMark()->setVisible(false);
+					m_pTarget = nullptr;
+				}
+
+				if (m_pTarget != nullptr)
+				{
+					Vec2 direction = m_pTarget->getPosition() - player->getPosition();
+					direction.normalize();
+					player->setShootDirection(direction);
+				}
+#else
+				if (player->getIsAutoShoot())
+				{
+					auto target = getNearestEnemy();
+					if (m_pTarget != nullptr && target == nullptr)
+					{
+						m_pTarget->getLockMark()->setVisible(false);
+						m_pTarget = nullptr;
+					}
+					else if (m_pTarget == nullptr)
+					{
+						m_pTarget = target;
+					}
+
+					if (m_pTarget)
+					{
+						m_pTarget->getLockMark()->setVisible(true);
+					}
+				}
+				else
+				{
+					if (m_pTarget != nullptr)
+					{
+						m_pTarget->getLockMark()->setVisible(false);
+						m_pTarget = nullptr;
+					}
+				}
+
+				if (m_pTarget != nullptr)
+				{
+					Vec2 direction = m_pTarget->getPosition() - player->getPosition();
+					direction.normalize();
+					player->setShootDirection(direction);
+					EventCustom event("auto_shoot");
+					event.setUserData(this);
+					_eventDispatcher->dispatchEvent(&event);
+				}
+				else
+				{
+					EventCustom event("auto_shoot_finish");
+					event.setUserData(this);
+					_eventDispatcher->dispatchEvent(&event);
+				}
+
+#endif
+			}
+		}
 	}
-	
 }
 
 void GameLayer::updateBullet(float dt)
@@ -340,8 +552,9 @@ void GameLayer::updateBullet(float dt)
 
 void GameLayer::updateForesight(float dt)
 {
-	m_pForesight->setPosition(m_pHero->getPosition() + Point(0.f, -20.f));
-	float angle = CC_RADIANS_TO_DEGREES(m_pHero->getShootDirection().getAngle());
+	BaseSprite* self = GameData::getInstance()->getMySelf();
+	m_pForesight->setPosition(self->getPosition() + Point(0.f, -20.f));
+	float angle = CC_RADIANS_TO_DEGREES(self->getShootDirection().getAngle());
 	m_pForesight->setRotation(-angle);
 }
 
@@ -382,16 +595,15 @@ void GameLayer::setViewPointCenter() {
 	auto centerOfView = Point(winSize.width / 2, winSize.height / 2);
 	
 
-	auto heroPos = m_pHero->getPosition();
+	auto heroPos = GameData::getInstance()->getMySelf()->getPosition();
 	auto layerPos = this->getPosition();
 	auto heroPosInScreen = heroPos + layerPos;
 	this->setPositionX(centerOfView.x - heroPos.x);
 
     auto diff = heroPosInScreen - centerOfView;
     if(fabs(diff.y) > 25.f)
-    {
-        
-		auto heroPrePosY = m_pHero->getPrePosition().y;
+    {     
+		auto heroPrePosY = GameData::getInstance()->getMySelf()->getPrePosition().y;
 		this->setPositionY(heroPrePosY + layerPos.y - heroPos.y);
     }
 	
@@ -506,22 +718,27 @@ BaseSprite* GameLayer::createHero(int role, cocos2d::Point pos)
 
 BaseSprite* GameLayer::getNearestEnemy()
 {
-    BaseSprite* target = nullptr;    
+    BaseSprite* target = nullptr;
+	BaseSprite* self = GameData::getInstance()->getMySelf();
     
     float distance = 100000.f;
-	for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < 4; ++i)
 	{
-        if(m_pEnemy[i] == nullptr)
+		BaseSprite* player = GameData::getInstance()->m_pPlayers[i];
+        if(player == nullptr)
+            continue;
+
+		if(player->getIsMe())
+			continue;
+        
+        if(fabsf(self->getPosition().x - player->getPosition().x) > 450.f ||  fabsf(self->getPosition().y - player->getPosition().y) > 320.f)
             continue;
         
-        if(fabsf(m_pHero->getPosition().x - m_pEnemy[i]->getPosition().x) > 450.f ||  fabsf(m_pHero->getPosition().y - m_pEnemy[i]->getPosition().y) > 320.f)
-            continue;
-        
-		float d = m_pHero->getPosition().getDistanceSq(m_pEnemy[i]->getPosition());
+		float d = self->getPosition().getDistanceSq(player->getPosition());
 		if (d < distance)
 		{
 			distance = d;
-            target = m_pEnemy[i];
+            target = player;
         }
 	}
 	return target;
@@ -529,18 +746,20 @@ BaseSprite* GameLayer::getNearestEnemy()
 
 void GameLayer::explodeEnemy()
 {
-	Hero* hero = dynamic_cast<Hero*>(m_pHero);
+	BaseSprite* self = GameData::getInstance()->getMySelf();
+	Hero* hero = dynamic_cast<Hero*>(self);
 	if (hero)
 	{
 		for (int i = 0; i < 3; ++i)
 		{
-			if (m_pEnemy[i] == nullptr)
+			BaseSprite* player = GameData::getInstance()->m_pPlayers[i];
+			if (player == nullptr)
 				continue;
 
-			float d = m_pBomb->getPosition().getDistanceSq(m_pEnemy[i]->getPosition());
+			float d = m_pBomb->getPosition().getDistanceSq(player->getPosition());
 			if (d < m_pBomb->getRange() * m_pBomb->getRange())
 			{
-				m_pEnemy[i]->hurt(m_pBomb->getPower());
+				player->hurt(m_pBomb->getPower());
 			}
 		}
 	}

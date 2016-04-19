@@ -10,6 +10,8 @@ public:
 
 	bool init();
 
+	virtual bool isInSplash() { return false;  }
+
 	CREATE_FUNC(Princess);
 };
 

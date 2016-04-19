@@ -50,21 +50,21 @@ void SelectLayer::initMenu()
 
 void SelectLayer::menuClientClick(Ref* sender)
 {
-	SocketManager::getInstance()->setNetworkType(NT_Client);
+	SocketManager::getInstance()->init(NT_Client);
 	auto scene = StartScene::createScene();
 	Director::getInstance()->replaceScene(scene);
 }
 
 void SelectLayer::menuServerClick(Ref* sender)
 {
-	SocketManager::getInstance()->setNetworkType(NT_Server);
+	SocketManager::getInstance()->init(NT_Server);
 	auto scene = StartScene::createScene();
 	Director::getInstance()->replaceScene(scene);
 }
 
 void SelectLayer::menuOfflineClick(Ref* sender)
 {
-	SocketManager::getInstance()->setNetworkType(NT_Offline);
+	SocketManager::getInstance()->init(NT_Offline);
 	auto scene = StartScene::createScene();
 	Director::getInstance()->replaceScene(scene);
 }

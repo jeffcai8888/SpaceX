@@ -23,17 +23,17 @@ public:
 	virtual void onExit();
 
 	virtual void update(float dt);
-	virtual void updateHero(float dt);
-	virtual void updateEnemys(float dt);
 	virtual void updateBullet(float dt);
 	virtual void updateBomb(float dt);
 	virtual void updateForesight(float dt);
-	void updatePhysicsWorld(float dt);
-
+	virtual void updatePhysicsWorld(float dt);
+	virtual void updatePlayer(float dt);
 
 	void callBack(cocos2d::Ref *pSender);
 
-	CC_SYNTHESIZE_READONLY(BaseSprite*, m_pHero, Hero);
+	BaseSprite* getPlayer(int index);
+
+	//CC_SYNTHESIZE_READONLY(BaseSprite*, m_pHero, Hero);
 	CC_SYNTHESIZE_READONLY(Foresight*, m_pForesight, Foresight);
     CC_SYNTHESIZE_READONLY(cocos2d::Sprite*, m_pRange, Range);
 	CC_SYNTHESIZE_READONLY(cocos2d::Sprite*, m_pSkillStartPos, SkillStartPos);
@@ -52,7 +52,6 @@ protected:
 
 	cocos2d::Vector<cocos2d::EventListener *> m_vecEventListener;
 
-	BaseSprite* m_pEnemy[3];
     BaseSprite* m_pTarget;
 	Bomb*		m_pBomb;
 

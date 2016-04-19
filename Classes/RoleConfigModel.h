@@ -6,12 +6,11 @@
 class RoleConfig
 {
 public:
-	float m_fVelocity;
-	float m_fRange;
-	float m_fStartTime;
-	float m_fCDTime;
-	int	  m_iPower;
+	float m_fWalkVelocity;
+	float m_fJumpVelocity;
 	float m_fGravity;
+	int	  m_iSkill1;
+	int	  m_iSkill2;
 };
 
 typedef std::map<std::string, RoleConfig>						RoleConfigMap;

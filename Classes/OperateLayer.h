@@ -21,7 +21,7 @@ public:
 	{
 		KB_Front = 1 << 0,
 		KB_Back = 1 << 1,
-		KB_Up = 1 << 2
+		//KB_Up = 1 << 2
 	};
 
 	OperateLayer();
@@ -57,11 +57,12 @@ private:
 	cocos2d::Vector<cocos2d::EventListener *> m_vecEventListener;
 	int m_PressType;
 
-	BaseSprite*	m_pHero;
     Foresight* m_pForesight;
     cocos2d::Sprite* m_pRange;
 
 	int m_KeyPressedValue;
+
+	bool m_isAutoShootPressed;
 
 	cocos2d::ValueMapIntKey m_mapPressType;
 };

@@ -11,12 +11,7 @@ std::string bombConfigName[1] =
 
 BombConfigModel::BombConfigModel()
 {
-	for (unsigned int i = 0; i < 1; ++i)
-	{
-        std::string configName = bombConfigName[i];
-		init(configName);
-        CCLOG("%f", m_mapBombConfig["Bomb1Config"].m_fVelocity);
-	}
+	load();
 }
 
 BombConfigModel::~BombConfigModel()
@@ -24,7 +19,16 @@ BombConfigModel::~BombConfigModel()
 
 }
 
-void BombConfigModel::init(const std::string& fileName)
+void BombConfigModel::load()
+{
+	for (unsigned int i = 0; i < 1; ++i)
+	{
+		std::string configName = bombConfigName[i];
+		load(configName);
+	}
+}
+
+void BombConfigModel::load(const std::string& fileName)
 {
 	BombConfig config;
 	JsonParser* parser = JsonParser::createWithFile((fileName + ".json").c_str());

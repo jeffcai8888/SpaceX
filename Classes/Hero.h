@@ -12,6 +12,9 @@ public:
 	bool init();
 	virtual void update(float dt);
 	void exploreBomb();
+	virtual bool isInSplash() {
+		return m_bIsInSplash;
+	}
 
 	CREATE_FUNC(Hero);
 
@@ -27,6 +30,7 @@ public:
 	CC_SYNTHESIZE(float, m_curSkillLastTime, CurSkillLastTime);
 	CC_SYNTHESIZE(float, m_curSkillCDTime,	CurSkillCDTime);
 	CC_SYNTHESIZE(bool,  m_isThrowBomb, IsThrowBomb);
+	CC_SYNTHESIZE(bool, m_bIsInSplash, IsInSplash);
 };
 
 

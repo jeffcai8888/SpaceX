@@ -11,6 +11,9 @@
 class JsonParser : public cocos2d::Ref
 {
 public:
+	static JsonParser *createWithString(const char*);
+	bool initWithString(const char*);
+
 	static JsonParser *createWithFile(const char *);
 	bool initWithFile(const char *);
 
@@ -18,6 +21,7 @@ public:
 	bool initWithArray(cocos2d::ValueVector);
 	void decodeDebugData();
 	void encodeDebugData(const char *);
+	void decodeLoginProtocol();
 
 
 	CC_SYNTHESIZE(cocos2d::ValueVector, list, List);

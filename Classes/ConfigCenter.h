@@ -15,6 +15,8 @@ public:
 	BulletConfigModel* getBulletConfigModel() { return m_pBulletConfigModel; }
 	BombConfigModel* getBombConfigModel() { return m_pBombConfigModel;  }
 	RoleConfigModel* getRoleConfigModel() { return m_pRoleConfigModel; }
+
+	void reload();
 private:
 	ConfigCenter();
 	virtual ~ConfigCenter();

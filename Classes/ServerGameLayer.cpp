@@ -12,6 +12,7 @@
 #include "SceneManager.h"
 #include "SimpleAudioEngine.h"
 #include "SocketManager.h"
+#include "GameData.h"
 
 USING_NS_CC;
 
@@ -28,92 +29,8 @@ ServerGameLayer::~ServerGameLayer()
 
 void ServerGameLayer::onEnter()
 {
-	GameLayer::onEnter();
-    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("hero.plist");
-    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gunner.plist");
-    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("princess.plist");
-    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("ui.plist");
-    auto visibleSize = Director::getInstance()->getVisibleSize();
-    this->m_origin = Director::getInstance()->getVisibleOrigin();
-    
-    TMXObjectGroup *objects = m_pTiledMap->getObjectGroup("Objects");
-    CCASSERT(NULL != objects, "'Objects' object group not found");
-    auto spawnPoint = objects->getObject("SpawnPoint");
-    CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
-    Point heroInitPos = m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
-    m_pHero = createHero(ROLE_HERO, heroInitPos);
-	m_pHero->setTag(0);
-    this->addChild(m_pHero);
-    auto centerOfView = Point(visibleSize.width / 2, visibleSize.height / 2);
-    this->setPosition(centerOfView - m_pHero->getPosition());
-    
-    m_pRange = Sprite::createWithSpriteFrameName("range.png");
-    m_pRange->setVisible(false);
-    m_pRange->setPosition(Point(140.f, 25.f));
-    m_pHero->addChild(m_pRange);
-    
-    m_pForesight = Foresight::create();
-    m_pForesight->setVisible(false);
-    this->addChild(m_pForesight);
-    
-    
-    spawnPoint = objects->getObject("SpawnPoint1");
-    CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
-    heroInitPos = m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
-    m_pEnemy[0] = createHero(ROLE_PRINCESS, heroInitPos);
-	m_pEnemy[0]->setTag(1);
-    this->addChild(m_pEnemy[0]);
-    
-    JsonParser* parser = JsonParser::createWithFile("Debug.json");
-    parser->decodeDebugData();
-    auto list = parser->getList();
-    for (auto& v : list)
-    {
-        ValueMap row = v.asValueMap();
-        
-        for (auto& pair : row)
-        {
-            CCLOG("%s %s", pair.first.c_str(), pair.second.asString().c_str());
-            if (pair.first.compare("HeroHSpeed") == 0)
-            {
-                float s = pair.second.asFloat();
-                m_pHero->setWalkVelocity(s);
-                for (int i = 0; i < 3; ++i)
-                {
-                    if (m_pEnemy[i])
-                    {
-                        m_pEnemy[i]->setWalkVelocity(s);
-                    }
-                }
-            }
-            else if (pair.first.compare("HeroVSpeed") == 0)
-            {
-                m_pHero->setJumpVelocity(pair.second.asFloat());
-                
-                for (int i = 0; i < 3; ++i)
-                {
-                    if (m_pEnemy[i])
-                    {
-                        m_pEnemy[i]->setJumpVelocity(pair.second.asFloat());
-                    }
-                }
-            }
-            else if (pair.first.compare("HeroG") == 0)
-            {
-                m_pHero->setGravity(pair.second.asFloat());
-                for (int i = 0; i < 3; ++i)
-                {
-                    if (m_pEnemy[i])
-                    {
-                        m_pEnemy[i]->setGravity(pair.second.asFloat());
-                    }
-                }
-            }        
-        }
-    }
-    
-    
-    SocketManager::getInstance()->getSocketServer()->onRecv = CC_CALLBACK_3(ServerGameLayer::onRecv, this);
+	GameLayer::onEnter();    
+	SocketManager::getInstance()->getSocketServer()->onRecv = CC_CALLBACK_3(ServerGameLayer::onRecv, this);
 	SocketManager::getInstance()->getSocketServer()->onDisconnect = CC_CALLBACK_1(ServerGameLayer::onDisconnect, this);
 }
 
@@ -125,41 +42,52 @@ void ServerGameLayer::onRecv(HSocket socket, const char* data, int count)
 		switch (networkData->dataType)
 		{
 		case NDT_HeroWalk:
-			//m_pHero->runWalkAction(!m_pHero->isInAir());
-			m_pEnemy[0]->setPosition(networkData->position);
-			//m_pHero->getPhysicsBody()->setVelocity(networkData->velocity);
-			m_pEnemy[0]->walk(networkData->vec.x);
-			break;
+		{
+			BaseSprite* player = GameData::getInstance()->m_pPlayers[networkData->index];
+			player->setPosition(networkData->position);
+			player->walk(networkData->vec.x);
+		}
+		break;
 		case NDT_HeroJumpUp:
-			//m_pHero->runJumpAction(true);
-			m_pEnemy[0]->setPosition(networkData->position);
-			//m_pHero->getPhysicsBody()->setVelocity(networkData->velocity);
-			m_pEnemy[0]->jump(m_pEnemy[0]->getJumpVelocity());
-			break;
+		{
+			BaseSprite* player = GameData::getInstance()->m_pPlayers[networkData->index];
+			player->setPosition(networkData->position);
+			player->jump(player->getJumpVelocity());
+		}
+		break;
 		case NDT_HeroJumpDown:
-			m_pEnemy[0]->runJumpAction(false);
-			m_pEnemy[0]->setPosition(networkData->position);
-			m_pEnemy[0]->getPhysicsBody()->setVelocity(networkData->vec);
-			break;
+		{
+			BaseSprite* player = GameData::getInstance()->m_pPlayers[networkData->index];
+			player->runJumpDownAction();
+			player->setPosition(networkData->position);
+			player->getPhysicsBody()->setVelocity(networkData->vec);
+		}
+		break;
 		case NDT_HeroStop:
-			//m_pHero->runIdleAction();
-			m_pEnemy[0]->setPosition(networkData->position);
-			//m_pHero->getPhysicsBody()->setVelocity(networkData->velocity);
-			m_pEnemy[0]->stop();
-			m_pEnemy[0]->stopMoveAction(MOVE_STATE_WALK, true);
-			break;
+		{
+			BaseSprite* player = GameData::getInstance()->m_pPlayers[networkData->index];
+			player->setPosition(networkData->position);
+			player->stop();
+		}
+		break;
 		case NDT_HeroPos:
 			m_dequeShadow.push_back(networkData->vec);
 			break;
 		case NDT_HeroAttack:
-			m_pEnemy[0]->setPosition(networkData->position);
-			m_pEnemy[0]->setShootDirection(networkData->vec);
-			m_pEnemy[0]->attack(true);
-			break;
+		{
+			BaseSprite* player = GameData::getInstance()->m_pPlayers[networkData->index];
+			player->setPosition(networkData->position);
+			player->setShootDirection(networkData->vec);
+			player->attack(true);
+		}
+		break;
 		case NDT_HeroStopAttack:
-			m_pEnemy[0]->setPosition(networkData->position);
-			m_pEnemy[0]->attack(false);
-			break;
+		{
+			BaseSprite* player = GameData::getInstance()->m_pPlayers[networkData->index];
+			player->attack(false);
+			player->setPosition(networkData->position);
+		}
+		break;
 		default:
 			break;
 		}

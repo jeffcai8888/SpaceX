@@ -11,19 +11,24 @@ std::string bulletConfigName[1] =
 
 BulletConfigModel::BulletConfigModel()
 {
-	for (int i = 0; i < 1; ++i)
-	{
-        std::string configName = bulletConfigName[i];
-		init(configName);
-	}
+	load();
 }
 
 BulletConfigModel::~BulletConfigModel()
 {
-
+	
 }
 
-void BulletConfigModel::init(const std::string& fileName)
+void BulletConfigModel::load()
+{
+	for (int i = 0; i < 1; ++i)
+	{
+		std::string configName = bulletConfigName[i];
+		load(configName);
+	}
+}
+
+void BulletConfigModel::load(const std::string& fileName)
 {
 	BulletConfig config;
 	JsonParser* parser = JsonParser::createWithFile((fileName + ".json").c_str());

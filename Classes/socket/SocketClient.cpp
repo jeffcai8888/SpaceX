@@ -1,4 +1,5 @@
 #include "SocketClient.h"
+#include "GameData.h"
 
 SocketClient* SocketClient::getInstance()
 {
@@ -13,7 +14,8 @@ void SocketClient::destroy()
 
 SocketClient::SocketClient(void) :
 	onRecv(nullptr),
-	_socektClient(0)
+	_socketClient(0),
+	_hasRecvLoginProtocol(false)
 {
 }
 
@@ -24,10 +26,10 @@ SocketClient::~SocketClient(void)
 
 void SocketClient::clear()
 {
-	if (_socektClient != 0)
+	if (_socketClient != 0)
 	{
 		_mutex.lock();
-		this->closeConnect(_socektClient);
+		this->closeConnect(_socketClient);
 		_mutex.unlock();
 	}
 
@@ -44,11 +46,11 @@ bool SocketClient::initClient()
 {
 	this->clear();
 
-	_socektClient = socket(AF_INET, SOCK_STREAM, 0);
-	if (error(_socektClient))
+	_socketClient = socket(AF_INET, SOCK_STREAM, 0);
+	if (error(_socketClient))
 	{
 		log("init client error!");
-		_socektClient = 0;
+		_socketClient = 0;
 		return false;
 	}
 	
@@ -71,12 +73,15 @@ bool SocketClient::connectServer(const char* serverIP, unsigned short port)
 	serverAddr.sin_addr.s_addr = inet_addr(serverIP);
 
 	int ret = 0;
-	ret = connect(_socektClient, (struct sockaddr*)&serverAddr, sizeof(struct sockaddr));
+	ret = connect(_socketClient, (struct sockaddr*)&serverAddr, sizeof(struct sockaddr));
 	if (ret < 0)
 	{
-		_socektClient = 0;
+		_socketClient = 0;
 		return false;
 	}
+
+	std::string loginData = std::string("{\"role_id\":\"") + Value(GameData::getInstance()->getRoleType()).asString() + std::string("\"}");
+	sendMessage(loginData.c_str(), loginData.length());
 
 	std::thread recvThread(&SocketClient::recvMessage, this);
 	recvThread.detach();
@@ -90,36 +95,47 @@ void SocketClient::recvMessage()
 	int ret = 0;
 	while (true)
 	{
-		ret = recv(_socektClient, recvBuf, sizeof(recvBuf), 0);
+		ret = recv(_socketClient, recvBuf, sizeof(recvBuf), 0);
+		CCLOG("recvMessage");
 		if (ret < 0)
 		{
 			log("recv error!");
 			break;
 		}
-		if (ret > 0 && onRecv != nullptr)
+
+		if (ret > 0 && ( onRecv != nullptr || (!_hasRecvLoginProtocol && onNewConnection != nullptr)))
 		{
 			std::lock_guard<std::mutex> lk(_UIMessageQueueMutex);
-			SocketMessage * msg = new SocketMessage(RECEIVE, (unsigned char*)recvBuf, ret);
+			SocketMessage * msg;
+			
+			
+			if (!_hasRecvLoginProtocol)
+			{
+				msg = new SocketMessage(NEW_CONNECTION, (unsigned char*)recvBuf, ret);
+				_hasRecvLoginProtocol = true;
+			}					
+			else
+				msg = new SocketMessage(RECEIVE, (unsigned char*)recvBuf, ret);
 			_UIMessageQueue.push_back(msg);
 		}
 	}
 	_mutex.lock();
-	this->closeConnect(_socektClient);
+	this->closeConnect(_socketClient);
 	if (onDisconnect != nullptr)
 	{
 		std::lock_guard<std::mutex> lk(_UIMessageQueueMutex);
 		SocketMessage * msg = new SocketMessage(DISCONNECT);
 		_UIMessageQueue.push_back(msg);
 	}
-	_socektClient = 0;
+	_socketClient = 0;
 	_mutex.unlock();
 }
 
 void SocketClient::sendMessage(const char* data, int count)
 {
-	if (_socektClient != 0)
+	if (_socketClient != 0)
 	{
-		int ret = send(_socektClient, data, count, 0);
+		int ret = send(_socketClient, data, count, 0);
 		if (ret < 0)
 		{
 			log("send error!");
@@ -157,6 +173,12 @@ void SocketClient::update(float dt)
 		if (onRecv)
 		{
 			this->onRecv((const char*)msg->getMsgData()->getBytes(), msg->getMsgData()->getSize());
+		}
+		break;
+	case NEW_CONNECTION:
+		if (onNewConnection)
+		{
+			this->onNewConnection((const char*)msg->getMsgData()->getBytes());
 		}
 		break;
 	default:

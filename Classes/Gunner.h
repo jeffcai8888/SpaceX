@@ -9,6 +9,7 @@ public:
 	~Gunner();
 
 	bool init();
+	virtual bool isInSplash() { return false; }
 
 	CREATE_FUNC(Gunner);
 };

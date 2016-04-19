@@ -26,10 +26,10 @@ public:
 
 
 	const BulletConfigMap&			GetBulletConfigMap(void) { return m_mapBulletConfig; }
+	void load();
 private:
 	BulletConfigMap m_mapBulletConfig;
-
-	void init(const std::string& fileName);
+	void load(const std::string& fileName);
 };
 
 #endif

@@ -2,6 +2,23 @@
 
 USING_NS_CC;
 
+JsonParser *JsonParser::createWithString(const char* data)
+{
+	JsonParser *pRet = new JsonParser();
+	if (pRet->initWithString(data))
+	{
+		pRet->autorelease();
+		return pRet;
+	}
+	CC_SAFE_DELETE(pRet);
+	return nullptr;
+}
+bool JsonParser::initWithString(const char* data)
+{
+	content = data;
+	return true;
+}
+
 JsonParser* JsonParser::createWithFile(const char *_fileName)
 {
 	JsonParser *pRet = new JsonParser();
@@ -122,5 +139,47 @@ void JsonParser::encodeDebugData(const char *fileName)
 	{
 		size_t ret = fwrite(out, 1, strlen(out), fp);
 		fclose(fp);
+	}
+}
+
+void JsonParser::decodeLoginProtocol()
+{
+	rapidjson::Document document;
+	document.Parse<0>(content.c_str());
+
+	CCASSERT(!document.HasParseError(), "Parsing to document failure.");
+
+	CCLOG("Parsing to document succeeded.");
+
+	CC_ASSERT(document.IsObject() && document.HasMember("Data"));
+
+	const rapidjson::Value& datas = document["Data"];
+
+	CC_ASSERT(datas.IsArray());
+
+	for (unsigned int i = 0; i < datas.Size(); ++i)
+	{
+		row = ValueMap();
+
+		const rapidjson::Value& data = datas[i];
+
+		CC_ASSERT(data.HasMember("player_id"));
+
+		const rapidjson::Value& val_attr = data["player_id"];
+
+		CC_ASSERT(val_attr.IsString());
+
+		//row["attr"] = Value(val_attr.GetString());
+
+		CC_ASSERT(data.HasMember("role_id"));
+
+		const rapidjson::Value& val_Value = data["role_id"];
+
+		CC_ASSERT(val_Value.IsInt());
+
+		//row["value"] = Value(val_Value.GetDouble());
+		row[val_attr.GetString()] = Value(val_Value.GetInt());
+
+		list.push_back(Value(row));
 	}
 }

@@ -1,14 +1,16 @@
 #include "SocketManager.h"
 #include "Macro.h"
 #include "GameLayer.h"
+#include "GameData.h"
 
 SocketManager* SocketManager::instance = nullptr;
 
 SocketManager::SocketManager()
 :m_networkType(NT_Offline)
-, m_pSocketClient(nullptr)
-, m_pSocketServer(nullptr)
+,m_pSocketClient(nullptr)
+,m_pSocketServer(nullptr)
 {
+
 }
 
 SocketManager::~SocketManager()
@@ -24,38 +26,47 @@ SocketManager* SocketManager::getInstance()
 	return instance;
 }
 
-void SocketManager::init()
+void SocketManager::init(int networkType)
+{
+	m_networkType = networkType;
+	if (NT_Client == m_networkType)
+	{
+		m_pSocketClient = new SocketClient();
+	}
+	else if (NT_Server == m_networkType)
+	{
+		m_pSocketServer = new SocketServer();
+	}
+}
+
+void SocketManager::start()
 {
 	if (NT_Client == m_networkType)
 	{
-		m_pSocketClient = SocketClient::getInstance();
-		if (!m_pSocketClient->connectServer(m_ServerAddr.c_str(), 8000))
+		if (!m_pSocketClient->connectServer("127.0.0.1", 8000))
 		{
 			CCLOG("Client connect error");
 		}
 	}
 	else if (NT_Server == m_networkType)
 	{
-		m_pSocketServer = SocketServer::getInstance();
 		m_pSocketServer->startServer(8000);
 	}
 }
 
-void SocketManager::sendData(int type, int actionState, int moveState, cocos2d::Vec2 position, cocos2d::Vec2 vec)
+void SocketManager::sendData(int type, int actionState, cocos2d::Vec2 position, cocos2d::Vec2 vec)
 {
 	NetworkData data;
 	data.dataType = type;
+	data.index = GameData::getInstance()->getRoleIndex();
 	data.actionState = actionState;
-	data.moveState = moveState;
 	data.position = position;
 	data.vec = vec;
 	data.dataSize = sizeof(data);
 	if(m_networkType == NT_Server)
 		m_pSocketServer->sendMessage((const char*)&data, sizeof(data));
 	else if (m_networkType == NT_Client)
-	{
 		m_pSocketClient->sendMessage((const char*)&data, sizeof(data));
-	}
 		
 }
 
