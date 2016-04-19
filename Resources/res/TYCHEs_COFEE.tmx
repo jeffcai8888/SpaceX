@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="400" height="100" tilewidth="20" tileheight="20" nextobjectid="49">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="400" height="100" tilewidth="20" tileheight="20" nextobjectid="51">
  <layer name="Background" width="400" height="100" visible="0">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -118,7 +118,7 @@
   <object id="12" name="Box" x="4480" y="1115" width="195" height="10"/>
   <object id="14" name="Box" x="4628.67" y="1291" width="10" height="68.6667"/>
   <object id="15" name="Box" x="4548.33" y="1280" width="151.167" height="10"/>
-  <object id="16" name="Box" x="904" y="1520" width="4441.33" height="10"/>
+  <object id="16" name="Box" x="904" y="1520" width="4696" height="10"/>
   <object id="17" name="Box" x="5073.83" y="1464.5" width="55" height="55"/>
   <object id="19" name="Box" x="4861.5" y="1354.33" width="80" height="53.6667"/>
   <object id="20" name="Box" x="4779.83" y="1299.83" width="80" height="108.667"/>
@@ -139,10 +139,12 @@
   <object id="41" name="Box" x="2649" y="1340" width="80" height="10"/>
   <object id="42" name="Box" x="2771" y="1400" width="80" height="10"/>
   <object id="47" name="Box" x="2179.76" y="520" width="10" height="1000"/>
-  <object id="48" name="Box" x="5345" y="529.5" width="10" height="1000"/>
+  <object id="48" name="Box" x="5590" y="529.5" width="10" height="1000"/>
  </objectgroup>
  <objectgroup name="Objects">
-  <object id="45" name="SpawnPoint" x="2500.44" y="1481.21" width="27.2727" height="30.303"/>
+  <object id="45" name="SpawnPoint0" x="2389.77" y="1400.36" width="27.2727" height="30.303"/>
   <object id="46" name="SpawnPoint1" x="5222.02" y="1471.97" width="27.2727" height="30.303"/>
+  <object id="49" name="SpawnPoint2" x="3628.38" y="942.937" width="20" height="20"/>
+  <object id="50" name="SpawnPoint3" x="4068.68" y="1075.82" width="27.2727" height="30.303"/>
  </objectgroup>
 </map>
