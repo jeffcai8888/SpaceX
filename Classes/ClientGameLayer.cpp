@@ -31,8 +31,8 @@ ClientGameLayer::~ClientGameLayer()
 void ClientGameLayer::onEnter()
 {
 	GameLayer::onEnter();
-	SocketClient::getInstance()->onRecv = CC_CALLBACK_2(ClientGameLayer::onRecv, this);
-	SocketClient::getInstance()->onDisconnect = CC_CALLBACK_0(ClientGameLayer::onDisconnect, this);
+	SocketManager::getInstance()->getSocketClient()->onRecv = CC_CALLBACK_2(ClientGameLayer::onRecv, this);
+	SocketManager::getInstance()->getSocketClient()->onDisconnect = CC_CALLBACK_0(ClientGameLayer::onDisconnect, this);
 }
 
 void ClientGameLayer::onRecv(const char* data, int count)

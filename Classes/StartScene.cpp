@@ -74,8 +74,8 @@ void StartLayer::onEnter()
 		static_cast<TextField *>(getChildByName("TextField_3"))->setVisible(false);
 		static_cast<TextField *>(getChildByName("TextField_4"))->setVisible(false);
 	}
-
-	//SocketManager::getInstance()->getSocketClient()->onNewConnection = CC_CALLBACK_1(StartLayer::onNewConnection, this);
+	if(SocketManager::getInstance()->getNetworkType() == NT_Client)
+		SocketManager::getInstance()->getSocketClient()->onNewConnection = CC_CALLBACK_1(StartLayer::onNewConnection, this);
 }
 
 void StartLayer::onExit()
@@ -142,7 +142,7 @@ void StartLayer::onClick3(Ref *pSender)
 
 void StartLayer::onNewConnection(const char* data)
 {
-	CCLOG("onRecv %s", data);
+	CCLOG("onNewConnection %s", data);
 	JsonParser* parser = JsonParser::createWithString(data);
 	parser->decodeLoginProtocol();
 	importStartGameData(parser);

@@ -17,6 +17,8 @@ public:
 
 	void update(float dt);
 
+	bool _hasRecvLoginProtocol;
+
 CC_CONSTRUCTOR_ACCESS:
 	SocketClient(void);
 	~SocketClient(void);
@@ -27,10 +29,10 @@ private:
 	void clear();
 
 private:
-	HSocket _socektClient;
+	HSocket _socketClient;
 	std::list<SocketMessage*> _UIMessageQueue;
 	std::mutex   _UIMessageQueueMutex;
-	bool _hasRecvLoginProtocol;
+	
 };
 
 #endif

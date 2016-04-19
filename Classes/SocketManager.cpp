@@ -1,11 +1,14 @@
 #include "SocketManager.h"
 #include "Macro.h"
 #include "GameLayer.h"
+#include "GameData.h"
 
 SocketManager* SocketManager::instance = nullptr;
 
 SocketManager::SocketManager()
 :m_networkType(NT_Offline)
+,m_pSocketClient(nullptr)
+,m_pSocketServer(nullptr)
 {
 
 }
@@ -26,20 +29,28 @@ SocketManager* SocketManager::getInstance()
 void SocketManager::init(int networkType)
 {
 	m_networkType = networkType;
+	if (NT_Client == m_networkType)
+	{
+		m_pSocketClient = new SocketClient();
+	}
+	else if (NT_Server == m_networkType)
+	{
+		m_pSocketServer = new SocketServer();
+	}
 }
 
 void SocketManager::start()
 {
 	if (NT_Client == m_networkType)
 	{
-		if (!SocketClient::getInstance()->connectServer("10.8.29.128", 8000))
+		if (!m_pSocketClient->connectServer("127.0.0.1", 8000))
 		{
 			CCLOG("Client connect error");
 		}
 	}
 	else if (NT_Server == m_networkType)
 	{
-		SocketServer::getInstance()->startServer(8000);
+		m_pSocketServer->startServer(8000);
 	}
 }
 
@@ -47,18 +58,19 @@ void SocketManager::sendData(int type, int actionState, cocos2d::Vec2 position, 
 {
 	NetworkData data;
 	data.dataType = type;
+	data.index = GameData::getInstance()->getRoleIndex();
 	data.actionState = actionState;
 	data.position = position;
 	data.vec = vec;
 	data.dataSize = sizeof(data);
 	if(m_networkType == NT_Server)
-		SocketServer::getInstance()->sendMessage((const char*)&data, sizeof(data));
+		m_pSocketServer->sendMessage((const char*)&data, sizeof(data));
 	else if (m_networkType == NT_Client)
-		SocketClient::getInstance()->sendMessage((const char*)&data, sizeof(data));
+		m_pSocketClient->sendMessage((const char*)&data, sizeof(data));
 		
 }
 
 std::string SocketManager::getIPAddress()
 {
-	return SocketServer::getInstance()->localIPAddresses();
+	return m_pSocketServer->localIPAddresses();
 }
