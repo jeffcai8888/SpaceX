@@ -208,7 +208,7 @@ void StartLayer::startGame()
 	}
 	else
 	{
-		JsonParser* parser = JsonParser::createWithFile("start.json");
+		JsonParser* parser = JsonParser::createWithFile("start0.json");
 		parser->decodeLoginProtocol();
 		importStartGameData(parser);
 		auto scene = GameScene::createScene();

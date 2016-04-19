@@ -84,7 +84,6 @@ bool SocketClient::connectServer(const char* serverIP, unsigned short port)
 	sendMessage(loginData.c_str(), loginData.length());
 
 	std::thread recvThread(&SocketClient::recvMessage, this);
-	CCLOG("thread %f start", recvThread);
 	recvThread.detach();
 
 	return true;
