@@ -134,8 +134,9 @@ void OperateLayer::onEnter()
 			if(isTap(m_pJoystickBg, p))
 			{
 				m_mapPressType[pTouch->getID()] = Value(BT_Joystick);
-#if 0
-				m_pHero->attack(true);
+				BaseSprite* self = GameData::getInstance()->getMySelf();
+				self->attack(true);
+#if 0			
                 m_pHero->setIsLocked(true);
                 m_pForesight->setVisible(true);
                 m_pRange->setVisible(true);
@@ -143,7 +144,7 @@ void OperateLayer::onEnter()
 				m_isAutoShootPressed = true;
 #endif
 				switchButtonStatus(BT_Joystick, true);
-				BaseSprite* self = GameData::getInstance()->getMySelf();
+				
 				SocketManager::getInstance()->sendData(NDT_HeroAttack, self->getCurrActionState(), self->getPosition(), self->getShootDirection());
 			}
 			else if (p.x <= 200.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
@@ -467,6 +468,7 @@ void OperateLayer::onEnter()
 
 	auto listener3 = EventListenerCustom::create("auto_shoot_finish", [this](EventCustom* event) {
 		BaseSprite* self = GameData::getInstance()->getMySelf();
+		CCLOG("auto_shoot_finish");
 		self->attack(false);
 		m_pForesight->setVisible(false);
 	});
