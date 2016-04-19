@@ -1,7 +1,5 @@
 {"Data":[
 {"Attr":"WalkSpeed","Value":230.0},
 {"Attr":"JumpSpeed","Value":410.0},
-{"Attr":"Gravity","Value":-600.0},
-{"Attr":"Skill1","Value":0.0},
-{"Attr":"Skill2","Value":0.0}
+{"Attr":"Gravity","Value":-600.0}
 ]}

@@ -1,8 +1,8 @@
 #include <cocos2d.h>
-#include <Box2D/Box2D.h>
 #include "Macro.h"
 #include "Princess.h"
 #include "Bullet.h"
+#include "JsonParser.h"
 
 USING_NS_CC;
 
@@ -58,6 +58,30 @@ bool Princess::init()
         body->addShape(shape1);
         
         this->setPhysicsBody(body);
+
+		JsonParser* parser = JsonParser::createWithFile("Princess.json");
+		parser->decodeDebugData();
+		auto list = parser->getList();
+		for (auto& v : list)
+		{
+			ValueMap row = v.asValueMap();
+			for (auto& pair : row)
+			{
+				if (pair.first.compare("WalkSpeed") == 0)
+				{
+					setWalkVelocity(pair.second.asFloat());
+				}
+				else if (pair.first.compare("JumpSpeed") == 0)
+				{
+					setJumpVelocity(pair.second.asFloat());
+				}
+				else if (pair.first.compare("Gravity") == 0)
+				{
+					setGravity(pair.second.asFloat());
+				}
+			}
+		}
+
         ret = true;
 	} while(0);
 

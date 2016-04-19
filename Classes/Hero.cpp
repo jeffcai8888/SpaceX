@@ -1,8 +1,8 @@
 #include <cocos2d.h>
-#include <Box2D/Box2D.h>
 #include "Macro.h"
 #include "Hero.h"
 #include "Bullet.h"
+#include "JsonParser.h"
 
 USING_NS_CC;
 
@@ -63,6 +63,55 @@ bool Hero::init()
 		body->addShape(shape1);
 		
 		this->setPhysicsBody(body);
+
+		JsonParser* parser = JsonParser::createWithFile("Hero.json");
+		parser->decodeDebugData();
+		auto list = parser->getList();
+		for (auto& v : list)
+		{
+			ValueMap row = v.asValueMap();
+			for (auto& pair : row)
+			{
+				if (pair.first.compare("WalkSpeed") == 0)
+				{
+					setWalkVelocity(pair.second.asFloat());
+				}
+				else if (pair.first.compare("JumpSpeed") == 0)
+				{
+					setJumpVelocity(pair.second.asFloat());
+				}
+				else if (pair.first.compare("Gravity") == 0)
+				{
+					setGravity(pair.second.asFloat());
+				}
+				else if (pair.first.compare("Skill1V") == 0)
+				{
+					setSkillState1Speed(pair.second.asFloat());
+				}
+				else if (pair.first.compare("Skill2V") == 0)
+				{
+					setSkillState2Speed(pair.second.asFloat());
+				}
+				else if (pair.first.compare("Skill1CD") == 0)
+				{
+					setSkillState1CDTime(pair.second.asFloat());
+				}
+				else if (pair.first.compare("Skill2CD") == 0)
+				{
+					setSkillState2CDTime(pair.second.asFloat());
+
+				}
+				else if (pair.first.compare("Skill1Time") == 0)
+				{
+					setSkillState1LastTime(pair.second.asFloat());
+				}
+				else if (pair.first.compare("Skill2Time") == 0)
+				{
+					setSkillState2LastTime(pair.second.asFloat());
+				}
+			}
+		}
+
 		ret = true;
 	} while(0);
 

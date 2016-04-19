@@ -103,6 +103,7 @@ void GameLayer::onEnter()
 		Point heroInitPos = m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
 		int roleType = GameData::getInstance()->m_playerTypes[i];
 		auto player = createHero(roleType, heroInitPos);
+		player->setTag(i);
 		if (GameData::getInstance()->getRoleIndex() == i)
 			player->setIsMe(true);
 		this->addChild(player);
@@ -135,118 +136,6 @@ void GameLayer::onEnter()
 	m_pForesight->setScale(0.2f);
 	m_pForesight->setVisible(false);
 	this->addChild(m_pForesight);
-
-	JsonParser* parser = JsonParser::createWithFile("Debug.json");
-	parser->decodeDebugData();
-	auto list = parser->getList();
-	for (auto& v : list)
-	{
-		ValueMap row = v.asValueMap();
-
-		for (auto& pair : row)
-		{
-			CCLOG("%s %s", pair.first.c_str(), pair.second.asString().c_str());
-			if (pair.first.compare("HeroHSpeed") == 0)
-			{
-				float s = pair.second.asFloat();
-				for (int i = 0; i < 4; ++i)
-				{
-					if (GameData::getInstance()->m_pPlayers[i])
-					{
-						GameData::getInstance()->m_pPlayers[i]->setWalkVelocity(s);
-					}
-				}
-			}
-			else if (pair.first.compare("HeroVSpeed") == 0)
-			{
-				for (int i = 0; i < 4; ++i)
-				{
-					if (GameData::getInstance()->m_pPlayers[i])
-					{
-						GameData::getInstance()->m_pPlayers[i]->setJumpVelocity(pair.second.asFloat());
-					}
-				}
-			}
-			else if (pair.first.compare("HeroG") == 0)
-			{
-				for (int i = 0; i < 4; ++i)
-				{
-					if (GameData::getInstance()->m_pPlayers[i])
-					{
-						GameData::getInstance()->m_pPlayers[i]->setGravity(pair.second.asFloat());
-					}
-				}
-			}
-			else if (pair.first.compare("HeroSkill1V") == 0)
-			{
-				for (int i = 0; i < 4; ++i)
-				{
-					Hero* hero = dynamic_cast<Hero*>(GameData::getInstance()->m_pPlayers[i]);
-					if (hero)
-					{
-						hero->setSkillState1Speed(pair.second.asFloat());
-					}
-				}
-				
-			}
-			else if (pair.first.compare("HeroSkill2V") == 0)
-			{
-				for (int i = 0; i < 4; ++i)
-				{
-					Hero* hero = dynamic_cast<Hero*>(GameData::getInstance()->m_pPlayers[i]);
-					if (hero)
-					{
-						hero->setSkillState2Speed(pair.second.asFloat());
-					}
-				}
-			}
-			else if (pair.first.compare("HeroSkill1CD") == 0)
-			{
-				for (int i = 0; i < 4; ++i)
-				{
-					Hero* hero = dynamic_cast<Hero*>(GameData::getInstance()->m_pPlayers[i]);
-					if (hero)
-					{
-						hero->setSkillState1CDTime(pair.second.asFloat());
-					}
-				}		
-			}
-			else if (pair.first.compare("HeroSkill2CD") == 0)
-			{
-				for (int i = 0; i < 4; ++i)
-				{
-					Hero* hero = dynamic_cast<Hero*>(GameData::getInstance()->m_pPlayers[i]);
-					if (hero)
-					{
-						hero->setSkillState2CDTime(pair.second.asFloat());
-					}
-				}
-				
-			}
-			else if (pair.first.compare("HeroSkill1Time") == 0)
-			{
-				for (int i = 0; i < 4; ++i)
-				{
-					Hero* hero = dynamic_cast<Hero*>(GameData::getInstance()->m_pPlayers[i]);
-					if (hero)
-					{
-						hero->setSkillState1LastTime(pair.second.asFloat());
-					}
-				}
-			}
-			else if (pair.first.compare("HeroSkill2Time") == 0)
-			{
-				for (int i = 0; i < 4; ++i)
-				{
-					Hero* hero = dynamic_cast<Hero*>(GameData::getInstance()->m_pPlayers[i]);
-					if (hero)
-					{
-						hero->setSkillState2LastTime(pair.second.asFloat());
-					}
-				}
-			}
-		}
-	}
 
 	importGroundData(m_pTiledMap);
 
@@ -516,23 +405,24 @@ void GameLayer::updatePlayer(float dt)
 						m_pTarget = nullptr;
 					}
 				}
-
-				if (m_pTarget != nullptr)
+				if (player->getIsAutoShoot())
 				{
-					Vec2 direction = m_pTarget->getPosition() - player->getPosition();
-					direction.normalize();
-					player->setShootDirection(direction);
-					EventCustom event("auto_shoot");
-					event.setUserData(this);
-					_eventDispatcher->dispatchEvent(&event);
+					if (m_pTarget != nullptr)
+					{
+						Vec2 direction = m_pTarget->getPosition() - player->getPosition();
+						direction.normalize();
+						player->setShootDirection(direction);
+						EventCustom event("auto_shoot");
+						event.setUserData(this);
+						_eventDispatcher->dispatchEvent(&event);
+					}
+					else
+					{
+						EventCustom event("auto_shoot_finish");
+						event.setUserData(this);
+						_eventDispatcher->dispatchEvent(&event);
+					}
 				}
-				else
-				{
-					EventCustom event("auto_shoot_finish");
-					event.setUserData(this);
-					_eventDispatcher->dispatchEvent(&event);
-				}
-
 #endif
 			}
 		}
@@ -750,10 +640,10 @@ void GameLayer::explodeEnemy()
 	Hero* hero = dynamic_cast<Hero*>(self);
 	if (hero)
 	{
-		for (int i = 0; i < 3; ++i)
+		for (int i = 0; i < 4; ++i)
 		{
 			BaseSprite* player = GameData::getInstance()->m_pPlayers[i];
-			if (player == nullptr)
+			if (player == nullptr || player->getIsMe())
 				continue;
 
 			float d = m_pBomb->getPosition().getDistanceSq(player->getPosition());
