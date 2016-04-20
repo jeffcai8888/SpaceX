@@ -23,6 +23,8 @@
 		3D6DA73B1C7545E80068FE19 /* Hero.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E96975191C72F24300959DB1 /* Hero.cpp */; };
 		3D6DA73C1C7545EC0068FE19 /* OperateLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E969751B1C72F24300959DB1 /* OperateLayer.cpp */; };
 		3D6DA73D1C7545EF0068FE19 /* SceneManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E969751D1C72F24300959DB1 /* SceneManager.cpp */; };
+		3D86F8831CC7A7C00008DBFE /* GameData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D86F8811CC7A7C00008DBFE /* GameData.cpp */; };
+		3D86F8841CC7A7C00008DBFE /* GameData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D86F8811CC7A7C00008DBFE /* GameData.cpp */; };
 		3D89168D1C7A165F00F442C9 /* JsonParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D89168B1C7A165F00F442C9 /* JsonParser.cpp */; };
 		3DBBA6F01CBE583700E2D383 /* BombConfigModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DBBA6EA1CBE583700E2D383 /* BombConfigModel.cpp */; };
 		3DBBA6F11CBE583700E2D383 /* BulletConfigModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DBBA6EC1CBE583700E2D383 /* BulletConfigModel.cpp */; };
@@ -159,6 +161,8 @@
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		3D6DA7311C74E2AA0068FE19 /* DebugScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DebugScene.cpp; sourceTree = "<group>"; };
 		3D6DA7321C74E2AA0068FE19 /* DebugScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugScene.h; sourceTree = "<group>"; };
+		3D86F8811CC7A7C00008DBFE /* GameData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameData.cpp; sourceTree = "<group>"; };
+		3D86F8821CC7A7C00008DBFE /* GameData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameData.h; sourceTree = "<group>"; };
 		3D89168B1C7A165F00F442C9 /* JsonParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JsonParser.cpp; sourceTree = "<group>"; };
 		3D89168C1C7A165F00F442C9 /* JsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JsonParser.h; sourceTree = "<group>"; };
 		3DBBA6EA1CBE583700E2D383 /* BombConfigModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BombConfigModel.cpp; sourceTree = "<group>"; };
@@ -395,6 +399,8 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				3D86F8811CC7A7C00008DBFE /* GameData.cpp */,
+				3D86F8821CC7A7C00008DBFE /* GameData.h */,
 				3DBBA6EA1CBE583700E2D383 /* BombConfigModel.cpp */,
 				3DBBA6EB1CBE583700E2D383 /* BombConfigModel.h */,
 				3DBBA6EC1CBE583700E2D383 /* BulletConfigModel.cpp */,
@@ -677,6 +683,7 @@
 				E96975241C72F24300959DB1 /* Ground.cpp in Sources */,
 				3DBBA6F01CBE583700E2D383 /* BombConfigModel.cpp in Sources */,
 				E910422C1CA533550004E13C /* Princess.cpp in Sources */,
+				3D86F8831CC7A7C00008DBFE /* GameData.cpp in Sources */,
 				E910422E1CA533550004E13C /* ServerGameLayer.cpp in Sources */,
 				E91042331CA533660004E13C /* SocketManager.cpp in Sources */,
 				E96975261C72F24300959DB1 /* OperateLayer.cpp in Sources */,
@@ -707,6 +714,7 @@
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				E910423B1CA5337F0004E13C /* SelectLayer.cpp in Sources */,
 				E910423A1CA5337B0004E13C /* Princess.cpp in Sources */,
+				3D86F8841CC7A7C00008DBFE /* GameData.cpp in Sources */,
 				3D6DA7351C7545D40068FE19 /* BaseSprite.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
 				3D6DA73C1C7545EC0068FE19 /* OperateLayer.cpp in Sources */,

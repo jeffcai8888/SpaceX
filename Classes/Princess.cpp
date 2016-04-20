@@ -91,7 +91,8 @@ bool Princess::init()
 
 		m_pRange = Sprite::createWithSpriteFrameName("range.png");
 		m_pRange->setVisible(false);
-		m_pRange->setPosition(Point(140.f, 25.f));
+		m_pRange->setPosition(Point(130.f, 25.f));
+        m_pRange->setScale(2.0f);
 		addChild(m_pRange);
         ret = true;
 	} while(0);

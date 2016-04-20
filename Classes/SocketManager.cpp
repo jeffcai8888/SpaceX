@@ -43,7 +43,7 @@ void SocketManager::start()
 {
 	if (NT_Client == m_networkType)
 	{
-		if (!m_pSocketClient->connectServer("127.0.0.1", 8000))
+		if (!m_pSocketClient->connectServer("172.20.10.7", 8000))
 		{
 			CCLOG("Client connect error");
 		}
@@ -54,11 +54,11 @@ void SocketManager::start()
 	}
 }
 
-void SocketManager::sendData(int type, int actionState, cocos2d::Vec2 position, cocos2d::Vec2 vec)
+void SocketManager::sendData(int type, int index, int actionState, cocos2d::Vec2 position, cocos2d::Vec2 vec)
 {
 	NetworkData data;
 	data.dataType = type;
-	data.index = GameData::getInstance()->getRoleIndex();
+    data.index = index;
 	data.actionState = actionState;
 	data.position = position;
 	data.vec = vec;

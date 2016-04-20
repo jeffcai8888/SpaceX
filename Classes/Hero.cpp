@@ -123,7 +123,8 @@ bool Hero::init()
 
 		m_pRange = Sprite::createWithSpriteFrameName("range.png");
 		m_pRange->setVisible(false);
-		m_pRange->setPosition(Point(140.f, 25.f));
+		m_pRange->setPosition(Point(130.f, 25.f));
+        m_pRange->setScale(2.0f);
 		addChild(m_pRange);
 
 		ret = true;
@@ -156,25 +157,8 @@ void Hero::activeSkill1()
 	}
 	else if (getCurSkillState() == 1)
 	{
-		if (isFlippedX())
-		{
-			getPhysicsBody()->setVelocity(Vec2(-getSkillState1Speed(), 0.f));
-		}
-		else
-		{
-			getPhysicsBody()->setVelocity(Vec2(getSkillState1Speed(), 0.f));
-		}
-		
-		setCurSkillState(2);
-		setIsInSplash(true);
-		setCurSkillCDTime(getSkillState2CDTime());
-		setCurSkillLastTime(getSkillState2LastTime());
-	}
-	else if (getCurSkillState() == 2)
-	{
 		setPosition(getSkillActivePos());
 		setCurSkillState(0);
-		//m_pSkill->setSpriteFrame("skill_flash1.png");
 		m_pSkillStartPos->setVisible(false);
 	}
 }

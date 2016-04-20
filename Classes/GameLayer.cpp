@@ -113,7 +113,7 @@ void GameLayer::onEnter()
 		}
 
 		auto foresight = Foresight::create();
-		foresight->setScale(0.2f);
+		foresight->setScale(0.4f);
 		foresight->setVisible(false);
 		player->setForesight(foresight);
 		this->addChild(foresight);
@@ -224,7 +224,7 @@ void GameLayer::onEnter()
 				hero = static_cast<BaseSprite *>(contact.getShapeA()->getBody()->getNode());
 			}
 				
-			if (bullet->getOwnerTag() == hero->getTag())
+			if (bullet->getOwnerTag() % 2 == hero->getTag() % 2)
 			{
 				return false;
 			}
@@ -233,6 +233,11 @@ void GameLayer::onEnter()
 				bullet->setIsActive(false);
 				this->removeChild(bullet);
 				hero->hurt(bullet->getPower());
+                BaseSprite* self = GameData::getInstance()->getMySelf();
+                if(bullet->getOwnerTag() == self->getTag())
+                {
+                    SocketManager::getInstance()->sendData(NDT_HeroHurt, hero->getTag(), hero->getCurrActionState(), hero->getPosition(), hero->getPhysicsBody()->getVelocity());
+                }
 				return true;
 			}		
 		}
@@ -342,7 +347,7 @@ void GameLayer::updatePlayer(float dt)
 				setViewPointCenter();
 				player->setPrePosition(player->getPosition());
 
-#if 0  
+#if 1
 				if (player->getIsLocked() && m_pTarget == nullptr)
 				{
 					m_pTarget = getNearestEnemy();
@@ -543,7 +548,7 @@ BaseSprite* GameLayer::createHero(int role, cocos2d::Point pos)
 	else
 		sprite = Princess::create();
 	sprite->setInitPos(pos);
-	sprite->setScale(0.5f);
+	sprite->setScale(0.6f);
 	sprite->setPosition(pos);
 	sprite->runIdleAction();
 	sprite->setLocalZOrder(visibleSize.height - sprite->getPositionY());
@@ -557,8 +562,9 @@ BaseSprite* GameLayer::createHero(int role, cocos2d::Point pos)
 	blood->setMidpoint(Point(0, 0));
 	blood->setBarChangeRate(Point(1, 0));
 	blood->setAnchorPoint(Point(0, 1));
-	blood->setPosition(50, 150);
+	blood->setPosition(60, 150);
 	blood->setPercentage(100);
+    blood->setScale(0.375f);
 
 
 	ProgressTimer *bloodBg = ProgressTimer::create(Sprite::create("bloodBg.png"));
@@ -566,8 +572,9 @@ BaseSprite* GameLayer::createHero(int role, cocos2d::Point pos)
 	bloodBg->setMidpoint(Point(0, 0));
 	bloodBg->setBarChangeRate(Point(1, 0));
 	bloodBg->setAnchorPoint(Point(0, 1));
-	bloodBg->setPosition(blood->getPosition());
+	bloodBg->setPosition(blood->getPosition() + Point(-25.f, 3.f));
 	bloodBg->setPercentage(100);
+    bloodBg->setScale(0.5f);
 
 	sprite->addChild(bloodBg);
 	sprite->addChild(blood);
@@ -608,7 +615,7 @@ void GameLayer::explodeEnemy(Bomb* bomb)
 	for (int i = 0; i < 4; ++i)
 	{
 		BaseSprite* player = GameData::getInstance()->m_pPlayers[i];
-		if (player == nullptr || player == bomb->getOwner())
+		if (player == nullptr || player->getTag() % 2 == bomb->getOwner()->getTag() % 2)
 			continue;
 
 		float d = bomb->getPosition().getDistanceSq(player->getPosition());

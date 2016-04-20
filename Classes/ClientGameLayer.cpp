@@ -109,6 +109,13 @@ void ClientGameLayer::onRecv(const char* data, int count)
 			player->setPosition(networkData->position);
 		}
 			break;
+        case NDT_HeroHurt:
+        {
+            BaseSprite* player = GameData::getInstance()->m_pPlayers[networkData->index];
+            player->hurt(networkData->vec.x);
+            player->setPosition(networkData->position);
+        }
+            break;
 		default:
 			break;
 		}

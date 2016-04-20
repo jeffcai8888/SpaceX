@@ -22,7 +22,8 @@ enum NetworkDataType
 	NDT_HeroAttack,
 	NDT_HeroStopAttack,
 	NDT_HeroSkill1,
-	NDT_HeroSkill2
+	NDT_HeroSkill2,
+    NDT_HeroHurt
 };
 
 struct NetworkData
@@ -42,7 +43,7 @@ public:
 
 	void init(int networkType);
 	void start();
-	void sendData(int, int, cocos2d::Vec2, cocos2d::Vec2);
+	void sendData(int, int, int, cocos2d::Vec2, cocos2d::Vec2);
 	std::string getIPAddress();
 
 	CC_SYNTHESIZE(int, m_networkType, NetworkType);

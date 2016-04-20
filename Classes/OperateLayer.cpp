@@ -49,7 +49,7 @@ bool OperateLayer::init()
 		m_pFront->setPosition(m_origin + Point(250, 100));
 		m_pBack->setPosition(m_origin + Point(150, 100));
 		m_pUp->setPosition(m_origin + Point(1038, 264));
-        m_pUp->setScale(1.25f);
+        m_pUp->setScale(1.6f);
 		this->addChild(m_pFront);
 		this->addChild(m_pBack);
 		this->addChild(m_pUp);
@@ -136,16 +136,14 @@ void OperateLayer::onEnter()
 				m_mapPressType[pTouch->getID()] = Value(BT_Joystick);
 				BaseSprite* self = GameData::getInstance()->getMySelf();
 				self->attack(true);
-#if 0			
-                m_pHero->setIsLocked(true);
-                m_pForesight->setVisible(true);
-                m_pRange->setVisible(true);
+#if 1
+                self->setIsLocked(true);
 #else
 				m_isAutoShootPressed = true;
 #endif
 				switchButtonStatus(BT_Joystick, true);
 				
-				SocketManager::getInstance()->sendData(NDT_HeroAttack, self->getCurrActionState(), self->getPosition(), self->getShootDirection());
+				SocketManager::getInstance()->sendData(NDT_HeroAttack, self->getTag(), self->getCurrActionState(), self->getPosition(), self->getShootDirection());
 			}
 			else if (p.x <= 200.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
 			{
@@ -165,7 +163,7 @@ void OperateLayer::onEnter()
             {
 				BaseSprite* self = GameData::getInstance()->getMySelf();
 				self->jump(self->getJumpVelocity());
-				SocketManager::getInstance()->sendData(NDT_HeroJumpUp, self->getCurrActionState(), self->getPosition(), self->getPhysicsBody()->getVelocity());
+				SocketManager::getInstance()->sendData(NDT_HeroJumpUp, self->getTag(),self->getCurrActionState(), self->getPosition(), self->getPhysicsBody()->getVelocity());
 				
 				m_mapPressType[pTouch->getID()] = Value(BT_Jump);
 				switchButtonStatus(BT_Jump, true);
@@ -174,7 +172,7 @@ void OperateLayer::onEnter()
 			{
 				BaseSprite* self = GameData::getInstance()->getMySelf();
 				self->activeSkill1();
-				SocketManager::getInstance()->sendData(NDT_HeroSkill1, self->getCurrActionState(), self->getPosition(), self->getPhysicsBody()->getVelocity());
+				SocketManager::getInstance()->sendData(NDT_HeroSkill1, self->getTag(),self->getCurrActionState(), self->getPosition(), self->getPhysicsBody()->getVelocity());
 
 				Hero* hero = static_cast<Hero *>(self);
 				if (hero)
@@ -182,10 +180,6 @@ void OperateLayer::onEnter()
 					if (hero->getCurSkillState() == 1)
 					{
 						m_pSkill->setSpriteFrame("skill_flash2.png");
-					}
-					else if (hero->getCurSkillState() == 2)
-					{
-						m_pSkill->setSpriteFrame("skill_flash3.png");
 					}
 					else
 					{
@@ -197,7 +191,7 @@ void OperateLayer::onEnter()
 			{
 				BaseSprite* self = GameData::getInstance()->getMySelf();
 				self->activeSkill2();
-				SocketManager::getInstance()->sendData(NDT_HeroSkill2, self->getCurrActionState(), self->getPosition(), self->getPhysicsBody()->getVelocity());
+				SocketManager::getInstance()->sendData(NDT_HeroSkill2, self->getTag(),self->getCurrActionState(), self->getPosition(), self->getPhysicsBody()->getVelocity());
 			}
 			++touchIter;
 		}
@@ -214,7 +208,7 @@ void OperateLayer::onEnter()
 			return;
 		BaseSprite* self = GameData::getInstance()->getMySelf();
 		
-        if(m_mapPressType.find(pTouch->getID()) != m_mapPressType.end() && m_mapPressType[pTouch->getID()].asInt() == BT_Joystick && !self->getIsAutoShoot())
+        if(m_mapPressType.find(pTouch->getID()) != m_mapPressType.end() && m_mapPressType[pTouch->getID()].asInt() == BT_Joystick) //&& !self->getIsAutoShoot())
         {
 			if (isInRange(m_pJoystickBg->getPosition(), m_pJoystickBg->getContentSize().width * 3, m_pJoystickBg->getContentSize().height * 3, p))
 				dealWithJoystick(m_pJoystickBg->getPosition(), p);
@@ -225,10 +219,10 @@ void OperateLayer::onEnter()
 				self->getRange()->setVisible(false);
 				self->attack(false);
 				switchButtonStatus(BT_Joystick, false);
-                SocketManager::getInstance()->sendData(NDT_HeroStopAttack, self->getCurrActionState(), self->getPosition(), self->getShootDirection());
+                SocketManager::getInstance()->sendData(NDT_HeroStopAttack, self->getTag(),self->getCurrActionState(), self->getPosition(), self->getShootDirection());
 			}
-#if 0
-            m_pHero->setIsLocked(false);
+#if 1
+            self->setIsLocked(false);
 #else
 			m_isAutoShootPressed = false;
 #endif
@@ -301,11 +295,9 @@ void OperateLayer::onEnter()
 			m_mapPressType.erase(pTouch->getID());
             showJoystick(m_pJoystickBg->getPosition());
 			
-#if 0
-			m_pHero->attack(false);
-            m_pHero->setIsLocked(false);
-            m_pForesight->setVisible(false);
-            m_pRange->setVisible(false);
+#if 1
+			self->attack(false);
+            self->setIsLocked(false);
 #else
 			if (!m_isAutoShootPressed)
 			{
@@ -328,7 +320,7 @@ void OperateLayer::onEnter()
 			}
 #endif
 			switchButtonStatus(BT_Joystick, false);
-			SocketManager::getInstance()->sendData(NDT_HeroStopAttack, self->getCurrActionState(), self->getPosition(), self->getShootDirection());
+			SocketManager::getInstance()->sendData(NDT_HeroStopAttack, self->getTag(),self->getCurrActionState(), self->getPosition(), self->getShootDirection());
         }
 		else if (p.x <= 200.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
 		{
@@ -383,7 +375,7 @@ void OperateLayer::onEnter()
 			switchButtonStatus(BT_Jump, true);
 			BaseSprite* self = GameData::getInstance()->getMySelf();
 			self->jump(self->getJumpVelocity());
-			SocketManager::getInstance()->sendData(NDT_HeroJumpUp, self->getCurrActionState(), self->getPosition(), self->getPhysicsBody()->getVelocity());
+			SocketManager::getInstance()->sendData(NDT_HeroJumpUp, self->getTag(),self->getCurrActionState(), self->getPosition(), self->getPhysicsBody()->getVelocity());
 		}
 		dealWithKeyBoard();
 	};
@@ -487,7 +479,7 @@ void OperateLayer::dealWithJoystick(cocos2d::Point centerPoint, cocos2d::Point p
 	BaseSprite* self = GameData::getInstance()->getMySelf();
 	self->setShootDirection(direction);
 	self->attack(true);
-	SocketManager::getInstance()->sendData(NDT_HeroAttack, self->getCurrActionState(), self->getPosition(), self->getShootDirection());
+	SocketManager::getInstance()->sendData(NDT_HeroAttack, self->getTag(),self->getCurrActionState(), self->getPosition(), self->getShootDirection());
 }
 
 bool OperateLayer::isTap(cocos2d::Node* pNode, cocos2d::Point point)
@@ -522,12 +514,12 @@ void OperateLayer::dealWithKeyBoard()
 	if (m_KeyPressedValue & KB_Back)
 	{
 		self->walk(-self->getWalkVelocity());
-		SocketManager::getInstance()->sendData(NDT_HeroWalk, self->getCurrActionState(), self->getPosition(), self->getPhysicsBody()->getVelocity());
+		SocketManager::getInstance()->sendData(NDT_HeroWalk, self->getTag(),self->getCurrActionState(), self->getPosition(), self->getPhysicsBody()->getVelocity());
 	}
 	else if (m_KeyPressedValue & KB_Front)
 	{
 		self->walk(self->getWalkVelocity());
-		SocketManager::getInstance()->sendData(NDT_HeroWalk, self->getCurrActionState(), self->getPosition(), self->getPhysicsBody()->getVelocity());
+		SocketManager::getInstance()->sendData(NDT_HeroWalk, self->getTag(),self->getCurrActionState(), self->getPosition(), self->getPhysicsBody()->getVelocity());
 	}
 	
 	else
@@ -536,7 +528,7 @@ void OperateLayer::dealWithKeyBoard()
 		if (!self->isInAir())
 		{
 			self->stop();
-			SocketManager::getInstance()->sendData(NDT_HeroStop, self->getCurrActionState(), self->getPosition(), Vec2(0, 0));
+			SocketManager::getInstance()->sendData(NDT_HeroStop, self->getTag(),self->getCurrActionState(), self->getPosition(), Vec2(0, 0));
 		}
 	}
 }
