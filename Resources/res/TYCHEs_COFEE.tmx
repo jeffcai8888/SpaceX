@@ -109,27 +109,26 @@
  </layer>
  <objectgroup name="Grounds">
   <object id="43" name="Box" x="2649" y="1460.5" width="80" height="10"/>
-  <object id="1" name="Box" x="4000" y="1500" width="680" height="20"/>
+  <object id="1" name="Box" x="4000" y="1500" width="739" height="20"/>
   <object id="4" name="Box" x="4543.67" y="1445.17" width="55" height="55"/>
   <object id="5" name="Box" x="4050.33" y="1280.38" width="80" height="10"/>
-  <object id="6" name="Box" x="4040" y="1260.5" width="10" height="99.5"/>
+  <object id="6" name="Box" x="4040" y="1269" width="10" height="91"/>
   <object id="7" name="Box" x="3999.17" y="1115" width="330.333" height="10"/>
-  <object id="8" name="Box" x="4039.67" y="1125" width="10" height="103"/>
-  <object id="9" name="Box" x="4020" y="1094.33" width="10" height="20"/>
-  <object id="10" name="Box" x="4229" y="1280" width="60" height="10"/>
-  <object id="11" name="Box" x="4390" y="1280" width="60" height="10"/>
-  <object id="12" name="Box" x="4480" y="1115" width="195" height="10"/>
-  <object id="14" name="Box" x="4628.67" y="1291" width="10" height="68.6667"/>
-  <object id="15" name="Box" x="4548.33" y="1280" width="151.167" height="10"/>
+  <object id="8" name="Box" x="4039.67" y="1125" width="10" height="95"/>
+  <object id="9" name="Box" x="4000" y="1104.33" width="10" height="10"/>
+  <object id="10" name="Box" x="4229" y="1280" width="80" height="10"/>
+  <object id="11" name="Box" x="4409" y="1280" width="80" height="10"/>
+  <object id="12" name="Box" x="4512" y="1115" width="195" height="10"/>
+  <object id="14" name="Box" x="4660.67" y="1291" width="10" height="68.6667"/>
+  <object id="15" name="Box" x="4580.33" y="1280" width="151.167" height="10"/>
   <object id="16" name="Box" x="904" y="1520" width="4696" height="10"/>
-  <object id="17" name="Box" x="5073.83" y="1464.5" width="55" height="55"/>
-  <object id="19" name="Box" x="4861.5" y="1354.33" width="80" height="53.6667"/>
-  <object id="20" name="Box" x="4779.83" y="1299.83" width="80" height="108.667"/>
-  <object id="21" name="Box" x="4779.5" y="1409" width="240.5" height="10"/>
-  <object id="24" name="Box" x="4471" y="1225" width="60" height="10"/>
-  <object id="25" name="Box" x="4368.5" y="1170" width="60" height="10"/>
-  <object id="26" name="Box" x="4629.67" y="1125" width="10" height="61.6667"/>
-  <object id="27" name="Box" x="4468" y="1335" width="60" height="10"/>
+  <object id="17" name="Box" x="5093.83" y="1464.5" width="55" height="55"/>
+  <object id="19" name="Box" x="4881.5" y="1354.33" width="80" height="53.6667"/>
+  <object id="20" name="Box" x="4799.83" y="1299.83" width="80" height="108.667"/>
+  <object id="21" name="Box" x="4799.5" y="1409" width="240.5" height="10"/>
+  <object id="24" name="Box" x="4511" y="1225" width="80" height="10"/>
+  <object id="25" name="Box" x="4380.5" y="1170" width="80" height="10"/>
+  <object id="26" name="Box" x="4661.67" y="1125" width="10" height="61.6667"/>
   <object id="28" name="Box" x="3379.17" y="1463.5" width="55" height="55"/>
   <object id="29" name="Box" x="3540.83" y="1464.5" width="55" height="55"/>
   <object id="30" name="Box" x="2780" y="1280" width="490.333" height="10"/>
@@ -146,7 +145,7 @@
  </objectgroup>
  <objectgroup name="Objects">
   <object id="45" name="SpawnPoint0" x="2389.77" y="1400.36" width="27.2727" height="30.303"/>
-  <object id="46" name="SpawnPoint1" x="5222.02" y="1471.97" width="27.2727" height="30.303"/>
+  <object id="46" name="SpawnPoint1" x="5246.02" y="1407.97" width="27.2727" height="30.303"/>
   <object id="49" name="SpawnPoint2" x="3628.38" y="942.937" width="20" height="20"/>
   <object id="50" name="SpawnPoint3" x="4068.68" y="1075.82" width="27.2727" height="30.303"/>
  </objectgroup>
