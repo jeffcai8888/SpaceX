@@ -1,8 +1,8 @@
 {"Data":[
-{"Attr":"Speed","Value":200.0},
+{"Attr":"Speed","Value":250.0},
 {"Attr":"Range","Value":250.0},
 {"Attr":"StartTime","Value":3.0},
 {"Attr":"CDTime","Value":50.0},
-{"Attr":"Power","Value":20.0},
+{"Attr":"Power","Value":50.0},
 {"Attr":"Gravity","Value":-600.0}
 ]}
