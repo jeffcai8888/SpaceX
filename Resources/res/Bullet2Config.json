@@ -2,7 +2,7 @@
 {"Attr":"Capacity","Value":100.0},
 {"Attr":"Power","Value":5.0},
 {"Attr":"Speed","Value":500.0},
-{"Attr":"DisappearTime","Value":1},
+{"Attr":"DisappearTime","Value":1.0},
 {"Attr":"Angle","Value":15.0},
 {"Attr":"Interval","Value":0.15},
 {"Attr":"Gravity","Value":0.0}
