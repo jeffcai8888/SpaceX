@@ -150,7 +150,7 @@ void GameLayer::onEnter()
     auto listener3 = EventListenerCustom::create("bomb_explode", [this](EventCustom* event) {
         
 		Bomb* bomb = static_cast<Bomb *>(event->getUserData());
-		explodeEnemy(bomb->getPosition(), bomb->getRange(), bomb->getPower());
+		explodeEnemy(bomb);
 		bomb->setPosition(10000.f, 10000.f);
 		bomb->getBombRange()->setVisible(false);
     });
@@ -603,18 +603,18 @@ BaseSprite* GameLayer::getNearestEnemy()
 	return target;
 }
 
-void GameLayer::explodeEnemy(cocos2d::Point position, float range, int power)
+void GameLayer::explodeEnemy(Bomb* bomb)
 {
 	for (int i = 0; i < 4; ++i)
 	{
 		BaseSprite* player = GameData::getInstance()->m_pPlayers[i];
-		if (player == nullptr || player->getIsMe())
+		if (player == nullptr || player == bomb->getOwner())
 			continue;
 
-		float d = position.getDistanceSq(player->getPosition());
-		if (d < range * range)
+		float d = bomb->getPosition().getDistanceSq(player->getPosition());
+		if (d < bomb->getRange() * bomb->getRange())
 		{
-			player->hurt(power);
+			player->hurt(bomb->getPower());
 		}
 	}
 }

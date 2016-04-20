@@ -174,6 +174,7 @@ void OperateLayer::onEnter()
 			{
 				BaseSprite* self = GameData::getInstance()->getMySelf();
 				self->activeSkill1();
+				SocketManager::getInstance()->sendData(NDT_HeroSkill1, self->getCurrActionState(), self->getPosition(), self->getPhysicsBody()->getVelocity());
 
 				Hero* hero = static_cast<Hero *>(self);
 				if (hero)
@@ -196,6 +197,7 @@ void OperateLayer::onEnter()
 			{
 				BaseSprite* self = GameData::getInstance()->getMySelf();
 				self->activeSkill2();
+				SocketManager::getInstance()->sendData(NDT_HeroSkill2, self->getCurrActionState(), self->getPosition(), self->getPhysicsBody()->getVelocity());
 			}
 			++touchIter;
 		}

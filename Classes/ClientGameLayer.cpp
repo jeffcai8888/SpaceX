@@ -45,6 +45,7 @@ void ClientGameLayer::onRecv(const char* data, int count)
 		case NDT_HeroWalk:
 		{
 			BaseSprite* player = GameData::getInstance()->m_pPlayers[networkData->index];
+			//player->setCurrActionState((ActionState)networkData->actionState);
 			player->setPosition(networkData->position);
 			player->walk(networkData->vec.x);
 		}
@@ -52,6 +53,7 @@ void ClientGameLayer::onRecv(const char* data, int count)
 		case NDT_HeroJumpUp:
 		{
 			BaseSprite* player = GameData::getInstance()->m_pPlayers[networkData->index];
+			//player->setCurrActionState((ActionState)networkData->actionState);
 			player->setPosition(networkData->position);
 			player->jump(player->getJumpVelocity());
 		}			
@@ -60,6 +62,7 @@ void ClientGameLayer::onRecv(const char* data, int count)
 		{
 			BaseSprite* player = GameData::getInstance()->m_pPlayers[networkData->index];
 			player->runJumpDownAction();
+			//player->setCurrActionState((ActionState)networkData->actionState);
 			player->setPosition(networkData->position);
 			player->getPhysicsBody()->setVelocity(networkData->vec);
 		}		
@@ -67,6 +70,7 @@ void ClientGameLayer::onRecv(const char* data, int count)
 		case NDT_HeroStop:
 		{
 			BaseSprite* player = GameData::getInstance()->m_pPlayers[networkData->index];
+			//player->setCurrActionState((ActionState)networkData->actionState);
 			player->setPosition(networkData->position);
 			player->stop();
 		}	
@@ -77,6 +81,7 @@ void ClientGameLayer::onRecv(const char* data, int count)
 		case NDT_HeroAttack:
 		{
 			BaseSprite* player = GameData::getInstance()->m_pPlayers[networkData->index];
+			//player->setCurrActionState((ActionState)networkData->actionState);
 			player->setPosition(networkData->position);
 			player->setShootDirection(networkData->vec);
 			player->attack(true);
@@ -85,9 +90,24 @@ void ClientGameLayer::onRecv(const char* data, int count)
 		case NDT_HeroStopAttack:
 		{
 			BaseSprite* player = GameData::getInstance()->m_pPlayers[networkData->index];
+			//player->setCurrActionState((ActionState)networkData->actionState);
 			player->attack(false);
 			player->setPosition(networkData->position);
 		}		
+			break;
+		case NDT_HeroSkill1:
+		{
+			BaseSprite* player = GameData::getInstance()->m_pPlayers[networkData->index];
+			player->activeSkill1();
+			player->setPosition(networkData->position);
+		}
+			break;
+		case NDT_HeroSkill2:
+		{
+			BaseSprite* player = GameData::getInstance()->m_pPlayers[networkData->index];
+			player->activeSkill2();
+			player->setPosition(networkData->position);
+		}
 			break;
 		default:
 			break;

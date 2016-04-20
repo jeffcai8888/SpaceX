@@ -57,7 +57,7 @@ protected:
 	void removeAllBullets();
 	BaseSprite* createHero(int, cocos2d::Point);
     BaseSprite* getNearestEnemy();
-	void explodeEnemy(cocos2d::Point position, float range, int power);
+	void explodeEnemy(Bomb* bomb);
 };
 
 #endif
