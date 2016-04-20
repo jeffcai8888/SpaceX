@@ -2,10 +2,10 @@
 {"Attr":"WalkSpeed","Value":250.0},
 {"Attr":"JumpSpeed","Value":430.0},
 {"Attr":"Gravity","Value":-600.0},
-{"Attr":"Skill1V","Value":1000.0},
-{"Attr":"Skill2V","Value":1000.0},
+{"Attr":"Skill1V","Value":1700.0},
+{"Attr":"Skill2V","Value":1700.0},
 {"Attr":"Skill1CD","Value":10.0},
 {"Attr":"Skill2CD","Value":5.0},
-{"Attr":"Skill1Time","Value":0.3},
-{"Attr":"Skill2Time","Value":0.3}
+{"Attr":"Skill1Time","Value":0.4},
+{"Attr":"Skill2Time","Value":0.4}
 ]}
