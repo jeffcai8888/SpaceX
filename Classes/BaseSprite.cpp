@@ -78,7 +78,7 @@ void BaseSprite::jump(float v)
 			this->setFlippedX(velocity.x < 0);
 		}
 		this->getPhysicsBody()->setVelocity(velocity);
-		CCLOG("jump %f,%f", this->getPhysicsBody()->getVelocity().x, this->getPhysicsBody()->getVelocity().y);
+		CCLOG("jump Stage %d", this->getJumpStage());
 		this->setPrePosition(this->getPosition());
 	}
 }
@@ -165,9 +165,8 @@ void BaseSprite::runJumpUpAction()
 			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("jump.mp3");
 			this->runAction(m_pJumpAction);
 		}
-
-		++m_JumpStage;
 	}
+	++m_JumpStage;
 }
 
 void BaseSprite::runJumpDownAction()
