@@ -106,8 +106,16 @@ void BaseSprite::attack(bool isStart)
 		{
 			this->stopAttackAction();
 		}
-		m_pForesight->setVisible(isStart);
-        m_pRange->setVisible(isStart);
+        
+        if(m_isMe)
+        {
+            m_pForesight->setVisible(isStart);
+            m_pRange->setVisible(isStart);
+        }
+        else{
+            m_pForesight->setVisible(false);
+            m_pRange->setVisible(false);
+        }
 	}
 }
 

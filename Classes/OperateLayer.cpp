@@ -354,7 +354,6 @@ void OperateLayer::onEnter()
 			m_mapPressType.erase(pTouch->getID());
 			switchButtonStatus(BT_Jump, false);
 		}
-		dealWithKeyBoard();
 	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 	m_vecEventListener.pushBack(listener);

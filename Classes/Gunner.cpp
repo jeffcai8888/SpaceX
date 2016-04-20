@@ -81,7 +81,7 @@ bool Gunner::init()
 				}
 			}
 		}
-		setBulletType("Bullet1Config");
+		setBulletType("Bullet2Config");
 
 		m_pLockMark = Sprite::createWithSpriteFrameName("lock.png");
 		m_pLockMark->setPosition(getContentSize().width / 2, 50.f);

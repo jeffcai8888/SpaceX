@@ -3,9 +3,10 @@
 
 USING_NS_CC;
 
-std::string bulletConfigName[1] =
+std::string bulletConfigName[2] =
 {
 	"Bullet1Config",
+    "Bullet2Config"
 };
 
 
@@ -21,7 +22,7 @@ BulletConfigModel::~BulletConfigModel()
 
 void BulletConfigModel::load()
 {
-	for (int i = 0; i < 1; ++i)
+	for (int i = 0; i < 2; ++i)
 	{
 		std::string configName = bulletConfigName[i];
 		load(configName);
