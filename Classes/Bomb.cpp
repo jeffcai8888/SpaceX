@@ -32,6 +32,11 @@ bool Bomb::init()
 		body->setCollisionBitmask(PC_Ground | PC_Box | PC_Slope);
 		body->setRotationEnable(false);
 		this->setPhysicsBody(body);
+
+		m_pBombRange = Sprite::createWithSpriteFrameName("bombRange.png");
+		m_pBombRange->setVisible(false);
+		addChild(m_pBombRange);
+
 		ret = true;
 	} while (false);
 	return ret;

@@ -64,15 +64,18 @@ bool OperateLayer::init()
 		this->addChild(m_pJoystickBg, 2);
 		showJoystick(Point(1039, 103));
 
-		m_pSkill = Sprite::createWithSpriteFrameName("skill_flash1.png");
-		m_pSkill->setScale(0.5f);
-		this->addChild(m_pSkill);
-		m_pSkill->setPosition(m_origin + Point(918, 198));
+		if (GameData::getInstance()->getRoleType() == ROLE_HERO)
+		{
+			m_pSkill = Sprite::createWithSpriteFrameName("skill_flash1.png");
+			m_pSkill->setScale(0.5f);
+			this->addChild(m_pSkill);
+			m_pSkill->setPosition(m_origin + Point(918, 198));
 
-		m_pSkill1 = Sprite::createWithSpriteFrameName("skill_bomb.png");
-		m_pSkill1->setScale(0.5f);
-		this->addChild(m_pSkill1);
-		m_pSkill1->setPosition(m_origin + Point(880, 78));
+			m_pSkill1 = Sprite::createWithSpriteFrameName("skill_bomb.png");
+			m_pSkill1->setScale(0.5f);
+			this->addChild(m_pSkill1);
+			m_pSkill1->setPosition(m_origin + Point(880, 78));
+		}
 
 		Menu* menu;
 		auto debugItem = MenuItemImage::create("pause.png", "pause_down.png", CC_CALLBACK_1(OperateLayer::gotoDebug, this));
@@ -118,9 +121,6 @@ bool OperateLayer::init()
 void OperateLayer::onEnter()
 {
 	Layer::onEnter();
-	GameLayer *layer = static_cast<GameLayer *>(this->getScene()->getChildByTag(LT_Game));
-    m_pForesight = layer->getForesight();
-    m_pRange = layer->getRange();
 
 	auto listener = EventListenerTouchAllAtOnce::create();
 	listener->onTouchesBegan = [this](const vector<Touch*>& touches, Event *event)
@@ -173,65 +173,29 @@ void OperateLayer::onEnter()
 			else if (isTap(m_pSkill, p))
 			{
 				BaseSprite* self = GameData::getInstance()->getMySelf();
-				Hero* hero = dynamic_cast<Hero*>(self);
+				self->activeSkill1();
+
+				Hero* hero = static_cast<Hero *>(self);
 				if (hero)
 				{
-					GameLayer *layer = static_cast<GameLayer *>(this->getScene()->getChildByTag(LT_Game));
-					auto positionSprite = layer->getSkillStartPos();
-					if (hero->getCurSkillState() == 0)
+					if (hero->getCurSkillState() == 1)
 					{
-						hero->setSkillActivePos(hero->getPosition());
-						if (hero->isFlippedX())
-						{
-							hero->getPhysicsBody()->setVelocity(Vec2(-hero->getSkillState1Speed(), 0.f));
-						}
-						else
-						{
-							hero->getPhysicsBody()->setVelocity(Vec2(hero->getSkillState1Speed(), 0.f));
-						}
 						m_pSkill->setSpriteFrame("skill_flash2.png");
-						hero->setCurSkillState(1);
-						hero->setCurSkillCDTime(hero->getSkillState1CDTime());
-						hero->setCurSkillLastTime(hero->getSkillState1LastTime());
-
-						CCLOG("skill speed = %f, skill last time = %f", hero->getPhysicsBody()->getVelocity().x, hero->getCurSkillLastTime());
-						hero->setIsInSplash(true);
-						positionSprite->setVisible(true);
-						positionSprite->setPosition(hero->getPosition() + Vec2(0, -10.f));
-					}
-					else if (hero->getCurSkillState() == 1)
-					{
-						if (hero->isFlippedX())
-						{
-							hero->getPhysicsBody()->setVelocity(Vec2(-hero->getSkillState1Speed(), 0.f));
-						}
-						else
-						{
-							hero->getPhysicsBody()->setVelocity(Vec2(hero->getSkillState1Speed(), 0.f));
-						}
-						m_pSkill->setSpriteFrame("skill_flash3.png");
-						hero->setCurSkillState(2);
-						hero->setIsInSplash(true);
-						hero->setCurSkillCDTime(hero->getSkillState2CDTime());
-						hero->setCurSkillLastTime(hero->getSkillState2LastTime());
 					}
 					else if (hero->getCurSkillState() == 2)
 					{
-						hero->setPosition(hero->getSkillActivePos());
-						hero->setCurSkillState(0);
+						m_pSkill->setSpriteFrame("skill_flash3.png");
+					}
+					else
+					{
 						m_pSkill->setSpriteFrame("skill_flash1.png");
-						positionSprite->setVisible(false);
-					}					
+					}
 				}
 			}
 			else if (isTap(m_pSkill1, p))
 			{
 				BaseSprite* self = GameData::getInstance()->getMySelf();
-				Hero* hero = dynamic_cast<Hero*>(self);
-				if (hero)
-				{
-					hero->setIsThrowBomb(true);
-				}
+				self->activeSkill2();
 			}
 			++touchIter;
 		}
@@ -256,8 +220,7 @@ void OperateLayer::onEnter()
 			{
                 showJoystick(m_pJoystickBg->getPosition());
 				m_mapPressType.erase(pTouch->getID());
-                m_pForesight->setVisible(false);
-                m_pRange->setVisible(false);				
+				self->getRange()->setVisible(false);
 				self->attack(false);
 				switchButtonStatus(BT_Joystick, false);
                 SocketManager::getInstance()->sendData(NDT_HeroStopAttack, self->getCurrActionState(), self->getPosition(), self->getShootDirection());
@@ -346,8 +309,7 @@ void OperateLayer::onEnter()
 			{
 				self->attack(false);
 				self->setIsLocked(false);
-				m_pForesight->setVisible(false);
-				m_pRange->setVisible(false);
+				self->getRange()->setVisible(false);
 			}
 			else
 			{
@@ -355,11 +317,11 @@ void OperateLayer::onEnter()
 				self->setIsAutoShoot(!self->getIsAutoShoot());
 				if (self->getIsAutoShoot())
 				{
-					m_pRange->setVisible(true);
+					self->getRange()->setVisible(true);
 				}
 				else
 				{
-					m_pRange->setVisible(false);
+					self->getRange()->setVisible(false);
 				}
 			}
 #endif
@@ -449,9 +411,6 @@ void OperateLayer::onEnter()
 		Hero* hero = dynamic_cast<Hero*>(self);
 		if (hero)
 		{
-			GameLayer *layer = static_cast<GameLayer *>(this->getScene()->getChildByTag(LT_Game));
-			auto positionSprite = layer->getSkillStartPos();
-			positionSprite->setVisible(false);
 			m_pSkill->setSpriteFrame("skill_flash1.png");
 		}
 	});
@@ -461,7 +420,6 @@ void OperateLayer::onEnter()
 	auto listener2 = EventListenerCustom::create("auto_shoot", [this](EventCustom* event) {
 		BaseSprite* self = GameData::getInstance()->getMySelf();
 		self->attack(true);
-		m_pForesight->setVisible(true);
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(listener2, 1);
 	m_vecEventListener.pushBack(listener2);
@@ -470,7 +428,6 @@ void OperateLayer::onEnter()
 		BaseSprite* self = GameData::getInstance()->getMySelf();
 		CCLOG("auto_shoot_finish");
 		self->attack(false);
-		m_pForesight->setVisible(false);
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(listener3, 1);
 	m_vecEventListener.pushBack(listener3);
@@ -508,7 +465,7 @@ void OperateLayer::updateJoystick(Point direction, float distance)
 {
 	Point start = m_pJoystickBg->getPosition();
 
-	if(distance < 33)
+	if(distance < 65)
 	{
 		m_pJoystick->setPosition(start + (direction * distance));
 	//}else if(distance > 78) {
@@ -533,9 +490,13 @@ void OperateLayer::dealWithJoystick(cocos2d::Point centerPoint, cocos2d::Point p
 
 bool OperateLayer::isTap(cocos2d::Node* pNode, cocos2d::Point point)
 {
-	Point pos = pNode->getPosition();
-	Size size = pNode->getContentSize();
-	return isInRange(pos, size.width / 2, point);
+	if (pNode)
+	{
+		Point pos = pNode->getPosition();
+		Size size = pNode->getContentSize();
+		return isInRange(pos, size.width / 2, point);
+	}
+	return false;
 }
 
 bool OperateLayer::isInRange(cocos2d::Point p1, float w, float h, cocos2d::Point p2)

@@ -3,6 +3,7 @@
 #include "SimpleAudioEngine.h"
 #include "ConfigCenter.h"
 #include "BulletConfigModel.h"
+#include "Foresight.h"
 
 USING_NS_CC;
 
@@ -105,6 +106,7 @@ void BaseSprite::attack(bool isStart)
 		{
 			this->stopAttackAction();
 		}
+		m_pForesight->setVisible(isStart);
 	}
 }
 
@@ -153,18 +155,16 @@ void BaseSprite::runWalkAction()
 
 void BaseSprite::runJumpUpAction()
 {
-	if (changeState(ACTION_STATE_JUMP_UP))
+	changeState(ACTION_STATE_JUMP_UP);
+	if (m_JumpStage == 1)
 	{
-		if (m_JumpStage == 1)
-		{
-			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("jump.mp3");
-			this->runAction(m_pJump2Action);
-		}
-		else
-		{
-			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("jump.mp3");
-			this->runAction(m_pJumpAction);
-		}
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("jump.mp3");
+		this->runAction(m_pJump2Action);
+	}
+	else
+	{
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("jump.mp3");
+		this->runAction(m_pJumpAction);
 	}
 	++m_JumpStage;
 }
@@ -339,5 +339,12 @@ void BaseSprite::update(float dt)
 			if (getShootDirection().x != 0)
 				setFlippedX(getShootDirection().x < 0);
 		}
+	}
+	
+	if (m_isMe)
+	{
+		m_pForesight->setPosition(getPosition() + Point(0.f, -20.f));
+		float angle = CC_RADIANS_TO_DEGREES(getShootDirection().getAngle());
+		m_pForesight->setRotation(-angle);
 	}
 }

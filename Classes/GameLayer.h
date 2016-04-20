@@ -24,8 +24,6 @@ public:
 
 	virtual void update(float dt);
 	virtual void updateBullet(float dt);
-	virtual void updateBomb(float dt);
-	virtual void updateForesight(float dt);
 	virtual void updatePhysicsWorld(float dt);
 	virtual void updatePlayer(float dt);
 
@@ -34,10 +32,6 @@ public:
 	BaseSprite* getPlayer(int index);
 
 	//CC_SYNTHESIZE_READONLY(BaseSprite*, m_pHero, Hero);
-	CC_SYNTHESIZE_READONLY(Foresight*, m_pForesight, Foresight);
-    CC_SYNTHESIZE_READONLY(cocos2d::Sprite*, m_pRange, Range);
-	CC_SYNTHESIZE_READONLY(cocos2d::Sprite*, m_pSkillStartPos, SkillStartPos);
-	CC_SYNTHESIZE_READONLY(cocos2d::Sprite*, m_pBombRange, BombRange);
 	CC_SYNTHESIZE_READONLY(cocos2d::Size, m_TiledMapSize, TiledMapSize);
 
 	CREATE_FUNC(GameLayer);
@@ -53,7 +47,7 @@ protected:
 	cocos2d::Vector<cocos2d::EventListener *> m_vecEventListener;
 
     BaseSprite* m_pTarget;
-	Bomb*		m_pBomb;
+	
 
 
 	Bullet* getUnusedBullet();
@@ -63,7 +57,7 @@ protected:
 	void removeAllBullets();
 	BaseSprite* createHero(int, cocos2d::Point);
     BaseSprite* getNearestEnemy();
-	void explodeEnemy();
+	void explodeEnemy(cocos2d::Point position, float range, int power);
 };
 
 #endif

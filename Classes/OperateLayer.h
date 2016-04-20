@@ -57,9 +57,6 @@ private:
 	cocos2d::Vector<cocos2d::EventListener *> m_vecEventListener;
 	int m_PressType;
 
-    Foresight* m_pForesight;
-    cocos2d::Sprite* m_pRange;
-
 	int m_KeyPressedValue;
 
 	bool m_isAutoShootPressed;

@@ -2,6 +2,7 @@
 #include "Macro.h"
 #include "Hero.h"
 #include "Bullet.h"
+#include "Bomb.h"
 #include "JsonParser.h"
 
 USING_NS_CC;
@@ -99,7 +100,6 @@ bool Hero::init()
 				else if (pair.first.compare("Skill2CD") == 0)
 				{
 					setSkillState2CDTime(pair.second.asFloat());
-
 				}
 				else if (pair.first.compare("Skill1Time") == 0)
 				{
@@ -112,10 +112,76 @@ bool Hero::init()
 			}
 		}
 
+		setBulletType("Bullet1Config");
+		setBombType("Bomb1Config");
+
+		m_pLockMark = Sprite::createWithSpriteFrameName("lock.png");
+		m_pLockMark->setPosition(getContentSize().width / 2, 50.f);
+		m_pLockMark->setVisible(false);
+		addChild(m_pLockMark);
+
+
+		m_pRange = Sprite::createWithSpriteFrameName("range.png");
+		m_pRange->setVisible(false);
+		m_pRange->setPosition(Point(140.f, 25.f));
+		addChild(m_pRange);
+
 		ret = true;
 	} while(0);
 
 	return ret;
+}
+
+void Hero::activeSkill1()
+{
+	if (getCurSkillState() == 0)
+	{
+		setSkillActivePos(getPosition());
+		if (isFlippedX())
+		{
+			getPhysicsBody()->setVelocity(Vec2(-getSkillState1Speed(), 0.f));
+		}
+		else
+		{
+			getPhysicsBody()->setVelocity(Vec2(getSkillState1Speed(), 0.f));
+		}
+		
+		setCurSkillState(1);
+		setCurSkillCDTime(getSkillState1CDTime());
+		setCurSkillLastTime(getSkillState1LastTime());
+
+		setIsInSplash(true);
+		m_pSkillStartPos->setVisible(true);
+		m_pSkillStartPos->setPosition(getPosition() + Vec2(0, -10.f));
+	}
+	else if (getCurSkillState() == 1)
+	{
+		if (isFlippedX())
+		{
+			getPhysicsBody()->setVelocity(Vec2(-getSkillState1Speed(), 0.f));
+		}
+		else
+		{
+			getPhysicsBody()->setVelocity(Vec2(getSkillState1Speed(), 0.f));
+		}
+		
+		setCurSkillState(2);
+		setIsInSplash(true);
+		setCurSkillCDTime(getSkillState2CDTime());
+		setCurSkillLastTime(getSkillState2LastTime());
+	}
+	else if (getCurSkillState() == 2)
+	{
+		setPosition(getSkillActivePos());
+		setCurSkillState(0);
+		//m_pSkill->setSpriteFrame("skill_flash1.png");
+		m_pSkillStartPos->setVisible(false);
+	}
+}
+
+void Hero::activeSkill2()
+{
+	setIsThrowBomb(true);
 }
 
 void Hero::update(float dt)
@@ -132,6 +198,7 @@ void Hero::update(float dt)
 				_eventDispatcher->dispatchEvent(&event);
 				m_curSkillState = 0;
 				m_curSkillCDTime = -1.f;
+				m_pSkillStartPos->setVisible(false);
 			}
 		}
 		
@@ -172,6 +239,9 @@ void Hero::update(float dt)
 		event.setUserData(this);
 		_eventDispatcher->dispatchEvent(&event);
 	}
+
+	if (m_pBomb->getIsActive())
+		m_pBomb->update(dt);
 }
 
 

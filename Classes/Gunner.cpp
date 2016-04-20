@@ -81,6 +81,18 @@ bool Gunner::init()
 				}
 			}
 		}
+		setBulletType("Bullet1Config");
+
+		m_pLockMark = Sprite::createWithSpriteFrameName("lock.png");
+		m_pLockMark->setPosition(getContentSize().width / 2, 50.f);
+		m_pLockMark->setVisible(false);
+		addChild(m_pLockMark);
+
+
+		m_pRange = Sprite::createWithSpriteFrameName("range.png");
+		m_pRange->setVisible(false);
+		m_pRange->setPosition(Point(140.f, 25.f));
+		addChild(m_pRange);
 
         ret = true;
 	} while(0);

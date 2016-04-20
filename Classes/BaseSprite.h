@@ -23,6 +23,7 @@ enum {
 
 
 class Bullet;
+class Foresight;
 class BaseSprite : public cocos2d::Sprite
 {
 public:
@@ -48,6 +49,8 @@ public:
 	void stop();
 	void hurt(int);
 	void attack(bool);
+	virtual void activeSkill1() {}
+	virtual void activeSkill2() {}
 
 	void reset();
 
@@ -84,8 +87,9 @@ public:
     CC_SYNTHESIZE(bool, m_isLocked, IsLocked);
 	CC_SYNTHESIZE(cocos2d::Sprite*, m_pLockMark, LockMark);
 	CC_SYNTHESIZE(std::string, m_bulletType, BulletType);
-    CC_SYNTHESIZE(std::string, m_bombType, BombType);
 	CC_SYNTHESIZE(bool, m_isAutoShoot, IsAutoShoot);
+	CC_SYNTHESIZE(Foresight*, m_pForesight, Foresight);
+	CC_SYNTHESIZE(cocos2d::Sprite*, m_pRange, Range);
 	
 	CC_SYNTHESIZE(int, m_curSkill, CurSkill);
     

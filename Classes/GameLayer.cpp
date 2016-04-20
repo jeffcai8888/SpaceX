@@ -22,10 +22,7 @@ USING_NS_CC;
 
 GameLayer::GameLayer()
 	:m_pTiledMap(nullptr)
-    ,m_pForesight(nullptr)
-    ,m_pRange(nullptr)
     ,m_pTarget(nullptr)
-	,m_pBomb(nullptr)
 {
 	m_vecBullets.clear();
 	m_vecEventListener.clear();
@@ -77,19 +74,6 @@ void GameLayer::onEnter()
 	edgeNode->setPhysicsBody(body);
 	this->addChild(edgeNode);
 
-	m_pSkillStartPos = Sprite::createWithSpriteFrameName("skill_flash.png");
-	m_pSkillStartPos->setScale(0.4f);
-	m_pSkillStartPos->setVisible(false);
-	this->addChild(m_pSkillStartPos);
-
-	m_pBombRange = Sprite::createWithSpriteFrameName("bombRange.png");
-	m_pBombRange->setVisible(false);
-	this->addChild(m_pBombRange);
-
-	m_pBomb = Bomb::create();
-	this->addChild(m_pBomb);
-	this->setPosition(10000.f, 10000.f);
-
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	this->m_origin = Director::getInstance()->getVisibleOrigin();
 
@@ -109,33 +93,33 @@ void GameLayer::onEnter()
 		this->addChild(player);
 		if (player->getIsMe())
 		{
-			player->setBulletType("Bullet1Config");
-			player->setBombType("Bomb1Config");
 			auto centerOfView = Point(visibleSize.width / 2, visibleSize.height / 2);
 			this->setPosition(centerOfView - player->getPosition());
+		}
 
-		}
-		else
+		auto skillStartPos = Sprite::createWithSpriteFrameName("skill_flash.png");
+		skillStartPos->setScale(0.4f);
+		skillStartPos->setVisible(false);
+		this->addChild(skillStartPos);
+
+		auto bomb = Bomb::create();
+		this->addChild(bomb);
+		bomb->setPosition(10000.f, 10000.f);
+
+		if (roleType == ROLE_HERO)
 		{
-			auto lockMark = Sprite::createWithSpriteFrameName("lock.png");
-			lockMark->setPosition(player->getContentSize().width / 2, 50.f);
-			lockMark->setVisible(false);
-			player->setLockMark(lockMark);
-			player->addChild(lockMark);
+			static_cast<Hero *>(player)->setSkillStartPos(skillStartPos);
+			static_cast<Hero *>(player)->setBomb(bomb);
 		}
+
+		auto foresight = Foresight::create();
+		foresight->setScale(0.2f);
+		foresight->setVisible(false);
+		player->setForesight(foresight);
+		this->addChild(foresight);
+
 		GameData::getInstance()->m_pPlayers[i] = player;
 	}
-
-
-	m_pRange = Sprite::createWithSpriteFrameName("range.png");
-	m_pRange->setVisible(false);
-	m_pRange->setPosition(Point(140.f, 25.f));
-	GameData::getInstance()->getMySelf()->addChild(m_pRange);
-
-	m_pForesight = Foresight::create();
-	m_pForesight->setScale(0.2f);
-	m_pForesight->setVisible(false);
-	this->addChild(m_pForesight);
 
 	importGroundData(m_pTiledMap);
 
@@ -158,15 +142,17 @@ void GameLayer::onEnter()
 
 	auto listener2 = EventListenerCustom::create("throw_bomb", [this](EventCustom* event) {
 		Hero* hero = static_cast<Hero *>(event->getUserData());
-		m_pBomb->launch(hero);
+		hero->getBomb()->launch(hero);
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(listener2, 1);
 	m_vecEventListener.pushBack(listener2);
     
     auto listener3 = EventListenerCustom::create("bomb_explode", [this](EventCustom* event) {
-        explodeEnemy();
-        m_pBomb->setPosition(10000.f, 10000.f);
-        m_pBombRange->setVisible(false);
+        
+		Bomb* bomb = static_cast<Bomb *>(event->getUserData());
+		explodeEnemy(bomb->getPosition(), bomb->getRange(), bomb->getPower());
+		bomb->setPosition(10000.f, 10000.f);
+		bomb->getBombRange()->setVisible(false);
     });
     _eventDispatcher->addEventListenerWithFixedPriority(listener3, 1);
     m_vecEventListener.pushBack(listener3);
@@ -266,8 +252,7 @@ void GameLayer::onEnter()
 			if (bomb)
 			{
 				bomb->start();
-				m_pBombRange->setVisible(true);
-				m_pBombRange->setPosition(bomb->getPosition());
+				bomb->getBombRange()->setVisible(true);
 			}
 			return true;
 		}
@@ -341,9 +326,7 @@ void GameLayer::update(float dt)
 {
 	this->updatePlayer(dt);
 	this->updateBullet(dt);
-	this->updateBomb(dt);
 	this->updatePhysicsWorld(dt);
-	this->updateForesight(dt);
 }
 
 void GameLayer::updatePlayer(float dt)
@@ -440,14 +423,6 @@ void GameLayer::updateBullet(float dt)
 	}
 }
 
-void GameLayer::updateForesight(float dt)
-{
-	BaseSprite* self = GameData::getInstance()->getMySelf();
-	m_pForesight->setPosition(self->getPosition() + Point(0.f, -20.f));
-	float angle = CC_RADIANS_TO_DEGREES(self->getShootDirection().getAngle());
-	m_pForesight->setRotation(-angle);
-}
-
 void GameLayer::updatePhysicsWorld(float dt)
 {
 	for (int i = 0; i < 3; ++i)
@@ -456,12 +431,6 @@ void GameLayer::updatePhysicsWorld(float dt)
 		getScene()->getPhysicsWorld()->step(1 / 180.0f);
 
 	}
-}
-
-void GameLayer::updateBomb(float dt)
-{
-	if (m_pBomb->getIsActive())
-		m_pBomb->update(dt);
 }
 
 Bullet* GameLayer::getUnusedBullet()
@@ -634,23 +603,18 @@ BaseSprite* GameLayer::getNearestEnemy()
 	return target;
 }
 
-void GameLayer::explodeEnemy()
+void GameLayer::explodeEnemy(cocos2d::Point position, float range, int power)
 {
-	BaseSprite* self = GameData::getInstance()->getMySelf();
-	Hero* hero = dynamic_cast<Hero*>(self);
-	if (hero)
+	for (int i = 0; i < 4; ++i)
 	{
-		for (int i = 0; i < 4; ++i)
-		{
-			BaseSprite* player = GameData::getInstance()->m_pPlayers[i];
-			if (player == nullptr || player->getIsMe())
-				continue;
+		BaseSprite* player = GameData::getInstance()->m_pPlayers[i];
+		if (player == nullptr || player->getIsMe())
+			continue;
 
-			float d = m_pBomb->getPosition().getDistanceSq(player->getPosition());
-			if (d < m_pBomb->getRange() * m_pBomb->getRange())
-			{
-				player->hurt(m_pBomb->getPower());
-			}
+		float d = position.getDistanceSq(player->getPosition());
+		if (d < range * range)
+		{
+			player->hurt(power);
 		}
 	}
 }

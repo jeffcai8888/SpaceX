@@ -26,6 +26,7 @@ public:
 	CC_SYNTHESIZE(bool, m_isStart, IsStart);
 	CC_SYNTHESIZE(Hero*, m_owner, Owner);
 	CC_SYNTHESIZE(float, m_startTime, StartTime);
+	CC_SYNTHESIZE(cocos2d::Sprite*, m_pBombRange, BombRange);
 
 private:
 	void reset();

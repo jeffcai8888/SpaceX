@@ -3,6 +3,7 @@
 
 #include "BaseSprite.h"
 class Bullet;
+class Bomb;
 class Hero : public BaseSprite
 {
 public:
@@ -11,6 +12,9 @@ public:
 
 	bool init();
 	virtual void update(float dt);
+	virtual void activeSkill1();
+	virtual void activeSkill2();
+
 	void exploreBomb();
 	virtual bool isInSplash() {
 		return m_bIsInSplash;
@@ -31,6 +35,10 @@ public:
 	CC_SYNTHESIZE(float, m_curSkillCDTime,	CurSkillCDTime);
 	CC_SYNTHESIZE(bool,  m_isThrowBomb, IsThrowBomb);
 	CC_SYNTHESIZE(bool, m_bIsInSplash, IsInSplash);
+	CC_SYNTHESIZE(std::string, m_bombType, BombType);
+
+	CC_SYNTHESIZE(cocos2d::Sprite*, m_pSkillStartPos, SkillStartPos);
+	CC_SYNTHESIZE(Bomb*, m_pBomb, Bomb);
 };
 
 
