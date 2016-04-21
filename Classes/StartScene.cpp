@@ -39,7 +39,7 @@ void StartLayer::onEnter()
 		static_cast<TextField *>(getChildByName("TextField_3"))->setVisible(true);
 		static_cast<TextField *>(getChildByName("TextField_4"))->setVisible(true);
 
-		/*for (auto& v : list)
+		for (auto& v : list)
 		{
 			ValueMap row = v.asValueMap();
 			for (auto& pair : row)
@@ -61,7 +61,7 @@ void StartLayer::onEnter()
 					static_cast<TextField *>(getChildByName("TextField_4"))->setString(Value(pair.second.asInt()).asString());
 				}
 			}
-		}*/
+		}
 	}
 	else
 	{

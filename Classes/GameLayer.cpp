@@ -80,7 +80,8 @@ void GameLayer::onEnter()
 	TMXObjectGroup *objects = m_pTiledMap->getObjectGroup("Objects");
 	CCASSERT(NULL != objects, "'Objects' object group not found");
 
-	for (int i = 0; i < 4; ++i)
+	int playerNum = GameData::getInstance()->getPlayerNum();
+	for (int i = 0; i < playerNum; ++i)
 	{
 		auto spawnPoint = objects->getObject("SpawnPoint" + Value(i).asString());
 		CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
@@ -336,7 +337,8 @@ void GameLayer::update(float dt)
 
 void GameLayer::updatePlayer(float dt)
 {
-	for (int i = 0; i < 4; ++i)
+	int playerNum = GameData::getInstance()->getPlayerNum();
+	for (int i = 0; i < playerNum; ++i)
 	{
 		BaseSprite* player = GameData::getInstance()->m_pPlayers[i];
 		if (player)
@@ -345,8 +347,6 @@ void GameLayer::updatePlayer(float dt)
 			if (player->getIsMe())
 			{
 				setViewPointCenter();
-				player->setPrePosition(player->getPosition());
-
 #if 1
 				if (player->getIsLocked() && m_pTarget == nullptr)
 				{
@@ -413,6 +413,7 @@ void GameLayer::updatePlayer(float dt)
 				}
 #endif
 			}
+			player->setPrePosition(player->getPosition());
 		}
 	}
 }
@@ -588,7 +589,8 @@ BaseSprite* GameLayer::getNearestEnemy()
 	BaseSprite* self = GameData::getInstance()->getMySelf();
     
     float distance = 100000.f;
-	for (int i = 0; i < 4; ++i)
+	int playerNum = GameData::getInstance()->getPlayerNum();
+	for (int i = 0; i < playerNum; ++i)
 	{
 		BaseSprite* player = GameData::getInstance()->m_pPlayers[i];
         if(player == nullptr)
@@ -612,7 +614,8 @@ BaseSprite* GameLayer::getNearestEnemy()
 
 void GameLayer::explodeEnemy(Bomb* bomb)
 {
-	for (int i = 0; i < 4; ++i)
+	int playerNum = GameData::getInstance()->getPlayerNum();
+	for (int i = 0; i < playerNum; ++i)
 	{
 		BaseSprite* player = GameData::getInstance()->m_pPlayers[i];
 		if (player == nullptr || player->getTag() % 2 == bomb->getOwner()->getTag() % 2)

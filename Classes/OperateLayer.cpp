@@ -524,7 +524,7 @@ void OperateLayer::dealWithKeyBoard()
 	else
 	{
 
-		if (!self->isInAir())
+		if (self->getCurrActionState() == ACTION_STATE_WALK)
 		{
 			self->stop();
 			SocketManager::getInstance()->sendData(NDT_HeroStop, self->getTag(),self->getCurrActionState(), self->getPosition(), Vec2(0, 0));
