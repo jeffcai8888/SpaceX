@@ -43,7 +43,7 @@ void SocketManager::start()
 {
 	if (NT_Client == m_networkType)
 	{
-		if (!m_pSocketClient->connectServer("172.20.10.7", 8000))
+		if (!m_pSocketClient->connectServer("127.0.0.1", 8000))
 		{
 			CCLOG("Client connect error");
 		}

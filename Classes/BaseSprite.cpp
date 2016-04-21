@@ -188,9 +188,9 @@ void BaseSprite::runJumpDownAction()
 
 void BaseSprite::runHurtAction()
 {
-	Blink* blinkAction = Blink::create(0.1f, 1);
-	this->setVisible(true);
-	this->runAction(blinkAction);
+	//Blink* blinkAction = Blink::create(0.1f, 1);
+	//this->setVisible(true);
+	//this->runAction(blinkAction);
 }
 
 void BaseSprite::runDeadAction()

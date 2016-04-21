@@ -622,6 +622,10 @@ void GameLayer::explodeEnemy(Bomb* bomb)
 		if (d < bomb->getRange() * bomb->getRange())
 		{
 			player->hurt(bomb->getPower());
+			if (bomb->getOwner()->getTag() == GameData::getInstance()->getMySelf()->getTag())
+			{
+				SocketManager::getInstance()->sendData(NDT_HeroHurt, player->getTag(), player->getCurrActionState(), player->getPosition(), player->getPhysicsBody()->getVelocity());
+			}
 		}
 	}
 }
