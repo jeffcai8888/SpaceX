@@ -34,11 +34,12 @@ void StartLayer::onEnter()
 		static_cast<Text *>(getChildByName("Text_2"))->setVisible(true);
 		static_cast<Text *>(getChildByName("Text_3"))->setVisible(true);
 		static_cast<Text *>(getChildByName("Text_4"))->setVisible(true);
+		static_cast<Text *>(getChildByName("Text_5"))->setVisible(true);
 		static_cast<TextField *>(getChildByName("TextField_1"))->setVisible(true);
 		static_cast<TextField *>(getChildByName("TextField_2"))->setVisible(true);
 		static_cast<TextField *>(getChildByName("TextField_3"))->setVisible(true);
 		static_cast<TextField *>(getChildByName("TextField_4"))->setVisible(true);
-
+		static_cast<TextField *>(getChildByName("TextField_5"))->setVisible(true);
 		for (auto& v : list)
 		{
 			ValueMap row = v.asValueMap();
@@ -62,6 +63,7 @@ void StartLayer::onEnter()
 				}
 			}
 		}
+		static_cast<TextField *>(getChildByName("TextField_5"))->setString("4");
 	}
 	else
 	{
@@ -69,10 +71,12 @@ void StartLayer::onEnter()
 		static_cast<Text *>(getChildByName("Text_2"))->setVisible(false);
 		static_cast<Text *>(getChildByName("Text_3"))->setVisible(false);
 		static_cast<Text *>(getChildByName("Text_4"))->setVisible(false);
+		static_cast<Text *>(getChildByName("Text_5"))->setVisible(false);
 		static_cast<TextField *>(getChildByName("TextField_1"))->setVisible(false);
 		static_cast<TextField *>(getChildByName("TextField_2"))->setVisible(false);
 		static_cast<TextField *>(getChildByName("TextField_3"))->setVisible(false);
 		static_cast<TextField *>(getChildByName("TextField_4"))->setVisible(false);
+		static_cast<TextField *>(getChildByName("TextField_5"))->setVisible(false);
 	}
 	if(SocketManager::getInstance()->getNetworkType() == NT_Client)
 		SocketManager::getInstance()->getSocketClient()->onNewConnection = CC_CALLBACK_1(StartLayer::onNewConnection, this);
@@ -192,6 +196,7 @@ void StartLayer::startGame()
 {	
 	if (SocketManager::getInstance()->getNetworkType() == NT_Client)
 	{
+		GameData::getInstance()->setPlayerNum(Value(static_cast<TextField *>(getChildByName("TextField_5"))->getString()).asInt());
 		std::string addr0, addr1, addr2, addr3;
 		addr0 = static_cast<TextField *>(getChildByName("TextField_1"))->getString();
 		addr1 = static_cast<TextField *>(getChildByName("TextField_2"))->getString();
@@ -208,6 +213,7 @@ void StartLayer::startGame()
 	}
 	else
 	{
+		GameData::getInstance()->setPlayerNum(4);
 		JsonParser* parser = JsonParser::createWithFile("start0.json");
 		parser->decodeLoginProtocol();
 		importStartGameData(parser);
