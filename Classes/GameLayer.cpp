@@ -233,21 +233,32 @@ void GameLayer::onEnter()
 			{
 				bullet->setIsActive(false);
 				this->removeChild(bullet);
-				
-                BaseSprite* self = GameData::getInstance()->getMySelf();
-                if(bullet->getOwnerTag() == self->getTag())
-                {
+
+				if (SocketManager::getInstance()->getNetworkType() == NT_Offline)
+				{
 					hero->hurt(bullet->getPower());
 					if (hero->getHP() <= 0)
 					{
 						hero->reset();
-						SocketManager::getInstance()->sendData(NDT_HeroDead, hero->getTag(), hero->getCurrActionState(), hero->getPosition(), Vec2(0.f, 0.f));
 					}
-					else
+				}
+				else
+				{
+					BaseSprite* self = GameData::getInstance()->getMySelf();
+					if (bullet->getOwnerTag() == self->getTag())
 					{
-						SocketManager::getInstance()->sendData(NDT_HeroHurt, hero->getTag(), hero->getCurrActionState(), hero->getPosition(), Vec2(bullet->getPower(), 0.f));
+						hero->hurt(bullet->getPower());
+						if (hero->getHP() <= 0)
+						{
+							hero->reset();
+							SocketManager::getInstance()->sendData(NDT_HeroDead, hero->getTag(), hero->getCurrActionState(), hero->getPosition(), Vec2(0.f, 0.f));
+						}
+						else
+						{
+							SocketManager::getInstance()->sendData(NDT_HeroHurt, hero->getTag(), hero->getCurrActionState(), hero->getPosition(), Vec2(bullet->getPower(), 0.f));
+						}
 					}
-                }
+				}
 				return true;
 			}		
 		}
@@ -473,9 +484,15 @@ void GameLayer::setViewPointCenter() {
 	auto layerPos = this->getPosition();
 	auto heroPosInScreen = heroPos + layerPos;
 	this->setPositionX(centerOfView.x - heroPos.x);
+	//this->setPosition(centerOfView - heroPos);
 
     auto diff = heroPosInScreen - centerOfView;
-    if(fabs(diff.y) > 25.f)
+	if (diff.y > 0)
+	{
+		this->setPositionY(centerOfView.y - heroPos.y);
+	}
+
+    else if(diff.y < -25.f)
     {     
 		auto heroPrePosY = GameData::getInstance()->getMySelf()->getPrePosition().y;
 		this->setPositionY(heroPrePosY + layerPos.y - heroPos.y);
@@ -633,20 +650,30 @@ void GameLayer::explodeEnemy(Bomb* bomb)
 		float d = bomb->getPosition().getDistanceSq(player->getPosition());
 		if (d < bomb->getRange() * bomb->getRange())
 		{
-			
-			if (bomb->getOwner()->getTag() == GameData::getInstance()->getMySelf()->getTag())
+			if (SocketManager::getInstance()->getNetworkType() == NT_Offline)
 			{
 				player->hurt(bomb->getPower());
 				if (player->getHP() <= 0)
 				{
 					player->reset();
-					SocketManager::getInstance()->sendData(NDT_HeroDead, player->getTag(), player->getCurrActionState(), player->getPosition(), Vec2(0.f, 0.f));
-				}
-				else
-				{
-					SocketManager::getInstance()->sendData(NDT_HeroHurt, player->getTag(), player->getCurrActionState(), player->getPosition(), Vec2(bomb->getPower(), 0.f));
 				}
 			}
+			else
+			{
+				if (bomb->getOwner()->getTag() == GameData::getInstance()->getMySelf()->getTag())
+				{
+					player->hurt(bomb->getPower());
+					if (player->getHP() <= 0)
+					{
+						player->reset();
+						SocketManager::getInstance()->sendData(NDT_HeroDead, player->getTag(), player->getCurrActionState(), player->getPosition(), Vec2(0.f, 0.f));
+					}
+					else
+					{
+						SocketManager::getInstance()->sendData(NDT_HeroHurt, player->getTag(), player->getCurrActionState(), player->getPosition(), Vec2(bomb->getPower(), 0.f));
+					}
+				}
+			}			
 		}
 	}
 }
