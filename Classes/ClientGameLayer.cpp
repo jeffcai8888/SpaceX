@@ -113,6 +113,10 @@ void ClientGameLayer::onRecv(const char* data, int count)
         {
             BaseSprite* player = GameData::getInstance()->m_pPlayers[networkData->index];
             player->hurt(networkData->vec.x);
+			if (player->getHP() < 0)
+			{
+				player->reset();
+			}
             player->setPosition(networkData->position);
         }
             break;
