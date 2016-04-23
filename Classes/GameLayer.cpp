@@ -233,11 +233,20 @@ void GameLayer::onEnter()
 			{
 				bullet->setIsActive(false);
 				this->removeChild(bullet);
-				hero->hurt(bullet->getPower());
+				
                 BaseSprite* self = GameData::getInstance()->getMySelf();
                 if(bullet->getOwnerTag() == self->getTag())
                 {
-                    SocketManager::getInstance()->sendData(NDT_HeroHurt, hero->getTag(), hero->getCurrActionState(), hero->getPosition(), hero->getPhysicsBody()->getVelocity());
+					hero->hurt(bullet->getPower());
+					if (hero->getHP() <= 0)
+					{
+						hero->reset();
+						SocketManager::getInstance()->sendData(NDT_HeroDead, hero->getTag(), hero->getCurrActionState(), hero->getPosition(), Vec2(0.f, 0.f));
+					}
+					else
+					{
+						SocketManager::getInstance()->sendData(NDT_HeroHurt, hero->getTag(), hero->getCurrActionState(), hero->getPosition(), Vec2(bullet->getPower(), 0.f));
+					}
                 }
 				return true;
 			}		
@@ -624,10 +633,19 @@ void GameLayer::explodeEnemy(Bomb* bomb)
 		float d = bomb->getPosition().getDistanceSq(player->getPosition());
 		if (d < bomb->getRange() * bomb->getRange())
 		{
-			player->hurt(bomb->getPower());
+			
 			if (bomb->getOwner()->getTag() == GameData::getInstance()->getMySelf()->getTag())
 			{
-				SocketManager::getInstance()->sendData(NDT_HeroHurt, player->getTag(), player->getCurrActionState(), player->getPosition(), player->getPhysicsBody()->getVelocity());
+				player->hurt(bomb->getPower());
+				if (player->getHP() <= 0)
+				{
+					player->reset();
+					SocketManager::getInstance()->sendData(NDT_HeroDead, player->getTag(), player->getCurrActionState(), player->getPosition(), Vec2(0.f, 0.f));
+				}
+				else
+				{
+					SocketManager::getInstance()->sendData(NDT_HeroHurt, player->getTag(), player->getCurrActionState(), player->getPosition(), Vec2(bomb->getPower(), 0.f));
+				}
 			}
 		}
 	}

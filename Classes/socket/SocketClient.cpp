@@ -96,7 +96,6 @@ void SocketClient::recvMessage()
 	while (true)
 	{
 		ret = recv(_socketClient, recvBuf, sizeof(recvBuf), 0);
-		CCLOG("recvMessage");
 		if (ret < 0)
 		{
 			log("recv error!");

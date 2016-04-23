@@ -25,7 +25,7 @@ BaseSprite::BaseSprite() :
 	m_isAutoShoot(false),
 	m_isMe(false)
 {
-
+	
 }
 
 BaseSprite::~BaseSprite()
@@ -48,6 +48,9 @@ void BaseSprite::reset()
 	this->setHP(100);
 	this->setIsAttacking(false);
 	this->setJumpStage(0);
+	ProgressTimer *blood = static_cast<ProgressTimer *>(this->getChildByName("blood"));
+	if(blood)
+		blood->setPercentage(100.f);
 }
 
 void BaseSprite::walk(float v)
@@ -127,15 +130,11 @@ void BaseSprite::hurt(int damage)
 		this->runHurtAction();
 		int hp = this->getHP() - damage;
 		this->setHP(hp);
+		CCLOG("HP = %d", hp);
 		ProgressTimer *blood = static_cast<ProgressTimer *>(this->getChildByName("blood"));
 		if (blood)
 		{
-			if (hp < 0)
-			{
-				reset();
-				blood->setPercentage(100.f);
-			}
-			else
+			if (hp > 0)
 			{
 				blood->setPercentage(this->getHP() * 100.f / this->getMaxHP());
 			}
