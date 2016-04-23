@@ -147,7 +147,6 @@ void OperateLayer::onEnter()
 			}
 			else if (p.x <= 200.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
 			{
-                CCLOG("onTouchesBegan %d %d", pTouch->getID(), BT_Left);
 				switchButtonStatus(BT_Left, true);
 				m_mapPressType[pTouch->getID()] = Value(BT_Left);
 				m_KeyPressedValue |= KB_Back;
@@ -155,7 +154,6 @@ void OperateLayer::onEnter()
 			}
 			else if (p.x > 200.f && p.x <= 400.f && p.y >= 0.f && p.y <= winSize.height * 3 / 4)
 			{
-                CCLOG("onTouchesBegan %d %d", pTouch->getID(), BT_Right);
 				switchButtonStatus(BT_Right, true);
 				m_mapPressType[pTouch->getID()] = Value(BT_Right);
 				m_KeyPressedValue |= KB_Front;
@@ -163,7 +161,6 @@ void OperateLayer::onEnter()
 			}
 			else if (isTap(m_pUp, p))
             {
-                CCLOG("onTouchesBegan %d %d", pTouch->getID(), BT_Jump);
 				BaseSprite* self = GameData::getInstance()->getMySelf();
 				self->jump(self->getJumpVelocity());
 				SocketManager::getInstance()->sendData(NDT_HeroJumpUp, self->getTag(),self->getCurrActionState(), self->getPosition(), self->getPhysicsBody()->getVelocity());
@@ -225,6 +222,7 @@ void OperateLayer::onEnter()
                     self->getRange()->setVisible(false);
                     self->attack(false);
                     switchButtonStatus(BT_Joystick, false);
+					self->setIsShootInit(false);
                     SocketManager::getInstance()->sendData(NDT_HeroStopAttack, self->getTag(),self->getCurrActionState(), self->getPosition(), self->getShootDirection());
                 }
 #if 1
@@ -306,7 +304,7 @@ void OperateLayer::onEnter()
             {
                 m_mapPressType.erase(pTouch->getID());
                 showJoystick(m_pJoystickBg->getPosition());
-                
+				self->setIsShootInit(false);
 #if 1
                 self->attack(false);
                 self->setIsLocked(false);
@@ -449,6 +447,12 @@ void OperateLayer::onEnter()
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(listener4, 1);
 	m_vecEventListener.pushBack(listener4);
+
+	auto listener5 = EventListenerCustom::create("heroSkillFinish", [this](EventCustom* event) {
+		dealWithKeyBoard();
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(listener5, 1);
+	m_vecEventListener.pushBack(listener5);
 }
 
 void OperateLayer::onExit()
@@ -491,6 +495,7 @@ void OperateLayer::dealWithJoystick(cocos2d::Point centerPoint, cocos2d::Point p
 	this->updateJoystick(direction, distance);
 	BaseSprite* self = GameData::getInstance()->getMySelf();
 	self->setShootDirection(direction);
+	self->setIsShootInit(true);
 	self->attack(true);
 	SocketManager::getInstance()->sendData(NDT_HeroAttack, self->getTag(),self->getCurrActionState(), self->getPosition(), self->getShootDirection());
 }
@@ -526,19 +531,23 @@ void OperateLayer::dealWithKeyBoard()
 	BaseSprite* self = GameData::getInstance()->getMySelf();
 	if (m_KeyPressedValue & KB_Back)
 	{
-		self->walk(-self->getWalkVelocity());
-		SocketManager::getInstance()->sendData(NDT_HeroWalk, self->getTag(),self->getCurrActionState(), self->getPosition(), self->getPhysicsBody()->getVelocity());
+		if (!self->isInSplash())
+		{
+			self->walk(-self->getWalkVelocity());
+			SocketManager::getInstance()->sendData(NDT_HeroWalk, self->getTag(), self->getCurrActionState(), self->getPosition(), self->getPhysicsBody()->getVelocity());
+		}	
 	}
 	else if (m_KeyPressedValue & KB_Front)
 	{
-		self->walk(self->getWalkVelocity());
-		SocketManager::getInstance()->sendData(NDT_HeroWalk, self->getTag(),self->getCurrActionState(), self->getPosition(), self->getPhysicsBody()->getVelocity());
-	}
-	
+		if (!self->isInSplash())
+		{
+			self->walk(self->getWalkVelocity());
+			SocketManager::getInstance()->sendData(NDT_HeroWalk, self->getTag(), self->getCurrActionState(), self->getPosition(), self->getPhysicsBody()->getVelocity());
+		}
+	}		
 	else
 	{
-
-		if (self->getCurrActionState() == ACTION_STATE_WALK)
+		if (self->getCurrActionState() == ACTION_STATE_WALK && !self->isInSplash())
 		{
 			self->stop();
 			SocketManager::getInstance()->sendData(NDT_HeroStop, self->getTag(),self->getCurrActionState(), self->getPosition(), Vec2(0, 0));

@@ -28,5 +28,14 @@
         <EnableHTML5Advanced Value="False" />
       </Value>
     </Item>
+    <Item Key="TabsParamsKey">
+      <Value ctype="TabsInfo">
+        <OpenedDocuments>
+          <FilePathData Path="StartScene.csd" />
+          <FilePathData Path="BackgroundLayer.csd" />
+        </OpenedDocuments>
+        <ActiveDocument Path="BackgroundLayer.csd" />
+      </Value>
+    </Item>
   </Properties>
 </UserData>

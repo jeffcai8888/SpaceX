@@ -385,6 +385,8 @@ void GameLayer::updatePlayer(float dt)
 					Vec2 direction = m_pTarget->getPosition() - player->getPosition();
 					direction.normalize();
 					player->setShootDirection(direction);
+					player->setIsShootInit(true);
+					CCLOG("setShootDirection 1");
 				}
 #else
 				if (player->getIsAutoShoot())

@@ -66,7 +66,22 @@ void Bullet::launch(BaseSprite* pHero)
 	this->m_fVelocity = config.m_fLaunchVelocity;
 	this->m_fDisappearTime = config.m_fDisappearTime;
 	float rotation = CC_DEGREES_TO_RADIANS(-rand_0_1() *config.m_iAngle);
-	this->m_fDirection = pHero->getShootDirection().rotateByAngle(Vec2(0.f, 0.f), rotation);
+	if (pHero->getIsShootInit())
+	{
+		this->m_fDirection = pHero->getShootDirection().rotateByAngle(Vec2(0.f, 0.f), rotation);
+	}
+	else
+	{
+		if (pHero->isFlippedX())
+		{
+			this->m_fDirection = Vec2(-1.f,0.f).rotateByAngle(Vec2(0.f, 0.f), rotation);
+		}
+		else
+		{
+			this->m_fDirection = Vec2(1.f, 0.f).rotateByAngle(Vec2(0.f, 0.f), rotation);
+		}
+	}
+	
 	this->m_power = config.m_iPower;
 	this->m_gravity = config.m_fGravity;
 	this->m_ownerTag = pHero->getTag();

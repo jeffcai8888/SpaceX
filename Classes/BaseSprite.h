@@ -90,6 +90,7 @@ public:
 	CC_SYNTHESIZE(bool, m_isAutoShoot, IsAutoShoot);
 	CC_SYNTHESIZE(Foresight*, m_pForesight, Foresight);
 	CC_SYNTHESIZE(cocos2d::Sprite*, m_pRange, Range);
+	CC_SYNTHESIZE(bool, m_isShootInit, IsShootInit);
 	
 	CC_SYNTHESIZE(int, m_curSkill, CurSkill);
     

@@ -344,7 +344,7 @@ void BaseSprite::update(float dt)
 			BulletConfigMap bulletConfigMap = ConfigCenter::getInstance()->getBulletConfigModel()->GetBulletConfigMap();
 			BulletConfig config = bulletConfigMap[getBulletType()];
 			m_shootTime = config.m_fInterval;
-			if (getShootDirection().x != 0)
+			if (getIsShootInit())
 				setFlippedX(getShootDirection().x < 0);
 		}
 	}
@@ -352,7 +352,21 @@ void BaseSprite::update(float dt)
 	if (m_isMe)
 	{
 		m_pForesight->setPosition(getPosition() + Point(0.f, -20.f));
-		float angle = CC_RADIANS_TO_DEGREES(getShootDirection().getAngle());
+		float angle;
+		if(getIsShootInit())		
+			angle  = CC_RADIANS_TO_DEGREES(getShootDirection().getAngle());
+		else
+		{
+			if (isFlippedX())
+			{
+				angle = CC_RADIANS_TO_DEGREES(Vec2(-1.f, 0.f).getAngle());
+			}
+			else
+			{
+				angle = CC_RADIANS_TO_DEGREES(Vec2(1.f, 0.f).getAngle());
+			}
+		}
+			
 		m_pForesight->setRotation(-angle);
 	}
 }
