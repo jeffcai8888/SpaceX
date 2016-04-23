@@ -5,7 +5,7 @@
 GameData* GameData::instance = nullptr;
 
 GameData::GameData()
-	:m_PlayerNum(2)
+	:m_PlayerNum(4)
 {
 	for (int i = 0; i < PLAYER_MAX_NUM; ++i)
 	{

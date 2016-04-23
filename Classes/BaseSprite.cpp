@@ -65,7 +65,7 @@ void BaseSprite::walk(float v)
 		Vec2 velocity = this->getPhysicsBody()->getVelocity();
 		velocity.x = v;
 		this->getPhysicsBody()->setVelocity(velocity);
-		CCLOG("walk %f,%f", this->getPhysicsBody()->getVelocity().x, this->getPhysicsBody()->getVelocity().y);
+		//CCLOG("walk %f,%f", this->getPhysicsBody()->getVelocity().x, this->getPhysicsBody()->getVelocity().y);
 	}
 }
 
@@ -82,7 +82,7 @@ void BaseSprite::jump(float v)
 			this->setFlippedX(velocity.x < 0);
 		}
 		this->getPhysicsBody()->setVelocity(velocity);
-		CCLOG("jump Stage %d", this->getJumpStage());
+		//CCLOG("jump Stage %d", this->getJumpStage());
 		this->setPrePosition(this->getPosition());
 	}
 }
@@ -93,7 +93,7 @@ void BaseSprite::stop()
 	{
 		this->runIdleAction();
 		this->getPhysicsBody()->setVelocity(Vec2(0.f, 0.f));
-		CCLOG("stop %f,%f", this->getPhysicsBody()->getVelocity().x, this->getPhysicsBody()->getVelocity().y);
+		//CCLOG("stop %f,%f", this->getPhysicsBody()->getVelocity().x, this->getPhysicsBody()->getVelocity().y);
 	}
 }
 

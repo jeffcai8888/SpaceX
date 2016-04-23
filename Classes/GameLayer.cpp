@@ -186,7 +186,7 @@ void GameLayer::onEnter()
 				_eventDispatcher->dispatchEvent(&event);
 				hero->setJumpStage(0);
 			}
-			CCLOG("collision %f, %f", hero->getPhysicsBody()->getVelocity().x, hero->getPhysicsBody()->getVelocity().y);
+			//CCLOG("collision %f, %f", hero->getPhysicsBody()->getVelocity().x, hero->getPhysicsBody()->getVelocity().y);
 			return true;
 		}
         else if((contact.getShapeA()->getCategoryBitmask() == PC_Bullet && contact.getShapeB()->getCategoryBitmask() == PC_Ground) ||
