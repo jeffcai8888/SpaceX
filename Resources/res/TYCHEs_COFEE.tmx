@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="400" height="100" tilewidth="20" tileheight="20" nextobjectid="70">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="400" height="100" tilewidth="20" tileheight="20" nextobjectid="74">
  <tileset firstgid="1" name="background" tilewidth="20" tileheight="20" tilecount="1536" columns="48">
   <image source="background.png" width="960" height="640"/>
  </tileset>
@@ -107,17 +107,17 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="Grounds">
+ <objectgroup name="Grounds" offsetx="-2.5" offsety="2.5">
   <object id="43" name="Box" x="1969.33" y="1458.83" width="80" height="10"/>
   <object id="4" name="Box" x="4272.17" y="1464.17" width="55" height="55"/>
   <object id="5" name="Box" x="3900.67" y="1319.38" width="99.3333" height="10"/>
-  <object id="7" name="Box" x="3900.66" y="1088" width="277.344" height="10"/>
+  <object id="7" name="Box" x="3900.66" y="1088" width="257.84" height="10"/>
   <object id="8" name="Box" x="3900.67" y="1088" width="10" height="101"/>
-  <object id="10" name="Box" x="4100" y="1280" width="158" height="10"/>
-  <object id="11" name="Box" x="4340" y="1280" width="121.333" height="10"/>
-  <object id="12" name="Box" x="4419.5" y="1088" width="280.25" height="10"/>
+  <object id="10" name="Box" x="4100" y="1280" width="146.5" height="10"/>
+  <object id="11" name="Box" x="4353.5" y="1280" width="90" height="10"/>
+  <object id="12" name="Box" x="4442.5" y="1088" width="257.25" height="10"/>
   <object id="16" name="Box" x="1281" y="1520" width="4537.67" height="10"/>
-  <object id="17" name="Box" x="5119.83" y="1465.5" width="97.5033" height="55"/>
+  <object id="17" name="Box" x="5124.83" y="1465.5" width="97.5033" height="55"/>
   <object id="19" name="Box" x="4880.03" y="1355.37" width="80" height="63.4499"/>
   <object id="20" name="Box" x="4800.01" y="1300.34" width="80.0196" height="118.475"/>
   <object id="21" name="Box" x="4960.12" y="1409" width="79.878" height="10"/>
@@ -130,13 +130,13 @@
   <object id="62" name="Box" x="1291.19" y="1342.67" width="533.148" height="177.333"/>
   <object id="58" name="Box" x="2442.26" y="1223.23" width="55" height="55"/>
   <object id="54" name="Box" x="2440.12" y="1465.04" width="55" height="55"/>
-  <object id="55" name="Box" x="2879.81" y="1059.33" width="80" height="10"/>
-  <object id="57" name="Box" x="2879.08" y="1200.33" width="80" height="10"/>
+  <object id="55" name="Box" x="3361.81" y="1077.33" width="198.19" height="10"/>
+  <object id="57" name="Box" x="2876.08" y="1223" width="80" height="10"/>
   <object id="51" name="Box" x="2879" y="1449.75" width="80" height="10"/>
-  <object id="56" name="Box" x="3022.58" y="1130.83" width="80" height="10"/>
+  <object id="56" name="Box" x="3019.58" y="1171.16" width="80" height="10"/>
   <object id="53" name="Box" x="3025.5" y="1389.25" width="80" height="10"/>
   <object id="60" name="Box" x="4727" y="1182" width="59" height="10"/>
-  <object id="61" name="Box" x="4259.5" y="1088" width="81.1667" height="10"/>
+  <object id="61" name="Box" x="4263.83" y="1088" width="72.6667" height="10"/>
   <object id="59" name="Box" x="4540.21" y="1280.04" width="159.125" height="10"/>
   <object id="64" name="Box" x="5631.59" y="1340.27" width="88.6876" height="179.702"/>
   <object id="67" name="Box" x="5542.97" y="1340.27" width="88.6194" height="179.766"/>
