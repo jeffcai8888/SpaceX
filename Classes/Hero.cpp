@@ -138,6 +138,7 @@ void Hero::activeSkill1()
 	if (getCurSkillState() == 0)
 	{
 		stop();
+		setJumpStage(0);
 		setSkillActivePos(getPosition());
 		if (isFlippedX())
 		{
