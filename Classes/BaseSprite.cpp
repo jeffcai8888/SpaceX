@@ -44,6 +44,7 @@ BaseSprite::~BaseSprite()
 void BaseSprite::reset()
 {
 	this->setPosition(m_initPos);
+	this->m_fPrePosition = m_initPos;
 	this->runIdleAction();
 	this->setHP(100);
 	this->setIsAttacking(false);
@@ -263,7 +264,7 @@ Animation* BaseSprite::createAnimation(const char* formatStr, int frameCount, in
 
 CallFunc* BaseSprite::createDeadCallbackFunc()
 {
-	return CallFunc::create( CC_CALLBACK_0(BaseSprite::onDead, this));
+	return CallFunc::create( CC_CALLBACK_0(BaseSprite::dead, this));
 }
 
 CallFunc* BaseSprite::createIdleCallbackFunc()
@@ -271,9 +272,9 @@ CallFunc* BaseSprite::createIdleCallbackFunc()
 	return  CallFunc::create(CC_CALLBACK_0(BaseSprite::runIdleAction, this));
 }
 
-void BaseSprite::onDead()
+void BaseSprite::dead()
 {
-
+	changeState(ACTION_STATE_DEAD);
 }
 
 bool BaseSprite::isLive()
@@ -281,7 +282,9 @@ bool BaseSprite::isLive()
 	if(this->m_currActionState >= ACTION_STATE_DEAD)
 	{
 		return false;
-	}else {
+	}
+	else
+	{
 		return true;
 	}
 }
@@ -293,10 +296,10 @@ bool BaseSprite::isInAir()
 
 bool BaseSprite::changeState(ActionState actionState)
 {
-	if((m_currActionState == ACTION_STATE_DEAD && actionState != ACTION_STATE_REMOVE) || m_currActionState == actionState)
+	/*if((m_currActionState == ACTION_STATE_DEAD && actionState != ACTION_STATE_REMOVE) || m_currActionState == actionState)
 	{
 		return false;
-	}
+	}*/
 
 	this->stopAllActions();
 	this->m_currActionState = actionState;
@@ -317,56 +320,64 @@ cocos2d::Point BaseSprite::getShootPosition()
 
 void BaseSprite::update(float dt)
 {
-	float x = getPhysicsBody()->getVelocity().x;
-	float y = getPhysicsBody()->getVelocity().y;
-	if (!getIsOnRotateGround() && !isInSplash())
+	if (isLive())
 	{
-		y += getGravity() * dt;
-	}	
-	getPhysicsBody()->setVelocity(Vec2(x, y));
-	//CCLOG("update %f,%f", this->getPhysicsBody()->getVelocity().x, this->getPhysicsBody()->getVelocity().y);
-
-	if (getCurrActionState() == ACTION_STATE_JUMP_UP && getPosition().y < getPrePosition().y)
-	{
-		runJumpDownAction();
-	}
-
-
-	if (getIsAttacking())
-	{
-		m_shootTime -= dt;
-		if (m_shootTime < 0)
+		float x = getPhysicsBody()->getVelocity().x;
+		float y = getPhysicsBody()->getVelocity().y;
+		if (!getIsOnRotateGround() && !isInSplash())
 		{
-			EventCustom event("shoot_bullet");
-			event.setUserData(this);
-			_eventDispatcher->dispatchEvent(&event);
-
-			BulletConfigMap bulletConfigMap = ConfigCenter::getInstance()->getBulletConfigModel()->GetBulletConfigMap();
-			BulletConfig config = bulletConfigMap[getBulletType()];
-			m_shootTime = config.m_fInterval;
-			if (getIsShootInit())
-				setFlippedX(getShootDirection().x < 0);
+			y += getGravity() * dt;
 		}
-	}
-	
-	if (m_isMe)
-	{
-		m_pForesight->setPosition(getPosition() + Point(0.f, -20.f));
-		float angle;
-		if(getIsShootInit())		
-			angle  = CC_RADIANS_TO_DEGREES(getShootDirection().getAngle());
-		else
+		getPhysicsBody()->setVelocity(Vec2(x, y));
+		//CCLOG("update %f,%f", this->getPhysicsBody()->getVelocity().x, this->getPhysicsBody()->getVelocity().y);
+
+		if (getCurrActionState() == ACTION_STATE_JUMP_UP && getPosition().y < getPrePosition().y)
 		{
-			if (isFlippedX())
+			runJumpDownAction();
+		}
+
+
+		if (getIsAttacking())
+		{
+			m_shootTime -= dt;
+			if (m_shootTime < 0)
 			{
-				angle = CC_RADIANS_TO_DEGREES(Vec2(-1.f, 0.f).getAngle());
+				EventCustom event("shoot_bullet");
+				event.setUserData(this);
+				_eventDispatcher->dispatchEvent(&event);
+
+				BulletConfigMap bulletConfigMap = ConfigCenter::getInstance()->getBulletConfigModel()->GetBulletConfigMap();
+				BulletConfig config = bulletConfigMap[getBulletType()];
+				m_shootTime = config.m_fInterval;
+				if (getIsShootInit())
+					setFlippedX(getShootDirection().x < 0);
 			}
+		}
+
+		if (m_isMe)
+		{
+			m_pForesight->setPosition(getPosition() + Point(0.f, -20.f));
+			float angle;
+			if (getIsShootInit())
+				angle = CC_RADIANS_TO_DEGREES(getShootDirection().getAngle());
 			else
 			{
-				angle = CC_RADIANS_TO_DEGREES(Vec2(1.f, 0.f).getAngle());
+				if (isFlippedX())
+				{
+					angle = CC_RADIANS_TO_DEGREES(Vec2(-1.f, 0.f).getAngle());
+				}
+				else
+				{
+					angle = CC_RADIANS_TO_DEGREES(Vec2(1.f, 0.f).getAngle());
+				}
 			}
+
+			m_pForesight->setRotation(-angle);
 		}
-			
-		m_pForesight->setRotation(-angle);
 	}
+	else
+	{
+		reset();
+	}
+	
 }

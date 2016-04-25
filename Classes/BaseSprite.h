@@ -49,6 +49,7 @@ public:
 	void stop();
 	void hurt(int);
 	void attack(bool);
+	void dead();
 	virtual void activeSkill1() {}
 	virtual void activeSkill2() {}
 
@@ -94,7 +95,7 @@ public:
 	
 	CC_SYNTHESIZE(int, m_curSkill, CurSkill);
     
-	virtual void onDead();
+	
 
 	virtual bool isLive();
 	virtual bool isInAir();

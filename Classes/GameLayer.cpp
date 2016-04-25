@@ -233,13 +233,12 @@ void GameLayer::onEnter()
 			{
 				bullet->setIsActive(false);
 				this->removeChild(bullet);
-
 				if (SocketManager::getInstance()->getNetworkType() == NT_Offline)
 				{
 					hero->hurt(bullet->getPower());
 					if (hero->getHP() <= 0)
 					{
-						hero->reset();
+						hero->dead();
 					}
 				}
 				else
@@ -250,7 +249,7 @@ void GameLayer::onEnter()
 						hero->hurt(bullet->getPower());
 						if (hero->getHP() <= 0)
 						{
-							hero->reset();
+							hero->dead();
 							SocketManager::getInstance()->sendData(NDT_HeroDead, hero->getTag(), hero->getCurrActionState(), hero->getPosition(), Vec2(0.f, 0.f));
 						}
 						else
@@ -260,7 +259,7 @@ void GameLayer::onEnter()
 					}
 				}
 				return true;
-			}		
+			}	
 		}
 		else if (	(contact.getShapeA()->getCategoryBitmask() == PC_Bomb && contact.getShapeB()->getCategoryBitmask() == PC_Ground)	||
 					(contact.getShapeA()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getCategoryBitmask() == PC_Bomb)	||
@@ -657,7 +656,7 @@ void GameLayer::explodeEnemy(Bomb* bomb)
 				player->hurt(bomb->getPower());
 				if (player->getHP() <= 0)
 				{
-					player->reset();
+					player->dead();
 				}
 			}
 			else
@@ -667,7 +666,7 @@ void GameLayer::explodeEnemy(Bomb* bomb)
 					player->hurt(bomb->getPower());
 					if (player->getHP() <= 0)
 					{
-						player->reset();
+						player->dead();
 						SocketManager::getInstance()->sendData(NDT_HeroDead, player->getTag(), player->getCurrActionState(), player->getPosition(), Vec2(0.f, 0.f));
 					}
 					else
