@@ -85,6 +85,6 @@ void Bullet::launch(BaseSprite* pHero)
 	this->m_power = config.m_iPower;
 	this->m_gravity = config.m_fGravity;
 	this->m_ownerTag = pHero->getTag();
-	this->getPhysicsBody()->setVelocity(m_fVelocity * m_fDirection);
+	this->getPhysicsBody()->setVelocity(m_fVelocity * m_fDirection + pHero->getPhysicsBody()->getVelocity());
 	m_launchTime = 0.f;
 }

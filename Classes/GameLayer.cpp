@@ -87,8 +87,7 @@ void GameLayer::onEnter()
 		CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
 		Point heroInitPos = m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
 		int roleType = GameData::getInstance()->m_playerTypes[i];
-		auto player = createHero(roleType, heroInitPos);
-		player->setTag(i);
+		auto player = createHero(roleType, heroInitPos, i);
 		if (GameData::getInstance()->getRoleIndex() == i)
 			player->setIsMe(true);
 		this->addChild(player);
@@ -565,7 +564,7 @@ void GameLayer::removeAllBullets()
 	}
 }
 
-BaseSprite* GameLayer::createHero(int role, cocos2d::Point pos)
+BaseSprite* GameLayer::createHero(int role, cocos2d::Point pos, int tag)
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	BaseSprite* sprite;
@@ -575,6 +574,7 @@ BaseSprite* GameLayer::createHero(int role, cocos2d::Point pos)
 		sprite = Gunner::create();
 	else
 		sprite = Princess::create();
+	sprite->setTag(tag);
 	sprite->setInitPos(pos);
 	sprite->setScale(0.6f);
 	sprite->setPosition(pos);
@@ -584,7 +584,11 @@ BaseSprite* GameLayer::createHero(int role, cocos2d::Point pos)
 	sprite->setIsAttacking(false);
 	sprite->setJumpStage(0);
 
-	ProgressTimer* blood = ProgressTimer::create(Sprite::create("blood.png"));
+	ProgressTimer* blood;
+	if(tag % 2 == 0)
+		blood = ProgressTimer::create(Sprite::create("blood1.png"));
+	else
+		blood = ProgressTimer::create(Sprite::create("blood2.png"));
 	blood->setName("blood");
 	blood->setType(ProgressTimer::Type::BAR);
 	blood->setMidpoint(Point(0, 0));
@@ -592,7 +596,6 @@ BaseSprite* GameLayer::createHero(int role, cocos2d::Point pos)
 	blood->setAnchorPoint(Point(0, 1));
 	blood->setPosition(60, 150);
 	blood->setPercentage(100);
-    blood->setScale(0.375f);
 
 
 	ProgressTimer *bloodBg = ProgressTimer::create(Sprite::create("bloodBg.png"));
@@ -602,7 +605,6 @@ BaseSprite* GameLayer::createHero(int role, cocos2d::Point pos)
 	bloodBg->setAnchorPoint(Point(0, 1));
 	bloodBg->setPosition(blood->getPosition() + Point(-25.f, 3.f));
 	bloodBg->setPercentage(100);
-    bloodBg->setScale(0.5f);
 
 	sprite->addChild(bloodBg);
 	sprite->addChild(blood);
