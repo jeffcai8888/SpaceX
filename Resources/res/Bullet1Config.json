@@ -1,9 +1,9 @@
 {"Data":[
 {"Attr":"Capacity","Value":100.0},
-{"Attr":"Power","Value":3.0},
-{"Attr":"Speed","Value":800.0},
-{"Attr":"DisappearTime","Value":0.3},
+{"Attr":"Power","Value":26.0},
+{"Attr":"Speed","Value":700.0},
+{"Attr":"DisappearTime","Value":0.8},
 {"Attr":"Angle","Value":0.0},
-{"Attr":"Interval","Value":0.15},
+{"Attr":"Interval","Value":1.0},
 {"Attr":"Gravity","Value":0.0}
 ]}
