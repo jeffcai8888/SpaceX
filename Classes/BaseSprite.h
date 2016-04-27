@@ -49,6 +49,7 @@ public:
 	void stop();
 	void hurt(int);
 	void attack(bool);
+	void dead();
 	virtual void activeSkill1() {}
 	virtual void activeSkill2() {}
 
@@ -70,8 +71,8 @@ public:
 	CC_SYNTHESIZE(ActionState, m_currActionState, CurrActionState);
 	CC_SYNTHESIZE(bool, m_isMe, IsMe);
 
-	CC_SYNTHESIZE(unsigned int, m_maxHp, MaxHP);
-	CC_SYNTHESIZE(unsigned int, m_hp, HP);
+	CC_SYNTHESIZE(int, m_maxHp, MaxHP);
+	CC_SYNTHESIZE(int, m_hp, HP);
 	CC_SYNTHESIZE(bool, m_isAttacking, IsAttacking);
 	CC_SYNTHESIZE(cocos2d::Vec2, m_fShootDirection, ShootDirection);
     CC_SYNTHESIZE(cocos2d::Vec2, m_fPrePosition, PrePosition);
@@ -90,10 +91,11 @@ public:
 	CC_SYNTHESIZE(bool, m_isAutoShoot, IsAutoShoot);
 	CC_SYNTHESIZE(Foresight*, m_pForesight, Foresight);
 	CC_SYNTHESIZE(cocos2d::Sprite*, m_pRange, Range);
+	CC_SYNTHESIZE(bool, m_isShootInit, IsShootInit);
 	
 	CC_SYNTHESIZE(int, m_curSkill, CurSkill);
     
-	virtual void onDead();
+	
 
 	virtual bool isLive();
 	virtual bool isInAir();

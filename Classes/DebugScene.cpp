@@ -5,6 +5,8 @@
 #include "SceneManager.h"
 #include "JsonParser.h"
 #include "SocketManager.h"
+#include "GameData.h"
+#include "BaseSprite.h"
 
 USING_NS_CC;
 using namespace cocos2d::ui;
@@ -24,55 +26,135 @@ void DebugLayer::onEnter()
 {
 	Layer::onEnter();
 
-	JsonParser* parser = JsonParser::createWithFile("Debug.json");
-	parser->decodeDebugData();
-	auto list = parser->getList();
-	for (auto& v : list)
+	JsonParser* parser;
+	JsonParser* parser1;
+	if (GameData::getInstance()->getRoleType() == ROLE_HERO)
 	{
-		ValueMap row = v.asValueMap();
-
-		for (auto& pair : row)
+		parser = JsonParser::createWithFile("Hero.json");
+		parser1 = JsonParser::createWithFile("Bullet1Config.json");
+		parser->decodeDebugData();
+		auto list = parser->getList();
+		for (auto& v : list)
 		{
-			if (pair.first.compare("HeroHSpeed") == 0)
+			ValueMap row = v.asValueMap();
+
+			for (auto& pair : row)
 			{
-				static_cast<TextField *>(getChildByName("TextField_1_1"))->setString(Value(pair.second.asFloat()).asString());
+				if (pair.first.compare("WalkSpeed") == 0)
+				{
+					static_cast<TextField *>(getChildByName("TextField_1_1"))->setString(Value(pair.second.asFloat()).asString());
+				}
+				else if (pair.first.compare("JumpSpeed") == 0)
+				{
+					static_cast<TextField *>(getChildByName("TextField_1_2"))->setString(Value(pair.second.asFloat()).asString());
+				}
+				else if (pair.first.compare("Gravity") == 0)
+				{
+					static_cast<TextField *>(getChildByName("TextField_1_4"))->setString(Value(pair.second.asFloat()).asString());
+				}
+				else if (pair.first.compare("Skill1V") == 0)
+				{
+					static_cast<TextField *>(getChildByName("TextField_1_5"))->setString(Value(pair.second.asFloat()).asString());
+				}
+				else if (pair.first.compare("Skill2V") == 0)
+				{
+					static_cast<TextField *>(getChildByName("TextField_1_6"))->setString(Value(pair.second.asFloat()).asString());
+				}
+				else if (pair.first.compare("Skill1CD") == 0)
+				{
+					static_cast<TextField *>(getChildByName("TextField_1_7"))->setString(Value(pair.second.asFloat()).asString());
+				}
+				else if (pair.first.compare("Skill2CD") == 0)
+				{
+					static_cast<TextField *>(getChildByName("TextField_1_8"))->setString(Value(pair.second.asFloat()).asString());
+				}
+				else if (pair.first.compare("Skill1Time") == 0)
+				{
+					static_cast<TextField *>(getChildByName("TextField_1_9"))->setString(Value(pair.second.asFloat()).asString());
+				}
+				else if (pair.first.compare("Skill2Time") == 0)
+				{
+					static_cast<TextField *>(getChildByName("TextField_1_10"))->setString(Value(pair.second.asFloat()).asString());
+				}
 			}
-			else if (pair.first.compare("HeroVSpeed") == 0)
-			{
-				static_cast<TextField *>(getChildByName("TextField_1_2"))->setString(Value(pair.second.asFloat()).asString());
-			}
-			else if (pair.first.compare("HeroG") == 0)
-			{
-				static_cast<TextField *>(getChildByName("TextField_1_4"))->setString(Value(pair.second.asFloat()).asString());
-			}
-			else if (pair.first.compare("HeroSkill1V") == 0)
-			{
-				static_cast<TextField *>(getChildByName("TextField_1_5"))->setString(Value(pair.second.asFloat()).asString());
-			}
-			else if (pair.first.compare("HeroSkill2V") == 0)
-			{
-				static_cast<TextField *>(getChildByName("TextField_1_6"))->setString(Value(pair.second.asFloat()).asString());
-			}
-			else if (pair.first.compare("HeroSkill1CD") == 0)
-			{
-				static_cast<TextField *>(getChildByName("TextField_1_7"))->setString(Value(pair.second.asFloat()).asString());
-			}
-			else if (pair.first.compare("HeroSkill2CD") == 0)
-			{
-				static_cast<TextField *>(getChildByName("TextField_1_8"))->setString(Value(pair.second.asFloat()).asString());
-			}
-			else if (pair.first.compare("HeroSkill1Time") == 0)
-			{
-				static_cast<TextField *>(getChildByName("TextField_1_9"))->setString(Value(pair.second.asFloat()).asString());
-			}
-			else if (pair.first.compare("HeroSkill2Time") == 0)
-			{
-				static_cast<TextField *>(getChildByName("TextField_1_10"))->setString(Value(pair.second.asFloat()).asString());
-			}		
 		}
 	}
+	else if (GameData::getInstance()->getRoleType() == ROLE_GUN)
+	{
+		parser = JsonParser::createWithFile("Gunner.json");
+		parser1 = JsonParser::createWithFile("Bullet2Config.json");
+		parser->decodeDebugData();
+		auto list = parser->getList();
+		for (auto& v : list)
+		{
+			ValueMap row = v.asValueMap();
+
+			for (auto& pair : row)
+			{
+				if (pair.first.compare("WalkSpeed") == 0)
+				{
+					static_cast<TextField *>(getChildByName("TextField_1_1"))->setString(Value(pair.second.asFloat()).asString());
+					static_cast<TextField *>(getChildByName("TextField_1_1"))->setVisible(true);
+				}
+				else if (pair.first.compare("JumpSpeed") == 0)
+				{
+					static_cast<TextField *>(getChildByName("TextField_1_2"))->setString(Value(pair.second.asFloat()).asString());
+					static_cast<TextField *>(getChildByName("TextField_1_2"))->setVisible(true);
+				}
+				else if (pair.first.compare("Gravity") == 0)
+				{
+					static_cast<TextField *>(getChildByName("TextField_1_4"))->setString(Value(pair.second.asFloat()).asString());
+					static_cast<TextField *>(getChildByName("TextField_1_4"))->setVisible(true);
+				}
+
+				static_cast<TextField *>(getChildByName("TextField_1_5"))->setVisible(false);
+				static_cast<TextField *>(getChildByName("TextField_1_6"))->setVisible(false);
+				static_cast<TextField *>(getChildByName("TextField_1_7"))->setVisible(false);
+				static_cast<TextField *>(getChildByName("TextField_1_8"))->setVisible(false);
+				static_cast<TextField *>(getChildByName("TextField_1_9"))->setVisible(false);
+				static_cast<TextField *>(getChildByName("TextField_1_10"))->setVisible(false);
+			}
+		}
+	}
+	else if(GameData::getInstance()->getRoleType() == ROLE_PRINCESS)
+	{
+		parser = JsonParser::createWithFile("Gunner.json");
+		parser1 = JsonParser::createWithFile("Bullet1Config.json");
+		parser->decodeDebugData();
+		auto list = parser->getList();	
+		for (auto& v : list)
+		{
+			ValueMap row = v.asValueMap();
+
+			for (auto& pair : row)
+			{
+				if (pair.first.compare("WalkSpeed") == 0)
+				{
+					static_cast<TextField *>(getChildByName("TextField_1_1"))->setString(Value(pair.second.asFloat()).asString());
+					static_cast<TextField *>(getChildByName("TextField_1_1"))->setVisible(true);
+				}
+				else if (pair.first.compare("JumpSpeed") == 0)
+				{
+					static_cast<TextField *>(getChildByName("TextField_1_2"))->setString(Value(pair.second.asFloat()).asString());
+					static_cast<TextField *>(getChildByName("TextField_1_2"))->setVisible(true);
+				}
+				else if (pair.first.compare("Gravity") == 0)
+				{
+					static_cast<TextField *>(getChildByName("TextField_1_4"))->setString(Value(pair.second.asFloat()).asString());
+					static_cast<TextField *>(getChildByName("TextField_1_4"))->setVisible(true);
+				}
+
+				static_cast<TextField *>(getChildByName("TextField_1_5"))->setVisible(false);
+				static_cast<TextField *>(getChildByName("TextField_1_6"))->setVisible(false);
+				static_cast<TextField *>(getChildByName("TextField_1_7"))->setVisible(false);
+				static_cast<TextField *>(getChildByName("TextField_1_8"))->setVisible(false);
+				static_cast<TextField *>(getChildByName("TextField_1_9"))->setVisible(false);
+				static_cast<TextField *>(getChildByName("TextField_1_10"))->setVisible(false);
+			}
+		}
+	}
+	
     
-    JsonParser* parser1 = JsonParser::createWithFile("Bullet1Config.json");
     parser1->decodeDebugData();
     auto list1 = parser1->getList();
     for (auto& v : list1)
@@ -157,37 +239,72 @@ void DebugLayer::onExit()
     
     ValueVector listData;
 	ValueMap m;
+
+	if (GameData::getInstance()->getRoleType() == ROLE_HERO)
+	{
+		m["Attr"] = Value("WalkSpeed");
+		m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_1"))->getString());
+		listData.push_back(Value(m));
+		m["Attr"] = Value("JumpSpeed");
+		m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_2"))->getString());
+		listData.push_back(Value(m));
+		m["Attr"] = Value("Gravity");
+		m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_4"))->getString());
+		listData.push_back(Value(m));
+		m["Attr"] = Value("Skill1V");
+		m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_5"))->getString());
+		listData.push_back(Value(m));
+		m["Attr"] = Value("Skill2V");
+		m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_6"))->getString());
+		listData.push_back(Value(m));
+		m["Attr"] = Value("Skill1CD");
+		m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_7"))->getString());
+		listData.push_back(Value(m));
+		m["Attr"] = Value("Skill2CD");
+		m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_8"))->getString());
+		listData.push_back(Value(m));
+		m["Attr"] = Value("Skill1Time");
+		m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_9"))->getString());
+		listData.push_back(Value(m));
+		m["Attr"] = Value("Skill2Time");
+		m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_10"))->getString());
+		listData.push_back(Value(m));
+		auto parser1 = JsonParser::createWithArray(listData);
+		std::string fileName = writablePath + "Hero.json";
+		parser1->encodeDebugData(fileName.c_str());
+	}
+	else if (GameData::getInstance()->getRoleType() == ROLE_GUN)
+	{
+		m["Attr"] = Value("WalkSpeed");
+		m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_1"))->getString());
+		listData.push_back(Value(m));
+		m["Attr"] = Value("JumpSpeed");
+		m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_2"))->getString());
+		listData.push_back(Value(m));
+		m["Attr"] = Value("Gravity");
+		m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_4"))->getString());
+		listData.push_back(Value(m));
+		auto parser1 = JsonParser::createWithArray(listData);
+		std::string fileName = writablePath + "Gunner.json";
+		parser1->encodeDebugData(fileName.c_str());
+	}
+	else if (GameData::getInstance()->getRoleType() == ROLE_PRINCESS)
+	{
+		m["Attr"] = Value("WalkSpeed");
+		m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_1"))->getString());
+		listData.push_back(Value(m));
+		m["Attr"] = Value("JumpSpeed");
+		m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_2"))->getString());
+		listData.push_back(Value(m));
+		m["Attr"] = Value("Gravity");
+		m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_4"))->getString());
+		listData.push_back(Value(m));
+		auto parser1 = JsonParser::createWithArray(listData);
+		std::string fileName = writablePath + "Princess.json";
+		parser1->encodeDebugData(fileName.c_str());
+	}
     
-	m["Attr"] = Value("HeroHSpeed");
-	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_1"))->getString());
-	listData.push_back(Value(m));
-	m["Attr"] = Value("HeroVSpeed");
-	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_2"))->getString());
-	listData.push_back(Value(m));
-	m["Attr"] = Value("HeroG");
-	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_4"))->getString());
-	listData.push_back(Value(m));
-	m["Attr"] = Value("HeroSkill1V");
-	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_5"))->getString());
-	listData.push_back(Value(m));
-	m["Attr"] = Value("HeroSkill2V");
-	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_6"))->getString());
-	listData.push_back(Value(m));
-	m["Attr"] = Value("HeroSkill1CD");
-	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_7"))->getString());
-	listData.push_back(Value(m));
-	m["Attr"] = Value("HeroSkill2CD");
-	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_8"))->getString());
-	listData.push_back(Value(m));
-	m["Attr"] = Value("HeroSkill1Time");
-	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_9"))->getString());
-	listData.push_back(Value(m));
-	m["Attr"] = Value("HeroSkill2Time");
-	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_1_10"))->getString());
-	listData.push_back(Value(m));
-    auto parser1 = JsonParser::createWithArray(listData);
-    std::string fileName = writablePath + "Debug.json";
-    parser1->encodeDebugData(fileName.c_str());
+	
     
     
     
@@ -215,34 +332,48 @@ void DebugLayer::onExit()
     m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_2_7"))->getString());
     listData.push_back(Value(m));
     auto parser2 = JsonParser::createWithArray(listData);
-    fileName = writablePath + "Bullet1Config.json";
-    parser2->encodeDebugData(fileName.c_str());
+	if (GameData::getInstance()->getRoleType() == ROLE_HERO)
+	{
+		std::string fileName = writablePath + "Bullet1Config.json";
+		parser2->encodeDebugData(fileName.c_str());
+	}
+	else if (GameData::getInstance()->getRoleType() == ROLE_GUN)
+	{
+		std::string fileName = writablePath + "Bullet2Config.json";
+		parser2->encodeDebugData(fileName.c_str());
+	}
+	else if (GameData::getInstance()->getRoleType() == ROLE_PRINCESS)
+	{
+		std::string fileName = writablePath + "Bullet1Config.json";
+		parser2->encodeDebugData(fileName.c_str());
+	}
     
+	{
+		listData.clear();
+		m.clear();
+		m["Attr"] = Value("Speed");
+		m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_1"))->getString());
+		listData.push_back(Value(m));
+		m["Attr"] = Value("Range");
+		m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_2"))->getString());
+		listData.push_back(Value(m));
+		m["Attr"] = Value("StartTime");
+		m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_3"))->getString());
+		listData.push_back(Value(m));
+		m["Attr"] = Value("CDTime");
+		m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_4"))->getString());
+		listData.push_back(Value(m));
+		m["Attr"] = Value("Power");
+		m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_5"))->getString());
+		listData.push_back(Value(m));
+		m["Attr"] = Value("Gravity");
+		m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_6"))->getString());
+		listData.push_back(Value(m));
+		auto parser3 = JsonParser::createWithArray(listData);
+		std::string fileName = writablePath + "Bomb1Config.json";
+		parser3->encodeDebugData(fileName.c_str());
+	}
     
-    
-    listData.clear();
-    m.clear();
-	m["Attr"] = Value("Speed");
-	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_1"))->getString());
-	listData.push_back(Value(m));
-	m["Attr"] = Value("Range");
-	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_2"))->getString());
-	listData.push_back(Value(m));
-	m["Attr"] = Value("StartTime");
-	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_3"))->getString());
-	listData.push_back(Value(m));
-	m["Attr"] = Value("CDTime");
-	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_4"))->getString());
-	listData.push_back(Value(m));
-	m["Attr"] = Value("Power");
-	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_5"))->getString());
-	listData.push_back(Value(m));
-	m["Attr"] = Value("Gravity");
-	m["Value"] = Value(static_cast<TextField *>(getChildByName("TextField_4_6"))->getString());
-	listData.push_back(Value(m));
-	auto parser3 = JsonParser::createWithArray(listData);
-	fileName = writablePath + "Bomb1Config.json";
-	parser3->encodeDebugData(fileName.c_str());
 }
 
 Widget::ccWidgetClickCallback DebugLayer::onLocateClickCallback(const std::string &callBackName)

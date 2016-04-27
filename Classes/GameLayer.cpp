@@ -80,14 +80,14 @@ void GameLayer::onEnter()
 	TMXObjectGroup *objects = m_pTiledMap->getObjectGroup("Objects");
 	CCASSERT(NULL != objects, "'Objects' object group not found");
 
-	for (int i = 0; i < 4; ++i)
+	int playerNum = GameData::getInstance()->getPlayerNum();
+	for (int i = 0; i < playerNum; ++i)
 	{
 		auto spawnPoint = objects->getObject("SpawnPoint" + Value(i).asString());
 		CCASSERT(!spawnPoint.empty(), "SpawnPoint object not found");
 		Point heroInitPos = m_origin + Point(spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
 		int roleType = GameData::getInstance()->m_playerTypes[i];
-		auto player = createHero(roleType, heroInitPos);
-		player->setTag(i);
+		auto player = createHero(roleType, heroInitPos, i);
 		if (GameData::getInstance()->getRoleIndex() == i)
 			player->setIsMe(true);
 		this->addChild(player);
@@ -185,7 +185,7 @@ void GameLayer::onEnter()
 				_eventDispatcher->dispatchEvent(&event);
 				hero->setJumpStage(0);
 			}
-			CCLOG("collision %f, %f", hero->getPhysicsBody()->getVelocity().x, hero->getPhysicsBody()->getVelocity().y);
+			//CCLOG("collision %f, %f", hero->getPhysicsBody()->getVelocity().x, hero->getPhysicsBody()->getVelocity().y);
 			return true;
 		}
         else if((contact.getShapeA()->getCategoryBitmask() == PC_Bullet && contact.getShapeB()->getCategoryBitmask() == PC_Ground) ||
@@ -232,14 +232,33 @@ void GameLayer::onEnter()
 			{
 				bullet->setIsActive(false);
 				this->removeChild(bullet);
-				hero->hurt(bullet->getPower());
-                BaseSprite* self = GameData::getInstance()->getMySelf();
-                if(bullet->getOwnerTag() == self->getTag())
-                {
-                    SocketManager::getInstance()->sendData(NDT_HeroHurt, hero->getTag(), hero->getCurrActionState(), hero->getPosition(), hero->getPhysicsBody()->getVelocity());
-                }
+				if (SocketManager::getInstance()->getNetworkType() == NT_Offline)
+				{
+					hero->hurt(bullet->getPower());
+					if (hero->getHP() <= 0)
+					{
+						hero->dead();
+					}
+				}
+				else
+				{
+					BaseSprite* self = GameData::getInstance()->getMySelf();
+					if (bullet->getOwnerTag() == self->getTag())
+					{
+						hero->hurt(bullet->getPower());
+						if (hero->getHP() <= 0)
+						{
+							hero->dead();
+							SocketManager::getInstance()->sendData(NDT_HeroDead, hero->getTag(), hero->getCurrActionState(), hero->getPosition(), Vec2(0.f, 0.f));
+						}
+						else
+						{
+							SocketManager::getInstance()->sendData(NDT_HeroHurt, hero->getTag(), hero->getCurrActionState(), hero->getPosition(), Vec2(bullet->getPower(), 0.f));
+						}
+					}
+				}
 				return true;
-			}		
+			}	
 		}
 		else if (	(contact.getShapeA()->getCategoryBitmask() == PC_Bomb && contact.getShapeB()->getCategoryBitmask() == PC_Ground)	||
 					(contact.getShapeA()->getCategoryBitmask() == PC_Ground && contact.getShapeB()->getCategoryBitmask() == PC_Bomb)	||
@@ -336,7 +355,8 @@ void GameLayer::update(float dt)
 
 void GameLayer::updatePlayer(float dt)
 {
-	for (int i = 0; i < 4; ++i)
+	int playerNum = GameData::getInstance()->getPlayerNum();
+	for (int i = 0; i < playerNum; ++i)
 	{
 		BaseSprite* player = GameData::getInstance()->m_pPlayers[i];
 		if (player)
@@ -345,8 +365,6 @@ void GameLayer::updatePlayer(float dt)
 			if (player->getIsMe())
 			{
 				setViewPointCenter();
-				player->setPrePosition(player->getPosition());
-
 #if 1
 				if (player->getIsLocked() && m_pTarget == nullptr)
 				{
@@ -365,6 +383,8 @@ void GameLayer::updatePlayer(float dt)
 					Vec2 direction = m_pTarget->getPosition() - player->getPosition();
 					direction.normalize();
 					player->setShootDirection(direction);
+					player->setIsShootInit(true);
+					CCLOG("setShootDirection 1");
 				}
 #else
 				if (player->getIsAutoShoot())
@@ -413,6 +433,7 @@ void GameLayer::updatePlayer(float dt)
 				}
 #endif
 			}
+			player->setPrePosition(player->getPosition());
 		}
 	}
 }
@@ -463,9 +484,15 @@ void GameLayer::setViewPointCenter() {
 	auto layerPos = this->getPosition();
 	auto heroPosInScreen = heroPos + layerPos;
 	this->setPositionX(centerOfView.x - heroPos.x);
+	//this->setPosition(centerOfView - heroPos);
 
     auto diff = heroPosInScreen - centerOfView;
-    if(fabs(diff.y) > 25.f)
+	if (diff.y > 0)
+	{
+		this->setPositionY(centerOfView.y - heroPos.y);
+	}
+
+    else if(diff.y < -25.f)
     {     
 		auto heroPrePosY = GameData::getInstance()->getMySelf()->getPrePosition().y;
 		this->setPositionY(heroPrePosY + layerPos.y - heroPos.y);
@@ -537,7 +564,7 @@ void GameLayer::removeAllBullets()
 	}
 }
 
-BaseSprite* GameLayer::createHero(int role, cocos2d::Point pos)
+BaseSprite* GameLayer::createHero(int role, cocos2d::Point pos, int tag)
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	BaseSprite* sprite;
@@ -547,6 +574,7 @@ BaseSprite* GameLayer::createHero(int role, cocos2d::Point pos)
 		sprite = Gunner::create();
 	else
 		sprite = Princess::create();
+	sprite->setTag(tag);
 	sprite->setInitPos(pos);
 	sprite->setScale(0.6f);
 	sprite->setPosition(pos);
@@ -556,7 +584,11 @@ BaseSprite* GameLayer::createHero(int role, cocos2d::Point pos)
 	sprite->setIsAttacking(false);
 	sprite->setJumpStage(0);
 
-	ProgressTimer* blood = ProgressTimer::create(Sprite::create("blood.png"));
+	ProgressTimer* blood;
+	if(tag % 2 == 0)
+		blood = ProgressTimer::create(Sprite::create("blood1.png"));
+	else
+		blood = ProgressTimer::create(Sprite::create("blood2.png"));
 	blood->setName("blood");
 	blood->setType(ProgressTimer::Type::BAR);
 	blood->setMidpoint(Point(0, 0));
@@ -564,7 +596,6 @@ BaseSprite* GameLayer::createHero(int role, cocos2d::Point pos)
 	blood->setAnchorPoint(Point(0, 1));
 	blood->setPosition(60, 150);
 	blood->setPercentage(100);
-    blood->setScale(0.375f);
 
 
 	ProgressTimer *bloodBg = ProgressTimer::create(Sprite::create("bloodBg.png"));
@@ -574,7 +605,6 @@ BaseSprite* GameLayer::createHero(int role, cocos2d::Point pos)
 	bloodBg->setAnchorPoint(Point(0, 1));
 	bloodBg->setPosition(blood->getPosition() + Point(-25.f, 3.f));
 	bloodBg->setPercentage(100);
-    bloodBg->setScale(0.5f);
 
 	sprite->addChild(bloodBg);
 	sprite->addChild(blood);
@@ -588,7 +618,8 @@ BaseSprite* GameLayer::getNearestEnemy()
 	BaseSprite* self = GameData::getInstance()->getMySelf();
     
     float distance = 100000.f;
-	for (int i = 0; i < 4; ++i)
+	int playerNum = GameData::getInstance()->getPlayerNum();
+	for (int i = 0; i < playerNum; ++i)
 	{
 		BaseSprite* player = GameData::getInstance()->m_pPlayers[i];
         if(player == nullptr)
@@ -612,7 +643,8 @@ BaseSprite* GameLayer::getNearestEnemy()
 
 void GameLayer::explodeEnemy(Bomb* bomb)
 {
-	for (int i = 0; i < 4; ++i)
+	int playerNum = GameData::getInstance()->getPlayerNum();
+	for (int i = 0; i < playerNum; ++i)
 	{
 		BaseSprite* player = GameData::getInstance()->m_pPlayers[i];
 		if (player == nullptr || player->getTag() % 2 == bomb->getOwner()->getTag() % 2)
@@ -621,7 +653,30 @@ void GameLayer::explodeEnemy(Bomb* bomb)
 		float d = bomb->getPosition().getDistanceSq(player->getPosition());
 		if (d < bomb->getRange() * bomb->getRange())
 		{
-			player->hurt(bomb->getPower());
+			if (SocketManager::getInstance()->getNetworkType() == NT_Offline)
+			{
+				player->hurt(bomb->getPower());
+				if (player->getHP() <= 0)
+				{
+					player->dead();
+				}
+			}
+			else
+			{
+				if (bomb->getOwner()->getTag() == GameData::getInstance()->getMySelf()->getTag())
+				{
+					player->hurt(bomb->getPower());
+					if (player->getHP() <= 0)
+					{
+						player->dead();
+						SocketManager::getInstance()->sendData(NDT_HeroDead, player->getTag(), player->getCurrActionState(), player->getPosition(), Vec2(0.f, 0.f));
+					}
+					else
+					{
+						SocketManager::getInstance()->sendData(NDT_HeroHurt, player->getTag(), player->getCurrActionState(), player->getPosition(), Vec2(bomb->getPower(), 0.f));
+					}
+				}
+			}			
 		}
 	}
 }

@@ -55,7 +55,7 @@ protected:
 	void importGroundData(cocos2d::TMXTiledMap*);
 	void removeAllEventListener();
 	void removeAllBullets();
-	BaseSprite* createHero(int, cocos2d::Point);
+	BaseSprite* createHero(int, cocos2d::Point, int);
     BaseSprite* getNearestEnemy();
 	void explodeEnemy(Bomb* bomb);
 };

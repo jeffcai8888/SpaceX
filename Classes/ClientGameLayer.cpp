@@ -84,6 +84,7 @@ void ClientGameLayer::onRecv(const char* data, int count)
 			//player->setCurrActionState((ActionState)networkData->actionState);
 			player->setPosition(networkData->position);
 			player->setShootDirection(networkData->vec);
+            player->setIsShootInit(true);
 			player->attack(true);
 		}			
 			break;
@@ -91,6 +92,7 @@ void ClientGameLayer::onRecv(const char* data, int count)
 		{
 			BaseSprite* player = GameData::getInstance()->m_pPlayers[networkData->index];
 			//player->setCurrActionState((ActionState)networkData->actionState);
+            player->setIsShootInit(false);
 			player->attack(false);
 			player->setPosition(networkData->position);
 		}		
@@ -113,9 +115,19 @@ void ClientGameLayer::onRecv(const char* data, int count)
         {
             BaseSprite* player = GameData::getInstance()->m_pPlayers[networkData->index];
             player->hurt(networkData->vec.x);
+			if (player->getHP() < 0)
+			{
+				player->reset();
+			}
             player->setPosition(networkData->position);
         }
             break;
+		case NDT_HeroDead:
+		{
+			BaseSprite* player = GameData::getInstance()->m_pPlayers[networkData->index];
+			player->reset();
+		}
+		break;
 		default:
 			break;
 		}

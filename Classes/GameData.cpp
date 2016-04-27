@@ -5,8 +5,9 @@
 GameData* GameData::instance = nullptr;
 
 GameData::GameData()
+	:m_PlayerNum(4)
 {
-	for (int i = 0; i < 4; ++i)
+	for (int i = 0; i < PLAYER_MAX_NUM; ++i)
 	{
 		m_pPlayers[i] = nullptr;
 		m_playerTypes[i] = ROLE_NONE;

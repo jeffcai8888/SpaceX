@@ -23,7 +23,8 @@ enum NetworkDataType
 	NDT_HeroStopAttack,
 	NDT_HeroSkill1,
 	NDT_HeroSkill2,
-    NDT_HeroHurt
+    NDT_HeroHurt,
+	NDT_HeroDead
 };
 
 struct NetworkData

@@ -25,7 +25,7 @@ BaseSprite::BaseSprite() :
 	m_isAutoShoot(false),
 	m_isMe(false)
 {
-
+	
 }
 
 BaseSprite::~BaseSprite()
@@ -44,10 +44,14 @@ BaseSprite::~BaseSprite()
 void BaseSprite::reset()
 {
 	this->setPosition(m_initPos);
+	this->m_fPrePosition = m_initPos;
 	this->runIdleAction();
 	this->setHP(100);
 	this->setIsAttacking(false);
 	this->setJumpStage(0);
+	ProgressTimer *blood = static_cast<ProgressTimer *>(this->getChildByName("blood"));
+	if(blood)
+		blood->setPercentage(100.f);
 }
 
 void BaseSprite::walk(float v)
@@ -62,7 +66,7 @@ void BaseSprite::walk(float v)
 		Vec2 velocity = this->getPhysicsBody()->getVelocity();
 		velocity.x = v;
 		this->getPhysicsBody()->setVelocity(velocity);
-		CCLOG("walk %f,%f", this->getPhysicsBody()->getVelocity().x, this->getPhysicsBody()->getVelocity().y);
+		//CCLOG("walk %f,%f", this->getPhysicsBody()->getVelocity().x, this->getPhysicsBody()->getVelocity().y);
 	}
 }
 
@@ -79,7 +83,7 @@ void BaseSprite::jump(float v)
 			this->setFlippedX(velocity.x < 0);
 		}
 		this->getPhysicsBody()->setVelocity(velocity);
-		CCLOG("jump Stage %d", this->getJumpStage());
+		//CCLOG("jump Stage %d", this->getJumpStage());
 		this->setPrePosition(this->getPosition());
 	}
 }
@@ -90,7 +94,7 @@ void BaseSprite::stop()
 	{
 		this->runIdleAction();
 		this->getPhysicsBody()->setVelocity(Vec2(0.f, 0.f));
-		CCLOG("stop %f,%f", this->getPhysicsBody()->getVelocity().x, this->getPhysicsBody()->getVelocity().y);
+		//CCLOG("stop %f,%f", this->getPhysicsBody()->getVelocity().x, this->getPhysicsBody()->getVelocity().y);
 	}
 }
 
@@ -106,8 +110,16 @@ void BaseSprite::attack(bool isStart)
 		{
 			this->stopAttackAction();
 		}
-		m_pForesight->setVisible(isStart);
-        m_pRange->setVisible(isStart);
+        
+        if(m_isMe)
+        {
+            m_pForesight->setVisible(isStart);
+            m_pRange->setVisible(isStart);
+        }
+        else{
+            m_pForesight->setVisible(false);
+            m_pRange->setVisible(false);
+        }
 	}
 }
 
@@ -119,15 +131,11 @@ void BaseSprite::hurt(int damage)
 		this->runHurtAction();
 		int hp = this->getHP() - damage;
 		this->setHP(hp);
+		CCLOG("HP = %d", hp);
 		ProgressTimer *blood = static_cast<ProgressTimer *>(this->getChildByName("blood"));
 		if (blood)
 		{
-			if (hp < 0)
-			{
-				reset();
-				blood->setPercentage(100.f);
-			}
-			else
+			if (hp > 0)
 			{
 				blood->setPercentage(this->getHP() * 100.f / this->getMaxHP());
 			}
@@ -180,9 +188,9 @@ void BaseSprite::runJumpDownAction()
 
 void BaseSprite::runHurtAction()
 {
-	Blink* blinkAction = Blink::create(0.1f, 1);
-	this->setVisible(true);
-	this->runAction(blinkAction);
+	//Blink* blinkAction = Blink::create(0.1f, 1);
+	//this->setVisible(true);
+	//this->runAction(blinkAction);
 }
 
 void BaseSprite::runDeadAction()
@@ -256,7 +264,7 @@ Animation* BaseSprite::createAnimation(const char* formatStr, int frameCount, in
 
 CallFunc* BaseSprite::createDeadCallbackFunc()
 {
-	return CallFunc::create( CC_CALLBACK_0(BaseSprite::onDead, this));
+	return CallFunc::create( CC_CALLBACK_0(BaseSprite::dead, this));
 }
 
 CallFunc* BaseSprite::createIdleCallbackFunc()
@@ -264,9 +272,9 @@ CallFunc* BaseSprite::createIdleCallbackFunc()
 	return  CallFunc::create(CC_CALLBACK_0(BaseSprite::runIdleAction, this));
 }
 
-void BaseSprite::onDead()
+void BaseSprite::dead()
 {
-
+	changeState(ACTION_STATE_DEAD);
 }
 
 bool BaseSprite::isLive()
@@ -274,7 +282,9 @@ bool BaseSprite::isLive()
 	if(this->m_currActionState >= ACTION_STATE_DEAD)
 	{
 		return false;
-	}else {
+	}
+	else
+	{
 		return true;
 	}
 }
@@ -286,10 +296,10 @@ bool BaseSprite::isInAir()
 
 bool BaseSprite::changeState(ActionState actionState)
 {
-	if((m_currActionState == ACTION_STATE_DEAD && actionState != ACTION_STATE_REMOVE) || m_currActionState == actionState)
+	/*if((m_currActionState == ACTION_STATE_DEAD && actionState != ACTION_STATE_REMOVE) || m_currActionState == actionState)
 	{
 		return false;
-	}
+	}*/
 
 	this->stopAllActions();
 	this->m_currActionState = actionState;
@@ -310,42 +320,64 @@ cocos2d::Point BaseSprite::getShootPosition()
 
 void BaseSprite::update(float dt)
 {
-	float x = getPhysicsBody()->getVelocity().x;
-	float y = getPhysicsBody()->getVelocity().y;
-	if (!getIsOnRotateGround() && !isInSplash())
+	if (isLive())
 	{
-		y += getGravity() * dt;
-	}	
-	getPhysicsBody()->setVelocity(Vec2(x, y));
-	//CCLOG("update %f,%f", this->getPhysicsBody()->getVelocity().x, this->getPhysicsBody()->getVelocity().y);
-
-	if (getCurrActionState() == ACTION_STATE_JUMP_UP && getPosition().y < getPrePosition().y)
-	{
-		runJumpDownAction();
-	}
-
-
-	if (getIsAttacking())
-	{
-		m_shootTime -= dt;
-		if (m_shootTime < 0)
+		float x = getPhysicsBody()->getVelocity().x;
+		float y = getPhysicsBody()->getVelocity().y;
+		if (!getIsOnRotateGround() && !isInSplash())
 		{
-			EventCustom event("shoot_bullet");
-			event.setUserData(this);
-			_eventDispatcher->dispatchEvent(&event);
+			y += getGravity() * dt;
+		}
+		getPhysicsBody()->setVelocity(Vec2(x, y));
+		//CCLOG("update %f,%f", this->getPhysicsBody()->getVelocity().x, this->getPhysicsBody()->getVelocity().y);
 
-			BulletConfigMap bulletConfigMap = ConfigCenter::getInstance()->getBulletConfigModel()->GetBulletConfigMap();
-			BulletConfig config = bulletConfigMap[getBulletType()];
-			m_shootTime = config.m_fInterval;
-			if (getShootDirection().x != 0)
-				setFlippedX(getShootDirection().x < 0);
+		if (getCurrActionState() == ACTION_STATE_JUMP_UP && getPosition().y < getPrePosition().y)
+		{
+			runJumpDownAction();
+		}
+
+
+		if (getIsAttacking())
+		{
+			m_shootTime -= dt;
+			if (m_shootTime < 0)
+			{
+				EventCustom event("shoot_bullet");
+				event.setUserData(this);
+				_eventDispatcher->dispatchEvent(&event);
+
+				BulletConfigMap bulletConfigMap = ConfigCenter::getInstance()->getBulletConfigModel()->GetBulletConfigMap();
+				BulletConfig config = bulletConfigMap[getBulletType()];
+				m_shootTime = config.m_fInterval;
+				if (getIsShootInit())
+					setFlippedX(getShootDirection().x < 0);
+			}
+		}
+
+		if (m_isMe)
+		{
+			m_pForesight->setPosition(getPosition() + Point(0.f, -20.f));
+			float angle;
+			if (getIsShootInit())
+				angle = CC_RADIANS_TO_DEGREES(getShootDirection().getAngle());
+			else
+			{
+				if (isFlippedX())
+				{
+					angle = CC_RADIANS_TO_DEGREES(Vec2(-1.f, 0.f).getAngle());
+				}
+				else
+				{
+					angle = CC_RADIANS_TO_DEGREES(Vec2(1.f, 0.f).getAngle());
+				}
+			}
+
+			m_pForesight->setRotation(-angle);
 		}
 	}
-	
-	if (m_isMe)
+	else
 	{
-		m_pForesight->setPosition(getPosition() + Point(0.f, -20.f));
-		float angle = CC_RADIANS_TO_DEGREES(getShootDirection().getAngle());
-		m_pForesight->setRotation(-angle);
+		reset();
 	}
+	
 }

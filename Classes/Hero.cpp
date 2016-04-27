@@ -137,6 +137,8 @@ void Hero::activeSkill1()
 {
 	if (getCurSkillState() == 0)
 	{
+		stop();
+		setJumpStage(0);
 		setSkillActivePos(getPosition());
 		if (isFlippedX())
 		{
@@ -191,16 +193,10 @@ void Hero::update(float dt)
 			m_curSkillLastTime -= dt;
 			if (m_curSkillLastTime <= 0.f)
 			{
-				if (getCurrActionState() == ACTION_STATE_WALK)
-				{
-					if(isFlippedX())
-						getPhysicsBody()->setVelocity(-Vec2(getWalkVelocity(), 0.f));
-					else
-						getPhysicsBody()->setVelocity(Vec2(getWalkVelocity(), 0.f));
-				}				
-				else
-					getPhysicsBody()->setVelocity(Vec2(0.f, 0.f));
-				
+				stop();
+
+				EventCustom event("heroSkillFinish");
+				_eventDispatcher->dispatchEvent(&event);
 				m_curSkillLastTime = -1.f;
 				if (m_curSkillState == 1)
 				{
