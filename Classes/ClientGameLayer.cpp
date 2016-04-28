@@ -125,7 +125,11 @@ void ClientGameLayer::onRecv(const char* data, int count)
 		case NDT_HeroDead:
 		{
 			BaseSprite* player = GameData::getInstance()->m_pPlayers[networkData->index];
-			player->reset();
+			if (player->getIsMe())
+			{
+				EventCustom event("dead");
+				_eventDispatcher->dispatchEvent(&event);
+			}
 		}
 		break;
 		default:

@@ -457,13 +457,9 @@ void OperateLayer::onEnter()
 	m_vecEventListener.pushBack(listener5);
 
 	auto listener6 = EventListenerCustom::create("dead", [this](EventCustom* event) {
-		BaseSprite* player = static_cast<BaseSprite *>(event->getUserData());
-		if (player->getIsMe())
-		{
-			m_pRevive->setVisible(true);
-			Animation *pReviveAnim = OperateLayer::createAnimation("Time%d.png", 3, 1);
-			m_pRevive->runAction(Sequence::create(Animate::create(pReviveAnim), CallFuncN::create(CC_CALLBACK_1(OperateLayer::revivePlayer, this)), nullptr));
-		}
+		m_pRevive->setVisible(true);
+		Animation *pReviveAnim = OperateLayer::createAnimation("Time%d.png", 3, 1);
+		m_pRevive->runAction(Sequence::create(Animate::create(pReviveAnim), CallFuncN::create(CC_CALLBACK_1(OperateLayer::revivePlayer, this)), nullptr));
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(listener6, 1);
 	m_vecEventListener.pushBack(listener6);

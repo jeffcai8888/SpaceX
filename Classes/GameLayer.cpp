@@ -238,9 +238,12 @@ void GameLayer::onEnter()
 					if (hero->getHP() <= 0)
 					{
 						hero->dead();
-						EventCustom event("dead");
-						event.setUserData(hero);
-						_eventDispatcher->dispatchEvent(&event);
+						if (hero->getIsMe())
+						{
+							EventCustom event("dead");
+							event.setUserData(hero);
+							_eventDispatcher->dispatchEvent(&event);
+						}					
 					}
 				}
 				else
