@@ -64,6 +64,11 @@ bool OperateLayer::init()
 		this->addChild(m_pJoystickBg, 2);
 		showJoystick(Point(1039, 103));
 
+		m_pRevive = Sprite::createWithSpriteFrameName("Time1.png");
+		m_pRevive->setPosition(visibleSize / 2);
+		m_pRevive->setVisible(false);
+		this->addChild(m_pRevive);
+
 		if (GameData::getInstance()->getRoleType() == ROLE_HERO)
 		{
 			m_pSkill = Sprite::createWithSpriteFrameName("skill_flash1.png");
@@ -429,7 +434,6 @@ void OperateLayer::onEnter()
 
 	auto listener3 = EventListenerCustom::create("auto_shoot_finish", [this](EventCustom* event) {
 		BaseSprite* self = GameData::getInstance()->getMySelf();
-		CCLOG("auto_shoot_finish");
 		self->attack(false);
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(listener3, 1);
@@ -451,6 +455,18 @@ void OperateLayer::onEnter()
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(listener5, 1);
 	m_vecEventListener.pushBack(listener5);
+
+	auto listener6 = EventListenerCustom::create("dead", [this](EventCustom* event) {
+		BaseSprite* player = static_cast<BaseSprite *>(event->getUserData());
+		if (player->getIsMe())
+		{
+			m_pRevive->setVisible(true);
+			Animation *pReviveAnim = OperateLayer::createAnimation("Time%d.png", 3, 1);
+			m_pRevive->runAction(Sequence::create(Animate::create(pReviveAnim), CallFuncN::create(CC_CALLBACK_1(OperateLayer::revivePlayer, this)), nullptr));
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(listener6, 1);
+	m_vecEventListener.pushBack(listener6);
 }
 
 void OperateLayer::onExit()
@@ -613,4 +629,23 @@ void OperateLayer::switchButtonStatus(int type, bool isPressed)
 			m_pJoystick->setSpriteFrame("joystick.png");
 		}
 	}
+}
+
+Animation* OperateLayer::createAnimation(const char* formatStr, int frameCount, int fps)
+{
+	Vector<SpriteFrame*>  vec(frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		const char* imgName = String::createWithFormat(formatStr,  i)->getCString();
+		SpriteFrame *pFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(imgName);
+		vec.pushBack(pFrame);
+	}
+	return Animation::createWithSpriteFrames(vec, 1.0f / fps);
+}
+
+void OperateLayer::revivePlayer(Ref* pSender)
+{
+	m_pRevive->setVisible(false);
+	BaseSprite* self = GameData::getInstance()->getMySelf();
+	self->reset();
 }

@@ -169,12 +169,14 @@ void BaseSprite::runJumpUpAction()
 	changeState(ACTION_STATE_JUMP_UP);
 	if (m_JumpStage == 1)
 	{
-		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("jump.mp3");
+		if(m_isMe)
+			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("jump.mp3");
 		this->runAction(m_pJump2Action);
 	}
 	else
 	{
-		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("jump.mp3");
+		if (m_isMe)
+			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("jump.mp3");
 		this->runAction(m_pJumpAction);
 	}
 	++m_JumpStage;
@@ -276,7 +278,10 @@ CallFunc* BaseSprite::createIdleCallbackFunc()
 
 void BaseSprite::dead()
 {
-	changeState(ACTION_STATE_DEAD);
+	if (changeState(ACTION_STATE_DEAD))
+	{
+
+	}
 }
 
 bool BaseSprite::isLive()
@@ -377,9 +382,4 @@ void BaseSprite::update(float dt)
 			m_pForesight->setRotation(-angle);
 		}
 	}
-	else
-	{
-		reset();
-	}
-	
 }

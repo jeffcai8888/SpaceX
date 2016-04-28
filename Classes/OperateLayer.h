@@ -31,6 +31,7 @@ public:
 	virtual void onEnter();
 	virtual void onExit();
 	void gotoDebug(Ref* pSender);
+	void revivePlayer(Ref* pSender);
 
 	CREATE_FUNC(OperateLayer);
 
@@ -43,8 +44,8 @@ private:
 	void dealWithKeyBoard();
 	void removeAllEventListener();
 	void switchButtonStatus(int type, bool isPressed);
-	void calJoyStickPos(cocos2d::Point& pos);
 	void dealWithJoystick(cocos2d::Point, cocos2d::Point);
+	cocos2d::Animation* createAnimation(const char* formatStr, int frameCount, int fps);
 	cocos2d::Sprite *m_pJoystick;
 	cocos2d::Sprite *m_pJoystickBg;
 	cocos2d::Sprite *m_pJoystickBg1;
@@ -53,6 +54,11 @@ private:
 	cocos2d::Sprite *m_pUp;
 	cocos2d::Sprite *m_pSkill;
 	cocos2d::Sprite *m_pSkill1;
+
+	cocos2d::Sprite *m_pRevive;
+	cocos2d::Action *m_pReviveAction;
+
+
 	
 	cocos2d::Vector<cocos2d::EventListener *> m_vecEventListener;
 	int m_PressType;
