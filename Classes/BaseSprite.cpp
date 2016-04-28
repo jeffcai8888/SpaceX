@@ -105,6 +105,8 @@ void BaseSprite::attack(bool isStart)
 		if (isStart)
 		{
 			this->runAttackAction();
+            if(!m_isShootInit)
+            m_shootTime = 0.f;
 		}
 		else
 		{
@@ -340,7 +342,7 @@ void BaseSprite::update(float dt)
 		if (getIsAttacking())
 		{
 			m_shootTime -= dt;
-			if (m_shootTime < 0)
+			if (m_shootTime <= 0)
 			{
 				EventCustom event("shoot_bullet");
 				event.setUserData(this);

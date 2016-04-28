@@ -218,9 +218,9 @@ void OperateLayer::onEnter()
                     showJoystick(m_pJoystickBg->getPosition());
                     m_mapPressType.erase(pTouch->getID());
                     self->getRange()->setVisible(false);
+                    self->setIsShootInit(false);
                     self->attack(false);
                     switchButtonStatus(BT_Joystick, false);
-					self->setIsShootInit(false);
                     SocketManager::getInstance()->sendData(NDT_HeroStopAttack, self->getTag(),self->getCurrActionState(), self->getPosition(), self->getShootDirection());
                 }
 #if 1
@@ -493,8 +493,8 @@ void OperateLayer::dealWithJoystick(cocos2d::Point centerPoint, cocos2d::Point p
 	this->updateJoystick(direction, distance);
 	BaseSprite* self = GameData::getInstance()->getMySelf();
 	self->setShootDirection(direction);
-	self->setIsShootInit(true);
 	self->attack(true);
+    self->setIsShootInit(true);
 	SocketManager::getInstance()->sendData(NDT_HeroAttack, self->getTag(),self->getCurrActionState(), self->getPosition(), self->getShootDirection());
 }
 

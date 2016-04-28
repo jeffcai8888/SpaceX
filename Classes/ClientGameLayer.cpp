@@ -84,8 +84,8 @@ void ClientGameLayer::onRecv(const char* data, int count)
 			//player->setCurrActionState((ActionState)networkData->actionState);
 			player->setPosition(networkData->position);
 			player->setShootDirection(networkData->vec);
-            player->setIsShootInit(true);
 			player->attack(true);
+            player->setIsShootInit(true);
 		}			
 			break;
 		case NDT_HeroStopAttack:
